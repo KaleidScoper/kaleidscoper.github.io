@@ -229,17 +229,12 @@ twikoo:
 # 首页广告配置
 # 可以根据需要自行增加ad_3，ad_4...，留空则不显示，建议图片和url不要带ad等关键词，否则可能会被adblock等插件屏蔽
 
-# ads:
-#   ad_1:
-#     title: 云服务器限时秒杀
-#     img: https://pic.imgdb.cn/item/62174b452ab3f51d912a5ccc.jpg
-#     url: https://curl.qcloud.com/kvO7hb43
-#     width: 300
-#   ad_2:
-#     title: vultr优惠vps
-#     img: https://pic.imgdb.cn/item/62174b452ab3f51d912a5cd7.png
-#     url: https://www.vultr.com/?ref=8630075
-#     width: 300
+ads:
+ad_1:
+  title: # 广告标题
+  url: # 广告链接
+  img: # 广告图片地址
+  width: # 广告宽度
 
 # 网站开启加密访问，密码可设置任何字符
 lock:
