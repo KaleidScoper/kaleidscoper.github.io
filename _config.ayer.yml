@@ -39,12 +39,13 @@ progressBar: true
 # 告示板模块
 broadcast:
   enable: true # true开启，false关闭
-  type: 2 # 1：自定义输入，2：一言api(https://hitokoto.cn/)
+  type: 1 # 1：自定义输入，2：一言api(https://hitokoto.cn/)
   text: 一个安静优雅的hexo主题，快速且响应式。 # type为1时有效
+  text: 文案2，测试用
 
 # 文章配置
 # 文章太长，截断按钮文字(在需要截断的行增加此标记：<!--more-->)
-excerpt_link: 阅读更多...
+excerpt_link: 显示更多...
 # 如果你嫌每篇文章手动加more标记比较麻烦，又不想在首页全文显示，可以把excerpt_all设置成true，这样首页只会显示文章归档
 excerpt_all: false
 
@@ -98,13 +99,13 @@ search: true
 
 # RSS订阅(先安装hexo-generator-feed插件，再去博客根目录config进行配置)
 # 不想显示可以直接留空
-rss: /atom.xml
+rss: 
 
 # 是否启用黑夜模式开关
 darkmode: false
 
 # 动态背景效果: 0-关闭，1-动态线条(跟随鼠标)
-canvas_bg: 1
+canvas_bg: 0
 
 # 自定义鼠标样式，直接替换/images/mouse.cur文件
 mouse:
