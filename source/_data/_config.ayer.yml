@@ -31,7 +31,7 @@ logo: /favicon.ico
 cover:
   enable: true
   path: /images/cover1.jpg # /source/images目录下附送多张美图，可更换
-  logo: true #/images/ayer.svg，如果不要直接设置成false
+  logo: false #/images/ayer.svg，如果不要直接设置成false
 
 # 页面顶部进度条
 progressBar: true
