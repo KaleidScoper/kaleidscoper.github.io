@@ -1,7 +1,7 @@
 # 侧边栏菜单
 menu:
   主页: /
-  归档: /archives
+  博文: /archives
   分类: /categories
   标签: /tags
   旅行: /tags/旅行/
