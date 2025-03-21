@@ -181,17 +181,17 @@ gongan:
 # 友情链接
 friends_link:
 
+  Hexo官网:
+    url: https://hexo.io
+    img: /images/hexo.png
+
   Ayer主题: #网站名称
     #网站地址
     url: https://github.com/Shen-Yu/hexo-theme-ayer
     #网站图片(可忽略不写)
     img: /images/ayer.png
-
-  Hexo官网:
-    url: https://hexo.io
-    img: /images/hexo.png
   
-  GitHub:
+  GitHub主页:
     url: https://github.com/KaleidScoper
     img: /images/github.png
 
