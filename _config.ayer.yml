@@ -186,11 +186,8 @@ friends_link:
     #网站图片(可忽略不写)
     img: /images/ayer.png
   GitHub:
-    url: https://github.com/Shen-Yu
+    url: https://github.com/KaleidScoper
     img: /images/github.png
-  码云:
-    url: https://gitee.com/shen-yu
-    img: /images/gitee.png
   Hexo官网:
     url: https://hexo.io
     img: /images/hexo.png
