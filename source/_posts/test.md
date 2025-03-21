@@ -1,7 +1,7 @@
 ---
 title: 测试页面
 date: 2025-03-20 12:00:00
-layout: "post"
+layout: post
 categories: [原创, 技术, Web, Hexo]
 tags: [Hexo, 分类, 标签, 教程]
 ---
