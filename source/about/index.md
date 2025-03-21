@@ -14,9 +14,7 @@ layout: page
 
 **关于网站：**
 
-本站禁止使用俄语评论，包含俄语字母的评论将被自动删除。
-
-网站服务器位于东京，使用代理访问博客体验最佳。通过网页端浏览能获得最佳阅读体验。
+本站曾经采用 WordPress + VPS 搭建，现换用 Hexo + GitHub Page 搭建，详情请前往[本站GitHub仓库页面](https://github.com/KaleidScoper/kaleidscoper.github.io)查看。
 
 此博客上所有原创内容，均采用 [知识共享署名-相同方式共享 4.0 国际许可协议](https://creativecommons.org/licenses/by-sa/4.0/deed.zh) 进行许可。
 
