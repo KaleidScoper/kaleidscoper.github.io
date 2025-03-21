@@ -3,13 +3,11 @@ menu:
   # 主页: /
   全部文章: /archives
   文章分类: /categories
-  母分类1:
-    子分类1: /
   全部标签: /tags
-  # 旅行: /categories/旅行/
-  旧博客: http://testgames.me
+  书画影音: /book
   友情链接: /friends
   关于本站: /about
+  旧博客: http://testgames.me
 
 # 站点次标题和打字动效
 # https://github.com/mattboldt/typed.js
