@@ -13,7 +13,7 @@ menu:
 # https://github.com/mattboldt/typed.js
 subtitle:
   enable: false # 是否开启动效
-  text: 兵无常势，水无常形 # 显示的文字
+  text: 兵無常勢，水無常形 # 显示的文字
   text2:  # 滚动播放，如果不需要可以留空
   text3:  # 最多支持三段文字
   startDelay: 0 # 延迟时间
