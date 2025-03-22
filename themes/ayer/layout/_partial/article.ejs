@@ -66,6 +66,7 @@
   <% if (!index){ %> <%- partial('post/nav') %> <% } %> <% if (theme.valine &&
   theme.valine.enable && !post.no_valine){ %> <%- partial('post/valine', { key:
   post.slug, title: post.title, url: config.url+url_for(post.path) }) %> <% } %>
-  <% if (is_post()) { %> <%- partial('post/gitalk') %> <% } %> 
+  <% if (!index) { %> <%- partial('post/gitalk') %> <% } %>
+  <% // 此处判断条件原本为is_post()，现改为!index尝试为全站支持评论区 %>
   <% if (is_post()) { %> <%- partial('post/twikoo') %> <% } %>
 </article>
