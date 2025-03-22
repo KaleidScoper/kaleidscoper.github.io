@@ -67,7 +67,60 @@ index_generator:
 # Category & Tag
 default_category: uncategorized
 category_map:
+  技术: tech
+
+  安全: sec
+  开源情报: osint
+  Web安全: websec
+  逆向工程: reverse
+  二进制安全: pwn
+  密码学: crypto
+  杂项: misc
+
+  开发: dev
+  Web开发: webdev
+  安卓开发: android
+  桌面开发: desktop
+
+  游戏: game
+  我的世界: minecraft
+  三国杀: sanguosha
+  王者荣耀: kog
+
+  旅行: travel
+  # 文章的文件名直接采用城市英文名
+  国内游: domestic
+  国外游: abroad
+
+
+  日记: diary
+  # 文章的文件名直接采用diary-年份
+
+  杂谈: talk
+  影视: movie
+  音乐: music
+  书刊: book
+  人文: humanity
+  未分类: uncategorized
+
 tag_map:
+  教程: tutorial
+  博客: blog
+  Markdown: markdown
+  Linux: linux
+  Hexo: hexo
+  WordPress: wordpress
+  HTML: html
+  CSS: css
+  C++: cpp
+  C: c
+  C#: csharp
+  Python: python
+  Java: java
+  JavaScript: js
+  PHP: php
+  数据库: SQL
+
 
 # Metadata elements
 ## https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
