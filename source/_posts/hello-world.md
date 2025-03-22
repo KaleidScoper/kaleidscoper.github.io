@@ -1,7 +1,6 @@
 ---
 title: Hello World
 date: 2025-03-20 12:00:00
-layout: post
 categories: [未分类]
 tags: [Hexo, 技术, Web]
 ---

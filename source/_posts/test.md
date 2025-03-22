@@ -1,7 +1,6 @@
 ---
 title: 测试页面
 date: 2025-03-20 12:00:00
-layout: post
 categories: [技术, 开发, Web开发]
 tags: [博客, Markdown, 教程]
 ---
