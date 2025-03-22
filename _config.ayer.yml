@@ -212,12 +212,12 @@ valine:
 
 # 2、Gitalk(https://github.com/gitalk/gitalk)
 gitalk:
-  enable: false # true
-  clientID: # GitHub Application Client ID
-  clientSecret: # Client Secret
-  repo: # Repository name
-  owner: # GitHub ID
-  admin: # GitHub ID
+  enable: true # true
+  clientID: Ov23liCJEFZyi44Lnx0M # GitHub Application Client ID
+  clientSecret: 8cded70703b10f4fa4ed60d72fa7c345014ec7de # Client Secret
+  repo: blog-comments # Repository name
+  owner: KaleidScoper # GitHub ID
+  admin: KaleidScoper # GitHub ID
 
 # 3、Twikoo(https://github.com/imaegoo/twikoo)
 twikoo:
