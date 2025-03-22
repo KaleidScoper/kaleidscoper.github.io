@@ -16,7 +16,7 @@ Hexo blog test
 而 Hexo + Github Page 就比较扬长避短：
 
 1. 部署相对来说简单一点，成本也更低；
-2. 一键 push 更新，更新博文还能反映到Github活跃度。
+2. 一键 push 更新，更新博文连浏览器都不用开，还能反映到Github活跃度。
 3. GitHub 提供 CDN ，国内访问速度比较好。
 
 总之先用一段时间再说。
