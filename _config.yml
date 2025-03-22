@@ -67,9 +67,9 @@ index_generator:
 # Category & Tag
 default_category: uncategorized
 category_map:
-  技术: tech
+  技术: tech # 一级分类，下辖两个二级分类安全和开发
 
-  安全: sec
+  安全: sec # 二级分类
   开源情报: osint
   Web安全: websec
   逆向工程: reverse
@@ -77,31 +77,30 @@ category_map:
   密码学: crypto
   杂项: misc
 
-  开发: dev
+  开发: dev # 二级分类
   Web开发: webdev
   安卓开发: android
   桌面开发: desktop
 
-  游戏: game
+  游戏: game # 一级分类
   我的世界: minecraft
   三国杀: sanguosha
   王者荣耀: kog
 
-  旅行: travel
-  # 文章的文件名直接采用城市英文名
+  旅行: travel # 一级分类，文章的文件名直接采用城市英文名
   国内游: domestic
   国外游: abroad
 
 
-  日记: diary
-  # 文章的文件名直接采用diary-年份
+  日记: diary # 一级分类，文章的文件名直接采用diary-年份
 
-  杂谈: talk
+  杂谈: talk # 一级分类
   影视: movie
   音乐: music
   书刊: book
-  人文: humanity
-  未分类: uncategorized
+  人文: humanity # 下辖文学、历史、哲学、政治等分类，但此二级分类处不再细分，日后考虑使用tag
+
+  未分类: uncategorized # 一级分类
 
 tag_map:
   教程: tutorial
