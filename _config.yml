@@ -65,6 +65,7 @@ index_generator:
   order_by: -date
 
 # Category & Tag
+# 声明！！！本站用分类来归档文章，标签仅用于检索文章
 default_category: uncategorized
 category_map:
   技术: tech # 一级分类，下辖两个二级分类安全和开发
@@ -79,6 +80,7 @@ category_map:
 
   开发: dev # 二级分类
   Web开发: webdev
+  UE5开发: ue5
   安卓开发: android
   桌面开发: desktop
 
@@ -105,20 +107,23 @@ category_map:
 tag_map:
   教程: tutorial
   博客: blog
+
   Markdown: markdown
   Linux: linux
+
   Hexo: hexo
   WordPress: wordpress
   HTML: html
   CSS: css
+  JavaScript: js
+  PHP: php
+  数据库: SQL
+
   C++: cpp
   C: c
   C#: csharp
   Python: python
   Java: java
-  JavaScript: js
-  PHP: php
-  数据库: SQL
 
 
 # Metadata elements
