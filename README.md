@@ -1,6 +1,6 @@
 # kaleidscoper.github.io
 
-Hexo blog test
+KaleidScoper testing his Hexo blog.
 
 # 关于
 
