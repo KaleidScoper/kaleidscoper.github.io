@@ -49,10 +49,10 @@ layout: page
 
 - **其他：**
   - INTP
-  - IQ 138（经 [Mensa Norway](https://test.mensa.no/) 测试）
+  <!-- - IQ 138（经 [Mensa Norway](https://test.mensa.no/) 测试）-->
   - AHU 信息安全专业本科生
   - AHU Minecraft 社区成员
   - [Red Pixiv Union](https://www.pixiv.net/) 管理员
   - [中国秦皇岛 Steam 群组](https://steamcommunity.com/) 管理员
   - 河坝黄牌
-  - 三国杀业余一段
+  - 三国杀业余一段（？）
