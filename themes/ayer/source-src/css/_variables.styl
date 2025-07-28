@@ -1,33 +1,25 @@
-// Config
-support-for-ie = false
-vendor-prefixes = webkit moz ms official
+// === Ayer 主题全站强制暗色模式样式 ===
+// 覆盖原有 _variables.styl 中颜色变量
 
-// Fonts
-font-size-browser = 62.5%
-font-size-base    = 1.4rem
-font-family-base  = "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif
-font-line-height  = 1.7
+// ===== 配色变量（暗色方案） =====
+black         = #000
+white         = #1e1e1e
+gray          = #888
+froth-light   = #2e2e2e
+froth         = #555
+water         = #3c6e91
+water-green   = #557a5e
+sea-blue      = #4a90e2
+sea-dark      = #0d1b2a
+sea           = #1a2b3c
+sea-light     = #2b3d4f
+sea-lighter   = #4a5a68
+sand-light    = #6b4e3d
+sand          = #8b5e3c
+sand-dark     = #403733
+sand-gray     = #666
+red           = #d94f4f
 
-// Colors
-black         = #000000
-water         = #cce5ff
-water-green   = #9c9
-sea-blue      = #3d85c6
-sea-dark      = #172d3e
-sea           = #1e3e3f
-sea-light     = #253145
-sea-lighter   = #5c6b72
-gray          = #adb5bd
-froth-light   = #f4f4f4
-froth         = #999
-white         = #ffffff
-sand-light    = #9c8079
-sand          = #9e6a4d
-sand-dark     = #5c5858
-sand-gray     = #bbb
-red           = #ea434a
-
-// Share Colors
 weibo-color      = #d81e06
 wechat-color     = #51c332
 qq-color         = #4cafe9
@@ -37,44 +29,90 @@ facebook-color   = #3b5998
 pinterest-color  = #cb2027
 google-color     = #dd4b39
 
-// Link Colors
-link-color         = #0681d0
-link-hover-color   = lighten(link-color, 20%)
-link-active-color  = darken(link-color, 5%)
+link-color         = #8ab4f8
+link-hover-color   = lighten(link-color, 10%)
+link-active-color  = darken(link-color, 10%)
 disabled-color     = gray
 
-// Body Colors
-body-background = white
-body-color      = darken(sand-dark,30%)
-main-color      = darken(water,20%)
-tag-color       = lighten(body-color,15%)
+body-background = #1e1e1e
+body-color      = #eeeeee
+main-color      = #8ab4f8
+tag-color       = lighten(body-color, 10%)
 
-// Border
 border-radius   = 0.4rem
 border-width    = 0.1rem
-border-color    = froth
+border-color    = #444
 
-// Layout
-aside-width      = 8rem
-wrap-width       = 70rem
-years-width      = 6rem
-logo-size        = 4.2rem
-cover-logo-size  = 6rem
+// ===== 全局暗色样式强制覆盖 =====
 
-gutter-width     = 1.5rem
+html, body
+  background: body-background !important
+  color: body-color !important
 
-// Breakpoints
-breakpoints = (
-  xs = 0,
-  sm = 576px,
-  md = 768px,
-  lg = 992px,
-  xl = 1200px
-)
+a
+  color: link-color !important
+  &:hover
+    color: link-hover-color !important
 
-// Transition
-transition-slow          = all .7s ease-in-out 0s
-transition-fast          = all .1s ease-in-out 0s
-transition-base          = all .3s ease-in-out
-transition-fade          = opacity .15s linear
-transition-collapse      = height .35s ease
+code, pre
+  background: #2a2a2a !important
+  color: #f8f8f2 !important
+
+blockquote
+  background: #2b2b2b !important
+  border-left: 4px solid #444 !important
+  color: body-color !important
+
+// 所有文章标题、meta 信息、日期
+.article-header .article-title,
+.article-date,
+.article-category .article-category-link,
+.archive-year-wrap .archive-year,
+.archive-article-date,
+.category-list a,
+.tag-list a
+  color: body-color !important
+
+// 评论区（Valine / Waline 等）
+#vcomments-box #vcomments
+  background-color: rgba(255,255,255,0.05) !important
+  *
+    color: #ddd !important
+
+.v .vbtn
+  background-color: transparent !important
+  border: 1px solid #777 !important
+  color: #eee !important
+
+.v .vlist .vcard .vhead .vsys
+  border: 1px solid #f1f1f1 !important
+  background-color: transparent !important
+
+input,
+textarea
+  background: #2c2c2c !important
+  color: #eee !important
+  border: 1px solid #555 !important
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder
+  color: #aaa
+
+// 浮动按钮等
+.float_btns i,
+.share-icons a i
+  color: #ccc !important
+
+// 朋友链接 / 友情链接块
+#friends_link .friends_li a
+  background-color: rgba(255,255,255,0.08)
+  color: #fff
+
+// toc目录
+a.toc-link
+  color: #bbb
+
+// 移动端适配
+@media (max-width: 768px)
+  html
+    font-size: 60%
