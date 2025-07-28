@@ -1,0 +1,51 @@
+---
+title: 名人堂
+layout: page
+---
+{% raw %}
+<link rel="stylesheet" href="style.css">
+<h1 class="title">我的电子名人堂</h1>
+  <div class="grid">
+
+    <div class="card" style="--bg:url('img/character1.png')">
+      <img src="img/character1.png" alt="初音未来">
+      <h2>初音未来</h2>
+      <p class="subname">Hatsune Miku</p>
+      <p class="intro">一个虚拟的VOCALOID歌姬，以其甜美的嗓音和青绿色双马尾闻名。</p>
+      <a href="https://zh.moegirl.org.cn/初音未来" target="_blank" class="wiki-btn">百科</a>
+    </div>
+
+    <div class="card" style="--bg:url('img/gojo.jpg')">
+      <img src="img/gojo.jpg" alt="五条悟">
+      <h2>五条悟</h2>
+      <p class="subname">Satoru Gojo</p>
+      <p class="intro">《咒术回战》中的特级咒术师，拥有六眼与无下限术式，实力远超常人。</p>
+      <a href="https://zh.moegirl.org.cn/五条悟" target="_blank" class="wiki-btn">百科</a>
+    </div>
+
+    <div class="card" style="--bg:url('img/asuka.jpg')">
+      <img src="img/asuka.jpg" alt="明日香·兰格雷">
+      <h2>明日香</h2>
+      <p class="subname">Asuka Langley Soryu</p>
+      <p class="intro">来自《EVA》，自信、聪明、傲娇，EVA-02 的专属驾驶员。</p>
+      <a href="https://zh.moegirl.org.cn/明日香·兰格雷" target="_blank" class="wiki-btn">百科</a>
+    </div>
+
+    <div class="card" style="--bg:url('img/rem.jpg')">
+      <img src="img/rem.jpg" alt="雷姆">
+      <h2>雷姆</h2>
+      <p class="subname">Rem</p>
+      <p class="intro">《Re:从零开始的异世界生活》中的双胞胎女仆之一，性格温柔忠诚。</p>
+      <a href="https://zh.moegirl.org.cn/雷姆" target="_blank" class="wiki-btn">百科</a>
+    </div>
+
+    <div class="card" style="--bg:url('img/artoria.jpg')">
+      <img src="img/artoria.jpg" alt="阿尔托莉雅">
+      <h2>阿尔托莉雅</h2>
+      <p class="subname">Artoria Pendragon</p>
+      <p class="intro">Fate 系列的标志角色，英灵 Saber，传说中的亚瑟王。</p>
+      <a href="https://zh.moegirl.org.cn/阿尔托莉雅·潘德拉贡" target="_blank" class="wiki-btn">百科</a>
+    </div>
+
+  </div>
+{% endraw %}
