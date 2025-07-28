@@ -8,7 +8,7 @@ layout: page
 <link rel="stylesheet" href="/waifu/style.css">
 <div class="grid">
 
-    <div class="card" style="--bg:url('img/character1.jpg')">
+    <div class="card" style="--bg:url('img/rick.jpg')">
       <img src="img/character1.jpg" alt="图片加载失败">
       <h2>瑞克 桑切斯</h2>
       <p class="subname">Rick Sanchez</p>
@@ -17,19 +17,19 @@ layout: page
     </div>
 
     <div class="card" style="--bg:url('img/gojo.jpg')">
-      <img src="img/gojo.jpg" alt="五条悟">
-      <h2>五条悟</h2>
+      <img src="img/gojo.jpg" alt="图片加载失败">
+      <h2>五条 悟</h2>
       <p class="subname">Satoru Gojo</p>
-      <p class="intro">《咒术回战》中的特级咒术师，拥有六眼与无下限术式，实力远超常人。</p>
+      <p class="intro">登场作品：《咒术回战》</p>
       <a href="https://zh.moegirl.org.cn/五条悟" target="_blank" class="wiki-btn">百科</a>
     </div>
 
-    <div class="card" style="--bg:url('img/asuka.jpg')">
-      <img src="img/asuka.jpg" alt="明日香·兰格雷">
-      <h2>明日香</h2>
-      <p class="subname">Asuka Langley Soryu</p>
-      <p class="intro">来自《EVA》，自信、聪明、傲娇，EVA-02 的专属驾驶员。</p>
-      <a href="https://zh.moegirl.org.cn/明日香·兰格雷" target="_blank" class="wiki-btn">百科</a>
+    <div class="card" style="--bg:url('img/stewie.jpg')">
+      <img src="img/asuka.jpg" alt="图片加载失败">
+      <h2>斯图威 格里芬</h2>
+      <p class="subname">Stewie Griffin</p>
+      <p class="intro">登场作品：《恶搞之家》</p>
+      <a href="https://zh.moegirl.org.cn/斯图威·格里芬" target="_blank" class="wiki-btn">百科</a>
     </div>
 
     <div class="card" style="--bg:url('img/rem.jpg')">
