@@ -48,6 +48,14 @@ layout: page
       <a href="https://zh.wikipedia.org/wiki/馬達加斯加的企鵝" target="_blank" class="wiki-btn">维基百科</a>
     </div>
 
+    <div class="card" style="--bg:url('img/tangxiaoyi.jpg')">
+      <img src="img/tangxiaoyi.jpg" alt="图片加载失败">
+      <h2>唐晓翼</h2>
+      <p class="subname">Xiaoyi Tang</p>
+      <p class="intro">《查理九世》</p>
+      <a href="https://mzh.moegirl.org.cn/唐晓翼" target="_blank" class="wiki-btn">萌娘百科</a>
+    </div>
+
 </div>
 
 {% endraw %}
