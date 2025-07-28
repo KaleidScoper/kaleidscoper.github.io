@@ -40,12 +40,12 @@ layout: page
       <a href="https://en.wikipedia.org/wiki/Evil_Morty" target="_blank" class="wiki-btn">维基百科</a>
     </div>
 
-    <div class="card" style="--bg:url('img/artoria.jpg')">
-      <img src="img/artoria.jpg" alt="阿尔托莉雅">
-      <h2>阿尔托莉雅</h2>
-      <p class="subname">Artoria Pendragon</p>
-      <p class="intro">Fate 系列的标志角色，英灵 Saber，传说中的亚瑟王。</p>
-      <a href="https://zh.moegirl.org.cn/阿尔托莉雅·潘德拉贡" target="_blank" class="wiki-btn">百科</a>
+    <div class="card" style="--bg:url('img/skipper.jpg')">
+      <img src="img/skipper.jpg" alt="图片加载失败">
+      <h2>老大</h2>
+      <p class="subname">Skipper</p>
+      <p class="intro">登场作品：《马达加斯加的企鹅》</p>
+      <a href="https://zh.wikipedia.org/wiki/馬達加斯加的企鵝" target="_blank" class="wiki-btn">维基百科</a>
     </div>
 
 </div>
