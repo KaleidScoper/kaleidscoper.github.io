@@ -9,11 +9,11 @@ layout: page
 <div class="grid">
 
     <div class="card" style="--bg:url('img/character1.jpg')">
-      <img src="img/character1.jpg" alt="初音未来">
-      <h2>初音未来</h2>
-      <p class="subname">Hatsune Miku</p>
-      <p class="intro">一个虚拟的VOCALOID歌姬，以其甜美的嗓音和青绿色双马尾闻名。</p>
-      <a href="https://zh.moegirl.org.cn/初音未来" target="_blank" class="wiki-btn">百科</a>
+      <img src="img/character1.jpg" alt="图片加载失败">
+      <h2>瑞克 桑切斯</h2>
+      <p class="subname">Rick Sanchez</p>
+      <p class="intro">登场作品：《瑞克和莫蒂》</p>
+      <a href="https://zh.moegirl.org.cn/瑞克·桑切斯" target="_blank" class="wiki-btn">百科</a>
     </div>
 
     <div class="card" style="--bg:url('img/gojo.jpg')">
