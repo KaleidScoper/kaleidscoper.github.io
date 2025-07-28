@@ -9,7 +9,7 @@ layout: page
 <div class="grid">
 
     <div class="card" style="--bg:url('img/rick.jpg')">
-      <img src="img/character1.jpg" alt="图片加载失败">
+      <img src="img/rick.jpg" alt="图片加载失败">
       <h2>瑞克 桑切斯</h2>
       <p class="subname">Rick Sanchez</p>
       <p class="intro">登场作品：《瑞克和莫蒂》</p>
@@ -25,7 +25,7 @@ layout: page
     </div>
 
     <div class="card" style="--bg:url('img/stewie.jpg')">
-      <img src="img/asuka.jpg" alt="图片加载失败">
+      <img src="img/stewie.jpg" alt="图片加载失败">
       <h2>斯图威 格里芬</h2>
       <p class="subname">Stewie Griffin</p>
       <p class="intro">登场作品：《恶搞之家》</p>
