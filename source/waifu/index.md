@@ -56,6 +56,14 @@ layout: page
       <a href="https://mzh.moegirl.org.cn/唐晓翼" target="_blank" class="wiki-btn">萌娘百科</a>
     </div>
 
+    <div class="card" style="--bg:url('img/frieren.jpg')">
+      <img src="img/frieren.jpg" alt="图片加载失败">
+      <h2>芙莉莲</h2>
+      <p class="subname">Frieren</p>
+      <p class="intro">《葬送的芙莉莲》</p>
+      <a href="https://mzh.moegirl.org.cn/芙莉莲" target="_blank" class="wiki-btn">萌娘百科</a>
+    </div>
+
 </div>
 
 {% endraw %}
