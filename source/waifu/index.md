@@ -1,15 +1,14 @@
 ---
-title: 名人堂
+title: 后宫名册
 layout: page
 ---
 
 {% raw %}
 
 <link rel="stylesheet" href="/waifu/style.css">
-<h1 class="title">我的电子名人堂</h1>
 <div class="grid">
 
-    <div class="card" style="--bg:url('img/character1.png')">
+    <div class="card" style="--bg:url('img/character1.jpg')">
       <img src="img/character1.png" alt="初音未来">
       <h2>初音未来</h2>
       <p class="subname">Hatsune Miku</p>

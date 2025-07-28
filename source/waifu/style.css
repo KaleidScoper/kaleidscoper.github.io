@@ -77,6 +77,12 @@ body {
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
 }
 
+/* 禁用Hexo自动图注（仅本页面） */
+.card .caption {
+  display: none !important;
+}
+
+
 /* 中文姓名 */
 .card h2 {
   font-size: 1.1em;
