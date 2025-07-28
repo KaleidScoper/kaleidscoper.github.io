@@ -9,7 +9,7 @@ layout: page
 <div class="grid">
 
     <div class="card" style="--bg:url('img/character1.jpg')">
-      <img src="img/character1.png" alt="初音未来">
+      <img src="img/character1.jpg" alt="初音未来">
       <h2>初音未来</h2>
       <p class="subname">Hatsune Miku</p>
       <p class="intro">一个虚拟的VOCALOID歌姬，以其甜美的嗓音和青绿色双马尾闻名。</p>
