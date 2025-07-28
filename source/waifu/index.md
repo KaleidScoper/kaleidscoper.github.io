@@ -20,7 +20,7 @@ layout: page
       <img src="img/gojo.jpg" alt="图片加载失败">
       <h2>五条 悟</h2>
       <p class="subname">Satoru Gojo</p>
-      <p class="intro">登场作品：《咒术回战》</p>
+      <p class="intro">《咒术回战》</p>
       <a href="https://zh.moegirl.org.cn/五条悟" target="_blank" class="wiki-btn">萌娘百科</a>
     </div>
 
@@ -28,7 +28,7 @@ layout: page
       <img src="img/stewie.jpg" alt="图片加载失败">
       <h2>斯图威 格里芬</h2>
       <p class="subname">Stewie Griffin</p>
-      <p class="intro">登场作品：《恶搞之家》</p>
+      <p class="intro">《恶搞之家》</p>
       <a href="https://zh.moegirl.org.cn/斯图威·格里芬" target="_blank" class="wiki-btn">萌娘百科</a>
     </div>
 
@@ -36,7 +36,7 @@ layout: page
       <img src="img/evil-morty.jpg" alt="图片加载失败">
       <h2>邪恶莫蒂</h2>
       <p class="subname">Evil Morty</p>
-      <p class="intro">登场作品：《瑞克和莫蒂》</p>
+      <p class="intro">《瑞克和莫蒂》</p>
       <a href="https://en.wikipedia.org/wiki/Evil_Morty" target="_blank" class="wiki-btn">维基百科</a>
     </div>
 
@@ -44,7 +44,7 @@ layout: page
       <img src="img/skipper.jpg" alt="图片加载失败">
       <h2>老大</h2>
       <p class="subname">Skipper</p>
-      <p class="intro">登场作品：《马达加斯加的企鹅》</p>
+      <p class="intro">《马达加斯加的企鹅》</p>
       <a href="https://zh.wikipedia.org/wiki/馬達加斯加的企鵝" target="_blank" class="wiki-btn">维基百科</a>
     </div>
 
