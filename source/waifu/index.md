@@ -2,10 +2,12 @@
 title: 名人堂
 layout: page
 ---
+
 {% raw %}
-<link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet" href="/waifu/style.css">
 <h1 class="title">我的电子名人堂</h1>
-  <div class="grid">
+<div class="grid">
 
     <div class="card" style="--bg:url('img/character1.png')">
       <img src="img/character1.png" alt="初音未来">
@@ -47,5 +49,6 @@ layout: page
       <a href="https://zh.moegirl.org.cn/阿尔托莉雅·潘德拉贡" target="_blank" class="wiki-btn">百科</a>
     </div>
 
-  </div>
+</div>
+
 {% endraw %}
