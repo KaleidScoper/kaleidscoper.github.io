@@ -1,5 +1,5 @@
 ---
-title: 后宫名册
+title: 电子手办柜
 layout: page
 ---
 
@@ -62,6 +62,14 @@ layout: page
       <p class="subname">Frieren</p>
       <p class="intro">《葬送的芙莉莲》</p>
       <a href="https://mzh.moegirl.org.cn/芙莉莲" target="_blank" class="wiki-btn">萌娘百科</a>
+    </div>
+
+    <div class="card" style="--bg:url('img/violet.jpg')">
+      <img src="img/violet.jpg" alt="图片加载失败">
+      <h2>薇尔莉特 伊芙加登</h2>
+      <p class="subname">Violet Evergarden</p>
+      <p class="intro">《紫罗兰永恒花园》</p>
+      <a href="https://mzh.moegirl.org.cn/薇尔莉特·伊芙加登" target="_blank" class="wiki-btn">萌娘百科</a>
     </div>
 
 </div>
