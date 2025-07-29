@@ -101,7 +101,7 @@ search: true
 rss: 
 
 # 是否启用黑夜模式开关
-darkmode: false
+darkmode: true
 
 # 动态背景效果: 0-关闭，1-动态线条(跟随鼠标)
 canvas_bg: 0
