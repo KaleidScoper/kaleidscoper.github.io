@@ -3446,5 +3446,44 @@ footer ul a:visited {
   }
 }
 
+/* ===================================================================
+ *  16. honors - (_layout.scss)
+ *
+ * ------------------------------------------------------------------- */
+
+#honors {
+  background: #FFFFFF;
+  padding: 0rem 0 1.5rem;
+  text-align: left;
+}
+
+#honors h1::before {
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+
+#honors .honors-list {
+  margin: 2rem 0 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+#honors .honors-list li {
+  background: #f6f6f6;
+  border-left: 4px solid #000a12;
+  margin-bottom: 1.2rem;
+  padding: 1.2rem 2rem;
+  border-radius: 4px;
+  font-size: 1.7rem;
+  color: #222;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  transition: background 0.2s;
+}
+
+#honors .honors-list li:hover {
+  background: #dbdee3;
+}
 
 /*# sourceMappingURL=main.css.map */
