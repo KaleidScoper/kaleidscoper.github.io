@@ -20,7 +20,7 @@ tags: []
 
 此博客上所有原创内容，均采用[知识共享署名-相同方式共享 4.0 国际许可协议](http://creativecommons.org/licenses/by-sa/4.0/)进行许可。
 
-**When you share, everyone wins.**
+<b>When you share, everyone wins.</b>
 
 ---
 
@@ -28,27 +28,27 @@ tags: []
 
 展开
 
-* **游戏：**
+* <b>游戏：</b>
   + Minecraft
   + 饥荒联机版
   + 三国杀（手杀）
   + P社
-* **二次元坑：**
+* <b>二次元坑：</b>
   + 咒术
   + 芙莉莲
   + 电锯人
   + 波兰球
   + R&M
-* **三次元坑**：
+* <b>三次元坑</b>：
   + 冷媒Airsoft
   + 乐高
   + 倭刀
   + 汝瓷
   + 汉服
-* **键政：**
+* <b>键政：</b>
   + 左翼民粹主义
   + 海盗党
-* **其他：**
+* <b>其他：</b>
   + INTP
   + IQ 138 Tested by [Mensa Norway](https://test.mensa.no/Home/Test/en-US)
   + AHU信息安全专业本科生
