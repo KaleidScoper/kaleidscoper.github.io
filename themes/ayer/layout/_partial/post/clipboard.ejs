@@ -11,18 +11,15 @@
     copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
     copyHtml += '</button>';
     
-    // Add copy button to all code blocks
-    $(".highlight pre").before(copyHtml);
-    $(".article pre:not(.highlight pre)").before(copyHtml);
-    
-    // Add language labels to code blocks
+    // Process all code blocks
     $("pre code").each(function() {
-      var $pre = $(this).closest('pre');
+      var $code = $(this);
+      var $pre = $code.closest('pre');
       var $highlight = $pre.closest('.highlight');
-      var lang = $(this).attr('class');
+      var lang = $code.attr('class');
       
+      // Extract language from class
       if (lang) {
-        // Extract language from class (e.g., "language-javascript" -> "javascript")
         lang = lang.replace(/^language-/, '');
         if ($highlight.length) {
           $highlight.attr('data-lang', lang);
@@ -30,11 +27,47 @@
           $pre.attr('data-lang', lang);
         }
       }
+      
+      // Create line numbers if not exists
+      if (!$highlight.find('.gutter').length) {
+        var codeText = $code.text();
+        var lines = codeText.split('\n');
+        var lineNumbers = '';
+        var codeLines = '';
+        
+        lines.forEach(function(line, index) {
+          lineNumbers += '<div class="line"></div>';
+          codeLines += '<div class="line">' + (line || '&nbsp;') + '</div>';
+        });
+        
+        // Create gutter and code structure
+        var gutterHtml = '<div class="gutter"><pre>' + lineNumbers + '</pre></div>';
+        var codeHtml = '<div class="code"><pre>' + codeLines + '</pre></div>';
+        
+        if ($highlight.length) {
+          $highlight.find('pre').html(gutterHtml + codeHtml);
+        } else {
+          $pre.wrap('<div class="highlight"></div>');
+          var $newHighlight = $pre.parent();
+          $newHighlight.attr('data-lang', lang || 'text');
+          $newHighlight.html(gutterHtml + codeHtml);
+        }
+      }
+    });
+    
+    // Add copy button to all code blocks
+    $(".highlight").each(function() {
+      var $highlight = $(this);
+      if (!$highlight.find('.btn-copy').length) {
+        $highlight.append(copyHtml);
+      }
     });
     
     var clipboard = new ClipboardJS('.btn-copy', {
       target: function(trigger) {
-        return trigger.nextElementSibling;
+        var $highlight = $(trigger).closest('.highlight');
+        var $code = $highlight.find('.code pre');
+        return $code[0];
       }
     });
     
@@ -47,7 +80,7 @@
       let $span = $($btn.find('span'));
       $span[0].innerText = 'COPIED';
       
-      wait(function () { // 等待两秒钟后恢复
+      wait(function () {
         $icon.removeClass('ri-checkbox-circle-line');
         $icon.addClass('ri-file-copy-2-line');
         $span[0].innerText = 'COPY';
@@ -64,7 +97,7 @@
       let $span = $($btn.find('span'));
       $span[0].innerText = 'COPY FAILED';
       
-      wait(function () { // 等待两秒钟后恢复
+      wait(function () {
         $icon.removeClass('ri-time-line');
         $icon.addClass('ri-file-copy-2-line');
         $span[0].innerText = 'COPY';

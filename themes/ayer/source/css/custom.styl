@@ -34,20 +34,20 @@ if hexo-config('mouse.enable')
         &.on
             transform translateX(0)
 
-// 额外的代码高亮美化样式
+// 代码高亮美化样式
 .article-entry {
   // 代码块悬停效果
-  pre, .highlight {
+  .highlight {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
     }
   }
   
   // 代码块内行高优化
-  pre code {
+  .highlight .code pre .line {
     line-height: 1.8;
     padding: 0.5em 0;
   }
@@ -113,7 +113,7 @@ if hexo-config('mouse.enable')
 // 暗色模式下的额外样式
 @media (prefers-color-scheme: dark) {
   .article-entry {
-    pre, .highlight {
+    .highlight {
       &:hover {
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
       }
@@ -136,29 +136,35 @@ if hexo-config('mouse.enable')
 }
 
 // 代码块滚动条美化
-.article-entry pre::-webkit-scrollbar,
 .article-entry .highlight::-webkit-scrollbar {
   transition: all 0.3s ease;
 }
 
-.article-entry pre:hover::-webkit-scrollbar,
 .article-entry .highlight:hover::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 
 // 代码块选择文本样式
-.article-entry pre::selection,
 .article-entry .highlight::selection,
-.article-entry pre *::selection,
 .article-entry .highlight *::selection {
   background: rgba(86, 156, 214, 0.3);
   color: inherit;
 }
 
 // 代码块焦点样式
-.article-entry pre:focus,
 .article-entry .highlight:focus {
   outline: 2px solid rgba(86, 156, 214, 0.5);
   outline-offset: 2px;
+}
+
+// 行号悬停效果
+.article-entry .highlight .gutter .line:hover::before {
+  opacity: 1;
+  color: #fff;
+}
+
+// 代码行悬停效果
+.article-entry .highlight .code .line:hover {
+  background: rgba(255, 255, 255, 0.08);
 }

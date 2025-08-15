@@ -1,111 +1,308 @@
-// 现代代码高亮配色方案
-// 结合GitHub和VSCode的设计理念
+// 现代化代码高亮配色方案
+// 基于示例文件的优雅设计理念
 
-// 浅色主题变量
-highlight-background-light = #f8f9fa
-highlight-border-light = #e1e4e8
-highlight-code-light = #24292e
-highlight-current-line-light = #f1f3f4
-highlight-selection-light = #c8e6c9
+// 主题变量
+highlight-bg = #2d2d2d
+highlight-text = #ccc
+highlight-side-bg = rgba(255, 255, 255, 0.05)
+highlight-side-text = #ccc
+highlight-side-border = rgba(255, 255, 255, 0.075)
+highlight-scrollbar-track = rgba(255, 255, 255, 0.1)
+highlight-scrollbar-thumb = rgba(255, 255, 255, 0.5)
+highlight-button-bg = rgba(255, 255, 255, 0.1)
+highlight-button-text = rgba(255, 255, 255, 0.5)
 
-// 暗色主题变量
-highlight-background-dark = #1e1e1e
-highlight-border-dark = #3c3c3c
-highlight-code-dark = #d4d4d4
-highlight-current-line-dark = #2d2d30
-highlight-selection-dark = #264f78
+// 语法高亮颜色
+highlight-comment = #6a9955
+highlight-keyword = #569cd6
+highlight-string = #ce9178
+highlight-number = #b5cea8
+highlight-function = #dcdcaa
+highlight-class = #4ec9b0
+highlight-variable = #9cdcfe
+highlight-operator = #d4d4d4
+highlight-punctuation = #d4d4d4
+highlight-tag = #569cd6
+highlight-attribute = #9cdcfe
+highlight-property = #9cdcfe
+highlight-value = #ce9178
+highlight-selector = #d7ba7d
+highlight-regex = #d16969
 
-// 语法高亮颜色（基于VSCode Dark+主题）
-highlight-keyword = #569cd6      // 关键字：蓝色
-highlight-string = #ce9178       // 字符串：橙色
-highlight-number = #b5cea8       // 数字：浅绿
-highlight-comment = #6a9955      // 注释：绿色
-highlight-function = #dcdcaa     // 函数：黄色
-highlight-class = #4ec9b0       // 类：青色
-highlight-variable = #9cdcfe     // 变量：浅蓝
-highlight-operator = #d4d4d4     // 操作符：白色
-highlight-punctuation = #d4d4d4  // 标点：白色
-
-// 基础样式
+// 基础代码块样式
 .article-entry pre,
 .article-entry .highlight {
-  background: highlight-background-light
-  border: 1px solid highlight-border-light
+  position: relative
+  background: highlight-bg
+  color: highlight-text
   border-radius: 8px
-  margin: 16px 0
-  padding: 16px
+  margin: 20px 0
   overflow: hidden
-  overflow-x: auto
-  color: highlight-code-light
-  font-size: 0.9em
-  line-height: 1.6
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15)
   font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1)
-  transition: all 0.3s ease
-
+  font-size: 14px
+  line-height: 1.5
+  tab-size: 4
+  
+  // 悬停效果
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1)
+  
   &:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15)
-    transform: translateY(-1px)
+    transform: translateY(-2px)
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25)
   }
+}
 
-  // 滚动条样式
-  &::-webkit-scrollbar {
-    height: 8px
-    width: 8px
-    background: transparent
-  }
+// 代码块头部
+.article-entry .highlight::before {
+  content: attr(data-lang)
+  position: absolute
+  top: 0
+  left: 0
+  right: 0
+  padding: 8px 16px
+  background: rgba(0, 0, 0, 0.2)
+  color: highlight-text
+  font-size: 12px
+  font-weight: 500
+  text-transform: uppercase
+  letter-spacing: 0.5px
+  border-bottom: 1px solid highlight-side-border
+  z-index: 1
+}
 
-  &::-webkit-scrollbar:hover {
-    background: rgba(0, 0, 0, 0.1)
-  }
+// 代码内容区域
+.article-entry .highlight pre {
+  margin: 0
+  padding: 0
+  background: none
+  border: none
+  position: relative
+  padding-top: 40px // 为头部留出空间
+}
 
-  &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2)
-    border-radius: 4px
-    
-    &:hover {
-      background: rgba(0, 0, 0, 0.3)
-    }
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent
-    border-radius: 4px
-  }
+// 行号容器
+.article-entry .highlight .gutter {
+  position: absolute
+  left: 0
+  top: 40px // 为头部留出空间
+  width: 50px
+  height: calc(100% - 40px)
+  background: highlight-side-bg
+  border-right: 2px solid highlight-side-border
+  z-index: 1
 }
 
 // 行号样式
-.article-entry .highlight .gutter pre,
-.article-entry .highlight .gutter pre .line,
-.article-entry .gist .gist-file .gist-data .line-numbers {
-  color: highlight-current-line-light
-  background: rgba(0, 0, 0, 0.02)
-  border-right: 1px solid highlight-border-light
-  padding-right: 16px
-  margin-right: 16px
+.article-entry .highlight .gutter pre {
+  padding: 0
+  margin: 0
+  background: none
+  border: none
+  counter-reset: lineNumber
   text-align: right
+  padding-right: 16px
   user-select: none
 }
 
-// 代码字体
-.article-entry pre,
-.article-entry code {
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace
-  font-feature-settings: 'liga' 1, 'calt' 1
-  text-rendering: optimizeLegibility
+.article-entry .highlight .gutter pre .line {
+  position: relative
+  min-height: 24px
+  line-height: 24px
+  color: highlight-side-text
+  font-size: 12px
+  
+  &::before {
+    position: absolute
+    width: 32px
+    left: -32px
+    text-align: right
+    counter-increment: lineNumber 1
+    content: counter(lineNumber)
+    color: highlight-side-text
+    opacity: 0.6
+  }
+}
+
+// 代码内容
+.article-entry .highlight .code {
+  margin-left: 50px
+  padding: 16px
+  overflow-x: auto
+  
+  pre {
+    padding: 0
+    margin: 0
+    background: none
+    border: none
+    padding-top: 0
+  }
+  
+  .line {
+    position: relative
+    min-height: 24px
+    line-height: 24px
+    padding: 0 8px
+    border-radius: 4px
+    transition: background-color 0.2s ease
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.05)
+    }
+  }
+}
+
+// 语法高亮颜色
+.article-entry .highlight {
+  .comment {
+    color: highlight-comment
+    font-style: italic
+  }
+  
+  .keyword {
+    color: highlight-keyword
+    font-weight: 600
+  }
+  
+  .string {
+    color: highlight-string
+  }
+  
+  .number {
+    color: highlight-number
+  }
+  
+  .function {
+    color: highlight-function
+  }
+  
+  .class {
+    color: highlight-class
+  }
+  
+  .variable {
+    color: highlight-variable
+  }
+  
+  .operator {
+    color: highlight-operator
+  }
+  
+  .punctuation {
+    color: highlight-punctuation
+  }
+  
+  .tag {
+    color: highlight-tag
+  }
+  
+  .attribute {
+    color: highlight-attribute
+  }
+  
+  .property {
+    color: highlight-property
+  }
+  
+  .value {
+    color: highlight-value
+  }
+  
+  .selector {
+    color: highlight-selector
+  }
+  
+  .regex {
+    color: highlight-regex
+  }
+}
+
+// 代码复制按钮
+.btn-copy {
+  position: absolute
+  top: 8px
+  right: 8px
+  background: highlight-button-bg
+  color: highlight-button-text
+  border: none
+  border-radius: 4px
+  padding: 6px 12px
+  font-size: 12px
+  cursor: pointer
+  transition: all 0.2s ease
+  z-index: 2
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.2)
+    color: highlight-text
+    transform: scale(1.05)
+  }
+  
+  &.copied {
+    background: #28a745
+    color: white
+    animation: copySuccess 0.6s ease
+  }
+  
+  &.copy-failed {
+    background: #dc3545
+    color: white
+    animation: copyFailed 0.6s ease
+  }
+}
+
+// 复制动画
+@keyframes copySuccess {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes copyFailed {
+  0% { transform: scale(1); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+  100% { transform: scale(1); }
+}
+
+// 滚动条样式
+.article-entry .highlight::-webkit-scrollbar {
+  height: 8px
+  width: 8px
+}
+
+.article-entry .highlight::-webkit-scrollbar-track {
+  background: highlight-scrollbar-track
+  border-radius: 4px
+}
+
+.article-entry .highlight::-webkit-scrollbar-thumb {
+  background: highlight-scrollbar-thumb
+  border-radius: 4px
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.7)
+  }
 }
 
 // 行内代码样式
 .article-entry code {
   background: rgba(175, 184, 193, 0.2)
-  color: highlight-code-light
+  color: #24292e
   padding: 0.2em 0.4em
   border-radius: 4px
   font-size: 0.85em
   border: 1px solid rgba(175, 184, 193, 0.3)
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace
+  transition: all 0.2s ease
+  
+  &:hover {
+    background: rgba(175, 184, 193, 0.3)
+    transform: scale(1.05)
+  }
 }
 
-// 代码块内的代码
+// 代码块内的行内代码
 .article-entry pre code {
   background: none
   color: inherit
@@ -113,193 +310,44 @@ highlight-punctuation = #d4d4d4  // 标点：白色
   border: none
   border-radius: 0
   font-size: inherit
-}
-
-// 代码块容器
-.article-entry .highlight {
-  position: relative
-  
-  // 语言标签
-  &::before {
-    content: attr(data-lang)
-    position: absolute
-    top: 0
-    right: 16px
-    background: highlight-keyword
-    color: white
-    padding: 4px 8px
-    font-size: 0.75em
-    border-radius: 0 8px 0 4px
-    font-weight: 500
-    text-transform: uppercase
-    letter-spacing: 0.5px
-  }
-}
-
-// 语法高亮颜色
-pre .comment {
-  color: highlight-comment
-  font-style: italic
-}
-
-pre .keyword,
-pre .function .keyword,
-pre .class .params {
-  color: highlight-keyword
-  font-weight: 600
-}
-
-pre .tag,
-pre .doctype,
-pre .params,
-pre .function,
-pre .css .value {
-  color: highlight-function
-}
-
-pre .css~* .tag,
-pre .title,
-pre .at_rule,
-pre .at_rule .keyword,
-pre .preprocessor,
-pre .preprocessor .keyword {
-  color: highlight-keyword
-}
-
-pre .attribute,
-pre .built_in,
-pre .class,
-pre .css~* .class,
-pre .function .title {
-  color: highlight-class
-}
-
-pre .value,
-pre .string {
-  color: highlight-string
-}
-
-pre .number {
-  color: highlight-number
-}
-
-pre .id,
-pre .css~* .id {
-  color: highlight-variable
-}
-
-pre .operator {
-  color: highlight-operator
-}
-
-pre .punctuation {
-  color: highlight-punctuation
-}
-
-// 暗色模式支持
-@media (prefers-color-scheme: dark) {
-  .article-entry pre,
-  .article-entry .highlight {
-    background: highlight-background-dark
-    border-color: highlight-border-dark
-    color: highlight-code-dark
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3)
-    
-    &:hover {
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4)
-    }
-  }
-  
-  .article-entry code {
-    background: rgba(255, 255, 255, 0.1)
-    color: highlight-code-dark
-    border-color: rgba(255, 255, 255, 0.2)
-  }
-  
-  .article-entry .highlight .gutter pre,
-  .article-entry .highlight .gutter pre .line {
-    background: rgba(255, 255, 255, 0.05)
-    border-color: highlight-border-dark
-    color: rgba(255, 255, 255, 0.6)
-  }
-}
-
-// 代码复制按钮样式
-.btn-copy {
-  position: absolute
-  top: 8px
-  right: 8px
-  background: rgba(0, 0, 0, 0.1)
-  color: #666
-  border: none
-  border-radius: 4px
-  padding: 4px 8px
-  font-size: 0.75em
-  cursor: pointer
-  transition: all 0.2s ease
-  opacity: 0
   
   &:hover {
-    background: rgba(0, 0, 0, 0.2)
-    color: #333
-  }
-  
-  &.copied {
-    background: #28a745
-    color: white
-  }
-  
-  &.copy-failed {
-    background: #dc3545
-    color: white
+    background: none
+    transform: none
   }
 }
 
-.article-entry .highlight:hover .btn-copy,
-.article-entry pre:hover .btn-copy {
-  opacity: 1
-}
-
-// 代码块标题
-.article-entry .highlight figcaption {
-  color: highlight-comment
-  line-height: 1em
-  margin-bottom: 1em
-  font-size: 0.85em
-  font-weight: 500
-  
-  &:before,
-  &:after {
-    content: ""
-    display: table
-  }
-  
-  &:after {
-    clear: both
-  }
-  
-  a {
-    float: right
-    color: highlight-keyword
-    text-decoration: none
-    
-    &:hover {
-      text-decoration: underline
-    }
-  }
+// 文本选择样式
+.article-entry .highlight::selection,
+.article-entry .highlight *::selection {
+  background: rgba(86, 156, 214, 0.3)
+  color: inherit
 }
 
 // 响应式设计
 @media (max-width: 768px) {
-  .article-entry pre,
   .article-entry .highlight {
-    margin: 12px 0
-    padding: 12px
-    font-size: 0.8em
+    margin: 16px 0
+    font-size: 13px
     
     &::before {
-      font-size: 0.7em
-      padding: 2px 6px
+      font-size: 11px
+      padding: 6px 12px
+    }
+    
+    .gutter {
+      width: 40px
+    }
+    
+    .code {
+      margin-left: 40px
+      padding: 12px
+    }
+    
+    .gutter pre .line::before {
+      width: 24px
+      left: -24px
+      font-size: 11px
     }
   }
   
@@ -307,7 +355,20 @@ pre .punctuation {
     position: relative
     top: auto
     right: auto
-    margin-bottom: 8px
+    margin: 8px
     opacity: 1
+  }
+}
+
+// 暗色模式支持
+@media (prefers-color-scheme: dark) {
+  .article-entry code {
+    background: rgba(255, 255, 255, 0.1)
+    color: highlight-text
+    border-color: rgba(255, 255, 255, 0.2)
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.15)
+    }
   }
 }
