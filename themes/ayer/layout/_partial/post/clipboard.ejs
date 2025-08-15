@@ -15,6 +15,23 @@
     $(".highlight pre").before(copyHtml);
     $(".article pre:not(.highlight pre)").before(copyHtml);
     
+    // Add language labels to code blocks
+    $("pre code").each(function() {
+      var $pre = $(this).closest('pre');
+      var $highlight = $pre.closest('.highlight');
+      var lang = $(this).attr('class');
+      
+      if (lang) {
+        // Extract language from class (e.g., "language-javascript" -> "javascript")
+        lang = lang.replace(/^language-/, '');
+        if ($highlight.length) {
+          $highlight.attr('data-lang', lang);
+        } else {
+          $pre.attr('data-lang', lang);
+        }
+      }
+    });
+    
     var clipboard = new ClipboardJS('.btn-copy', {
       target: function(trigger) {
         return trigger.nextElementSibling;
