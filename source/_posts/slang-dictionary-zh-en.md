@@ -15,7 +15,7 @@ tags: []
 **Use `Ctrl+F` (`Command+F`) to search for a specific word!**  
 **请使用 `Ctrl+F` (`Command+F`) 快捷键搜索词汇！**
 
-**Introduction 简介**
+## Introduction 简介
 
 This dictionary is made for those who’d like to speak more natively in both Chinese and English, translate or write internet-related thing like a chat history, or just want to understand what everything means in this digital world.  
 本词典可以用来学习更地道的中英网络用语、作为网络相关文学作品的翻译或写作参考、或只是用来辅助理解网络上常见用词的意思。
@@ -44,7 +44,7 @@ A term is usually included if it has a matching translation in Chinese or can’
 
 
 
-**The Dictionary 词典正文**
+## The Dictionary 词典正文
 
 
 

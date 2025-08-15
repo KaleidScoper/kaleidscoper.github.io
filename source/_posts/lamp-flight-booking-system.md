@@ -12,12 +12,12 @@ Bash
 git clone https://github.com/KaleidScoper/LAMP_Flight_Booking.git
 ```
 
-**目录：**
+## 目录
 
-1. [环境要求](#1)
-2. [功能演示](#2)
+1. [环境要求](#环境要求)
+2. [功能演示](#功能演示)
 
-**一、环境要求**
+## 一、环境要求
 
 开发及测试环境如下：
 
@@ -27,7 +27,7 @@ git clone https://github.com/KaleidScoper/LAMP_Flight_Booking.git
 * **PHP** 8.1.2-1ubuntu2.18
 * 开放端口3306（TCP，MySQL默认端口）
 
-**二、功能演示**
+## 二、功能演示
 
 项目包含下列页面：
 
