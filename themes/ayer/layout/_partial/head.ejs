@@ -33,7 +33,13 @@
       <link rel="shortcut icon" href="<%- theme.favicon %>" />
       <% } %> <%- css('dist/main') %>
       <%- css('css/fonts/remixicon') %>
-      <%- css('css/custom') %> <% if (theme.progressBar){ %>
+      <%- css('css/custom') %>
+      
+      <!-- highlight.js for code highlighting -->
+      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/11.8.0/styles/github.min.css">
+      <script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
+      
+      <% if (theme.progressBar){ %>
       <script src="https://cdn.staticfile.org/pace/1.2.4/pace.min.js"></script>
       <% } %> <%- partial('google-analytics') %> <%- partial('baidu-analytics')
       %>

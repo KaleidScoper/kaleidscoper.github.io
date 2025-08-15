@@ -4,51 +4,68 @@
     var timelag = null;
     timelag = window.setTimeout(callback, seconds);
   }
-  !function (e, t, a) {
-    var initCopyCode = function(){
-      var copyHtml = '';
-      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
-      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
-      copyHtml += '</button>';
-      $(".highlight .code pre").before(copyHtml);
-      $(".article pre code").before(copyHtml);
-      var clipboard = new ClipboardJS('.btn-copy', {
-        target: function(trigger) {
-          return trigger.nextElementSibling;
-        }
-      });
-      clipboard.on('success', function(e) {
-        let $btn = $(e.trigger);
-        $btn.addClass('copied');
-        let $icon = $($btn.find('i'));
-        $icon.removeClass('ri-file-copy-2-line');
-        $icon.addClass('ri-checkbox-circle-line');
-        let $span = $($btn.find('span'));
-        $span[0].innerText = 'COPIED';
-        
-        wait(function () { // 等待两秒钟后恢复
-          $icon.removeClass('ri-checkbox-circle-line');
-          $icon.addClass('ri-file-copy-2-line');
-          $span[0].innerText = 'COPY';
-        }, 2000);
-      });
-      clipboard.on('error', function(e) {
-        e.clearSelection();
-        let $btn = $(e.trigger);
-        $btn.addClass('copy-failed');
-        let $icon = $($btn.find('i'));
-        $icon.removeClass('ri-file-copy-2-line');
-        $icon.addClass('ri-time-line');
-        let $span = $($btn.find('span'));
-        $span[0].innerText = 'COPY FAILED';
-        
-        wait(function () { // 等待两秒钟后恢复
-          $icon.removeClass('ri-time-line');
-          $icon.addClass('ri-file-copy-2-line');
-          $span[0].innerText = 'COPY';
-        }, 2000);
-      });
+  
+  function initCopyCode(){
+    var copyHtml = '';
+    copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+    copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+    copyHtml += '</button>';
+    
+    // Add copy button to all code blocks
+    $(".highlight pre").before(copyHtml);
+    $(".article pre:not(.highlight pre)").before(copyHtml);
+    
+    var clipboard = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    
+    clipboard.on('success', function(e) {
+      let $btn = $(e.trigger);
+      $btn.addClass('copied');
+      let $icon = $($btn.find('i'));
+      $icon.removeClass('ri-file-copy-2-line');
+      $icon.addClass('ri-checkbox-circle-line');
+      let $span = $($btn.find('span'));
+      $span[0].innerText = 'COPIED';
+      
+      wait(function () { // 等待两秒钟后恢复
+        $icon.removeClass('ri-checkbox-circle-line');
+        $icon.addClass('ri-file-copy-2-line');
+        $span[0].innerText = 'COPY';
+      }, 2000);
+    });
+    
+    clipboard.on('error', function(e) {
+      e.clearSelection();
+      let $btn = $(e.trigger);
+      $btn.addClass('copy-failed');
+      let $icon = $($btn.find('i'));
+      $icon.removeClass('ri-file-copy-2-line');
+      $icon.addClass('ri-time-line');
+      let $span = $($btn.find('span'));
+      $span[0].innerText = 'COPY FAILED';
+      
+      wait(function () { // 等待两秒钟后恢复
+        $icon.removeClass('ri-time-line');
+        $icon.addClass('ri-file-copy-2-line');
+        $span[0].innerText = 'COPY';
+      }, 2000);
+    });
+  }
+  
+  // Wait for highlight.js to finish processing
+  function waitForHighlight() {
+    if (typeof hljs !== 'undefined' && document.querySelectorAll('pre code').length > 0) {
+      // Wait a bit more to ensure highlight.js has finished
+      setTimeout(initCopyCode, 100);
+    } else {
+      // Retry after a short delay
+      setTimeout(waitForHighlight, 50);
     }
-    initCopyCode();
-  }(window, document);
+  }
+  
+  // Initialize copy functionality
+  waitForHighlight();
 </script>

@@ -57,3 +57,19 @@
     }
   </script>
   <% } %>
+
+<!-- Initialize highlight.js for code highlighting -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize highlight.js
+    hljs.highlightAll();
+    
+    // Re-highlight code blocks after dynamic content loads
+    if (typeof hljs !== 'undefined') {
+      // Highlight all code blocks
+      document.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightElement(block);
+      });
+    }
+  });
+</script>
