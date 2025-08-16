@@ -33,33 +33,3 @@ if hexo-config('mouse.enable')
         transform translateX($aside-width)
         &.on
             transform translateX(0)
-
-// 简洁的代码高亮样式
-.article-entry {
-  // 代码块基础样式
-  .highlight {
-    position: relative
-  }
-  
-  // 行内代码样式
-  code {
-    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace
-  }
-}
-
-// 代码复制按钮样式
-.btn-copy {
-  opacity: 0
-  transition: opacity 0.2s ease
-}
-
-.article-entry .highlight:hover .btn-copy {
-  opacity: 1
-}
-
-// 响应式调整
-@media (max-width: 768px) {
-  .btn-copy {
-    opacity: 1
-  }
-}

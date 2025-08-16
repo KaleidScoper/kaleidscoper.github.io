@@ -1,302 +1,260 @@
-// 简洁实用的代码高亮样式
-// 设计理念：简洁、清晰、不干扰阅读
+highlight-background = #2d2d2d
+highlight-code = #f2f2f2
+highlight-code-color = #c7254e
+highlight-current-line = grey
+highlight-selection = #000
+highlight-foreground = #dedede
+highlight-comment = #8e908c
+highlight-red = #f2777a
+highlight-orange = #f99157
+highlight-yellow = #ffcc66
+highlight-green = #99cc99
+highlight-aqua = #66cccc
+highlight-blue = #6699cc
+highlight-purple = #cc99cc
 
-// 基础变量
-highlight-bg = #f6f8fa
-highlight-border = #e1e4e8
-highlight-text = #24292e
-highlight-line-bg = #f1f3f4
-highlight-line-border = #e1e4e8
-
-// 语法高亮颜色（GitHub风格）
-highlight-keyword = #d73a49
-highlight-string = #032f62
-highlight-number = #005cc5
-highlight-comment = #6a737d
-highlight-function = #6f42c1
-highlight-class = #e36209
-highlight-variable = #24292e
-highlight-operator = #24292e
-highlight-punctuation = #24292e
-
-// 基础代码块样式
 .article-entry pre,
 .article-entry .highlight {
-  background: highlight-bg
-  border: 1px solid highlight-border
-  border-radius: 6px
-  margin: 16px 0
-  overflow: hidden
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace
-  font-size: 13px
-  line-height: 1.45
-  tab-size: 4
+  background: highlight-background;
+  margin: 10px 0;
+  padding: 10px 10px;
+  overflow: hidden;
+  overflow-x: auto;
+  color: highlight-foreground;
+  font-size: 0.9em;
+  line-height: 1.5;
+
+  /** 滚动条整体部分 */
+  &::-webkit-scrollbar {
+    height: 10px;
+    width: 7px;
+    background: rgba(0, 0, 0, 0.1);
+    /* 高宽分别对应横竖滚动条的尺寸 */
+    /* width: 10px;
+    height: 10px;
+    background: #ccc;
+    border-radius: 0; */
+  }
+
+  &::-webkit-scrollbar:hover {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  /* 滚动条里面小方块 */
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -ms-border-radius: 6px;
+    -o-border-radius: 6px;
+    border-radius: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    -webkit-box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.25);
+    /* Webkit browsers */
+    -moz-box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.25);
+    /* Firefox */
+    -ms-box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.25);
+    /* IE9 */
+    -o-box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.25);
+    /* Opera(Old) */
+    box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.25);
+    /* IE9+, News */
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  /** 滚动条里面的轨道 */
+  &::-webkit-scrollbar-track {
+    /* box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2); */
+    background: #ededed;
+    border-radius: 10px;
+  }
+
 }
 
-// 代码内容
+.article-entry .highlight .gutter pre,
+.article-entry .highlight .gutter pre .line,
+.article-entry .gist .gist-file .gist-data .line-numbers {
+  /* color: #666; */
+  color: highlight-current-line;
+}
+
+.article-entry pre,
+.article-entry code {
+  font-family: Consolas,Monaco,"Andale Mono","Ubuntu Mono",monospace
+}
+
+.article-entry code {
+  background: #eee;
+  color: highlight-code-color;
+  padding: 0 0.3em;
+  border: none;
+}
+
+.article-entry pre code {
+  background: none;
+  text-shadow: none;
+  padding: 0;
+  color: highlight-foreground;
+}
+
+.article-entry .highlight {
+  border-radius: 4px;
+}
+
 .article-entry .highlight pre {
-  margin: 0
-  padding: 16px
-  background: none
-  border: none
-  overflow-x: auto
+  border: none;
+  margin: 0;
+  padding: 0;
 }
 
-// 行号容器
-.article-entry .highlight .gutter {
-  float: left
-  width: 50px
-  background: highlight-line-bg
-  border-right: 1px solid highlight-line-border
-  text-align: right
-  padding: 16px 8px 16px 0
-  margin-right: 16px
-  user-select: none
+.article-entry .highlight table {
+  margin: 0;
+  width: auto;
+  border: none;
 }
 
-// 行号样式
+.article-entry .highlight td {
+  border: none;
+  padding: 0;
+}
+
+.article-entry .highlight figcaption {
+  color: highlight-comment;
+  line-height: 1em;
+  margin-bottom: 1em;
+}
+
+.article-entry .highlight figcaption:before,
+.article-entry .highlight figcaption:after {
+  content: "";
+  display: table;
+}
+
+.article-entry .highlight figcaption:after {
+  clear: both;
+}
+
+.article-entry .highlight figcaption a {
+  float: right;
+}
+
 .article-entry .highlight .gutter pre {
-  padding: 0
-  margin: 0
-  background: none
-  border: none
-  counter-reset: lineNumber
+  text-align: right;
+  padding-right: 20px;
 }
 
 .article-entry .highlight .gutter pre .line {
-  position: relative
-  min-height: 20px
-  line-height: 20px
-  color: #6a737d
-  font-size: 12px
-  
-  &::before {
-    position: absolute
-    width: 32px
-    left: -32px
-    text-align: right
-    counter-increment: lineNumber 1
-    content: counter(lineNumber)
-    color: #6a737d
-  }
+  text-shadow: none;
 }
 
-// 代码内容区域
-.article-entry .highlight .code {
-  overflow: hidden
-  padding: 16px 16px 16px 0
-  
-  pre {
-    padding: 0
-    margin: 0
-    background: none
-    border: none
-  }
-  
-  .line {
-    position: relative
-    min-height: 20px
-    line-height: 20px
-    padding: 0 8px
-  }
+.article-entry .highlight .line {
+  color: highlight-foreground;
+  min-height: 19px;
 }
 
-// 语法高亮颜色
-.article-entry .highlight {
-  .comment {
-    color: highlight-comment
-    font-style: italic
-  }
-  
-  .keyword {
-    color: highlight-keyword
-    font-weight: 600
-  }
-  
-  .string {
-    color: highlight-string
-  }
-  
-  .number {
-    color: highlight-number
-  }
-  
-  .function {
-    color: highlight-function
-  }
-  
-  .class {
-    color: highlight-class
-  }
-  
-  .variable {
-    color: highlight-variable
-  }
-  
-  .operator {
-    color: highlight-operator
-  }
-  
-  .punctuation {
-    color: highlight-punctuation
-  }
+.article-entry .gist {
+  margin: 0 -20px;
+  border-style: solid;
+  border-color: #ddd;
+  border-width: 1px 0;
+  background: #272822;
+  padding: 15px 20px 15px 0;
 }
 
-// 代码复制按钮
-.btn-copy {
-  position: absolute
-  top: 8px
-  right: 8px
-  background: #fff
-  color: #586069
-  border: 1px solid #d1d5da
-  border-radius: 3px
-  padding: 4px 8px
-  font-size: 11px
-  cursor: pointer
-  transition: all 0.2s ease
-  z-index: 2
-  
-  &:hover {
-    background: #f3f4f6
-    border-color: #d1d5da
-  }
-  
-  &.copied {
-    background: #28a745
-    color: white
-    border-color: #28a745
-  }
-  
-  &.copy-failed {
-    background: #dc3545
-    color: white
-    border-color: #dc3545
-  }
+.article-entry .gist .gist-file {
+  border: none;
+  font-family: "Source Code Pro", Consolas, Monaco, Menlo, Consolas, monospace;
+  margin: 0;
 }
 
-// 滚动条样式
-.article-entry .highlight::-webkit-scrollbar {
-  height: 6px
-  width: 6px
+.article-entry .gist .gist-file .gist-data {
+  background: none;
+  border: none;
 }
 
-.article-entry .highlight::-webkit-scrollbar-track {
-  background: #f1f3f4
-  border-radius: 3px
+.article-entry .gist .gist-file .gist-data .line-numbers {
+  background: none;
+  border: none;
+  padding: 0 20px 0 0;
 }
 
-.article-entry .highlight::-webkit-scrollbar-thumb {
-  background: #d1d5da
-  border-radius: 3px
-  
-  &:hover {
-    background: #959da5
-  }
+.article-entry .gist .gist-file .gist-data .line-data {
+  padding: 0 !important;
 }
 
-// 行内代码样式
-.article-entry code {
-  background: #f6f8fa
-  color: #e36209
-  padding: 0.2em 0.4em
-  border-radius: 3px
-  font-size: 0.85em
-  border: 1px solid #e1e4e8
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace
+.article-entry .gist .gist-file .highlight {
+  margin: 0;
+  padding: 0;
+  border: none;
 }
 
-// 代码块内的行内代码
-.article-entry pre code {
-  background: none
-  color: inherit
-  padding: 0
-  border: none
-  border-radius: 0
-  font-size: inherit
+.article-entry .gist .gist-file .gist-meta {
+  background: #272822;
+  color: highlight-comment;
+  font: 0.85em "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-shadow: 0 0;
+  padding: 0;
+  margin-top: 1em;
+  margin-left: 20px;
 }
 
-// 文本选择样式
-.article-entry .highlight::selection,
-.article-entry .highlight *::selection {
-  background: #c8e6c9
-  color: inherit
+.article-entry .gist .gist-file .gist-meta a {
+  color: #258fb8;
+  font-weight: normal;
 }
 
-// 响应式设计
-@media (max-width: 768px) {
-  .article-entry .highlight {
-    margin: 12px 0
-    font-size: 12px
-    
-    .gutter {
-      width: 40px
-      padding: 12px 6px 12px 0
-      margin-right: 12px
-    }
-    
-    .code {
-      padding: 12px 12px 12px 0
-    }
-    
-    .gutter pre .line::before {
-      width: 24px
-      left: -24px
-      font-size: 11px
-    }
-  }
-  
-  .btn-copy {
-    position: relative
-    top: auto
-    right: auto
-    margin: 8px
-    opacity: 1
-  }
+.article-entry .gist .gist-file .gist-meta a:hover {
+  text-decoration: underline;
 }
 
-// 暗色模式支持
-@media (prefers-color-scheme: dark) {
-  .article-entry .highlight {
-    background: #0d1117
-    border-color: #30363d
-    color: #c9d1d9
-    
-    .gutter {
-      background: #161b22
-      border-color: #30363d
-    }
-    
-    .gutter pre .line::before {
-      color: #8b949e
-    }
-  }
-  
-  .article-entry code {
-    background: #161b22
-    color: #79c0ff
-    border-color: #30363d
-  }
-  
-  .btn-copy {
-    background: #21262d
-    color: #c9d1d9
-    border-color: #30363d
-    
-    &:hover {
-      background: #30363d
-    }
-  }
-  
-  .article-entry .highlight::-webkit-scrollbar-track {
-    background: #161b22
-  }
-  
-  .article-entry .highlight::-webkit-scrollbar-thumb {
-    background: #30363d
-    
-    &:hover {
-      background: #484f58
-    }
-  }
+pre .comment {
+  /* color: #75715e; */
+  color: highlight-green
+}
+
+pre .keyword,
+pre .function .keyword,
+pre .class .params {
+  color: #66d9ef;
+}
+
+pre .tag,
+pre .doctype,
+pre .params,
+pre .function,
+pre .css .value {
+  color: highlight-foreground;
+}
+
+pre .css~* .tag,
+pre .title,
+pre .at_rule,
+pre .at_rule .keyword,
+pre .preprocessor,
+pre .preprocessor .keyword {
+  color: #f92672;
+}
+
+pre .attribute,
+pre .built_in,
+pre .class,
+pre .css~* .class,
+pre .function .title {
+  color: #a6e22e;
+}
+
+pre .value,
+pre .string {
+  color: highlight-foreground;
+}
+
+pre .number {
+  color: highlight-purple
+}
+
+pre .id,
+pre .css~* .id {
+  color: #fd971f;
 }
