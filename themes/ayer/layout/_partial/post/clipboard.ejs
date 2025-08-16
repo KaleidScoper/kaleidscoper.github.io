@@ -11,50 +11,6 @@
     copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
     copyHtml += '</button>';
     
-    // Process all code blocks
-    $("pre code").each(function() {
-      var $code = $(this);
-      var $pre = $code.closest('pre');
-      var $highlight = $pre.closest('.highlight');
-      var lang = $code.attr('class');
-      
-      // Extract language from class
-      if (lang) {
-        lang = lang.replace(/^language-/, '');
-        if ($highlight.length) {
-          $highlight.attr('data-lang', lang);
-        } else {
-          $pre.attr('data-lang', lang);
-        }
-      }
-      
-      // Create line numbers if not exists
-      if (!$highlight.find('.gutter').length) {
-        var codeText = $code.text();
-        var lines = codeText.split('\n');
-        var lineNumbers = '';
-        var codeLines = '';
-        
-        lines.forEach(function(line, index) {
-          lineNumbers += '<div class="line"></div>';
-          codeLines += '<div class="line">' + (line || '&nbsp;') + '</div>';
-        });
-        
-        // Create gutter and code structure
-        var gutterHtml = '<div class="gutter"><pre>' + lineNumbers + '</pre></div>';
-        var codeHtml = '<div class="code"><pre>' + codeLines + '</pre></div>';
-        
-        if ($highlight.length) {
-          $highlight.find('pre').html(gutterHtml + codeHtml);
-        } else {
-          $pre.wrap('<div class="highlight"></div>');
-          var $newHighlight = $pre.parent();
-          $newHighlight.attr('data-lang', lang || 'text');
-          $newHighlight.html(gutterHtml + codeHtml);
-        }
-      }
-    });
-    
     // Add copy button to all code blocks
     $(".highlight").each(function() {
       var $highlight = $(this);
@@ -66,8 +22,8 @@
     var clipboard = new ClipboardJS('.btn-copy', {
       target: function(trigger) {
         var $highlight = $(trigger).closest('.highlight');
-        var $code = $highlight.find('.code pre');
-        return $code[0];
+        var $code = $highlight.find('pre code');
+        return $code[0] || $highlight.find('pre')[0];
       }
     });
     
@@ -105,17 +61,8 @@
     });
   }
   
-  // Wait for highlight.js to finish processing
-  function waitForHighlight() {
-    if (typeof hljs !== 'undefined' && document.querySelectorAll('pre code').length > 0) {
-      // Wait a bit more to ensure highlight.js has finished
-      setTimeout(initCopyCode, 100);
-    } else {
-      // Retry after a short delay
-      setTimeout(waitForHighlight, 50);
-    }
-  }
-  
   // Initialize copy functionality
-  waitForHighlight();
+  $(document).ready(function() {
+    setTimeout(initCopyCode, 100);
+  });
 </script>
