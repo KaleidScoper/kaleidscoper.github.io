@@ -41,7 +41,7 @@ progressBar: true
 broadcast:
   enable: false # true开启，false关闭
   type: 1 # 1：自定义输入，2：一言api(https://hitokoto.cn/)
-  text: tmd是只能显示一行还是怎的 # type为1时有效
+  text: 是只能显示一行吗 # type为1时有效
 
 # 文章配置
 # 文章太长，截断按钮文字(在需要截断的行增加此标记：<!--more-->)
