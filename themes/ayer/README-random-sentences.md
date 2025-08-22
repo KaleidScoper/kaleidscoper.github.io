@@ -10,7 +10,14 @@
 # 随机句子模块
 random_sentences:
   enable: true # true开启，false关闭
+  use_local_file: true # true使用本地txt文件，false使用内置句子库
 ```
+
+**配置说明：**
+- `enable`: 控制整个随机句子功能的开启/关闭
+- `use_local_file`: 控制句子来源
+  - `true`: 从 `themes/ayer/source/data/random-sentences.txt` 文件读取句子
+  - `false`: 使用内置的默认句子库
 
 ### 2. 自定义句子库
 编辑 `themes/ayer/source/data/random-sentences.txt` 文件，每行添加一个句子。

@@ -53,7 +53,8 @@
     <% if (theme.random_sentences && theme.random_sentences.enable){ %>
     <ul>
       <li>
-        <div id="random-sentence" class="random-sentence"></div>
+        <div id="random-sentence" class="random-sentence" 
+             data-random-sentences-config='{"use_local_file": <%= theme.random_sentences.use_local_file || true %>}'></div>
       </li>
     </ul>
     <% } %>

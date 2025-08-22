@@ -1,7 +1,7 @@
 // 随机句子功能
 (function() {
-    // 句子库
-    const sentences = [
+    // 默认句子库（备用）
+    const defaultSentences = [
         "生活就像一盒巧克力，你永远不知道下一颗是什么味道。",
         "人生没有彩排，每一天都是现场直播。",
         "时间是最好的老师，但遗憾的是，它杀死了所有的学生。",
@@ -24,6 +24,49 @@
         "最怕你一生碌碌无为，还安慰自己平凡可贵。"
     ];
 
+    let sentences = [...defaultSentences]; // 当前使用的句子库
+    let useLocalFile = true; // 是否使用本地txt文件
+
+    // 检查配置选项（通过全局变量或数据属性）
+    function checkConfig() {
+        // 尝试从页面元素获取配置
+        const configElement = document.querySelector('[data-random-sentences-config]');
+        if (configElement) {
+            try {
+                const config = JSON.parse(configElement.getAttribute('data-random-sentences-config'));
+                if (config.hasOwnProperty('use_local_file')) {
+                    useLocalFile = config.use_local_file;
+                }
+            } catch (e) {
+                console.log('解析配置失败，使用默认设置');
+            }
+        }
+    }
+
+    // 从txt文件读取句子
+    async function loadSentencesFromFile() {
+        try {
+            const response = await fetch('/data/random-sentences.txt');
+            if (response.ok) {
+                const text = await response.text();
+                const lines = text.split('\n').filter(line => line.trim() !== '');
+                if (lines.length > 0) {
+                    sentences = lines;
+                    console.log('成功从txt文件加载句子库，共', lines.length, '句');
+                } else {
+                    console.log('txt文件为空，使用默认句子库');
+                    sentences = [...defaultSentences];
+                }
+            } else {
+                console.log('无法读取txt文件，使用默认句子库');
+                sentences = [...defaultSentences];
+            }
+        } catch (error) {
+            console.log('读取txt文件失败，使用默认句子库:', error);
+            sentences = [...defaultSentences];
+        }
+    }
+
     // 随机选择句子的函数
     function getRandomSentence() {
         const randomIndex = Math.floor(Math.random() * sentences.length);
@@ -45,11 +88,20 @@
         }
     }
 
-    // 页面加载完成后显示随机句子
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', displayRandomSentence);
-    } else {
+    // 初始化：先尝试加载txt文件，然后显示随机句子
+    async function initialize() {
+        checkConfig(); // 检查配置
+        if (useLocalFile) {
+            await loadSentencesFromFile();
+        }
         displayRandomSentence();
+    }
+
+    // 页面加载完成后初始化
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initialize);
+    } else {
+        initialize();
     }
 
     // 页面刷新时重新选择句子（通过监听页面可见性变化）
