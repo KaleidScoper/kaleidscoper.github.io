@@ -6,9 +6,7 @@ tags: [PHP, 数据库, HTML, CSS]
 ---
 <b>前言：</b>这是安徽大学"数据库实验"（大三秋冬）期末作业，是一个演示性质的机票预订系统。代码托管于Github，可通过下方命令下载：
 
-Bash
-
-```
+```bash
 git clone https://github.com/KaleidScoper/LAMP_Flight_Booking.git
 ```
 

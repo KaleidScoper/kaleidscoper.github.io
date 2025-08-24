@@ -12,19 +12,19 @@ Chocolatey[1](#2862beb1-6032-4e76-a84c-9cc4dd2d8982)，一个专为 Windows 系�
 
 以管理员身份打开PowerShell，运行下列命令安装Chocolatey：
 
-```
+```bash
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 ```
 
 使用它搜索软件：
 
-```
+```bash
 choco search 软件包名称
 ```
 
 安装、更新、卸载软件：
 
-```
+```bash
 choco install 要安装的软件包名称 -y
 
 choco upgrade 要更新的软件包名称 -y
@@ -34,18 +34,14 @@ choco uninstall 要卸载的软件包名称 -y
 
 Chocolatey的默认下载路径为“C:\Program Files\”，你可以通过修改它的配置文件来更改下载路径：
 
-```
+```bash
 choco config set cacheLocation "此处填绝对路径如D:\ChocolateyCache"
 ```
 
 比如用它安装Java 22：
 
-```
+```bash
 choco install openjdk --version=22.0.2 -y
 ```
 
 从此你就基本告别了手动配置环境。
-
----
-
-脚注：

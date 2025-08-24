@@ -4,11 +4,10 @@ date: 2023-09-06 22:44:32
 categories: [技术, 开发]
 tags: [C]
 ---
+
 Talk is cheap, show you my code:
 
-C
-
-```
+```c
 #include <stdio.h>
 void main(){
     int x, y=0;

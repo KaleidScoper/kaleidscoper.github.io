@@ -1,10 +1,10 @@
 ---
-title: 使用LAMP建WordPress博客站
+title: 基于 WordPress + VPS 的建站教程
 date: 2023-09-06 21:40:43
 categories: [技术, 开发, Web开发]
 tags: [Linux, Apache, 数据库, PHP, HTML, CSS]
 ---
-<b>前言：</b>阅读本教程不需要任何前置知识。我此前走了很多弯路，不希望后来者还把时间浪费在它们身上。按本教程操作，你将得到一个每年维护成本￥300以下，基于LAMP（Ubuntu22、Apache、MySQL、PHP）的WordPress博客（类似本站），感受Web的精神以及它带来的自由。本文阅读时长可能超过一个小时，有任何问题请直接在评论区讨论。注意：你并不需要现在就准备300元钱，完成本教程支出可能不超过100元。
+<b>前言：</b> 阅读本教程不需要任何前置知识。我此前走了很多弯路，不希望后来者还把时间浪费在它们身上。按本教程操作，你将得到一个每年维护成本 ￥300 以下，基于 LAMP（Ubuntu22、Apache、MySQL、PHP）的 WordPress 博客，感受 Web 的精神以及它带来的自由。☝️🤓欸，那我为啥需要个WordPress博客呢，BB空间不香吗。理由有很多，一是如今海内外的社交媒体，个个是食贴兽，你写了那点玩意鬼知道哪天被吞了。二是如果你打算学点Web开发，直接从零开始搭个网站不现实，选择博客托管平台呢又锻炼不到，而WordPress能先帮你建个站出来，还不剥夺你的自定义空间。
 
 ## 一、注册域名
 
@@ -28,89 +28,76 @@ https://testgames.me/mcserver
 163.197.247.117
 ```
 
-在国内，较大的云主机服务商是阿里云、腾讯云、华为云等，大厂的服务安全性高、种类繁杂、对新人有优惠，但是需要实名认证、备案，流程缓慢。那么，你是否应该去网上寻找诸如“xx云”的广告推广，或是淘宝里的“免备”云主机？并不应该。
+在国内，较大的云主机服务商是阿里云、腾讯云、华为云等，大厂的服务安全性高、有客服用来压力、对新用户有优惠，但是需要实名认证、备案，流程非常缓慢，而且一个Whois查询能直接把你开了，又不方便又不隐私。
 
-我极不建议你选购小服务商的云主机用来建设博客的原因如下：
+☝️🤓欸，那我直接去网上找各种“xx云”的广告推广，或者淘宝里的“免备”不就行了吗？很可惜，也不行。鉴于本人血与泪的教训，我极不建议你用小服务商的云主机用来建设博客：
 
-* 小服务商经常超售、超开，使你选购的配置无法发挥最好性能；
-* 小服务商的用户鱼龙混杂，曾经使用此机器的人可能进行了非法活动，导致ipv4地址被注册商拉入黑名单；
-* 售后较差，跑路风险高。
+- 小服务商经常超售、超开，使你选购的配置无法发挥正常性能；
+- 售后较差，有跑路风险；
+- 小服务商的用户鱼龙混杂，曾经使用此设备的人可能进行了非法活动，导致 IPV4 地址被注册商拉入黑名单，一旦你将珍贵的域名解析至这个不干净的 IP ，遭到ServerHold，那就写小作文跪求解封去吧(本人两次遭到ServerHold，零次解封成功)。
 
-在这里我们可以选择外网的云主机服务商，比如LightNode。选择服务商时注意“是否有独立ipv4地址”，以方便新手建站。我建议选择一款2核2g的月付云主机即可，这是比较低的硬件配置。其中，2核指两个处理器核心，2g指2GB的内存（RAM），这是主要的两个性能指标。2核2g+<b>1个IPv4地址</b>+附赠的大约几十G系统盘+3Mbps峰值带宽/按量付费+Ubuntu22系统镜像（推荐使用此操作系统），这个套装售价大约是每月几十元。
+所以我们选择外网的云主机服务商，比如 LightNode 。挑选商品时，务必确保它具有独立 ipv4 地址。我建议选择一款2核2g的月付云主机即可，这是比较低的硬件配置。其中，2核指两个处理器核心，2g指2GB的内存（RAM），这是主要的两个性能指标。
 
-我们假设你现在租到了心仪的主机，得到了其公网ipv4地址。现在去域名注册商那里将ip填入就可以了。至此DNS服务就帮你把域名解析到这台主机的IP地址了。
+2核2g + 1个IPv4地址 + 约几十G系统盘 + Ubuntu 22 系统镜像，这个套装售价大约是每月几十元。记得选择东亚地区的机器以确保连接速度。
+
+租到了心仪的主机，得到了其公网ipv4地址之后，就可以去域名注册商那里将ip填入了。至此DNS服务就帮你把域名解析到这台主机的IP地址了。
 
 ## 三、如何使用云主机？
 
-拥有云主机后，请先进入服务商提供的控制台，复制保存一下此主机的IP地址、root登录密码，再检查一下硬件配置是否如付款时所声称的那样。接下来查看服务器安全组，注意检查以下几个<b>端口</b>（port）是否放开（即允许TCP入方向规则）：22（ssh端口）、80（http端口）、443（https端口）、3306（MySQL端口）。如果没有可以手动添加，允许所有ip（即0.0.0.0/0），入方向，自定义TCP，端口范围填写需要的端口即可。
+拥有云主机后，请先进入服务商提供的控制台，复制保存一下此主机的IP地址、root登录密码，再检查一下硬件配置是否如付款时所声称的那样。
 
-现在可以使用云主机了，为了方便，我们打开一款<b>终端模拟器</b>软件来进行后续操作，像是Windows Terminal、Tabby、或Termux，以及陈旧的CMD都可以。其他系统我不太熟悉，如果你使用的是Windows系列操作系统，按下Win+R组合键并输入cmd后敲击回车就能打开CMD窗口。
+接下来查看服务器安全组。
+1. TCP 入方向：注意检查以下几个端口（port）是否放开：22（ssh端口）、80（http端口）、443（https端口）、3306（MySQL端口）。如果没有，可以手动为端口添加自定义TCP规则：入方向允许所有ip（即0.0.0.0/0）。
+2. TCP 出方向：一般已经默认开放全部端口。
 
-我建议你像我一样用<b>SSH</b>这种简单、方便的连接命令，它的使用方法是在刚才你打开的窗口里输入ssh后回车（前面列出的Tabby等功能比较强大的终端模拟器，已经提供了图形化的ssh连接方式，不再需要每次手动输入命令，在此不做演示）。如果你的设备已经安装了ssh工具，CMD预计会给出以下输出：
+现在可以使用云主机了，为了方便，我们打开一款终端模拟器软件来进行后续操作，像是Windows Terminal、CMD，或者图形化的终端软件[Tabby](https://tabby.sh/)等等都可以。其他系统我不太熟悉，如果你使用的是Windows系列操作系统，按下Win+R组合键并输入cmd后敲击回车，就能打开CMD窗口。
 
-```
-usage: ssh [-46AaCfGgKkMNnqsTtVvXxYy] [-B buffer_size] [-b bind_address] [-c cipher_spec] [-D [bind_address:]port]
-           [-E log_file] [-e escape_char] [-F configfile] [-I pkcs11]
-           [-i identity_file] [-J [user@]host[:port]] [-L address]
-           [-l login_name] [-m mac_spec] [-O ctl_cmd] [-o option] [-p port]
-           [-Q query_option] [-R address] [-S ctl_path] [-W host:port]
-           [-w local_tun[:remote_tun]] destination [command]
-```
+一般用SSH命令（极个别的设备没有预装ssh，需要手动安装。而前面列出的Tabby等功能比较强大的终端模拟器，已经提供了图形化的ssh连接方式，不再需要每次手动输入命令，在此不做演示）连接服务器。
 
-极个别的设备没有预装ssh，需要手动安装。
+使用方法是在刚才你打开的窗口里输入下列内容后回车：
 
-现在输入以下命令连接你的云主机：
-
-```
+```bash
 ssh root@你购买的云主机的IP
 ```
 
-<b>注意！</b>（如果你是第一次执行刚才的命令，请无视本提示）<b>在后续操作过程中，你有可能操作失败后，想通过重装系统，来回到这步试图重新操作。如果你这么做了，你可能发现ssh命令拒绝连接你的云主机。</b>如果这发生了，按这个路径打开C:\Users\你的用户名\.ssh进入到一个叫.ssh的文件夹，删除里面的所有文件后即可恢复正常。
+用户名一般是root。如果你的设备已经安装了ssh工具，现在就可以输入你的密码来连接。你输入的密码不会显示出来，但实际已经输入进去了。输入结束后敲击回车即可登入。
 
-然后输入你的密码来连接。你输入的密码不会显示出来，但实际已经输入进去了，输入结束后敲击回车即可完成。这期间操作界面可能看起来是下面的样子：
+<b>注意！</b> 在后续操作过程中，你有可能操作失败后，直接重装系统回到这步试图重新操作。如果你这么做了，你可能发现ssh命令拒绝连接你的云主机，或者提示你遭到了中间人攻击。解决方法是打开这个路径：`C:\Users\你的用户名\.ssh`，删除文件夹内所有文件后即可恢复正常。
 
-```
-PS C:\Users\你的电脑用户名> ssh root@你的云主机IP地址
-root@你的云主机IP地址's password:
-Last failed login: Thu Feb 16 03:44:26 UTC 2023 from 某个不怀好意的IP地址 on ssh:notty
-There were 114514 failed login attempts since the last successful login.
-Last login: Thu Feb 16 03:40:08 2023 from 你自己的IP（有可能是）
-[root@云主机名，可能是字母和数字串 ~]#
-```
+以下是几个日常高频使用的指令：
 
-现在你已经成功登入云主机。
+``` shell
+ls #列出当前目录的所有内容
+ll #也是列出当前目录的所有内容，但是包含详细信息，相当于ls -l
 
-以下是几个日常高频使用的指令，你最好记住它们。
+cd /var/www #前往www文件夹
+cd .. #前往上一层文件夹，对于www文件夹，var就是上级文件夹
+cd . #没有任何作用，因为.表示本层文件夹，而..表示上级文件夹
 
-```
-ls 列出当前目录的所有内容
-ll 也是列出当前目录的所有内容，但是包含详细信息，相当于ls -l
-cd /var/www 前往www文件夹
-cd .. 前往上一层文件夹，对于www文件夹，var就是上级文件夹
-cd . 没有任何作用，因为.表示本层文件夹，而..表示上级文件夹
-rm readme.txt 删除readme.txt
-mv readme.txt fuckme.txt 重命名前者为后面的名字
-mv readme.txt /root 剪切此文件到/root文件夹
-cp readme.txt /root 复制此文件到/root文件夹
-pwd 显示你当前所处的路径
-whoami 显示当前用户（如果到目前为止一切正常，此命令应该输出root）
-ping baidu.com 测试你和baidu.com是否还可以联通
-mkdir file 在此处新建file文件夹
-vi readme.txt 编辑readme.txt文件，如果没有则创建一个并编辑。
-              命令执行后，按i进入编辑模式，按Esc后输入:wq后回车可保存退出
-              注意是输入:wq而不是wq
-ctrl键+c键 此组合键会中止你当前执行的命令，别把它当复制用！
-ctrl键+z键 挂起当前指令
-exit 断开连接
+nano readme.txt #编辑readme.txt文件，如果没有则创建一个并编辑。请自行查询nano编辑器的使用方法
+mkdir file #在此处新建file文件夹
+
+rm readme.txt #删除readme.txt
+mv readme.txt new.txt #重命名前者为后面的名字
+mv readme.txt /root #剪切此文件到/root文件夹
+cp readme.txt /root #复制此文件到/root文件夹
+
+pwd #显示你当前所处的路径
+whoami #显示当前用户，如果到目前为止一切正常，此命令应该输出root
+ping baidu.com #测试你是否能访问baidu.com
+
+exit #断开连接
+
+#ctrl键+c键 此组合键会中止你当前执行的命令
+#ctrl键+z键 挂起当前指令
+#在终端中，选中文本点击右键才是复制，未选中文本时点击右键则粘贴
 ```
 
-你可能发现vi命令似乎格外复杂。
-
-由于服务器的延迟和vi编辑器繁琐的操作，实际上我们不应使用这个命令在服务器编辑文件，而是把想编辑的文件下载下来（或者你可以安装一些更好用的文本编辑器，比如nano）。
+由于服务器的延迟和TUI文本编辑器繁琐的操作，实际上我们应避免使用命令在服务器编辑文件，而是把想编辑的文件下载下来编辑。
 
 现在断开和云主机的连接，输入sftp并执行，预期会出现下面的内容（前面列出的Tabby等功能比较强大的终端模拟器，已经提供了图形化的sftp连接方式，不再需要每次手动输入命令，在此不做演示）：
 
-```
+```bash
 usage: sftp [-46AaCfNpqrv] [-B buffer_size] [-b batchfile] [-c cipher]
           [-D sftp_server_path] [-F ssh_config] [-i identity_file]
           [-J destination] [-l limit] [-o ssh_option] [-P port]
@@ -119,13 +106,13 @@ usage: sftp [-46AaCfNpqrv] [-B buffer_size] [-b batchfile] [-c cipher]
 
 一般来说，sftp命令是系统自带的ssh工具的一部分。它登录的方式和ssh类似：
 
-```
+```bash
 sftp root@你的云主机IP地址
 ```
 
 输入密码后：
 
-```
+```bash
 PS C:\Users\你的用户名> sftp root@你的云主机IP地址
 root@你的云主机IP地址's password:
 Connected to 你的云主机IP地址.
@@ -138,7 +125,7 @@ sftp>
 
 现在我演示将云主机/root文件夹内的readme.txt下载到电脑桌面的全部操作。
 
-```
+```bash
 sftp root@你的云主机IP地址
 
 root@你的云主机IP地址's password:
@@ -162,7 +149,7 @@ sftp> lls
 
 现在我们终于开始了网站建设的第一步。我们需要选择一种Web服务器来负责接收用户请求、实现网站各种功能：这样的服务器有很多，比如Nginx、Apache和TomCat，我们选择Apache，这种服务器配置简单、功能强大，现在使用之前提到的ssh登录你的云主机，执行下面的命令安装Apache：
 
-```
+```bash
 sudo apt update && sudo apt install apache2 --yes && sudo ufw allow in "Apache"
 ```
 
@@ -178,7 +165,7 @@ sudo apt update && sudo apt install apache2 --yes && sudo ufw allow in "Apache"
 
 MySQL是一种广受欢迎的关系型数据库，我们WordPress网站的各种数据都存储在MySQL中。
 
-```
+```bash
 sudo apt install mysql-server -y && sudo mysql
 ```
 
@@ -186,9 +173,7 @@ sudo apt install mysql-server -y && sudo mysql
 
 接下来我们需要设置MySQL数据库的密码，在MySQL中输入以下代码，其中<b>PASSWORD必须替换成你自己的密码</b>。此为数据库root用户密码，后面会用到。
 
-SQL
-
-```
+```sql
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password by 'PASSWORD';
 ```
 
@@ -196,7 +181,7 @@ ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password by 'PASSWORD
 
 执行成功后，你将返回到原来的VPS终端界面。接下来初始化MySQL，输入以下命令：
 
-```
+```bash
 sudo mysql_secure_installation
 ```
 
@@ -214,15 +199,13 @@ sudo mysql_secure_installation
 
 一切结束后，输入以下命令登入数据库：
 
-```
+```bash
 mysql -u root -p
 ```
 
 登入MySQL后，依次执行下面每一行MySQL语句，创建一个网站数据库。
 
-SQL
-
-```
+```sql
 CREATE DATABASE 数据库名称 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 CREATE USER '数据库用户名'@'%' IDENTIFIED WITH mysql_native_password BY '数据库密码';
@@ -242,7 +225,7 @@ EXIT;
 
 依次执行下列命令，将安装包括PHP的所有所需的文件、重启Apache。
 
-```
+```bash
 sudo apt install php libapache2-mod-php php-mysql -y
 
 sudo apt update -y && sudo apt install php-curl php-gd php-mbstring php-xml php-xmlrpc php-soap php-intl php-zip -y && sudo systemctl restart apache2
@@ -250,7 +233,7 @@ sudo apt update -y && sudo apt install php-curl php-gd php-mbstring php-xml php-
 
 然后，运行以下命令以修改Apache配置文件，确保WordPress可以正常运行。**请将”我的域名”替换为你的域名**。
 
-```
+```bash
 sudo nano /etc/apache2/sites-available/我的域名.conf
 ```
 
@@ -258,15 +241,13 @@ sudo nano /etc/apache2/sites-available/我的域名.conf
 
 执行以下命令安装nano。
 
-```
+```bash
 sudo apt install nano
 ```
 
 在打开的文件中，粘贴以下配置，并将”我的域名”替换为你的域名：
 
-Apache
-
-```
+```Apache
 <VirtualHost *:80>
     ServerName 我的域名
     ServerAlias www.我的域名
@@ -284,13 +265,13 @@ Apache
 
 然后启用新的网站配置，**其中”我的域名”需要替换为你的域名**：
 
-```
+```bash
 sudo a2ensite 我的域名
 ```
 
 最后，禁用默认网站，并重启Apache：
 
-```
+```bash
 sudo a2dissite 000-default && sudo a2enmod rewrite && sudo a2enmod rewrite && sudo apache2ctl configtest && sudo systemctl restart apache2
 ```
 
@@ -298,13 +279,13 @@ sudo a2dissite 000-default && sudo a2enmod rewrite && sudo a2enmod rewrite && su
 
 目前可选的网站程序（CMS）很多，我们在此选择WordPress。运行以下命令以下载WordPress文件，将保存在你的VPS中的/var/www/wordpress路径下：
 
-```
+```bash
 cd /tmp && curl -O https://wordpress.org/latest.tar.gz && tar xzvf latest.tar.gz && touch /tmp/wordpress/.htaccess && cp /tmp/wordpress/wp-config-sample.php /tmp/wordpress/wp-config.php && mkdir /tmp/wordpress/wp-content/upgrade && sudo cp -a /tmp/wordpress/. /var/www/wordpress && sudo chown -R www-data:www-data /var/www/wordpress && sudo find /var/www/wordpress/ -type d -exec chmod 750 {} \; && sudo find /var/www/wordpress/ -type f -exec chmod 640 {} \;
 ```
 
 运行以下命令获取随机字符串：
 
-```
+```bash
 cd /var/www/wordpress && curl -s https://api.wordpress.org/secret-key/1.1/salt/
 ```
 
@@ -312,7 +293,7 @@ cd /var/www/wordpress && curl -s https://api.wordpress.org/secret-key/1.1/salt/
 
 然后运行以下命令编辑WordPress配置文件，<b>删除原来的字符串，并将你的随机字符串替换到相应的位置</b>。
 
-```
+```bash
 sudo nano /var/www/wordpress/wp-config.php
 ```
 
@@ -320,7 +301,7 @@ sudo nano /var/www/wordpress/wp-config.php
 
 PHP
 
-```
+```bash
 define('FS_METHOD', 'direct');
 ```
 
@@ -338,19 +319,19 @@ define('FS_METHOD', 'direct');
 
 现在回到VPS的控制台，首先我们要安装Certbot：
 
-```
+```bash
 sudo apt install certbot python3-certbot-apache -y
 ```
 
 接下来调整防火墙规则：
 
-```
+```bash
 sudo ufw allow 'Apache Full' && sudo ufw delete allow 'Apache'
 ```
 
 然后，启动Certbot来获取SSL证书：
 
-```
+```bash
 sudo certbot --apache
 ```
 

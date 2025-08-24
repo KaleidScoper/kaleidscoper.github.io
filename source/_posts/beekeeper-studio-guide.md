@@ -12,33 +12,25 @@ tags: [数据库]
 
 现在以root身份登入MySQL，我们需要为远程连接数据库创建一个专用的用户：
 
-Bash
-
-```
+```Bash
 mysql -u root -p
 ```
 
 然后创建一个远程用户，命令中的%代表允许任何ip连接：
 
-SQL
-
-```
+```SQL
 CREATE USER '数据库用户名'@'%' IDENTIFIED WITH mysql_native_password BY '数据库密码';
 ```
 
 将需要管理的数据库授权给该用户操作：
 
-SQL
-
-```
+```SQL
 GRANT ALL ON 数据库名称.* TO '数据库用户名'@'%';
 ```
 
 配置完毕，现在查询所有MySQL用户的Host信息：
 
-SQL
-
-```
+```SQL
 SELECT User, Host FROM mysql.user;
 ```
 
@@ -46,9 +38,7 @@ SELECT User, Host FROM mysql.user;
 
 现在退出MySQL，编辑此MySQL配置文件：
 
-Bash
-
-```
+```Bash
 nano /etc/mysql/mysql.conf.d/mysqld.cnf
 ```
 
@@ -58,16 +48,6 @@ nano /etc/mysql/mysql.conf.d/mysqld.cnf
 
 通过此链接前往Beekeeper Studio官网，下载其社区版：<https://www.beekeeperstudio.io/get-community>
 
-安装完毕后，在“新建连接”中选择你的数据库类型，比如MySQL：
+安装完毕后，在“新建连接”中选择你的数据库类型，比如MySQL，填写信息后，点击test按钮测试连接，一切正常后点击保存即可。
 
-![](https://testgames.me/wp-content/uploads/2024/09/image.png)
-
-按下图填写信息后，点击test按钮测试连接：
-
-![](https://testgames.me/wp-content/uploads/2024/09/image-1-888x1024.png)
-
-一切正常后点击保存即可。
-
-现在从左侧列表找到你新建的连接，右键选择连接即可。然后就可以图形化地管理你的数据库了。
-
-![](https://testgames.me/wp-content/uploads/2024/09/image-3.png)
+现在从左侧列表找到你新建的连接，右键选择连接，然后就可以图形化地管理你的数据库了。

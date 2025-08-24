@@ -8,9 +8,7 @@ tags: [HTML, JavaScript]
 
 将这个文件加入你网站某个页面的head可以起到类似的效果。
 
-HTML
-
-```
+```html
 <script type="text/javascript">
   function Redirect()
   {

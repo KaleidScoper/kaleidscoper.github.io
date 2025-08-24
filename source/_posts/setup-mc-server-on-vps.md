@@ -37,41 +37,31 @@ tags: []
 
 在Tabby等软件中新增一个ssh连接，填入ip地址、密码，选择保存并连接即可进入VPS的终端界面。
 
-![](https://testgames.me/wp-content/uploads/2024/10/image-1024x693.png)
-
 现在假设你已经通过Xshell、Tabby或者CMD连接到了你的VPS。
 
 ## 三、配置云主机环境
 
 在VPS终端界面使用下面的命令更新软件包：
 
-Bash
-
-```
+```Bash
 apt update
 ```
 
 安装Java 21：
 
-Bash
-
-```
+```bash
 apt install openjdk-21-jre -y
 ```
 
 现在安装MCSmanager，这是一个图形化的管理面板，免去了繁琐的命令行操作：
 
-Bash
-
-```
+```bash
 sudo wget -qO- https://gitee.com/mcsmanager/script/raw/master/setup_cn.sh | sudo bash
 ```
 
 现在依次执行每行命令，设置开机自启、启动MCSmanager：
 
-Bash
-
-```
+```bash
 systemctl enable mcsm-{daemon,web}.service
 
 systemctl start mcsm-{daemon,web}.service
@@ -85,9 +75,7 @@ systemctl start mcsm-{daemon,web}.service
 
 MC官网给出了[官方Java版服务端](https://www.minecraft.net/en-us/download/server)，这个服务端是不能安装插件、Mod的。我们以这个服务端为例配置MC服务器。执行此命令下载：（建议自行前往官网下载最新版）
 
-Bash
-
-```
+```bash
 wget https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
 ```
 
@@ -99,9 +87,9 @@ wget https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa
 
 ## 五、Q&A
 
-**Q：**服务器存档和单机档互通吗？
+<b>Q：</b>服务器存档和单机档互通吗？
 
-**A：**分情况。各服务端的存档格式主要有两种：
+<b>A：</b>分情况。各服务端的存档格式主要有两种：
 
 1. 第一种格式：在存档文件夹（这个文件夹的名称就是存档名称，可能是world）里，有DIM1和DIM-1这两个文件夹，分别是维度1（也就是末地）和维度-1（也就是下界）的存档。这个格式是Minecraft客户端使用的格式，最近官方的服务端也开始使用这个格式了。
 2. 第二种格式：存档分为三个文件夹，分别名为world（主世界）、world_the_end（末地）和world_nether（下界）。这是大多数第三方服务端在使用的格式。

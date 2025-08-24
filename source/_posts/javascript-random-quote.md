@@ -10,9 +10,7 @@ tags: [JavaScript]
 
 创建randomQuote.js文件如下：
 
-JavaScript
-
-```
+```javascript
 fetch('/txt文本的路径/quotes.txt')
     .then(response => response.text())
     .then(data => {
@@ -35,9 +33,7 @@ fetch('/txt文本的路径/quotes.txt')
 
 然后将此js脚本引入你的页面：
 
-HTML
-
-```
+```html
 <script src="/js脚本的路径/randomQuote.js"></script>
 <div id="randomText"></div>
 ```
@@ -46,9 +42,7 @@ HTML
 
 执行下列命令即可将我正在使用的文本文档（以个人口味收集）下载到你的服务器：
 
-Bash
-
-```
+```bash
 wget https://testgames.me/random-quote/quotes.txt
 ```
 
