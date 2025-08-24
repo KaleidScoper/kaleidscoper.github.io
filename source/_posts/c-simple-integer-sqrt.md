@@ -5,7 +5,9 @@ categories: [技术, 开发]
 tags: [C]
 ---
 
-Talk is cheap, show you my code:
+Talk is cheap, show you my code.
+
+<!--more-->
 
 ```c
 #include <stdio.h>

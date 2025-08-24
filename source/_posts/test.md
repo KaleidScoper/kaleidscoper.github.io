@@ -5,6 +5,10 @@ categories: [技术, 开发, Web开发]
 tags: [博客, Markdown, 教程]
 ---
 
+测试页面。以后会删。
+
+<!--more-->
+
 行内公式 $ e=mc^2 $
 
 # Hexo 分类与标签示例

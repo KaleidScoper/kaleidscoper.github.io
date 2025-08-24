@@ -13,7 +13,7 @@ menu:
 # 站点次标题和打字动效
 # https://github.com/mattboldt/typed.js
 subtitle:
-  enable: true # 是否开启动效
+  enable: false # 是否开启动效
   text: 兵无常势，水无常形 # 显示的文字
   text2: 曲终人不见，江上数峰青 # 滚动播放，如果不需要可以留空
   text3: 醉困不知醒，欹枕卧江流 # 最多支持三段文字
@@ -32,7 +32,7 @@ logo: /favicon.ico
 cover:
   enable: true
   path: /images/cover4.jpg # /source/images目录下附送多张美图，可更换
-  logo: true #/images/ayer.svg，如果不要直接设置成false
+  logo: false #/images/ayer.svg，如果不要直接设置成false
 
 # 页面顶部进度条
 progressBar: true
@@ -86,7 +86,7 @@ word_count:
 
 # 打赏
 # 打赏type设定：0-关闭打赏； 1-文章对应的md文件里有reward:true属性，才有打赏； 2-所有文章均有打赏
-reward_type: 0
+reward_type: 1
 # 打赏wording
 reward_wording: "欢迎打赏支持作者"
 # 支付宝二维码图片地址，跟你设置logo的方式一样。比如：/images/alipay.jpg
@@ -170,7 +170,7 @@ mermaid:
   theme: forest
 
 # 网站成立年份(默认为 2019，若填入年份小于当前年份，则显示为 2018-2019 类似的格式)
-since: 2025
+since: 2023
 
 # ICP备案信息尾部显示
 icp:

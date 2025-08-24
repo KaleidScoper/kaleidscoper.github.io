@@ -1,30 +1,31 @@
 ---
-title: 不完全网络用语中英词�?
+title: 不完全网络用语中英词典
 date: 2023-09-06 22:34:34
 categories: [杂谈, 人文]
 tags: []
 ---
-本文由[Cy](https://cynthia7979.github.io)[nthia的博客](https://cynthia7979.github.io/Book%20Notes/Alternative%20Theories)转载至此，[点击此处](https://cynthia7979.github.io/Book%20Notes/Alternative%20Theories)[查看原文](https://cynthia7979.github.io/www-dict/)。此转载已获原作者授权，再次转载请向作者申请。请尤其注意，原作�?b>未声�?/b>采用本站授权方式（CC BY-SA 4.0）。本文包含不适宜在工作场所访问的内容，也不适合未成年人阅读。我不能保证本文内容的正确性�?
+
+本文为[Cynthia](https://cynthia7979.github.io)的[博客文章](https://cynthia7979.github.io/Book%20Notes/Alternative%20Theories)直接转载至此。此转载已获原作者授权，再次转载请向作者申请。请尤其注意，原作者未声明采用本站授权方式（CC BY-SA 4.0）。本文包含不适宜在工作场所访问的内容，也不适合未成年人阅读。我不能保证本文内容的正确性。
+
+<!--more-->
 
 ---
 
-*<b></b>*
-
-<b>不适宜工作场所访问 / 冒犯性内容警告：网络暴力相关内容。侮辱性用词。含蓄或明确的性暗示�?/b>
+<b>不适宜工作场所访问 / 冒犯性内容警告：网络暴力相关内容。侮辱性用词。含蓄或明确的性暗示</b>
 
 <b>Use `Ctrl+F` (`Command+F`) to search for a specific word!</b>  
 <b>请使�?`Ctrl+F` (`Command+F`) 快捷键搜索词汇！</b>
 
-## Introduction 简�?
+## Introduction 简介
 
 This dictionary is made for those who'd like to speak more natively in both Chinese and English, translate or write internet-related thing like a chat history, or just want to understand what everything means in this digital world.  
-本词典可以用来学习更地道的中英网络用语、作为网络相关文学作品的翻译或写作参考、或只是用来辅助理解网络上常见用词的意思�?
+本词典可以用来学习更地道的中英网络用语、作为网络相关文学作品的翻译或写作参考、或只是用来辅助理解网络上常见用词的意思。
 
 A term is usually included if it has a matching translation in Chinese or can't be easily found on web. It does not need an English translation to appear here.  
-如果一个词汇有对应的中文翻译，或者未被其他主流词典收录，那么它就会出现在这里。有的词汇不会有对应的英文意思�?
+如果一个词汇有对应的中文翻译，或者未被其他主流词典收录，那么它就会出现在这里。有的词汇不会有对应的英文意思。
 
 <b>Disclaimer:</b> The terms in this dictionary are highly informal. They should not be used for formal situations, e.g. publications, academic presentations, news or scientific reports, etc.  
-<b>免责声明�?/b>本词典中的词汇是极度非正式的，不应被用在正式场合中。正式的场合包括但不限于论文写作、学术演讲、新闻报道及科学报告�?
+<b>免责声明</b>本词典中的词汇是极度非正式的，不应被用在正式场合中。正式的场合包括但不限于论文写作、学术演讲、新闻报道及科学报告。
 
 <b>Please Note:</b> The abbreviations that start with slashes are called <b>tone indicators</b>. They are used to clarify a sentence's connotation and should be used accurately. Read more about tone indicators [here](https://toneindicators.carrd.co/).  
 <b>请注�?/b>：下列英语词汇中，以斜杠�?）开头的词汇都是<b>tone indicator</b>（语气指示词）。它们的作用是阐明一句话的语气和意思，因此需要被恰当使用。在 [这里](https://toneindicators.carrd.co/) 阅读更多关于tone indicator（语气指示词）的介绍�?
@@ -34,7 +35,7 @@ A term is usually included if it has a matching translation in Chinese or can't 
 * `amb.` Ambiguous 模糊翻译
 * `n.a.` Not available 关联词不存在
 * `uncmn.` Uncommon or not a slang 不常用或过于正式
-* `alt.` Alternative meaning 另一个意�?
+* `alt.` Alternative meaning 另一个意思
 * `lit.` Literal translation of the Chinese term 直译
 * `f.` Female 对于女性的用词
 * `m.` Male 对于男性的用词

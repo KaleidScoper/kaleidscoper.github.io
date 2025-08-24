@@ -4,7 +4,10 @@ date: 2024-10-13 22:35:31
 categories: [技术, 开发, Web开发]
 tags: [JavaScript]
 ---
+
 <b>前言：</b>装文艺用，用于在网页的某个位置显示一句诗。托管于[GitHub](https://github.com/KaleidScoper/random-quote)。可前往GitHub页面一键部署。
+
+<!--more-->
 
 ## 正文
 
