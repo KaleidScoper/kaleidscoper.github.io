@@ -5,6 +5,8 @@ categories: [技术, 开发, Web开发]
 tags: [博客, Markdown, 教程]
 ---
 
+行内公式 $ e=mc^2 $
+
 # Hexo 分类与标签示例
 
 这是一篇测试文章，用于防止我忘了Markdown语法。
