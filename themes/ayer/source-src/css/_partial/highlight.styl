@@ -1,73 +1,55 @@
+// VS Code Dark+ Theme Colors with custom background
 highlight-background = #2d2d2d
-highlight-code = #f2f2f2
-highlight-code-color = #c7254e
-highlight-current-line = grey
-highlight-selection = #000
-highlight-foreground = #dedede
-highlight-comment = #8e908c
-highlight-red = #f2777a
-highlight-orange = #f99157
-highlight-yellow = #ffcc66
-highlight-green = #99cc99
-highlight-aqua = #66cccc
-highlight-blue = #6699cc
-highlight-purple = #cc99cc
+highlight-code = #D4D4D4
+highlight-code-color = #9CDCFE
+highlight-current-line = #858585
+highlight-selection = #264F78
+highlight-foreground = #D4D4D4
+highlight-comment = #6A9955
+highlight-red = #F44747
+highlight-orange = #CE9178
+highlight-yellow = #DCDCAA
+highlight-green = #B5CEA8
+highlight-aqua = #4EC9B0
+highlight-blue = #569CD6
+highlight-purple = #C586C0
 
 .article-entry pre,
 .article-entry .highlight {
   background: highlight-background;
-  margin: 10px 0;
-  padding: 10px 10px;
+  margin: 15px 0;
+  padding: 15px;
   overflow: hidden;
   overflow-x: auto;
   color: highlight-foreground;
-  font-size: 0.9em;
-  line-height: 1.5;
+  font-size: 14px;
+  line-height: 1.6;
+  border-radius: 5px;
 
-  /** 滚动条整体部分 */
+  /** 滚动条样式 */
   &::-webkit-scrollbar {
     height: 10px;
     width: 7px;
-    background: rgba(0, 0, 0, 0.1);
-    /* 高宽分别对应横竖滚动条的尺寸 */
-    /* width: 10px;
-    height: 10px;
-    background: #ccc;
-    border-radius: 0; */
+    background: #2d2d2d;
   }
 
   &::-webkit-scrollbar:hover {
-    background: rgba(0, 0, 0, 0.2);
+    background: #3d3d3d;
   }
 
-  /* 滚动条里面小方块 */
+  /* 滚动条滑块 */
   &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.3);
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    -ms-border-radius: 6px;
-    -o-border-radius: 6px;
+    background: #5a5a5a;
     border-radius: 6px;
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    -webkit-box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.25);
-    /* Webkit browsers */
-    -moz-box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.25);
-    /* Firefox */
-    -ms-box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.25);
-    /* IE9 */
-    -o-box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.25);
-    /* Opera(Old) */
-    box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.25);
-    /* IE9+, News */
-    background-color: rgba(0, 0, 0, 0.4);
+    background: #6e6e6e;
   }
 
-  /** 滚动条里面的轨道 */
+  /** 滚动条轨道 */
   &::-webkit-scrollbar-track {
-    /* box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2); */
-    background: #ededed;
+    background: #2d2d2d;
     border-radius: 10px;
   }
 
@@ -86,9 +68,10 @@ highlight-purple = #cc99cc
 }
 
 .article-entry code {
-  background: #eee;
+  background: highlight-background;
   color: highlight-code-color;
-  padding: 0 0.3em;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
   border: none;
 }
 
@@ -99,8 +82,18 @@ highlight-purple = #cc99cc
   color: highlight-foreground;
 }
 
+// 确保所有代码块相关元素使用相同的背景色
+.article-entry pre,
 .article-entry .highlight {
-  border-radius: 4px;
+  background: highlight-background;
+  margin: 15px 0;
+  padding: 15px;
+  overflow: hidden;
+  overflow-x: auto;
+  color: highlight-foreground;
+  font-size: 14px;
+  line-height: 1.6;
+  border-radius: 5px;
 }
 
 .article-entry .highlight pre {
@@ -157,9 +150,9 @@ highlight-purple = #cc99cc
 .article-entry .gist {
   margin: 0 -20px;
   border-style: solid;
-  border-color: #ddd;
+  border-color: #1E1E1E;
   border-width: 1px 0;
-  background: #272822;
+  background: highlight-background;
   padding: 15px 20px 15px 0;
 }
 
@@ -191,7 +184,7 @@ highlight-purple = #cc99cc
 }
 
 .article-entry .gist .gist-file .gist-meta {
-  background: #272822;
+  background: highlight-background;
   color: highlight-comment;
   font: 0.85em "Helvetica Neue", Helvetica, Arial, sans-serif;
   text-shadow: 0 0;
