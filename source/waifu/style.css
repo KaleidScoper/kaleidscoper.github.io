@@ -1,133 +1,149 @@
-/* 页面整体样式 */
+/* CSS Variables for theming */
+:root {
+  --bg-color: #f0f2f5;
+  --card-bg-color: rgba(255, 255, 255, 0.6);
+  --card-border-color: rgba(255, 255, 255, 0.8);
+  --text-color-primary: #333;
+  --text-color-secondary: #555;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --wiki-btn-bg-color: #4f88c6;
+  --wiki-btn-bg-hover-color: #357ab8;
+  --wiki-btn-text-color: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #1a1a1a;
+    --card-bg-color: rgba(40, 40, 40, 0.6);
+    --card-border-color: rgba(255, 255, 255, 0.1);
+    --text-color-primary: #f0f0f0;
+    --text-color-secondary: #aaa;
+    --shadow-color: rgba(0, 0, 0, 0.4);
+    --wiki-btn-bg-color: #357ab8;
+    --wiki-btn-bg-hover-color: #4f88c6;
+  }
+}
+
+/* Page body styles */
 body {
   margin: 0;
   font-family: "Noto Sans", "Microsoft YaHei", sans-serif;
-  background-color: #f5f5f5;
-  /* background-color: #000000; */
+  background-color: var(--bg-color);
   padding: 20px;
+  transition: background-color 0.3s ease;
 }
 
-/* 页面标题 */
-.title {
-  text-align: center;
-  font-size: 2.5em;
-  margin-bottom: 30px;
-  color: #333;
-}
-
-/* 卡片网格布局 */
+/* Grid layout for cards */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 25px;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* 卡片外框（含模糊背景） */
+/* Card styles */
 .card {
   position: relative;
-  padding: 16px;
-  border-radius: 16px;
   overflow: hidden;
-  text-align: center;
-  transition: all 0.3s ease;
-  height: 220px;
+  border-radius: 16px;
+  background-color: var(--card-bg-color);
+  border: 1px solid var(--card-border-color);
+  box-shadow: 0 8px 32px 0 var(--shadow-color);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
-  justify-content: start;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.75);
 }
 
-/* 模糊背景伪元素 */
+.card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 12px 40px 0 var(--shadow-color);
+}
+
+/* Blurred background pseudo-element */
 .card::before {
   content: "";
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-image: var(--bg);
   background-size: cover;
   background-position: center;
-  filter: blur(12px);
-  transform: scale(1.1);
-  z-index: 0;
-  opacity: 0.4;
+  filter: blur(15px) brightness(0.9);
+  transform: scale(1.15);
+  z-index: -1;
+  opacity: 0.5;
 }
 
-/* 让所有子元素浮在背景之上 */
-.card * {
-  position: relative;
-  z-index: 1;
+.card-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex-grow: 1;
 }
 
-/* 悬停时展开卡片 */
-.card:hover {
-  height: auto;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  z-index: 2;
-}
-
-/* 头像样式（圆形） */
+/* Character avatar */
 .card img {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  flex-shrink: 0;  /* 防止头像在 flex 中被压缩 */
-  margin-bottom: 10px;
-  border: 2px solid white;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  border: 3px solid var(--card-border-color);
+  box-shadow: 0 0 10px var(--shadow-color);
+  margin-bottom: 15px;
 }
 
-/* 禁用Hexo自动图注（仅本页面） */
+/* Disable Hexo's auto caption for this page */
 .card .caption {
   display: none !important;
 }
 
-
-/* 中文姓名 */
+/* Character name */
 .card h2 {
-  font-size: 1.1em;
-  margin: 6px 0 2px;
-  color: #333;
+  font-size: 1.25em;
+  margin: 10px 0 2px;
+  color: var(--text-color-primary);
+  font-weight: 600;
 }
 
-/* 原文名（小字） */
+/* Subname */
 .card .subname {
-  font-size: 0.85em;
-  color: #555;
-  margin: 0 0 10px;
-}
-
-/* 简介：默认显示第一行，悬停展开 */
-.card .intro {
   font-size: 0.9em;
-  line-height: 1.4;
-  max-height: 2.6em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: max-height 0.3s ease;
-  margin: 0 0 10px;
-  padding: 0 8px;
+  color: var(--text-color-secondary);
+  margin: 0 0 15px;
+  font-style: italic;
 }
 
-.card:hover .intro {
-  max-height: 1000px;
+/* Introduction */
+.card .intro {
+  font-size: 0.95em;
+  color: var(--text-color-primary);
+  line-height: 1.5;
+  margin: 0 0 20px;
+  flex-grow: 1; /* Allows intro to take up available space */
 }
 
-/* 百科按钮 */
+/* Wiki button */
 .wiki-btn {
-  background-color: #4f88c6;
-  color: white;
+  background-color: var(--wiki-btn-bg-color);
+  color: var(--wiki-btn-text-color);
   text-decoration: none;
-  padding: 6px 12px;
-  border-radius: 10px;
-  font-size: 0.85em;
-  transition: background-color 0.3s ease;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 0.9em;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease;
   margin-top: auto;
-  margin-bottom: 8px;
+  border: 1px solid transparent;
 }
 
 .wiki-btn:hover {
-  background-color: #357ab8;
+  background-color: var(--wiki-btn-bg-hover-color);
+  transform: scale(1.05);
 }
