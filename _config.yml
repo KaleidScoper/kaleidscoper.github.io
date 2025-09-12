@@ -122,6 +122,7 @@ tag_map:
   HTML: html
   CSS: css
   JavaScript: js
+  Vue: vue
   PHP: php
   数据库: SQL
 
