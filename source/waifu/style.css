@@ -1,6 +1,17 @@
-/* CSS Variables for theming */
-:root {
-  --bg-color: #f0f2f5;
+/* Grid layout for cards */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 25px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+/* --- LIGHT MODE STYLES (DEFAULT) --- */
+
+.card {
+  /* Define light mode colors as CSS variables within the card scope */
   --card-bg-color: rgba(255, 255, 255, 0.6);
   --card-border-color: rgba(255, 255, 255, 0.8);
   --text-color-primary: #333;
@@ -9,41 +20,8 @@
   --wiki-btn-bg-color: #4f88c6;
   --wiki-btn-bg-hover-color: #357ab8;
   --wiki-btn-text-color: white;
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-color: #1a1a1a;
-    --card-bg-color: rgba(40, 40, 40, 0.6);
-    --card-border-color: rgba(255, 255, 255, 0.1);
-    --text-color-primary: #f0f0f0;
-    --text-color-secondary: #aaa;
-    --shadow-color: rgba(0, 0, 0, 0.4);
-    --wiki-btn-bg-color: #357ab8;
-    --wiki-btn-bg-hover-color: #4f88c6;
-  }
-}
-
-/* Page body styles */
-body {
-  margin: 0;
-  font-family: "Noto Sans", "Microsoft YaHei", sans-serif;
-  background-color: var(--bg-color);
-  padding: 20px;
-  transition: background-color 0.3s ease;
-}
-
-/* Grid layout for cards */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 25px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* Card styles */
-.card {
+  /* Common structural and aesthetic styles */
   position: relative;
   overflow: hidden;
   border-radius: 16px;
@@ -52,24 +30,35 @@ body {
   box-shadow: 0 8px 32px 0 var(--shadow-color);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
 }
+
+/* --- DARK MODE STYLES (ACTIVATED BY THEME'S .darkmode class) --- */
+
+body.darkmode .card {
+  /* Override the CSS variables for dark mode */
+  --card-bg-color: rgba(40, 40, 40, 0.6);
+  --card-border-color: rgba(255, 255, 255, 0.1);
+  --text-color-primary: #f0f0f0;
+  --text-color-secondary: #aaa;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --wiki-btn-bg-color: #357ab8;
+  --wiki-btn-bg-hover-color: #4f88c6;
+}
+
+/* --- COMMON CARD STYLES THAT USE THE VARIABLES --- */
 
 .card:hover {
   transform: translateY(-5px) scale(1.02);
   box-shadow: 0 12px 40px 0 var(--shadow-color);
 }
 
-/* Blurred background pseudo-element */
 .card::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
   background-image: var(--bg);
   background-size: cover;
   background-position: center;
@@ -88,7 +77,6 @@ body {
   flex-grow: 1;
 }
 
-/* Character avatar */
 .card img {
   width: 100px;
   height: 100px;
@@ -99,12 +87,10 @@ body {
   margin-bottom: 15px;
 }
 
-/* Disable Hexo's auto caption for this page */
 .card .caption {
   display: none !important;
 }
 
-/* Character name */
 .card h2 {
   font-size: 1.25em;
   margin: 10px 0 2px;
@@ -112,7 +98,6 @@ body {
   font-weight: 600;
 }
 
-/* Subname */
 .card .subname {
   font-size: 0.9em;
   color: var(--text-color-secondary);
@@ -120,16 +105,14 @@ body {
   font-style: italic;
 }
 
-/* Introduction */
 .card .intro {
   font-size: 0.95em;
   color: var(--text-color-primary);
   line-height: 1.5;
   margin: 0 0 20px;
-  flex-grow: 1; /* Allows intro to take up available space */
+  flex-grow: 1;
 }
 
-/* Wiki button */
 .wiki-btn {
   background-color: var(--wiki-btn-bg-color);
   color: var(--wiki-btn-text-color);
