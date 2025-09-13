@@ -115,6 +115,7 @@ tag_map:
   博客: blog
 
   Markdown: markdown
+  LaTeX: latex
   Linux: linux
 
   Hexo: hexo
