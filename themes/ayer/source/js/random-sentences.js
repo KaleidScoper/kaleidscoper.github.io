@@ -26,6 +26,8 @@
 
     let sentences = [...defaultSentences]; // 当前使用的句子库
     let useLocalFile = true; // 是否使用本地txt文件
+    let queueSize = 5; // 防重复队列大小，默认5
+    let recentSentences = []; // 最近显示的句子队列
 
     // 检查配置选项（通过全局变量或数据属性）
     function checkConfig() {
@@ -36,6 +38,9 @@
                 const config = JSON.parse(configElement.getAttribute('data-random-sentences-config'));
                 if (config.hasOwnProperty('use_local_file')) {
                     useLocalFile = config.use_local_file;
+                }
+                if (config.hasOwnProperty('queue_size') && config.queue_size > 0) {
+                    queueSize = config.queue_size;
                 }
             } catch (e) {
                 console.log('解析配置失败，使用默认设置');
@@ -67,10 +72,54 @@
         }
     }
 
-    // 随机选择句子的函数
+    // 随机选择句子的函数（防重复版本）
     function getRandomSentence() {
-        const randomIndex = Math.floor(Math.random() * sentences.length);
-        return sentences[randomIndex];
+        // 如果句子库数量小于等于队列大小，直接随机选择
+        if (sentences.length <= queueSize) {
+            const randomIndex = Math.floor(Math.random() * sentences.length);
+            const selectedSentence = sentences[randomIndex];
+            // 更新队列
+            updateRecentQueue(selectedSentence);
+            return selectedSentence;
+        }
+
+        // 获取不在最近队列中的句子
+        const availableSentences = sentences.filter(sentence => !recentSentences.includes(sentence));
+        
+        // 如果所有句子都在队列中，清空队列重新开始
+        if (availableSentences.length === 0) {
+            recentSentences = [];
+            const randomIndex = Math.floor(Math.random() * sentences.length);
+            const selectedSentence = sentences[randomIndex];
+            updateRecentQueue(selectedSentence);
+            return selectedSentence;
+        }
+
+        // 从可用句子中随机选择
+        const randomIndex = Math.floor(Math.random() * availableSentences.length);
+        const selectedSentence = availableSentences[randomIndex];
+        
+        // 更新队列
+        updateRecentQueue(selectedSentence);
+        
+        return selectedSentence;
+    }
+
+    // 更新最近显示句子队列
+    function updateRecentQueue(sentence) {
+        // 如果句子已经在队列中，先移除
+        const index = recentSentences.indexOf(sentence);
+        if (index > -1) {
+            recentSentences.splice(index, 1);
+        }
+        
+        // 将新句子添加到队列末尾
+        recentSentences.push(sentence);
+        
+        // 如果队列超过设定大小，移除最旧的句子
+        if (recentSentences.length > queueSize) {
+            recentSentences.shift();
+        }
     }
 
     // 处理句子中的空格（单空格保持，双空格及以上换行）

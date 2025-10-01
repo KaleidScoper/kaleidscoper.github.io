@@ -47,6 +47,7 @@ broadcast:
 random_sentences: # txt文件中双空格为换行，单空格为空格
   enable: true # true开启，false关闭
   use_local_file: true # true使用本地txt文件，false使用内置句子库
+  queue_size: 5 # 防重复队列大小，存储最近显示的句子数量
 
 # 文章配置
 # 文章太长，截断按钮文字(在需要截断的行增加此标记：<!--more-->)

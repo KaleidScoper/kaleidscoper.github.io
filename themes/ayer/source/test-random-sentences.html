@@ -61,9 +61,10 @@
     <div class="test-section">
         <h2>随机句子显示</h2>
         <div id="random-sentence" class="random-sentence" 
-             data-random-sentences-config='{"use_local_file": true}'></div>
+             data-random-sentences-config='{"use_local_file": true, "queue_size": 5}'></div>
         <button onclick="refreshSentence()">刷新句子</button>
         <button onclick="toggleSource()">切换句子来源</button>
+        <button onclick="testQueue()">测试防重复功能</button>
     </div>
     
     <div class="test-section">
@@ -76,6 +77,13 @@
         <h2>当前配置</h2>
         <p>使用本地txt文件: <span id="config-status">true</span></p>
         <p>当前句子库大小: <span id="sentence-count">0</span></p>
+        <p>队列大小设置: <span id="queue-size">5</span></p>
+    </div>
+    
+    <div class="test-section">
+        <h2>当前队列状态</h2>
+        <div id="queue-status" class="log" style="max-height: 100px;"></div>
+        <button onclick="updateQueueStatus()">刷新队列状态</button>
     </div>
 
     <script>
@@ -120,6 +128,8 @@
 
             let sentences = [...defaultSentences]; // 当前使用的句子库
             let useLocalFile = true; // 是否使用本地txt文件
+            let queueSize = 5; // 防重复队列大小，默认5
+            let recentSentences = []; // 最近显示的句子队列
 
             // 检查配置选项（通过全局变量或数据属性）
             function checkConfig() {
@@ -131,6 +141,10 @@
                         if (config.hasOwnProperty('use_local_file')) {
                             useLocalFile = config.use_local_file;
                             document.getElementById('config-status').textContent = useLocalFile;
+                        }
+                        if (config.hasOwnProperty('queue_size') && config.queue_size > 0) {
+                            queueSize = config.queue_size;
+                            document.getElementById('queue-size').textContent = queueSize;
                         }
                     } catch (e) {
                         console.log('解析配置失败，使用默认设置');
@@ -166,10 +180,54 @@
                 }
             }
 
-            // 随机选择句子的函数
+            // 随机选择句子的函数（防重复版本）
             function getRandomSentence() {
-                const randomIndex = Math.floor(Math.random() * sentences.length);
-                return sentences[randomIndex];
+                // 如果句子库数量小于等于队列大小，直接随机选择
+                if (sentences.length <= queueSize) {
+                    const randomIndex = Math.floor(Math.random() * sentences.length);
+                    const selectedSentence = sentences[randomIndex];
+                    // 更新队列
+                    updateRecentQueue(selectedSentence);
+                    return selectedSentence;
+                }
+
+                // 获取不在最近队列中的句子
+                const availableSentences = sentences.filter(sentence => !recentSentences.includes(sentence));
+                
+                // 如果所有句子都在队列中，清空队列重新开始
+                if (availableSentences.length === 0) {
+                    recentSentences = [];
+                    const randomIndex = Math.floor(Math.random() * sentences.length);
+                    const selectedSentence = sentences[randomIndex];
+                    updateRecentQueue(selectedSentence);
+                    return selectedSentence;
+                }
+
+                // 从可用句子中随机选择
+                const randomIndex = Math.floor(Math.random() * availableSentences.length);
+                const selectedSentence = availableSentences[randomIndex];
+                
+                // 更新队列
+                updateRecentQueue(selectedSentence);
+                
+                return selectedSentence;
+            }
+
+            // 更新最近显示句子队列
+            function updateRecentQueue(sentence) {
+                // 如果句子已经在队列中，先移除
+                const index = recentSentences.indexOf(sentence);
+                if (index > -1) {
+                    recentSentences.splice(index, 1);
+                }
+                
+                // 将新句子添加到队列末尾
+                recentSentences.push(sentence);
+                
+                // 如果队列超过设定大小，移除最旧的句子
+                if (recentSentences.length > queueSize) {
+                    recentSentences.shift();
+                }
             }
 
             // 处理句子中的空格（单空格保持，双空格及以上换行）
@@ -197,6 +255,7 @@
                     document.getElementById('sentence-count').textContent = defaultSentences.length;
                 }
                 displayRandomSentence();
+                updateQueueStatus();
             }
 
             // 页面加载完成后初始化
@@ -227,6 +286,43 @@
 
             window.clearLog = function() {
                 logElement.textContent = '';
+            };
+
+            window.testQueue = function() {
+                console.log('开始测试防重复功能...');
+                console.log('当前队列大小设置:', queueSize);
+                console.log('当前句子库大小:', sentences.length);
+                console.log('当前队列内容:', recentSentences);
+                
+                // 连续生成10个句子，观察是否有重复
+                const testResults = [];
+                for (let i = 0; i < 10; i++) {
+                    const sentence = getRandomSentence();
+                    testResults.push(sentence);
+                    console.log(`第${i+1}次选择: ${sentence}`);
+                }
+                
+                // 检查是否有重复
+                const duplicates = testResults.filter((item, index) => testResults.indexOf(item) !== index);
+                if (duplicates.length > 0) {
+                    console.log('发现重复句子:', duplicates);
+                } else {
+                    console.log('测试通过：10次选择中无重复句子');
+                }
+                
+                console.log('测试完成，当前队列内容:', recentSentences);
+                updateQueueStatus();
+            };
+
+            window.updateQueueStatus = function() {
+                const queueStatusElement = document.getElementById('queue-status');
+                if (recentSentences.length === 0) {
+                    queueStatusElement.textContent = '队列为空';
+                } else {
+                    queueStatusElement.textContent = recentSentences.map((sentence, index) => 
+                        `${index + 1}. ${sentence}`
+                    ).join('\n');
+                }
             };
         })();
     </script>
