@@ -22,7 +22,7 @@ layout: page
       <div class="card-content">
         <img src="img/gojo.jpg" alt="图片加载失败">
         <h2>五条 悟</h2>
-        <p class="subname">Satoru Gojo</p>
+        <p class="subname">Gojo Satoru</p>
         <p class="intro">《咒术回战》</p>
         <a href="https://zh.moegirl.org.cn/五条悟" target="_blank" class="wiki-btn">萌娘百科</a>
       </div>
@@ -85,6 +85,26 @@ layout: page
         <p class="subname">Violet Evergarden</p>
         <p class="intro">《紫罗兰永恒花园》</p>
         <a href="https://mzh.moegirl.org.cn/薇尔莉特·伊芙加登" target="_blank" class="wiki-btn">萌娘百科</a>
+      </div>
+    </div>
+
+    <div class="card" style="--bg:url('img/momo.jpg')">
+      <div class="card-content">
+        <img src="img/momo.jpg" alt="图片加载失败">
+        <h2>绫濑 桃</h2>
+        <p class="subname">Ayase Momo</p>
+        <p class="intro">《胆大党》</p>
+        <a href="https://zh.moegirl.org.cn/绫濑桃" target="_blank" class="wiki-btn">萌娘百科</a>
+      </div>
+    </div>
+
+    <div class="card" style="--bg:url('img/abyss.jpg')">
+      <div class="card-content">
+        <img src="img/abyss.jpg" alt="图片加载失败">
+        <h2>阿比斯深渊</h2>
+        <p class="subname">Abyss</p>
+        <p class="intro">《来自深渊》</p>
+        <a href="https://zh.moegirl.org.cn/来自深渊/阿比斯" target="_blank" class="wiki-btn">萌娘百科</a>
       </div>
     </div>
 

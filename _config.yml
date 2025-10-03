@@ -163,6 +163,27 @@ ignore:
 ## Themes: https://hexo.io/themes/
 theme: ayer
 
+# Markdown-it configuration
+markdown_it:
+  render:
+    html: true
+    xhtmlOut: false
+    breaks: true
+    linkify: true
+    typographer: true
+    quotes: '""'''
+  plugins:
+    - markdown-it-abbr
+    - markdown-it-cjk-breaks
+    - markdown-it-container
+    - markdown-it-deflist
+    - markdown-it-emoji
+    - markdown-it-footnote
+    - markdown-it-ins
+    - markdown-it-mark
+    - markdown-it-sub
+    - markdown-it-sup
+
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
