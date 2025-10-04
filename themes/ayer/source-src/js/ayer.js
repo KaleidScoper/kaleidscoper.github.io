@@ -152,22 +152,22 @@
   });
 
   // DarkMode
-  if (sessionStorage.getItem("darkmode") == 1) {
-    $("body").addClass("darkmode");
-    $("#todark i").removeClass("ri-moon-line").addClass("ri-sun-line");
-  } else {
+  if (sessionStorage.getItem("darkmode") == 0) {
     $("body").removeClass("darkmode");
     $("#todark i").removeClass("ri-sun-line").addClass("ri-moon-line");
+  } else {
+    $("body").addClass("darkmode");
+    $("#todark i").removeClass("ri-moon-line").addClass("ri-sun-line");
   }
   $("#todark").on("click", () => {
-    if (sessionStorage.getItem("darkmode") == 1) {
-      $("body").removeClass("darkmode");
-      $("#todark i").removeClass("ri-sun-line").addClass("ri-moon-line");
-      sessionStorage.removeItem("darkmode");
-    } else {
+    if (sessionStorage.getItem("darkmode") == 0) {
       $("body").addClass("darkmode");
       $("#todark i").removeClass("ri-moon-line").addClass("ri-sun-line");
       sessionStorage.setItem("darkmode", 1);
+    } else {
+      $("body").removeClass("darkmode");
+      $("#todark i").removeClass("ri-sun-line").addClass("ri-moon-line");
+      sessionStorage.setItem("darkmode", 0);
     }
   });
 
