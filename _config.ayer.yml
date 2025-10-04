@@ -8,7 +8,7 @@ menu:
   椒房兰殿: /waifu
   友情链接: /friends
   关于本站: /about
-  个人简历: /resume
+  # 个人简历: /resume
 
 # 站点次标题和打字动效
 # https://github.com/mattboldt/typed.js

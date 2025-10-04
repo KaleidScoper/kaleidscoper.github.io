@@ -1,7 +1,7 @@
 ---
 title: "Hexo博客写作指南：Markdown与数学公式(KaTeX)"
 date: 2025-03-20 12:00:00
-categories: [技术, 开发]
+categories: [技术, 开发, Web开发]
 tags: [教程, Markdown, LaTeX, Hexo]
 ---
 

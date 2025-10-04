@@ -1,7 +1,7 @@
 ---
 title: 树莓派4B开机教程
 date: 2023-10-03 13:23:14
-categories: [技术, 开发]
+categories: [技术, 开发, 桌面开发]
 tags: [Linux]
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: Hexo + GitHub Page 建站教程
 date: 2025-10-02 20:00:00
-categories: [开发,Web开发]
+categories: [技术, 开发, Web开发]
 tags: [教程,Hexo]
 ---
 

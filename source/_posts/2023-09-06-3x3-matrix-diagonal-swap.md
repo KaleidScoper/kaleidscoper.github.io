@@ -1,7 +1,7 @@
 ---
 title: 3x3矩阵沿对角线镜像对调
 date: 2023-09-06 21:13:29
-categories: [技术, 开发]
+categories: [技术, 开发, 桌面开发]
 tags: [C]
 ---
 
