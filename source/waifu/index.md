@@ -108,6 +108,16 @@ layout: page
       </div>
     </div>
 
+    <div class="card" style="--bg:url('img/fareeda.jpg')">
+      <div class="card-content">
+        <img src="img/fareeda.jpg" alt="图片加载失败">
+        <h2>法里达</h2>
+        <p class="subname">Fareeda</p>
+        <p class="intro">Bilibili 音乐 VUP</p>
+        <a href="https://space.bilibili.com/23263470" target="_blank" class="wiki-btn">Bilibili</a>
+      </div>
+    </div>
+
 </div>
 
 {% endraw %}
