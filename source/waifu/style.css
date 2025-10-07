@@ -6,6 +6,8 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px 0;
+  /* 优化渲染性能 */
+  contain: layout style paint;
 }
 
 /* --- LIGHT MODE STYLES (DEFAULT) --- */
@@ -96,6 +98,12 @@ body.darkmode .wiki-btn:hover {
   border: 3px solid var(--card-border-color);
   box-shadow: 0 0 10px var(--shadow-color);
   margin-bottom: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover img {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px var(--shadow-color);
 }
 
 .card .caption {
@@ -161,4 +169,24 @@ body.darkmode .wiki-btn:hover {
 
 .wiki-btn:hover::before {
   left: 100%;
+}
+
+/* 键盘导航支持 */
+.wiki-btn:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+/* 图片懒加载优化 */
+.card img {
+  loading: lazy;
+}
+
+/* 减少重绘优化 */
+.card {
+  will-change: transform;
+}
+
+.card:hover {
+  will-change: auto;
 }
