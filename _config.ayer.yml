@@ -198,9 +198,13 @@ friends_link:
     #网站图片(可忽略不写)
     img: /images/ayer.png
   
-  GitHub主页:
+  我的GitHub主页:
     url: https://github.com/KaleidScoper
     img: /images/github.png
+
+  法里达的歌单:
+    url: https://fareeda.songlist.cc/
+    img: /waifu/img/fareeda.jpg
 
 
 # 评论：1、Valine(推荐)；2、Gitalk；3、Twikoo;
