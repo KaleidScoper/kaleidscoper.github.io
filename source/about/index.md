@@ -4,35 +4,208 @@ date: 2025-03-19 12:00:00
 layout: page
 ---
 
-**关于我：**
+<style>
+.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 30px;
+  margin: 20px 0;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
 
-我是 Kaleid Scoper。欢迎来到我的博客，祝你拥有美好的一天！
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 20px;
+  z-index: 0;
+}
 
-我的常用联系方式如下：
+.glass-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  z-index: 1;
+}
 
-- 邮箱：kaleided.scoper@gmail.com
+.glass-card > * {
+  position: relative;
+  z-index: 2;
+}
 
-**关于网站：**
+.glass-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
+}
 
-本站曾经采用 WordPress + VPS 搭建，现换用 Hexo + GitHub Page 搭建，详情请前往[本站 GitHub 仓库页面](https://github.com/KaleidScoper/kaleidscoper.github.io)查看。
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
+}
 
-我保证本站无任何评论审核、封禁、禁言、敏感词条等规则，这也意味着网站内可能出现非预期的恶意内容，<b>但您在此处发布的任何内容，应遵守您居住地的相关法律法规</b>。
+.profile-avatar::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(255, 255, 255, 0.9) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+  transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 2;
+  pointer-events: none;
+}
 
-当有人留下评论时，我可能会收集评论表单所显示的数据，和访客的IP地址及浏览器的user agent字符串来检查垃圾评论。
+.profile-avatar:hover {
+  transform: scale(1.05) rotate(2deg);
+  box-shadow: 
+    0 8px 32px 0 rgba(31, 38, 135, 0.37),
+    0 4px 16px 0 rgba(31, 38, 135, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+}
 
-如果您向此网站上传图片，您应当避免上传那些有嵌入地理位置信息（EXIF）的图片。此网站的访客将可以下载并提取此网站的图片中的位置信息。
+.profile-avatar:hover::before {
+  transform: translateX(100%) translateY(100%) rotate(45deg);
+}
 
-此站点上的文章可能会包含嵌入的内容（如视频、图片、文章等）。来自其他站点的嵌入内容的行为和您直接访问这些其他站点没有区别。这些站点可能会收集关于您的数据、使用cookies、嵌入额外的第三方跟踪程序，监视您与这些嵌入内容的交互，包括在您有这些站点的账户并登录了这些站点时，跟踪您与嵌入内容的交互。
+.profile-avatar img {
+  position: relative;
+  z-index: 0;
+}
 
-如果您留下评论，评论将被无限期保存。我们这样做以便能识别并自动批准任何后续评论，而不用将这些后续评论加入待审队列。评论可能会被自动垃圾评论监测服务检查。
+.avatar-link {
+  display: inline-block;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
 
-如果您有此站点的账户，或曾经留下评论，您可以请求我提供或者删除您的个人数据。
+.avatar-link:hover {
+  text-decoration: none;
+}
 
-此博客上所有原创内容，均采用 [知识共享署名-相同方式共享 4.0 国际许可协议](https://creativecommons.org/licenses/by-sa/4.0/deed.zh) 进行许可。
+.profile-info {
+  flex: 1;
+  color: #f8f9fa;
+}
 
-<b>*When you share, everyone wins.*</b>
+.profile-name {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0 0 10px 0;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
 
-**关于查成分：**
+.profile-title {
+  font-size: 18px;
+  color: #e9ecef;
+  margin: 0 0 15px 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.profile-desc {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #f1f3f4;
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+  .glass-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+  
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .profile-avatar:hover {
+    transform: scale(1.08) rotate(1deg);
+    box-shadow: 
+      0 8px 32px 0 rgba(31, 38, 135, 0.37),
+      0 4px 16px 0 rgba(31, 38, 135, 0.2),
+      0 0 0 1px rgba(255, 255, 255, 0.2);
+  }
+  
+  .profile-name {
+    font-size: 24px;
+  }
+  
+  .profile-title {
+    font-size: 16px;
+  }
+}
+</style>
+
+<div class="glass-card" data-bg style="--bg-image: url('/images/about-background.jpg')">
+  <a href="/" class="avatar-link">
+    <img src="/waifu/img/fanghe.jpg" alt="" class="profile-avatar">
+  </a>
+  <div class="profile-info">
+    <h2 class="profile-name">Kaleid Scoper</h2>
+    <p class="profile-title">安徽大学 | 博主</p>
+    <p class="profile-desc">
+      欢迎来到我的博客！我是Kale，一名信息安全专业的本科生。此博客将作为我的电子日记本，用于堆放我本人写的一些没用的内容。祝您拥有美好的一天。
+    </p>
+  </div>
+</div>
+
+本站曾经采用 WordPress + VPS 搭建，现换用 Hexo + GitHub Page 搭建，详情请前往[本站 GitHub 仓库页面](https://github.com/KaleidScoper/kaleidscoper.github.io)查看。我保证本站无任何评论审核、封禁、禁言、敏感词条等规则，这也意味着网站内可能出现非预期的恶意内容。<b>您在此处发布的内容最好遵守您居住地的相关法律法规。</b>
+
+**隐私政策：**
+
+- 当您留下评论时，我可能会收集评论表单数据、您的IP地址、浏览器UA等信息。
+- 当您上传包含“嵌入地理位置信息（EXIF）”的图片，此网站的访客将可以下载并提取图片中的位置信息。
+- 除非您或公安机关要求我提供、删除您的个人数据，否则您留下的任何信息将被无限期保存。
+- 此站点上的文章可能会包含嵌入的内容（如视频、图片、文章等）。来自其他站点的嵌入内容的行为和您直接访问这些其他站点没有区别。这些站点可能会收集关于您的数据、使用cookies、嵌入额外的第三方跟踪程序，监视您与这些嵌入内容的交互，包括在您有这些站点的账户并登录了这些站点时，跟踪您与嵌入内容的交互。我对此不提供技术支持、也不负任何责任。
+- 此博客上所有我的原创内容，均采用 [知识共享署名-相同方式共享 4.0 国际许可协议](https://creativecommons.org/licenses/by-sa/4.0/deed.zh) 进行许可。
+- <b>*When you share, everyone wins.*</b>
+
+**查成分：**
 
 - **游戏：**
   - Minecraft
