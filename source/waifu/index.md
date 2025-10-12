@@ -72,6 +72,28 @@ layout: page
       </div>
     </div>
 
+    <!-- K -->
+    <div class="card" style="--bg:url('img/kurusu-makina.png')">
+      <div class="card-content">
+        <img src="img/kurusu-makina.png" alt="图片加载失败">
+        <h2>来栖 真希奈</h2>
+        <p class="subname">Kurusu Makina</p>
+        <p class="intro">《银河特急》</p>
+        <a href="https://zh.wikipedia.org/wiki/銀河特快車_Milky☆Subway" target="_blank" class="wiki-btn">维基百科</a>
+      </div>
+    </div>
+
+    <!-- M -->
+    <div class="card" style="--bg:url('img/mansui.png')">
+      <div class="card-content">
+        <img src="img/mansui.png" alt="图片加载失败">
+        <h2>满穗</h2>
+        <p class="subname">Mahn Swei</p>
+        <p class="intro">《饿殍：明末千里行》</p>
+        <a href="https://zh.moegirl.org.cn/满穗" target="_blank" class="wiki-btn">萌娘百科</a>
+      </div>
+    </div>
+
     <!-- R -->
     <div class="card" style="--bg:url('img/rick.jpg')">
       <div class="card-content">
@@ -123,6 +145,17 @@ layout: page
         <p class="subname">Violet Evergarden</p>
         <p class="intro">《紫罗兰永恒花园》</p>
         <a href="https://mzh.moegirl.org.cn/薇尔莉特·伊芙加登" target="_blank" class="wiki-btn">萌娘百科</a>
+      </div>
+    </div>
+
+    <!-- W -->
+    <div class="card" style="--bg:url('img/wanderer.png')">
+      <div class="card-content">
+        <img src="img/wanderer.png" alt="图片加载失败">
+        <h2>流浪者</h2>
+        <p class="subname">Wanderer</p>
+        <p class="intro">《原神》</p>
+        <a href="https://zh.wikipedia.org/wiki/流浪者_(原神)#参考资料" target="_blank" class="wiki-btn">维基百科</a>
       </div>
     </div>
 
