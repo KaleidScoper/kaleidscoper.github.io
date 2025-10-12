@@ -159,6 +159,17 @@ layout: page
     </div>
 
     <!-- W -->
+
+    <div class="card" style="--bg:url('img/webber.png')">
+      <div class="card-content">
+        <img src="img/webber.png" alt="图片加载失败">
+        <h2>韦伯</h2>
+        <p class="subname">Webber</p>
+        <p class="intro">《饥荒》</p>
+        <a href="zh.moegirl.org.cn/韦伯" target="_blank" class="wiki-btn">萌娘百科</a>
+      </div>
+    </div>
+
     <div class="card" style="--bg:url('img/wulingni.jpg')">
       <div class="card-content">
         <img src="img/wulingni.jpg" alt="图片加载失败">
