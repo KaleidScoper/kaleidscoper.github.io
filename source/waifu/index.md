@@ -41,6 +41,16 @@ layout: page
     </div>
 
     <!-- F -->
+    <div class="card" style="--bg:url('img/fanghe.jpg')">
+      <div class="card-content">
+        <img src="img/fanghe.jpg" alt="图片加载失败">
+        <h2>方和</h2>
+        <p class="subname">Fang Ho</p>
+        <p class="intro">地球Online</p>
+        <a href="/about/" target="_blank" class="wiki-btn">关于</a>
+      </div>
+    </div>
+
     <div class="card" style="--bg:url('img/fareeda.jpg')">
       <div class="card-content">
         <img src="img/fareeda.jpg" alt="图片加载失败">
@@ -131,7 +141,7 @@ layout: page
       <div class="card-content">
         <img src="img/tangxiaoyi.jpg" alt="图片加载失败">
         <h2>唐晓翼</h2>
-        <p class="subname">T'ang, Hsiao-i</p>
+        <p class="subname">T'ang Hsiao-i</p>
         <p class="intro">《查理九世》</p>
         <a href="https://mzh.moegirl.org.cn/唐晓翼" target="_blank" class="wiki-btn">萌娘百科</a>
       </div>
@@ -149,6 +159,16 @@ layout: page
     </div>
 
     <!-- W -->
+    <div class="card" style="--bg:url('img/wulingni.jpg')">
+      <div class="card-content">
+        <img src="img/wulingni.jpg" alt="图片加载失败">
+        <h2>吴凌旎</h2>
+        <p class="subname">Wu Ling-ni</p>
+        <p class="intro">地球Online</p>
+        <a href="/about/" target="_blank" class="wiki-btn">关于</a>
+      </div>
+    </div>
+
     <div class="card" style="--bg:url('img/wanderer.png')">
       <div class="card-content">
         <img src="img/wanderer.png" alt="图片加载失败">
