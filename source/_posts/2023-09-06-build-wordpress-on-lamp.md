@@ -279,7 +279,7 @@ sudo a2dissite 000-default && sudo a2enmod rewrite && sudo a2enmod rewrite && su
 
 ## 七、安装网站程序
 
-目前可选的网站程序（CMS）很多，我们在此选择WordPress。运行以下命令以下载WordPress文件，将保存在你的VPS中的/var/www/wordpress路径下：
+目前可选的网站程序（CMS）很多，我们在此选择WordPress，大名鼎鼎的星月号就是基于WordPress的网站。运行以下命令以下载WordPress文件，将保存在你的VPS中的/var/www/wordpress路径下：
 
 ```bash
 cd /tmp && curl -O https://wordpress.org/latest.tar.gz && tar xzvf latest.tar.gz && touch /tmp/wordpress/.htaccess && cp /tmp/wordpress/wp-config-sample.php /tmp/wordpress/wp-config.php && mkdir /tmp/wordpress/wp-content/upgrade && sudo cp -a /tmp/wordpress/. /var/www/wordpress && sudo chown -R www-data:www-data /var/www/wordpress && sudo find /var/www/wordpress/ -type d -exec chmod 750 {} \; && sudo find /var/www/wordpress/ -type f -exec chmod 640 {} \;
