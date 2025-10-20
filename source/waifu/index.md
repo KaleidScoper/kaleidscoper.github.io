@@ -6,10 +6,29 @@ layout: page
 {% raw %}
 
 <link rel="stylesheet" href="/waifu/style.css">
+<div id="gender-stats" class="gender-stats" aria-live="polite">
+  <div class="stats-header">
+    <strong>性别统计（仅纳入有性别者参与统计）</strong>
+    <span id="status-badge" class="status-badge ok">性取向正常</span>
+  </div>
+  <div class="stats-bars">
+    <div class="bar female">
+      <span class="label">女</span>
+      <div class="track"><div id="bar-female" class="fill" style="width:0%"></div></div>
+      <span id="pct-female" class="percent">0%</span>
+    </div>
+    <div class="bar male">
+      <span class="label">男</span>
+      <div class="track"><div id="bar-male" class="fill" style="width:0%"></div></div>
+      <span id="pct-male" class="percent">0%</span>
+    </div>
+  </div>
+</div>
+<script src="/waifu/stats.js"></script>
 <div class="grid">
 
     <!-- A -->
-    <div class="card" style="--bg:url('img/abyss.jpg')">
+    <div class="card" data-gender="na" style="--bg:url('img/abyss.jpg')">
       <div class="card-content">
         <img src="img/abyss.jpg" alt="图片加载失败">
         <h2>阿比斯深渊</h2>
@@ -19,7 +38,7 @@ layout: page
       </div>
     </div>
 
-    <div class="card" style="--bg:url('img/momo.jpg')">
+    <div class="card" data-gender="female" style="--bg:url('img/momo.jpg')">
       <div class="card-content">
         <img src="img/momo.jpg" alt="图片加载失败">
         <h2>绫濑 桃</h2>
@@ -30,7 +49,7 @@ layout: page
     </div>
 
     <!-- E -->
-    <div class="card" style="--bg:url('img/evil-morty.jpg')">
+    <div class="card" data-gender="male" style="--bg:url('img/evil-morty.jpg')">
       <div class="card-content">
         <img src="img/evil-morty.jpg" alt="图片加载失败">
         <h2>邪恶莫蒂</h2>
@@ -41,7 +60,7 @@ layout: page
     </div>
 
     <!-- F -->
-    <div class="card" style="--bg:url('img/fanghe.jpg')">
+    <div class="card" data-gender="na" style="--bg:url('img/fanghe.jpg')">
       <div class="card-content">
         <img src="img/fanghe.jpg" alt="图片加载失败">
         <h2>方和</h2>
@@ -51,7 +70,7 @@ layout: page
       </div>
     </div>
 
-    <div class="card" style="--bg:url('img/fareeda.jpg')">
+    <div class="card" data-gender="female" style="--bg:url('img/fareeda.jpg')">
       <div class="card-content">
         <img src="img/fareeda.jpg" alt="图片加载失败">
         <h2>法里达</h2>
@@ -61,7 +80,7 @@ layout: page
       </div>
     </div>
 
-    <div class="card" style="--bg:url('img/frieren.jpg')">
+    <div class="card" data-gender="female" style="--bg:url('img/frieren.jpg')">
       <div class="card-content">
         <img src="img/frieren.jpg" alt="图片加载失败">
         <h2>芙莉莲</h2>
@@ -72,7 +91,7 @@ layout: page
     </div>
 
     <!-- G -->
-    <div class="card" style="--bg:url('img/gojo.jpg')">
+    <div class="card" data-gender="male" style="--bg:url('img/gojo.jpg')">
       <div class="card-content">
         <img src="img/gojo.jpg" alt="图片加载失败">
         <h2>五条 悟</h2>
@@ -83,7 +102,7 @@ layout: page
     </div>
 
     <!-- K -->
-    <div class="card" style="--bg:url('img/kurusu-makina.png')">
+    <div class="card" data-gender="female" style="--bg:url('img/kurusu-makina.png')">
       <div class="card-content">
         <img src="img/kurusu-makina.png" alt="图片加载失败">
         <h2>来栖 真希奈</h2>
@@ -94,7 +113,7 @@ layout: page
     </div>
 
     <!-- M -->
-    <div class="card" style="--bg:url('img/mansui.png')">
+    <div class="card" data-gender="female" style="--bg:url('img/mansui.png')">
       <div class="card-content">
         <img src="img/mansui.png" alt="图片加载失败">
         <h2>满穗</h2>
@@ -105,7 +124,7 @@ layout: page
     </div>
 
     <!-- R -->
-    <div class="card" style="--bg:url('img/rick.jpg')">
+    <div class="card" data-gender="male" style="--bg:url('img/rick.jpg')">
       <div class="card-content">
         <img src="img/rick.jpg" alt="图片加载失败">
         <h2>瑞克 桑切斯</h2>
@@ -116,7 +135,7 @@ layout: page
     </div>
 
     <!-- S -->
-    <div class="card" style="--bg:url('img/skipper.jpg')">
+    <div class="card" data-gender="male" style="--bg:url('img/skipper.jpg')">
       <div class="card-content">
         <img src="img/skipper.jpg" alt="图片加载失败">
         <h2>老大</h2>
@@ -126,7 +145,7 @@ layout: page
       </div>
     </div>
 
-    <div class="card" style="--bg:url('img/star-butterfly.png')">
+    <div class="card" data-gender="female" style="--bg:url('img/star-butterfly.png')">
       <div class="card-content">
         <img src="img/star-butterfly.png" alt="图片加载失败">
         <h2>星蝶</h2>
@@ -136,7 +155,7 @@ layout: page
       </div>
     </div>
 
-    <div class="card" style="--bg:url('img/stewie.jpg')">
+    <div class="card" data-gender="male" style="--bg:url('img/stewie.jpg')">
       <div class="card-content">
         <img src="img/stewie.jpg" alt="图片加载失败">
         <h2>斯图威 格里芬</h2>
@@ -147,7 +166,7 @@ layout: page
     </div>
 
     <!-- T -->
-    <div class="card" style="--bg:url('img/tangxiaoyi.jpg')">
+    <div class="card" data-gender="male" style="--bg:url('img/tangxiaoyi.jpg')">
       <div class="card-content">
         <img src="img/tangxiaoyi.jpg" alt="图片加载失败">
         <h2>唐晓翼</h2>
@@ -158,7 +177,7 @@ layout: page
     </div>
 
     <!-- V -->
-    <div class="card" style="--bg:url('img/violet.jpg')">
+    <div class="card" data-gender="female" style="--bg:url('img/violet.jpg')">
       <div class="card-content">
         <img src="img/violet.jpg" alt="图片加载失败">
         <h2>薇尔莉特 伊芙加登</h2>
@@ -170,7 +189,7 @@ layout: page
 
     <!-- W -->
 
-    <div class="card" style="--bg:url('img/webber.png')">
+    <div class="card" data-gender="male" style="--bg:url('img/webber.png')">
       <div class="card-content">
         <img src="img/webber.png" alt="图片加载失败">
         <h2>韦伯</h2>
@@ -180,7 +199,7 @@ layout: page
       </div>
     </div>
 
-    <div class="card" style="--bg:url('img/wulingni.jpg')">
+    <div class="card" data-gender="na" style="--bg:url('img/wulingni.jpg')">
       <div class="card-content">
         <img src="img/wulingni.jpg" alt="图片加载失败">
         <h2>吴凌旎</h2>
@@ -190,7 +209,7 @@ layout: page
       </div>
     </div>
 
-    <div class="card" style="--bg:url('img/wanderer.png')">
+    <div class="card" data-gender="male" style="--bg:url('img/wanderer.png')">
       <div class="card-content">
         <img src="img/wanderer.png" alt="图片加载失败">
         <h2>流浪者</h2>

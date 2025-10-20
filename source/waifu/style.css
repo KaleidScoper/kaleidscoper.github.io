@@ -190,3 +190,127 @@ body.darkmode .wiki-btn:hover {
 .card:hover {
   will-change: auto;
 }
+
+/* ---- Gender Stats Panel ---- */
+.gender-stats {
+  --panel-bg: rgba(255, 255, 255, 0.6);
+  --panel-border: rgba(0, 0, 0, 0.08);
+  --panel-shadow: rgba(0, 0, 0, 0.08);
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --ok-bg: rgba(16, 185, 129, 0.15);
+  --ok-text: #059669;
+  --ok-border: rgba(16, 185, 129, 0.35);
+  --error-bg: rgba(239, 68, 68, 0.15);
+  --error-text: #dc2626;
+  --error-border: rgba(239, 68, 68, 0.35);
+  --male-grad: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
+  --female-grad: linear-gradient(90deg, #f472b6, #ec4899, #db2777);
+  --track-bg: rgba(0, 0, 0, 0.08);
+
+  max-width: 1200px;
+  margin: 0 auto 12px auto;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--panel-border);
+  background: var(--panel-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text-primary);
+  box-shadow: 0 8px 28px 0 var(--panel-shadow);
+}
+
+.gender-stats .stats-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.gender-stats .stats-header strong {
+  font-size: 1rem;
+  letter-spacing: .02em;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .9rem;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: all .25s ease;
+  user-select: none;
+}
+
+.status-badge.ok {
+  background: var(--ok-bg);
+  color: var(--ok-text);
+  border-color: var(--ok-border);
+}
+
+.status-badge.error {
+  background: var(--error-bg);
+  color: var(--error-text);
+  border-color: var(--error-border);
+}
+
+.gender-stats .stats-bars {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.gender-stats .bar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.gender-stats .bar .label {
+  font-size: .9rem;
+  color: var(--text-secondary);
+  width: 2em;
+}
+
+.gender-stats .bar .track {
+  position: relative;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--track-bg);
+  overflow: hidden;
+}
+
+.gender-stats .bar .fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0%;
+  transition: width .6s cubic-bezier(.22,.61,.36,1);
+}
+
+.gender-stats .bar.female .fill {
+  background: var(--female-grad);
+}
+
+.gender-stats .bar.male .fill {
+  background: var(--male-grad);
+}
+
+.gender-stats .bar .percent {
+  font-variant-numeric: tabular-nums;
+  min-width: 3.5em;
+  text-align: right;
+}
+
+/* Dark mode overrides */
+body.darkmode .gender-stats {
+  --panel-bg: rgba(40, 40, 40, 0.55);
+  --panel-border: rgba(255, 255, 255, 0.12);
+  --panel-shadow: rgba(0, 0, 0, 0.35);
+  --text-primary: #e5e7eb;
+  --text-secondary: #9ca3af;
+  --track-bg: rgba(255, 255, 255, 0.12);
+}
