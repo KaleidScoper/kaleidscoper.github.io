@@ -126,6 +126,16 @@ layout: page
       </div>
     </div>
 
+    <div class="card" style="--bg:url('img/star-butterfly.png')">
+      <div class="card-content">
+        <img src="img/star-butterfly.png" alt="图片加载失败">
+        <h2>星蝶</h2>
+        <p class="subname">Star Butterfly</p>
+        <p class="intro">《星蝶公主》</p>
+        <a href="https://zh.moegirl.org.cn/星蝶" target="_blank" class="wiki-btn">萌娘百科</a>
+      </div>
+    </div>
+
     <div class="card" style="--bg:url('img/stewie.jpg')">
       <div class="card-content">
         <img src="img/stewie.jpg" alt="图片加载失败">
