@@ -5,7 +5,7 @@ categories: [技术, 开发, Web开发]
 tags: [教程,Hexo]
 ---
 
-<b>前言：</b>Hexo是一个快速、简洁且高效的博客框架，基于Node.js开发。它可以将Markdown文档转换为静态网站，非常适合技术博客和个人网站。结合GitHub Pages的免费托管服务，可以零成本搭建一个专业的个人博客。本教程将带你从零开始搭建一个Hexo博客并部署到GitHub Pages。
+<b>前言：</b>Hexo是一个快速、简洁且高效的静态站点生成器，基于Node.js开发。与WordPress这种开箱即用的动态网站框架不同，Hexo是将Markdown文档转换为静态网站，极其轻量化，非常适合技术博客和个人网站。结合GitHub Pages的免费托管服务，可以零成本搭建一个很唬人的个人博客。本教程将带你从零开始搭建一个Hexo博客并部署到GitHub Pages。
 
 <!--more-->
 
