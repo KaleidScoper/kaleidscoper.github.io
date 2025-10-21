@@ -128,6 +128,6 @@ tags: [教程]
 
 ## 九、参考文献（？）
 - 资料来源包括：  
-  - Pixiv 等日韩二次元/成人社区标签用法；  
+  - Pixiv、JmComic、PicACG 等亚洲二次元/成人社区标签用法；  
   - Pornhub、XVideos、AO3 等英文色情网站的分类体系；
   - Wikipedia 对色情相关词源的解释。  
