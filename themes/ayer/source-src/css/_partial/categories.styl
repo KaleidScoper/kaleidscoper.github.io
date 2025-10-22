@@ -1,52 +1,374 @@
-// Categories
+// Categories - Clean Glassmorphism Design (Waifu-style)
 .categories-box
-  max-width 320px
-  margin-right -.5rem
-  margin-left -.5rem
-  border-left 1px solid #eee
-  span
-    padding-left: 5px;
-    color: #aaa;
-    font-size: 14px
-  ul li, ol li
-    list-unstyled()
-    margin: 15px 0;
-    padding-left: 15px;
-    padding-bottom: 12px;
-    font-size: 16px;
-    font-weight: 500;
-    word-wrap: break-word;
-    border-bottom: 1px solid #eee;
-    &:last-child
-      margin-bottom 0
-      border-bottom 0 solid #000
-    i 
-      font-style normal
-      margin-left 10px
-      color: darken(water,45%)
-  a 
-    display inline-block
-    vertical-align middle
-    text-decoration: none 
-    color: body-color
-    &:hover
-      opacity .8
-    &:before
-      content "\efde"
-      font-family remixicon
-      margin-right .5rem
-      display inline-block
-      vertical-align middle
-  ul ul,ol ul,ul ol,ol ol
-    list-unstyled()
-    margin 0 20px
-  ul ul li,ol ul li,ul ol li,ol ol li
-    list-unstyled()
-    border: none;
-    padding-bottom: 0;
-.category-list-count:before, .tag-list-count:before, .archive-list-count:before
-  content: "(";
-.category-list-count:after, .tag-list-count:after, .archive-list-count:after
-  content: ")";
+  max-width: 100%
+  margin: 2rem 0
+  padding: 1rem 0
+  overflow: visible
+  
+  // 主分类列表
+  > .category-list
+    display: grid
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))
+    gap: 1.5rem
+    list-style: none
+    padding: 0
+    margin: 0
+    
+    > .category-list-item
+      // CSS 变量定义 - 亮色模式
+      --card-bg: rgba(255, 255, 255, 0.6)
+      --card-border: rgba(255, 255, 255, 0.8)
+      --shadow-color: rgba(0, 0, 0, 0.1)
+      --shadow-hover: rgba(0, 0, 0, 0.15)
+      --accent-color: #667eea
+      --accent-color-alt: #764ba2
+      --text-primary: #333
+      --text-secondary: #555
+      --badge-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
+      --badge-text: #ffffff
+      
+      position: relative
+      overflow: hidden
+      border-radius: 16px
+      padding: 1.5rem
+      background-color: var(--card-bg)
+      border: 1px solid var(--card-border)
+      box-shadow: 0 8px 32px 0 var(--shadow-color)
+      backdrop-filter: blur(10px)
+      -webkit-backdrop-filter: blur(10px)
+      transition: all 0.4s cubic-bezier(0.22, 0.61, 0.36, 1)
+      display: grid
+      grid-template-columns: 1fr auto
+      gap: 0.5rem
+      align-items: start
+      will-change: transform
+      
+      &:hover
+        transform: translateY(-5px) scale(1.02)
+        box-shadow: 0 12px 40px 0 var(--shadow-hover)
+        will-change: auto
+      
+      // 顶级分类链接
+      > .category-list-link
+        display: flex
+        align-items: center
+        font-size: 1.3rem
+        font-weight: 600
+        color: var(--text-primary)
+        text-decoration: none
+        transition: color 0.3s cubic-bezier(0.22, 0.61, 0.36, 1)
+        
+        &:before
+          content: "\efde"
+          font-family: remixicon
+          font-size: 1.5rem
+          margin-right: 0.75rem
+          color: var(--accent-color)
+          transition: transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1)
+        
+        &:hover
+          color: var(--accent-color)
+          
+          &:before
+            transform: scale(1.1) rotate(5deg)
+      
+      // 分类计数徽章
+      > .category-list-count
+        display: inline-flex
+        align-items: center
+        justify-content: center
+        min-width: 2rem
+        height: 2rem
+        padding: 0 0.6rem
+        background: var(--badge-bg)
+        color: var(--badge-text)
+        border-radius: 20px
+        font-size: 0.85rem
+        font-weight: 600
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3)
+        transition: all 0.4s cubic-bezier(0.22, 0.61, 0.36, 1)
+        position: relative
+        overflow: hidden
+        
+        &:before
+          content: ''
+          position: absolute
+          top: 0
+          left: -100%
+          width: 100%
+          height: 100%
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)
+          transition: left 0.5s ease
+        
+        &:after
+          content: none
+        
+        &:hover
+          transform: translateY(-2px) scale(1.05)
+          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5)
+          
+          &:before
+            left: 100%
+      
+      // 子分类容器
+      > .category-list-child
+        grid-column: 1 / -1
+        list-style: none
+        padding: 0
+        margin: 1rem 0 0 0
+        
+        > .category-list-item
+          --child-bg: rgba(255, 255, 255, 0.4)
+          --child-border: rgba(255, 255, 255, 0.6)
+          --child-text: var(--text-secondary)
+          --child-shadow: rgba(0, 0, 0, 0.08)
+          --child-badge-bg: linear-gradient(135deg, #a8b8ff 0%, #c9b3ff 100%)
+          --child-badge-text: #2d3748
+          
+          position: relative
+          background-color: var(--child-bg)
+          backdrop-filter: blur(10px)
+          -webkit-backdrop-filter: blur(10px)
+          border-radius: 12px
+          border: 1px solid var(--child-border)
+          padding: 1rem
+          margin: 0.75rem 0
+          box-shadow: 0 4px 16px 0 var(--child-shadow)
+          transition: all 0.4s cubic-bezier(0.22, 0.61, 0.36, 1)
+          display: grid
+          grid-template-columns: 1fr auto
+          gap: 0.5rem
+          align-items: start
+          will-change: transform
+          
+          &:hover
+            transform: translateY(-3px) scale(1.01)
+            box-shadow: 0 6px 20px 0 var(--child-shadow)
+            will-change: auto
+          
+          // 二级分类链接
+          > .category-list-link
+            display: flex
+            align-items: center
+            font-size: 1.1rem
+            font-weight: 500
+            color: var(--child-text)
+            text-decoration: none
+            transition: color 0.3s cubic-bezier(0.22, 0.61, 0.36, 1)
+            
+            &:before
+              content: "\ea6e"
+              font-family: remixicon
+              font-size: 1.2rem
+              margin-right: 0.6rem
+              color: var(--accent-color)
+              transition: transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1)
+            
+            &:hover
+              color: var(--accent-color)
+              
+              &:before
+                transform: scale(1.1) rotate(5deg)
+          
+          // 二级分类计数
+          > .category-list-count
+            display: inline-flex
+            align-items: center
+            justify-content: center
+            min-width: 1.8rem
+            height: 1.8rem
+            padding: 0 0.5rem
+            background: var(--child-badge-bg)
+            color: var(--child-badge-text)
+            border-radius: 15px
+            font-size: 0.8rem
+            font-weight: 600
+            box-shadow: 0 2px 6px rgba(168, 184, 255, 0.3)
+            transition: all 0.4s cubic-bezier(0.22, 0.61, 0.36, 1)
+            position: relative
+            overflow: hidden
+            
+            &:before
+              content: ''
+              position: absolute
+              top: 0
+              left: -100%
+              width: 100%
+              height: 100%
+              background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)
+              transition: left 0.5s ease
+            
+            &:after
+              content: none
+            
+            &:hover
+              transform: translateY(-2px) scale(1.05)
+              box-shadow: 0 3px 8px rgba(168, 184, 255, 0.5)
+              
+              &:before
+                left: 100%
+          
+          // 三级分类容器
+          > .category-list-child
+            grid-column: 1 / -1
+            list-style: none
+            padding: 0
+            margin: 0.75rem 0 0 0
+            
+            > .category-list-item
+              --grandchild-bg: rgba(255, 255, 255, 0.3)
+              --grandchild-border: rgba(255, 255, 255, 0.5)
+              --grandchild-text: #718096
+              --grandchild-shadow: rgba(0, 0, 0, 0.06)
+              
+              background-color: var(--grandchild-bg)
+              backdrop-filter: blur(10px)
+              -webkit-backdrop-filter: blur(10px)
+              border-radius: 10px
+              border: 1px solid var(--grandchild-border)
+              padding: 0.7rem 1rem
+              margin: 0.5rem 0
+              box-shadow: 0 2px 8px 0 var(--grandchild-shadow)
+              transition: all 0.4s cubic-bezier(0.22, 0.61, 0.36, 1)
+              display: grid
+              grid-template-columns: 1fr auto
+              gap: 0.5rem
+              align-items: center
+              will-change: transform
+              
+              &:hover
+                transform: translateY(-2px) scale(1.01)
+                box-shadow: 0 4px 12px 0 var(--grandchild-shadow)
+                will-change: auto
+              
+              // 三级分类链接
+              > .category-list-link
+                display: flex
+                align-items: center
+                font-size: 1rem
+                font-weight: 400
+                color: var(--grandchild-text)
+                text-decoration: none
+                transition: color 0.3s cubic-bezier(0.22, 0.61, 0.36, 1)
+                
+                &:before
+                  content: "\eb6f"
+                  font-family: remixicon
+                  font-size: 1rem
+                  margin-right: 0.5rem
+                  color: #a8b8ff
+                  transition: transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1)
+                
+                &:hover
+                  color: var(--accent-color)
+                  
+                  &:before
+                    transform: scale(1.1) rotate(5deg)
+              
+              // 三级分类计数
+              > .category-list-count
+                display: inline-flex
+                align-items: center
+                justify-content: center
+                min-width: 1.5rem
+                height: 1.5rem
+                padding: 0 0.4rem
+                background: rgba(226, 232, 240, 0.8)
+                color: #4a5568
+                border-radius: 12px
+                font-size: 0.75rem
+                font-weight: 500
+                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1)
+                transition: all 0.4s cubic-bezier(0.22, 0.61, 0.36, 1)
+                position: relative
+                overflow: hidden
+                
+                &:before
+                  content: ''
+                  position: absolute
+                  top: 0
+                  left: -100%
+                  width: 100%
+                  height: 100%
+                  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)
+                  transition: left 0.5s ease
+                
+                &:after
+                  content: none
+                
+                &:hover
+                  transform: translateY(-1px) scale(1.05)
+                  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15)
+                  
+                  &:before
+                    left: 100%
+
+// 响应式设计
+@media (max-width: 768px)
+  .categories-box
+    > .category-list
+      grid-template-columns: 1fr
+      gap: 1rem
+      
+      > .category-list-item
+        padding: 1.2rem
+        
+        > .category-list-link
+          font-size: 1.1rem
+        
+        > .category-list-child
+          > .category-list-item
+            padding: 0.8rem
+            
+            > .category-list-link
+              font-size: 1rem
+
+// 深色模式适配（使用 body.darkmode）
+body.darkmode
+  .categories-box
+    > .category-list
+      > .category-list-item
+        // 重新定义暗色模式下的 CSS 变量
+        --card-bg: rgba(40, 40, 40, 0.6)
+        --card-border: rgba(255, 255, 255, 0.1)
+        --shadow-color: rgba(0, 0, 0, 0.4)
+        --shadow-hover: rgba(0, 0, 0, 0.5)
+        --accent-color: #a8b8ff
+        --accent-color-alt: #c9b3ff
+        --text-primary: #f0f0f0
+        --text-secondary: #aaa
+        --badge-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
+        --badge-text: #ffffff
+        
+        > .category-list-child
+          > .category-list-item
+            --child-bg: rgba(45, 55, 72, 0.5)
+            --child-border: rgba(255, 255, 255, 0.08)
+            --child-text: #cbd5e0
+            --child-shadow: rgba(0, 0, 0, 0.3)
+            --child-badge-bg: linear-gradient(135deg, #7c90ff 0%, #b8a8ff 100%)
+            --child-badge-text: #1a202c
+            
+            > .category-list-child
+              > .category-list-item
+                --grandchild-bg: rgba(26, 32, 44, 0.4)
+                --grandchild-border: rgba(255, 255, 255, 0.06)
+                --grandchild-text: #a0aec0
+                --grandchild-shadow: rgba(0, 0, 0, 0.25)
+                
+                > .category-list-count
+                  background: rgba(74, 85, 104, 0.8)
+                  color: #e2e8f0
+                  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2)
+                  
+                  &:hover
+                    background: rgba(74, 85, 104, 1)
+                    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3)
+
+// 标签和归档页面的计数样式保持一致
+.tag-list-count:before, .archive-list-count:before
+  content: "("
+.tag-list-count:after, .archive-list-count:after
+  content: ")"
  
   

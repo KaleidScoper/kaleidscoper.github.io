@@ -136,12 +136,178 @@ theme: ayer
 3. 这样修改不会在主题更新时丢失
 
 ### <b>主题修改后的操作</b>
-修改主题配置或主题文件后，需要：
+
+主题修改分为两种情况，操作流程不同：
+
+#### <b>情况一：仅修改主题配置文件</b>
+
+如果只修改了主题配置文件（如`_config.ayer.yml`或`themes/ayer/_config.yml`），操作如下：
+
 ```bash
 hexo clean    # 清理缓存
 hexo generate # 重新生成
 hexo server   # 本地预览效果
 ```
+
+#### <b>情况二：修改主题源文件</b>
+
+如果修改了主题的源文件（如CSS、JavaScript、模板文件等），需要**先构建主题**，然后再构建网站。
+
+**为什么需要先构建主题？**
+
+现代Hexo主题通常使用预处理器和构建工具：
+- **CSS预处理器**：Stylus、SCSS、Less等
+- **JavaScript打包**：Webpack、Rollup等
+- **代码优化**：压缩、合并、Tree-shaking等
+
+以Ayer主题为例，它的目录结构包括：
+```
+themes/ayer/
+├── source-src/       # 主题源码（你修改的地方）
+│   ├── css/          # Stylus源文件
+│   │   ├── _partial/
+│   │   │   └── categories.styl  # 例如修改这个文件
+│   │   └── style.styl
+│   └── js/           # JavaScript源文件
+│       └── ayer.js
+├── source/           # 编译后的文件（Hexo实际使用的）
+│   └── dist/
+│       ├── main.css  # 编译后的CSS
+│       └── main.js   # 打包后的JS
+└── package.json      # 主题构建脚本
+```
+
+**关键理解**：Hexo在生成网站时，使用的是`source/dist/`中的编译后文件，而不是`source-src/`中的源文件。因此，修改源文件后必须先编译。
+
+**完整操作流程：**
+
+```bash
+# 步骤1：进入主题目录
+cd themes/ayer
+
+# 步骤2：安装主题依赖（首次修改时需要）
+npm install
+
+# 步骤3：构建主题（将source-src/编译到source/dist/）
+npm run build
+
+# 步骤4：返回站点根目录
+cd ../..
+
+# 步骤5：清理Hexo缓存
+hexo clean
+
+# 步骤6：重新生成网站
+hexo generate
+
+# 步骤7：本地预览
+hexo server
+```
+
+**简化命令（在站点根目录执行）：**
+
+```bash
+# Windows PowerShell
+cd themes/ayer; npm run build; cd ../..; hexo clean; hexo generate; hexo server
+
+# Linux/Mac
+cd themes/ayer && npm run build && cd ../.. && hexo clean && hexo generate && hexo server
+```
+
+#### <b>常见主题文件修改场景</b>
+
+| 修改内容 | 是否需要构建主题 | 示例 |
+|---------|----------------|------|
+| 主题配置文件 | ❌ 不需要 | `_config.ayer.yml` |
+| 模板文件（EJS等） | ❌ 不需要 | `layout/_partial/footer.ejs` |
+| 预处理CSS（Stylus/SCSS） | ✅ 需要 | `source-src/css/_partial/categories.styl` |
+| 源码JavaScript | ✅ 需要 | `source-src/js/ayer.js` |
+| 已编译的CSS | ⚠️ 不推荐直接修改 | `source/dist/main.css` |
+| 已编译的JS | ⚠️ 不推荐直接修改 | `source/dist/main.js` |
+
+**注意**：直接修改`source/dist/`中的编译后文件会在下次构建时被覆盖，应该修改`source-src/`中的源文件。
+
+#### <b>开发模式：实时监听修改</b>
+
+如果需要频繁修改主题样式，可以使用开发模式：
+
+**终端1（主题开发服务器）：**
+```bash
+cd themes/ayer
+npm run dev  # 监听source-src/变化，自动构建到source/dist/
+```
+
+**终端2（Hexo服务器）：**
+```bash
+hexo server  # 启动网站预览
+```
+
+这样修改`source-src/`中的文件后：
+1. Rollup自动重新构建到`source/dist/`
+2. 刷新浏览器即可看到效果（某些修改可能需要重启Hexo服务器）
+
+#### <b>主题构建工具对照表</b>
+
+不同主题使用不同的构建工具，常见命令：
+
+| 主题 | 构建工具 | 构建命令 |
+|------|---------|---------|
+| Ayer | Rollup | `npm run build` |
+| Butterfly | Gulp | `npm run build` |
+| Next | 无需构建 | 直接修改即可 |
+| Fluid | Webpack | `npm run build` |
+
+**如何判断主题是否需要构建？**
+
+1. 查看主题目录是否有`package.json`文件
+2. 检查是否有`source-src/`、`src/`等源码目录
+3. 查看`package.json`中是否有`build`脚本
+
+如果以上都没有，说明主题不需要构建，直接修改后运行`hexo clean && hexo generate`即可。
+
+#### <b>主题修改调试技巧</b>
+
+1. **使用浏览器开发者工具**：
+   - 按F12打开开发者工具
+   - 在Elements面板中实时修改CSS样式
+   - 找到满意的样式后，再修改源文件
+
+2. **查看构建日志**：
+   ```bash
+   npm run build --verbose  # 查看详细构建信息
+   ```
+
+3. **清理缓存**：
+   如果修改未生效，尝试清理所有缓存：
+   ```bash
+   hexo clean              # 清理Hexo缓存
+   rm -rf themes/ayer/node_modules/.cache  # 清理主题构建缓存（如果存在）
+   ```
+
+4. **强制刷新浏览器**：
+   - Windows/Linux：`Ctrl + F5`
+   - Mac：`Cmd + Shift + R`
+
+#### <b>主题修改最佳实践</b>
+
+1. **版本控制**：
+   - 使用Git跟踪主题修改
+   - 修改前创建分支：`git checkout -b theme-custom`
+
+2. **备份原文件**：
+   ```bash
+   cp source-src/css/_partial/categories.styl source-src/css/_partial/categories.styl.bak
+   ```
+
+3. **文档记录**：
+   在项目中创建`THEME_MODIFICATIONS.md`记录修改内容
+
+4. **避免直接修改主题**：
+   如果可能，通过主题配置或自定义CSS实现，避免修改主题核心文件
+
+5. **主题更新策略**：
+   - 不要直接在主题目录使用`git pull`更新
+   - 先备份你的修改，更新后再手动合并
 
 ### <b>常用主题推荐</b>
 - **Ayer**：简洁现代，支持数学公式
@@ -963,7 +1129,13 @@ tags: [标签1, 标签2]
 
 <b>Q：</b>修改主题后网站没有变化怎么办？
 
-<b>A：</b>修改主题后需要执行：`hexo clean && hexo generate && hexo server`。主题修改包括配置文件修改和主题文件修改。
+<b>A：</b>这取决于你修改了什么：
+1. **修改主题配置文件**：执行`hexo clean && hexo generate && hexo server`
+2. **修改主题源文件**（如Stylus、SCSS等）：需要先构建主题。对于Ayer主题，执行：
+   ```bash
+   cd themes/ayer && npm run build && cd ../.. && hexo clean && hexo generate && hexo server
+   ```
+3. **仍然无效**：尝试强制刷新浏览器（Ctrl+F5）或清理主题构建缓存。详见"主题修改后的操作"章节。
 
 <b>Q：</b>如何创建关于页面、友链页面等？
 

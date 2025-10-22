@@ -96,18 +96,35 @@ category_map:
   王者荣耀: kog
   其他游戏: miscgame
 
-  旅行: travel # 一级分类，文章的文件名直接采用城市英文名
-  国内游: domestic
-  国外游: abroad
-
-
-  日记: diary # 一级分类，文章的文件名直接采用diary-年份
+  日记: diary # 一级分类，文章的文件名也直接采用diary-年份
+  2010年: diary-2010
+  2011年: diary-2011
+  2012年: diary-2012
+  2013年: diary-2013
+  2014年: diary-2014
+  2015年: diary-2015
+  2016年: diary-2016
+  2017年: diary-2017
+  2018年: diary-2018
+  2019年: diary-2019
+  2020年: diary-2020
+  2021年: diary-2021
+  2022年: diary-2022
+  2023年: diary-2023
+  2024年: diary-2024
+  2025年: diary-2025
 
   杂谈: talk # 一级分类
-  影视: movie
-  音乐: music
-  书刊: book
-  人文: humanity # 下辖文学、历史、哲学、政治等分类，但此二级分类处不再细分，日后考虑使用tag
+
+  旅行: travel # 二级分类，文章的文件名直接采用城市英文名
+  国内: domestic
+  国外: abroad
+
+  电影剧集: movie
+  漫画动漫: otaku
+  音乐品鉴: music
+  书刊品鉴: book
+  人文社科: humanity # 下辖文学、历史、哲学、政治等分类，但此二级分类处不再细分，日后考虑使用tag
 
   未分类: uncategorized # 一级分类
 
@@ -133,6 +150,30 @@ tag_map:
   C#: csharp
   Python: python
   Java: java
+
+  建筑学: architecture
+  哲学: philosophy
+  历史: history
+  文学: literature
+  美学: aesthetics
+  经济学: economics
+  政治学: politics
+  法学: law
+  教育学: education
+  心理学: psychology
+  社会学: sociology
+  人类学: anthropology
+  地理学: geography
+  生物学: biology
+  化学: chemistry
+  物理学: physics
+  数学: mathematics
+  计算机科学: computer science
+  工程学: engineering
+  医学: medicine
+  管理学: management
+  经济学: economics
+  统计学: statistics
 
 
 # Metadata elements
