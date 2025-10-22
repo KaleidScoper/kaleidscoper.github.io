@@ -54,7 +54,11 @@
             const response = await fetch('/data/random-sentences.txt');
             if (response.ok) {
                 const text = await response.text();
-                const lines = text.split('\n').filter(line => line.trim() !== '');
+                // 过滤空行和以#开头的注释行
+                const lines = text.split('\n').filter(line => {
+                    const trimmed = line.trim();
+                    return trimmed !== '' && !trimmed.startsWith('#');
+                });
                 if (lines.length > 0) {
                     sentences = lines;
                     console.log('成功从txt文件加载句子库，共', lines.length, '句');
