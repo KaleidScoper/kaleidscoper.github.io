@@ -1,8 +1,8 @@
 ---
 title: 不完全网络用语中英词典
 date: 2023-09-06 22:34:34
-categories: [杂谈, 人文]
-tags: []
+categories: [杂谈, 人文社科]
+tags: [语言学,教程]
 ---
 
 本文为[Cynthia](https://cynthia7979.github.io)的[博客文章](https://cynthia7979.github.io/Book%20Notes/Alternative%20Theories)直接转载至此。此转载已获原作者授权，再次转载请向作者申请。请尤其注意，原作者未声明采用本站授权方式（CC BY-SA 4.0）。本文包含不适宜在工作场所访问的内容，也不适合未成年人阅读。我不能保证本文内容的正确性。

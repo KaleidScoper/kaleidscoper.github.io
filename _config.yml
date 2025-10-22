@@ -155,6 +155,7 @@ tag_map:
   哲学: philosophy
   历史: history
   文学: literature
+  语言学: linguistics
   美学: aesthetics
   经济学: economics
   政治学: politics
@@ -169,7 +170,6 @@ tag_map:
   物理学: physics
   数学: mathematics
   计算机科学: computer science
-  工程学: engineering
   医学: medicine
   管理学: management
   经济学: economics

@@ -1,8 +1,8 @@
 ---
 title: 《飞天意面神福音书》读后感
 date: 2023-09-06 22:39:03
-categories: [杂谈, 书刊]
-tags: [书刊]
+categories: [杂谈, 书刊品鉴]
+tags: [哲学]
 ---
 本文由[Cy](https://cynthia7979.github.io)[nthia的博客](https://cynthia7979.github.io/Book%20Notes/Alternative%20Theories)转载至此，[点击此处](https://cynthia7979.github.io/Book%20Notes/Alternative%20Theories)[查看原文](https://cynthia7979.github.io/Book%20Notes/Alternative%20Theories)。此转载已获原作者授权，再次转载请向作者申请。请尤其注意，原作者<b>未声明</b>采用本站授权方式（CC BY-SA 4.0）。原文为英文，是原作者针对Bobby Henderson所著*The Gospel of the Flying Spaghetti Monster*的一篇简单的书评。以下是我不保证准确性的译文。
 
@@ -14,10 +14,7 @@ tags: [书刊]
 
 本书的第一篇文章试图证明下面这个观点：虽然科学是基于“经验证据“的，但其他看似荒谬的说法，如飞天意大利面神教对引力的解释，也可以如此。更何况，由于科学的基础是建立在那些已故科学家的工作上的，所以不可能让他们起来解释自己的观点，并确认他们当时的真正想法是不是和飞天意面同样荒谬。这表明科学也可能充满逻辑错误和未曾证实的假设，就像任何其他“可供选择的理论系统”一样（如飞天意面神教教义，译者注）。
 
-![](https://cynthia7979.github.io/static/FSM%20Theory%20of%20Gravity.jpg)
-
-飞天意面魔神的重力理论。  
-Henderson，*The Gospel of the Flying Spaghetti Monster*，纽约Villard Books出版于2006年，pp5。
+![飞天意面魔神的重力理论，Henderson，The Gospel of the Flying Spaghetti Monster，纽约Villard Books出版于2006年，pp5](https://cynthia7979.github.io/static/FSM%20Theory%20of%20Gravity.jpg)
 
 因此，仅代表我个人的看法，科学在某些方面可以被视为一种宗教：此宗教仅基于数学与人为概念，它用这些东西制造了一个理论系统，并尝试用它帮人们理解这个世界。（那么仪式和/或宗教场所呢？嗯，且不必说宗教仪式并非必须，仅就实验室要求和出版物相关的规定之流不也是某种“仪式”吗？）
 
