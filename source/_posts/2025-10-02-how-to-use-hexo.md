@@ -23,7 +23,7 @@ npm --version
 ```
 
 ### <b>Git</b>
-用于版本控制和部署到GitHub。访问[Git官网](https://git-scm.com/)下载安装。
+用于版本控制和部署到GitHub。访问[Git官网](https://git-scm.com/)下载安装。各种流行IDE的内置图形化Git工具，一般也需要你先自行安装Git。
 
 安装完成后配置用户信息：
 ```bash
