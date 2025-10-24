@@ -1,383 +1,388 @@
-<p align="center"><a href="https://ayer.886622.xyz" target="_blank" rel="noopener noreferrer"><img width="100" src="logo.png" alt="ayer logo"></a></p>
+# Kaleid's Customized Ayer Theme
 
-<h3 align="center">一个干净且优雅的 Hexo 主题</h3>
+## 主题说明
 
-<p align="center">
-  <a href="https://travis-ci.org/Shen-Yu/hexo-theme-ayer?branch=master" target="_blank" rel="noopener noreferrer">
-    <img alt="travis-ci" src="https://travis-ci.org/Shen-Yu/hexo-theme-ayer.svg?branch=master">
-  </a>
-  <a href="http://standardjs.com" target="_blank" rel="noopener noreferrer">
-    <img alt="js-standard-style" src="https://img.shields.io/badge/code%20style-standard-brightgreen.svg">
-  </a>
-  <br>  
-  <a href="https://www.npmjs.com/package/hexo-theme-ayer" target="_blank" rel="noopener noreferrer">
-  <img alt="npm" src="https://img.shields.io/npm/dt/hexo-theme-ayer">
-  </a>
-  <a href="https://shen-yu.gitee.io" target="_blank" rel="noopener noreferrer">
-   <img alt="platform" src="https://img.shields.io/badge/platform-PC--ios--android-ff69b4.svg">
-   </a>
-  <a href="https://gitter.im/hexo-theme-ayer/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge" target="_blank" rel="noopener noreferrer">
-    <img alt="Gitter" src="https://badges.gitter.im/Join%20Chat.svg">
-  </a>
-  <br>
-  <a href="https://www.npmjs.com/package/hexo-theme-ayer" target="_blank" rel="noopener noreferrer">
-    <img alt="npm version" src="https://img.shields.io/npm/v/hexo-theme-ayer">
-  </a> 
- <img alt="language" src="https://img.shields.io/badge/language-ejs--stylus-green.svg">
- <a href="https://github.com/Shen-Yu/hexo-theme-ayer/releases" target="_blank" rel="noopener noreferrer">
-  <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Shen-Yu/hexo-theme-ayer?color=b37feb">
-  </a>
-  <a href="https://github.com/Shen-Yu/hexo-theme-ayer/blob/master/LICENSE" target="_blank" rel="noopener noreferrer"><img alt="LICENSE" src="https://img.shields.io/badge/LICENSE-SATA-6ccab8">
-  </a>
-</p>
+本主题基于 [Ayer](https://github.com/Shen-Yu/hexo-theme-ayer) 开发，是一个干净且优雅的 Hexo 主题。经过大量自定义修改，已发展成为一个独特的主题版本。
+
+Ayer（"水"的马来语，"昨日"的西班牙语）原作者：[Eric-Shen](https://github.com/Shen-Yu)
 
 ---
 
-:ocean: Ayer is a clean and elegant theme for Hexo, also fast, powerful and responsive. It contains many awesome features, It's perfect for your blog, "Ayer" means "water" in Malaysian and "yesterday" in Spanish. [Create an issue](https://github.com/shen-yu/hexo-theme-ayer/issues/new/choose) if you have any queries or advice during the process of using, 
+## 项目信息
 
-<b>注：收藏本主题请点右上角 Star，谢谢~~ </b>
-<b>如果你想给主题添砖加瓦，可以点右上角 Fork，然后给此仓库提交 PR</b>
+- **网站**: [Ka1eid's SandBox](https://kaleidscoper.github.io)
+- **标语**: 千仞高塔，筑基于此
+- **作者**: Kaleid Scoper
+- **GitHub**: [KaleidScoper](https://github.com/KaleidScoper)
 
-## 本人已转行不做码农了，项目暂停维护，仅供学习！！
-## QQ：448766534
+---
 
-### [Preview 预览](https://ayer.886622.xyz)
+## 安装说明
 
-### [中文说明](https://ayer.886622.xyz/2019/ayer/)
-
-### [国内镜像](https://gitee.com/shen-yu/hexo-theme-ayer)
-
-![Screenshot](screenshots/hexo-theme-ayer.png)
-
-## Install
-
-### For hexo >= 5.0
+### Hexo >= 5.0 版本
 
 ```shell
 npm i hexo-theme-ayer -S
 ```
 
-- If this theme is newly installed, a `_config.ayer.yml` file will be generated in the root directory after the installation is complete, and you can directly edit the `_config.ayer.yml` file for configuration.
-- If it is a theme upgrade, you can use the configuration method of hexo < 5.0, or you can move the original configuration file to the root directory and rename it to `_config.ayer.yml`.
+- 首次安装时，根目录会自动生成 `_config.ayer.yml` 配置文件
+- 升级主题时，可以将原配置文件移至根目录并重命名为 `_config.ayer.yml`
 
-### For hexo < 5.0
+### Hexo < 5.0 版本
 
 ```shell
 git clone https://github.com/Shen-Yu/hexo-theme-ayer.git themes/ayer
 ```
 
-## Enable
+## 启用主题
 
-Modify `theme` setting in `_config.yml` to `ayer`
+在 Hexo 根目录的 `_config.yml` 中修改主题设置：
 
 ```yml
 theme: ayer
 ```
 
-## Update
+## 更新主题
 
 ```bash
 cd themes/ayer
 git pull
 ```
 
-## Multi Language Support
+## 多语言支持
 
-zh-CN（中文简体） en（English） zh-TW（中文繁体） ja（日本語） es（Español） de（Deutsch） fr（Français） ru（Русский） ko（한국어） vi（Tiếng Việt） nl（Nederlands） no（norsk） pt（Português）
+支持以下语言：zh-CN（中文简体）、en（English）、zh-TW（中文繁体）、ja（日本語）、es（Español）、de（Deutsch）、fr（Français）、ru（Русский）、ko（한국어）、vi（Tiếng Việt）、nl（Nederlands）、no（norsk）、pt（Português）
 
-English is default languge, if you want to change, modify `language` option in `_config.yml` file in your Hexo blog's root folder.
+默认语言为英文，可在 Hexo 根目录的 `_config.yml` 中修改 `language` 选项。
 
-## Configuration
+## 主题配置
 
-let me know if you have any questions.
+### 侧边栏菜单
 
 ```yml
-# Menu-Sidebar
 menu:
-  Home: /
-  Archives: /archives
-  Categories: /categories
-  Tags: /tags
-  Gallery: http://shenyu-vip.lofter.com
-  Travel: /tags/旅行/
-  About: /2019/about
+  主页: /
+  全部文章: /archives
+  文章分类: /categories
+  全部标签: /tags
+  书单推荐: /book
+  友情链接: /friends
+  关于本站: /about
+```
 
-# Subtitle and Typing animation
-# https://github.com/mattboldt/typed.js
+### 站点次标题和打字动效
+
+基于 [typed.js](https://github.com/mattboldt/typed.js) 实现
+
+```yml
 subtitle:
   enable: true
-  text: A clean and elegant theme
-  text2: It's perfect for your hexo blog
-  text3: Have fun! #Supports up to three lines of text
+  text: 第一行文字
+  text2: 第二行文字
+  text3: 第三行文字 # 最多支持三行
   startDelay: 0
   typeSpeed: 200
   loop: true
   backSpeed: 100
   showCursor: true
+```
 
-# Favicon and sidebar logo
+### 网站图标和Logo
+
+```yml
 favicon: /favicon.ico
 logo: /images/ayer-side.svg
+```
 
-# Cover Setting
-# enable: [true|false]；path: [background-image]；logo: [cover-logo-image]
+### 封面配置
+
+```yml
 cover:
   enable: true
-  path: /images/cover1.jpg # there are some beautiful cover images in Ayer's directory: /source/images, choose your favorite image to replace it.
-  logo: /images/ayer.svg
+  path: /images/cover1.jpg # 背景图片路径
+  logo: /images/ayer.svg # 封面Logo，不需要可设为false
+```
 
-# ProgressBar
+### 页面功能
+
+```yml
+# 顶部进度条
 progressBar: true
 
-# Boardcast
+# 告示板
 broadcast:
   enable: true
-  type: 2 # 1：custom，2：hitokoto api(https://hitokoto.cn/)
-  text: a clean and elegant theme, fast and responsive. # only work in custom mode
+  type: 2 # 1：自定义文字，2：一言API
+  text: 自定义告示内容
 
-# Article Setting
-# (Use this to excerpt if article is too long：<!--more-->)
-excerpt_link: Read More...
-excerpt_all: false
+# 文章设置
+excerpt_link: 显示更多...
+excerpt_all: false # 是否在首页只显示文章归档
 
-# Copy code button
+# 代码复制按钮
 copy_btn: true
-# Share
-share_enable: true
-# If you are not in China, maybe you prefer to set:false
-share_china: true
-# share text
-share_text: Share
-# search text
-search_text: Search
-# nav text
-nav_text:
-  page_prev: Prev page
-  page_next: Next page
-  post_prev: Newer posts
-  post_next: Older posts
 
-# Catalog in article
+# 文章分享
+share_enable: true
+share_china: true # 是否使用国内社交平台
+share_text: 分享
+
+# 文章目录
 toc: true
 
-# images in the article support click to fullscreen
+# 图片点击放大
 image_viewer: true
+```
 
-# https://github.com/willin/hexo-wordcount
+### 字数统计
+
+需要安装 [hexo-wordcount](https://github.com/willin/hexo-wordcount)
+
+```yml
 word_count:
   enable: true
-  # only display in article page(not in index page)
-  only_article_visit: true
+  only_article_visit: true # 只在文章页显示
+```
 
-# Reward Setting
-# type：0-close reward； 1-only open in article which you have configured reward:true； 2-open in all articles
+### 打赏功能
+
+```yml
+# type: 0-关闭；1-仅在设置了reward:true的文章显示；2-所有文章显示
 reward_type: 2
-# reward word
-reward_wording: "Buy me a cup of coffee~"
-# qrcode image path
-alipay: /images/alipay.jpg
-# qrcode image path
-weixin: /images/wechat.jpg
+reward_wording: "请我喝杯咖啡~"
+alipay: /images/alipay.jpg # 支付宝二维码
+weixin: /images/wechat.jpg # 微信二维码
+```
 
-# Copyright
-# type：0-close all； 1-only display in article which you have configured copyright: true； 2-all articles
+### 版权声明
+
+```yml
+# type: 0-关闭；1-仅在设置了copyright:true的文章显示；2-所有文章显示
 copyright_type: 2
+```
 
-# Search
-# https://github.com/theme-next/hexo-generator-searchdb
+### 搜索功能
+
+需要安装 [hexo-generator-searchdb](https://github.com/theme-next/hexo-generator-searchdb)
+
+```yml
 search: true
+```
 
-# RSS
-# leave it empty if you dont' need
-rss: /atom.xml
+### RSS订阅
 
-# DarkMode
+```yml
+rss: /atom.xml # 留空则不显示
+```
+
+### 界面设置
+
+```yml
+# 深色模式开关
 darkmode: true
 
-# Canvas background style: 0-close，1-moveline
+# 动态背景: 0-关闭，1-动态线条
 canvas_bg: 0
 
-# Custom mouse pointer，replace /images/mouse.cur
+# 自定义鼠标样式
 mouse:
   enable: false
   path: /images/mouse.cur
 
-# Click effect: 0-close，1-love，2-boom，3-particles
+# 鼠标点击效果: 0-关闭，1-爱心，2-爆炸，3-粒子
 click_effect: 0
 
-# articleWidth and sidebarWidth
+# 页面宽度设置
 layout:
   article_width: 80rem
   sidebar_width: 8rem
+```
 
-# GitHub Ribbons(https://github.blog/2008-12-19-github-ribbons/)
+### GitHub Ribbons
+
+```yml
 github:
-  # (Set false if you don't need)
   enable: false
-  url: https://github.com/Shen-Yu/hexo-theme-ayer
+  url: https://github.com/your-username/your-repo
+```
 
-# pv&uv statistics
+### 统计分析
+
+```yml
+# 不蒜子统计
 busuanzi:
   enable: true
 
-# cnzz statistics
+# 友盟统计
 cnzz:
   enable: true
-  url: #
+  url: # 统计代码链接
 
 # Google Analytics
 google_analytics: ""
-# Baidu Analytics
-baidu_analytics: ""
 
-# Mathjax Support
+# 百度统计
+baidu_analytics: ""
+```
+
+### 数学公式
+
+```yml
+# Mathjax
 mathjax: true
 
-# Katex Support
-# note: need change the hexo-renderer，npm un hexo-renderer-marked -S && npm i hexo-renderer-markdown-it-katex -S
+# Katex（需更换渲染器）
 katex:
-  enable: false # true
+  enable: false
   allpost: true
   copy_tex: false
+```
 
-# since year
-since: 2019
+### 网站信息
 
-# only for chinese website
-# ICP
+```yml
+# 网站成立年份
+since: 2023
+
+# ICP备案
 icp:
   enable: false
-  url: "http://www.beian.miit.gov.cn/"
+  url: "https://beian.miit.gov.cn/"
   text: "浙ICP备88888888"
-# gongan
+
+# 公安备案
 gongan:
   enable: false
   img: /images/beian.png
-  url: "http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=01234567890123" #link
+  url: "http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=01234567890123"
   text: "浙公网安备01234567890123号"
+```
 
-# friends link
+### 友情链接
+
+```yml
 friends_link:
-  Ayer: #site name
-    # site url
-    url: https://github.com/Shen-Yu/hexo-theme-ayer
-    # site icon(optional)
-    img: /images/ayer.png
-  GitHub:
-    url: https://github.com/Shen-Yu
-    img: https://i.loli.net/2020/09/07/indb4PRYDA98EkN.png
-  gitee:
-    url: https://gitee.com/shen-yu
-    img: https://i.loli.net/2020/09/07/K3AqO7h6krQFlRX.png
-  Hexo:
-    url: https://hexo.io
-    img: https://i.loli.net/2020/09/07/UYGzjo7h68CRWny.png
-  hexo-tag-chart:
-    url: https://github.com/Shen-Yu/hexo-tag-chart
-    img: https://i.loli.net/2020/09/07/GIXBYE5SoylhR1r.png
+  网站名称:
+    url: https://example.com
+    img: /images/logo.png
+```
 
-# Comment：1、Valine (recommended)；2、Gitalk；3、Twikoo；4、MiniValine
-# You can close the comment section on one of your posts by marking `comments: false` in front-matter.
+### 评论系统
 
-# 1、Valine [A fast, simple & powerful comment system](https://github.com/xCss/Valine)
-# You need create leancloud account first (https://console.leancloud.app), then put the id|key in below.
+支持 Valine、Gitalk、Twikoo 三种评论系统
+
+#### Valine
+
+需要先创建 [LeanCloud](https://console.leancloud.app) 应用
+
+```yml
 leancloud:
   enable: true
   app_id: #
   app_key: #
-# Valine Setting
+
 valine:
   enable: true
-  avatar: mp # (https://valine.js.org/avatar.html)
-  placeholder: Add some comments to my article~ # placeholder
+  avatar: mp
+  placeholder: 欢迎留言~
+```
 
-# 2、Gitalk(https://github.com/gitalk/gitalk)
+#### Gitalk
+
+```yml
 gitalk:
-  enable: false # true
+  enable: false
   clientID: # GitHub Application Client ID
   clientSecret: # Client Secret
-  repo: # Repository name
-  owner: # GitHub ID
-  admin: # GitHub ID
+  repo: # 仓库名
+  owner: # GitHub用户名
+  admin: # GitHub用户名
+```
 
-# 3、Twikoo(https://github.com/imaegoo/twikoo)
+#### Twikoo
+
+```yml
 twikoo:
   enable: false
   envId: #
+```
 
+### 广告位
 
-# advertisement
-# if there is an "ad" word in photo or url，it may blocked by adblock or any other browser extensions
+```yml
 ads:
   ad_1:
-    title: vultr优惠vps
-    img: https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/vultr.png
-    url: https://www.vultr.com/?ref=8630075
+    title: 广告标题
+    img: /images/ad.jpg
+    url: https://example.com
     width: 300
-  ad_2:
-    title: 云服务器全球购低至2折
-    img: https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/ten_2.jpg
-    url: https://curl.qcloud.com/kvO7hb43
-    width: 300
+```
 
-# encrypt settings
+### 加密访问
+
+```yml
 lock:
   enable: false
   password: 123456
 ```
 
-## Plugins
+---
 
-- [hexo-generator-search](https://github.com/wzpan/hexo-generator-search) (for Local Search)
+## 必需插件
 
-  ```yml
-  $ npm install hexo-generator-searchdb --save
-  ```
-
-  Then add the plugin configuration in hexo's configuration file `_config.yml` (note: not the theme's configuration file):
-
-  ```yml
-  # Hexo-generator-search
-  search:
-    path: search.xml
-    field: post
-    format: html
-  ```
-
-- [hexo-generator-feed](https://github.com/hexojs/hexo-generator-feed) (for RSS)
-
-  ```yml
-  $ npm install hexo-generator-feed --save
-  ```
-
-  Then add the plugin configuration in hexo's configuration file `_config.yml` (note: not the theme's configuration file):
-
-  ```yml
-  feed:m
-      type: atom
-      path: atom.xml
-      limit: 20
-      hub:
-      content:
-      content_limit: 140
-      content_limit_delim: ' '
-      order_by: -date
-  ```
-
-- [hexo-generator-index-pin-top](https://github.com/netcan/hexo-generator-index-pin-top) (for Sticky Post)
-
-  ```bash
-  $ npm uninstall hexo-generator-index --save
-  $ npm install hexo-generator-index-pin-top --save
-  ```
-
-## Categories
+### 本地搜索
 
 ```bash
-  hexo new page categories
+npm install hexo-generator-searchdb --save
 ```
 
-Then paste following codes to file: /source/categories/index.md
+在 Hexo 根目录的 `_config.yml` 中添加：
+
+```yml
+search:
+  path: search.xml
+  field: post
+  format: html
+```
+
+### RSS订阅
+
+```bash
+npm install hexo-generator-feed --save
+```
+
+在 Hexo 根目录的 `_config.yml` 中添加：
+
+```yml
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+  hub:
+  content:
+  content_limit: 140
+  content_limit_delim: ' '
+  order_by: -date
+```
+
+### 文章置顶
+
+```bash
+npm uninstall hexo-generator-index --save
+npm install hexo-generator-index-pin-top --save
+```
+
+---
+
+## 页面创建
+
+### 分类页面
+
+```bash
+hexo new page categories
+```
+
+在 `/source/categories/index.md` 中添加：
 
 ```md
 ---
@@ -387,17 +392,29 @@ layout: "categories"
 ---
 ```
 
-## Tags
+### 标签页面
 
-Same as categories.
+```bash
+hexo new page tags
+```
 
-## Friend Links
+在 `/source/tags/index.md` 中添加：
+
+```md
+---
+title: tags
+type: tags
+layout: "tags"
+---
+```
+
+### 友情链接页面
 
 ```bash
 hexo new page friends
 ```
 
-Then paste following codes to file: /source/friends/index.md
+在 `/source/friends/index.md` 中添加：
 
 ```md
 ---
@@ -407,65 +424,49 @@ layout: "friends"
 ---
 ```
 
-Then edit `friends_link` in `_config.yml`
+然后在 `_config.ayer.yml` 中配置 `friends_link`。
 
-## Gallery
+---
 
-Need to write in the head of the markdown, this is not a good way to write, I hope to get a better way to write on github.
+## 相册功能
+
+在文章的 Front-matter 中添加：
 
 ```md
 ---
-title: Gallery
-
-albums: [["img_url", "img_caption"], ["img_url", "img_caption"]]
+title: 相册标题
+albums: [["图片URL", "图片说明"], ["图片URL", "图片说明"]]
 ---
 ```
 
-## Toc
+---
 
-Use Tocbot to parse the title tags (h1~h6) in the content and insert the directory.
+## 目录功能
 
-- ayer/\_config.yml
+全局开启目录：
 
-  ```bash
-  # Toc
-  toc: true
-  ```
+```yml
+toc: true
+```
 
-- If Toc is turned on in ayer/\_config.yml, then Tocbot will generate a Toc article directory in the title tag of each blog parsing content, but not all blogs require Toc, so in the Front-matter section of markdown Can be closed:
+单独关闭某篇文章的目录，在 Front-matter 中添加：
 
-  ```md
-  ---
-  no_toc: true
-  ---
-  ```
+```md
+---
+no_toc: true
+---
+```
 
 ---
 
-<br/>
+## 开源协议
 
-## Code Contributors
+本项目基于原 Ayer 主题的 [SATA License](https://github.com/Shen-Yu/hexo-theme-ayer/blob/master/LICENSE) 许可。
 
-This project exists thanks to all the people who contribute.
+SATA 协议核心思想：在遵守 MIT 许可证的前提下，使用者应该给项目点赞（Star）并感谢作者。
 
-<a href="https://github.com/Shen-Yu/hexo-theme-ayer/graphs/contributors"><img src="https://opencollective.com/ayer/contributors.svg?width=890&button=false" /></a>
+---
 
-## Stargazers over time
+## 致谢
 
-[![Stargazers over time](https://starchart.cc/Shen-Yu/hexo-theme-ayer.svg)](https://starchart.cc/Shen-Yu/hexo-theme-ayer)
-
-## License
-
-<a src="https://github.com/Shen-Yu/hexo-theme-ayer">Ayer</a> by <a  href="https://github.com/Shen-Yu">Eric-Shen</a> is licensed under <a rel="license" href="https://github.com/Shen-Yu/hexo-theme-ayer/blob/master/LICENSE">SATA-License</a>.
-
-The basic idea is, whenever using a project using SATA license, people shall star/like/+1 that project and thank the author. Just imagine Google stared your project and send you a thank-you letter because they used your project in github!
-<br>
-
-本项目采用<a rel="license" href="https://github.com/Shen-Yu/hexo-theme-ayer/blob/master/LICENSE">SATA</a>开源协议，在遵守 MIT 许可证的前提下，你应该马不停蹄的给这个开源项目“点个赞”，比如 github 右上角的 star，然后你应该感谢这个开源项目的作者，作者信息可以在许可证头部的版权声明部分找到。<br>
-
-下面是几条 SATA 作者推荐的感谢途径，也是 SATA 包含的内容：
-
-- 给你使用的开源项目的作者发个 Email，和他交个朋友
-- 提出你在使用过程中发现的 BUG 或者提一些建设性的意见
-- 告诉你的朋友们这是一个多棒的开源项目
-- 当然，你也可以只是在心里默默的感激，不用让全世界都知道
+感谢 [Ayer](https://github.com/Shen-Yu/hexo-theme-ayer) 原作者 [Eric-Shen](https://github.com/Shen-Yu) 提供的优秀主题框架。
