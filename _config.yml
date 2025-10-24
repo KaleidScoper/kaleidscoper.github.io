@@ -132,6 +132,7 @@ tag_map:
   教程: tutorial
   博客: blog
 
+  Git: git
   Markdown: markdown
   LaTeX: latex
   Linux: linux
