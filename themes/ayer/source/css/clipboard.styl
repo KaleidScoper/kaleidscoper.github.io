@@ -17,16 +17,18 @@ if hexo-config('copy_btn') == true
       margin-right: 4px
       font-size: 10px
       transform: translateY(1px);
-    color: #333
-    background: rgba(255,255,255,.8)
-    border-radius: 2px
+    color: #e0e0e0
+    background: rgba(50,50,50,.9)
+    border-radius: 4px
     position: absolute
-    top: 0
-    right: 0
+    top: 5px
+    right: 5px
     opacity: 0
     transition: all linear .2s
+    box-shadow: 0 2px 4px rgba(0,0,0,.3)
     &:hover
-      background: rgba(255,255,255,.7)
+      background: rgba(70,70,70,.95)
+      color: #ffffff
 
   .highlight:hover .btn-copy
     opacity: 1
