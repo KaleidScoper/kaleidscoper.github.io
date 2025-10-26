@@ -69,6 +69,17 @@ git remote -v
 
 **注意**：使用SSH协议前，需要先在GitHub/GitLab等平台配置SSH公钥。
 
+### **全局切换传输协议**
+
+你也可以让ssh成为你的Git的默认协议，日后所有操作都将使用ssh。
+
+```sh
+git config --global url."git@github.com:".insteadOf "https://github.com/"
+
+# 当你想要切换回来时：
+git config --global --unset url."git@github.com:".insteadOf
+```
+
 ## 二、拉取更新
 
 ### <b>更新本地某个非当前分支</b>
