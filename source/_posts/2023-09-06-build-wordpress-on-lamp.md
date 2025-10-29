@@ -2,7 +2,7 @@
 title: 基于 WordPress + VPS 的建站教程
 date: 2023-09-06 21:40:43
 categories: [技术, 开发, Web开发]
-tags: [Linux, Apache, 数据库, PHP, HTML, CSS]
+tags: [Linux, Apache, 数据库, PHP, HTML, CSS, 原创]
 ---
 <b>前言：</b> 阅读本教程不需要任何前置知识。我此前走了很多弯路，不希望后来者还把时间浪费在它们身上。按本教程操作，你将得到一个每年维护成本 ￥300 以下，基于 LAMP（Ubuntu22、Apache、MySQL、PHP）的 WordPress 博客，感受 Web 的精神以及它带来的自由。☝️🤓欸，那我为啥需要个WordPress博客呢，BB空间不香吗。理由有很多，一是如今海内外的社交媒体，个个是食贴兽，你写了那点玩意鬼知道哪天被吞了。二是如果你打算学点Web开发，直接从零开始搭个网站不现实，选择博客托管平台呢又锻炼不到，而WordPress能先帮你建个站出来，还不剥夺你的自定义空间。
 

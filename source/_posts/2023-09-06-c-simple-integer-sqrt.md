@@ -2,7 +2,7 @@
 title: C语言最简开平方（娱乐）
 date: 2023-09-06 22:44:32
 categories: [技术, 开发, 桌面开发]
-tags: [C]
+tags: [C, 原创]
 ---
 
 Talk is cheap, show you my code.

@@ -131,6 +131,9 @@ category_map:
 tag_map:
   教程: tutorial
   博客: blog
+  转载: repost
+  原创: original
+  翻译: translation
 
   Git: git
   Markdown: markdown

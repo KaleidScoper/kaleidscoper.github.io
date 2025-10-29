@@ -2,7 +2,7 @@
 title: 基于LAMP的机票预订系统
 date: 2024-10-09 17:05:49
 categories: [技术, 开发, Web开发]
-tags: [PHP, 数据库, HTML, CSS]
+tags: [PHP, 数据库, HTML, CSS, 原创]
 ---
 
 <b>前言：</b>这是安徽大学"数据库实验"（大三秋冬）期末作业，是一个演示性质的机票预订系统。代码托管于Github，可通过下方命令下载：

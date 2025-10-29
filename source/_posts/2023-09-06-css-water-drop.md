@@ -2,7 +2,7 @@
 title: CSS绘制简易水滴
 date: 2023-09-06 21:18:09
 categories: [技术, 开发, Web开发]
-tags: [HTML, CSS]
+tags: [HTML, CSS, 转载]
 ---
 
 <b>前言：</b>从B站看到一个有趣的教程，现在把实现它的代码放在这里。将下面的代码直接复制粘贴入一个.html文件保存并打开，即可得到一个简单的动态水滴💧。你可以自行修改动画中将要展现的border-radius效果，阴影范围，高光（即下文#water::before和#water::after两个）的形状和大小，以及动画播放的速度。
