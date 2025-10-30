@@ -188,21 +188,21 @@ gongan:
 # 友情链接
 friends_link:
 
-  Hexo官网:
+  Hexo 官网:
     url: https://hexo.io
     img: /images/hexo.png
 
-  Ayer主题: #网站名称
+  Ayer 主题: #网站名称
     #网站地址
     url: https://github.com/Shen-Yu/hexo-theme-ayer
     #网站图片(可忽略不写)
     img: /images/ayer.png
   
-  GitHub主页:
+  我的 GitHub 主页:
     url: https://github.com/KaleidScoper
     img: /images/github.png
 
-  安徽大学MineCraft社区:
+  安徽大学 Minecraft 社区:
     url: http://mc.ahumc.top/
     img: /images/ahumc.png
 
@@ -218,7 +218,7 @@ friends_link:
     url: https://www.pasrcglobal.com/
     img: /images/PASRC.png
   
-  Unia智能笔记:
+  Unia 智能笔记:
     url: https://unia.college/
     img: /images/unialogo.png
 
