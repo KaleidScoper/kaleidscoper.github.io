@@ -17,8 +17,8 @@ darkmode()
   // 主背景
   background: dark-background
 
-  // 全局文字
-  *
+  // 全局文字（排除 font[color] 及其后代元素）
+  *:not(font[color]):not(font[color] *)
     color: dark-text
 
   // 文章正文中的代码块
