@@ -17,8 +17,8 @@ darkmode()
   // 主背景
   background: dark-background
 
-  // 全局文字（排除 font[color] 及其后代元素、链接）
-  *:not(font[color]):not(font[color] *):not(a)
+  // 全局文字（排除 font[color] 及其后代元素、链接、代码块及其子元素）
+  *:not(font[color]):not(font[color] *):not(a):not(.highlight):not(.highlight *):not(pre):not(pre *)
     color: dark-text
 
   // 全局链接颜色（模仿亮色模式的实现方式）
