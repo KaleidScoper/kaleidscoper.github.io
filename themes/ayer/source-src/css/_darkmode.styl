@@ -17,9 +17,15 @@ darkmode()
   // 主背景
   background: dark-background
 
-  // 全局文字（排除 font[color] 及其后代元素）
-  *:not(font[color]):not(font[color] *)
+  // 全局文字（排除 font[color] 及其后代元素、链接）
+  *:not(font[color]):not(font[color] *):not(a)
     color: dark-text
+
+  // 全局链接颜色（模仿亮色模式的实现方式）
+  a
+    color: dark-link
+    &:hover
+      color: dark-link-hover
 
   // 文章正文中的代码块
   .article-entry code
@@ -82,12 +88,6 @@ darkmode()
     color: dark-muted
   input::-ms-input-placeholder
     color: dark-muted
-
-  // 文章正文链接颜色
-  .article-entry a
-    color: dark-link !important
-  .article-entry a:hover
-    color: dark-link-hover !important
 
   // 文章引用块样式
   .article-entry blockquote
