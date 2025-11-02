@@ -1,12 +1,26 @@
+/* Glass Card - CSS Variables Version (No Flash) */
+
 .glass-card {
-  background: rgba(255, 255, 255, 0.1);
+  /* 定义 CSS 变量 - 亮色模式默认值 */
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: rgba(31, 38, 135, 0.37);
+  --glass-overlay: rgba(255, 255, 255, 0.1);
+  --avatar-border: rgba(255, 255, 255, 0.3);
+  --profile-name-color: #ffffff;
+  --profile-title-color: #e9ecef;
+  --profile-desc-color: #f1f3f4;
+  --profile-info-color: #f8f9fa;
+  
+  /* 使用变量的样式定义 */
+  background: var(--glass-bg);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--glass-border);
   border-radius: 20px;
   padding: 30px;
   margin: 20px 0;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  box-shadow: 0 8px 32px 0 var(--glass-shadow);
   display: flex;
   align-items: center;
   gap: 30px;
@@ -15,6 +29,20 @@
   overflow: hidden;
 }
 
+/* 暗色模式 - 只覆盖变量值 */
+body.darkmode .glass-card {
+  --glass-bg: rgba(42, 47, 58, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-shadow: rgba(0, 0, 0, 0.6);
+  --glass-overlay: rgba(42, 47, 58, 0.4);
+  --avatar-border: rgba(255, 255, 255, 0.2);
+  --profile-name-color: #f0f0f0;
+  --profile-title-color: #c0c0c0;
+  --profile-desc-color: #b0b0b0;
+  --profile-info-color: #d0d0d0;
+}
+
+/* 背景图片层 */
 .glass-card::before {
   content: '';
   position: absolute;
@@ -30,6 +58,7 @@
   z-index: 0;
 }
 
+/* 模糊覆盖层 */
 .glass-card::after {
   content: '';
   position: absolute;
@@ -37,29 +66,38 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--glass-overlay);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-radius: 20px;
   z-index: 1;
 }
 
+/* 确保内容在最上层 */
 .glass-card > * {
   position: relative;
   z-index: 2;
 }
 
+/* hover 效果 */
 .glass-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
+  box-shadow: 0 12px 40px 0 var(--glass-shadow);
 }
 
+/* 暗色模式 hover */
+body.darkmode .glass-card:hover {
+  --glass-bg: rgba(50, 55, 66, 0.7);
+  --glass-shadow: rgba(0, 0, 0, 0.8);
+}
+
+/* 头像样式 */
 .profile-avatar {
   width: 120px;
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid rgba(255, 255, 255, 0.3);
+  border: 3px solid var(--avatar-border);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   position: relative;
   overflow: hidden;
@@ -67,6 +105,7 @@
   cursor: pointer;
 }
 
+/* 头像光效 */
 .profile-avatar::before {
   content: '';
   position: absolute;
@@ -94,7 +133,11 @@
     0 8px 32px 0 rgba(31, 38, 135, 0.37),
     0 4px 16px 0 rgba(31, 38, 135, 0.2),
     0 0 0 1px rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* 暗色模式头像 hover */
+body.darkmode .profile-avatar:hover {
+  --avatar-border: rgba(255, 255, 255, 0.4);
 }
 
 .profile-avatar:hover::before {
@@ -106,6 +149,7 @@
   z-index: 0;
 }
 
+/* 头像链接 */
 .avatar-link {
   display: inline-block;
   text-decoration: none;
@@ -116,22 +160,23 @@
   text-decoration: none;
 }
 
+/* 个人信息区域 */
 .profile-info {
   flex: 1;
-  color: #f8f9fa;
+  color: var(--profile-info-color);
 }
 
 .profile-name {
   font-size: 28px;
   font-weight: bold;
   margin: 0 0 10px 0;
-  color: #ffffff;
+  color: var(--profile-name-color);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .profile-title {
   font-size: 18px;
-  color: #e9ecef;
+  color: var(--profile-title-color);
   margin: 0 0 15px 0;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
@@ -139,11 +184,12 @@
 .profile-desc {
   font-size: 16px;
   line-height: 1.6;
-  color: #f1f3f4;
+  color: var(--profile-desc-color);
   margin: 0;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
+/* 响应式设计 */
 @media (max-width: 768px) {
   .glass-card {
     flex-direction: column;
@@ -172,3 +218,4 @@
     font-size: 16px;
   }
 }
+
