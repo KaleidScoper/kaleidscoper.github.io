@@ -38,7 +38,7 @@ layout: page
     </div>
   </div>
 
-  <div class="card" data-gender="female" style="--bg:url('img/momo.jpg'); --img-border-color: #5ff3d6;">
+  <div class="card" data-gender="female" style="--bg:url('img/momo-bg.jpg'); --img-border-color: #5ff3d6;">
     <div class="card-content">
       <img src="img/momo.jpg" alt="图片加载失败">
       <h2>绫濑 桃</h2>
@@ -91,7 +91,7 @@ layout: page
   </div>
 
   <!-- G -->
-  <div class="card" data-gender="male" style="--bg:url('img/gojo.jpg')">
+  <div class="card" data-gender="male" style="--bg:url('img/gojo.jpg'); --img-border-color: #57d1ee;">
     <div class="card-content">
       <img src="img/gojo.jpg" alt="图片加载失败">
       <h2>五条 悟</h2>
@@ -166,7 +166,7 @@ layout: page
   </div>
 
   <!-- T -->
-  <div class="card" data-gender="male" style="--bg:url('img/takakura-ken.png'); --img-border-color: #ca2534;">
+  <div class="card" data-gender="male" style="--bg:url('img/ken-bg.jpg'); --img-border-color: #ca2534;">
     <div class="card-content">
       <img src="img/takakura-ken.png" alt="图片加载失败">
       <h2>高仓 健</h2>
