@@ -188,19 +188,19 @@ gongan:
 # 友情链接
 friends_link:
 
-  Hexo 官网:
-    url: https://hexo.io
-    img: /images/hexo.png
+  GitHub 主页:
+    url: https://github.com/KaleidScoper
+    img: /images/github.png
 
   Ayer 主题: #网站名称
     #网站地址
-    url: https://github.com/Shen-Yu/hexo-theme-ayer
+    url: https://github.com/KaleidScoper/hexo-theme-ayer-modified
     #网站图片(可忽略不写)
     img: /images/ayer.png
   
-  我的 GitHub 主页:
-    url: https://github.com/KaleidScoper
-    img: /images/github.png
+  Hexo 官网:
+    url: https://hexo.io
+    img: /images/hexo.png
 
   安徽大学 Minecraft 社区:
     url: http://mc.ahumc.top/
