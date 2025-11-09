@@ -123,8 +123,8 @@ category_map:
   电影剧集: movie
   漫画动漫: otaku
   音乐品鉴: music
-  书刊品鉴: book
-  人文社科: humanity # 下辖文学、历史、哲学、政治等分类，但此二级分类处不再细分，日后考虑使用tag
+  书刊诗文: book
+  人文社科: humanity # 下辖历史、哲学、政治等分类，但此二级分类处不再细分，使用tag
 
   未分类: uncategorized # 一级分类
 

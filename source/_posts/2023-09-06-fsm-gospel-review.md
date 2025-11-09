@@ -1,7 +1,7 @@
 ---
 title: 《飞天意面神福音书》读后感
 date: 2023-09-06 22:39:03
-categories: [杂谈, 书刊品鉴]
+categories: [杂谈, 书刊诗文]
 tags: [哲学, 转载]
 ---
 本文由[Cy](https://cynthia7979.github.io)[nthia的博客](https://cynthia7979.github.io/Book%20Notes/Alternative%20Theories)转载至此，[点击此处](https://cynthia7979.github.io/Book%20Notes/Alternative%20Theories)[查看原文](https://cynthia7979.github.io/Book%20Notes/Alternative%20Theories)。此转载已获原作者授权，再次转载请向作者申请。请尤其注意，原作者<b>未声明</b>采用本站授权方式（CC BY-SA 4.0）。原文为英文，是原作者针对Bobby Henderson所著*The Gospel of the Flying Spaghetti Monster*的一篇简单的书评。以下是我不保证准确性的译文。
