@@ -17,19 +17,19 @@ layout: false
 <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <nav class="desktop_navbar">
-      <a href="#"><img class="desktop_navbar_logo_img" src="img/logo_small.png" alt="logo"></a>
+      <a href="#"><img class="desktop_navbar_logo_img" src="img/favicon.ico" alt="logo"></a>
       <a href="https://zh.minecraft.wiki/" class="desktop_navbar_link">中文 Minecraft Wiki</a>
-      <a href="#qqgroup" class="desktop_navbar_link scroll">群聊</a>
+      <a href="#community" class="desktop_navbar_link scroll">群聊</a>
       <a href="#about" class="desktop_navbar_link scroll">关于我们</a>
       <div class="desktop_navbar_link2_div">
           <a href="#join" class="desktop_navbar_link2 scroll">马上开玩</a>
       </div>
     </nav>
     <div class="mobile_navbar">
-      <a href="#" class="mobile_navbar_logo_img_a"><img class="mobile_navbar_logo_img" src="img/logo_small.png" alt="logo"></a>
+      <a href="#" class="mobile_navbar_logo_img_a"><img class="mobile_navbar_logo_img" src="img/favicon.ico" alt="logo"></a>
       <div id="mobile_navbar_links">
           <a class="mobile_navbar_link" onclick="mobile_navbar_link_hider()" href="https://zh.minecraft.wiki/">中文 Minecraft Wiki</a>
-          <a class="mobile_navbar_link scroll" onclick="mobile_navbar_link_hider()" href="#qqgroup">群聊</a>
+          <a class="mobile_navbar_link scroll" onclick="mobile_navbar_link_hider()" href="#community">群聊</a>
           <a class="mobile_navbar_link scroll" onclick="mobile_navbar_link_hider()" href="#about">关于我们</a>
           <a class="mobile_navbar_link scroll" onclick="mobile_navbar_link_hider()" href="#join">马上开玩</a>
         </div>
@@ -53,8 +53,8 @@ layout: false
           <h1 class="main1_logo_text">Kaleid Scoper<br>Minecraft Server</h1>
         </div>
         <div class="main1_description">
-          <a>逃课打MC，<br>变得</a>
-          <a class="main1_actcent">触手可及</a><a>。</a>
+          <a>诗酒一言谈笑隔</a>
+          <a class="main1_actcent">江山千里梦魂通</a>
         </div>
         <div class="main1_ipcopier_div">
           <button class="main1_ipcopier" onclick="copyText()" type="button">
@@ -112,7 +112,7 @@ layout: false
             <a class="main2_feature_text">稳定的服务器，稳定的社区</a>
           </div>
           <div class="main2_feature">
-            <img class="main2_feature_img" alt="Feature Image" src="img/kale.jpg">
+            <img class="main2_feature_img" alt="Feature Image" src="img/service.jpg">
             <a class="main2_feature_headline">技术支持</a>
             <a class="main2_feature_text">超萌客服在线答疑</a>
           </div>
@@ -128,70 +128,70 @@ layout: false
           </div>
         </div>
       </div>
-      <div id="qqgroup"></div>
+      <div id="community"></div>
       <div class="main4">
-        <a class="headline">加入 QQ 群组</a>
-        <div class="main4_qq_div">
-          <img class="main4_qq_widget" src="img/qq.jpg" alt="QQ群二维码">
-          <div class="main4_qq_description_div">
-            <a class="main4_qq_description_title">随时开始聊天！</a>
-            <a class="main4_qq_description"> ・结识校友 <br> ・拷打腐竹 <br> ・更新通知 <br> ・Bug反馈  <br><br> ・ 还有更多！ </a>
-            <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=GezzDFpmsfK8J%2BZeepkxrd6M04ViYa718AkVpiprtexqtuUlpm%2FvOVKRE2eH043S&busi_data=eyJncm91cENvZGUiOiI1NzUwNzczMDgiLCJ0b2tlbiI6IjJQS3pXZm5YdjRra2NxUWZpMUNiZ1RZWEpQZ29sSENXSWJWS1RNMDR4bEkzV1hRKytkaFJ4aHljb0IvbFZISEciLCJ1aW4iOiIxNTAwMjk3NDU3In0%3D&data=EzrtcDDIGMGRHOqQ85Z-0LmHWvjTO2enYZREZWGoP8kHlk6T9uefvgUKq_YwO74RkyHAuZ6y_BzsfykXrl2WDw&svctype=4&tempid=h5_group_info" class="main4_qq_button_a">
-              <div class="main4_qq_button">加入</div>
+        <a class="headline">加入微信群聊</a>
+        <div class="main4_chat_div">
+          <img class="main4_chat_widget" src="img/community.jpg" alt="群聊">
+          <div class="main4_chat_description_div">
+            <a class="main4_chat_description_title">随时开始聊天！</a>
+            <a class="main4_chat_description"> ・结识校友 <br> ・拷打腐竹 <br> ・更新通知 <br> ・Bug反馈  <br><br> ・ 还有更多！ </a>
+            <a href="#" class="main4_chat_button_a" id="main4_chat_copy_button">
+              <div class="main4_chat_button">联系服主加入</div>
             </a>
           </div>
         </div>
       </div>
+      <script>
+        const chatCopyButton = document.getElementById('main4_chat_copy_button');
+        if (chatCopyButton) {
+          chatCopyButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            navigator.clipboard.writeText('kaleided.scoper@gmail.com');
+            const popup = document.createElement('div');
+            popup.className = 'main4_popup';
+            popup.innerHTML = '<h3 class="copy_confirm">已复制邮箱地址</h3>';
+            chatCopyButton.appendChild(popup);
+            setTimeout(function() {
+              popup.remove();
+            }, 1000);
+          });
+        }
+      </script>
       <div id="about"></div>
       <div class="main5">
         <a class="headline">我们是谁</a>
         <div class="main5_supporter_div">
-          <div class="main5_supporters_div">
-            <img class="main5_supporters_img" alt="admin member img" src="img/lhm.jpg">
+          <div class="main5_supporters_div main5_supporters_div_owner">
+            <img class="main5_supporters_img" alt="admin member img" src="img/kale.png">
             <div class="main5_supporters_description_div">
-              <a class="main5_supporters_description_rank main5_supporters_description_rank_owner">腐竹</a>
-              <a class="main5_supporters_description_title" href="https://qun.qq.com/universal-share/share?ac=1&authKey=GezzDFpmsfK8J%2BZeepkxrd6M04ViYa718AkVpiprtexqtuUlpm%2FvOVKRE2eH043S&busi_data=eyJncm91cENvZGUiOiI1NzUwNzczMDgiLCJ0b2tlbiI6IjJQS3pXZm5YdjRra2NxUWZpMUNiZ1RZWEpQZ29sSENXSWJWS1RNMDR4bEkzV1hRKytkaFJ4aHljb0IvbFZISEciLCJ1aW4iOiIxNTAwMjk3NDU3In0%3D&data=EzrtcDDIGMGRHOqQ85Z-0LmHWvjTO2enYZREZWGoP8kHlk6T9uefvgUKq_YwO74RkyHAuZ6y_BzsfykXrl2WDw&svctype=4&tempid=h5_group_info">蓝鹤梦</a>
-              <a class="main5_supporters_description">- 提供服务器<br>- 提供运维服务</a>
+              <a class="main5_supporters_description_rank main5_supporters_description_rank_owner">服主</a>
+              <a class="main5_supporters_description_title" href="https://kaleidscoper.github.io">KaleidScoper</a>
+              <a class="main5_supporters_description">- 盘踞出生点<br>- 大兴土木<br>- 很可爱</a>
             </div>
           </div>
-          <div class="main5_supporters_div">
-            <img class="main5_supporters_img" alt="admin member img" src="img/jemmy.jpg">
+          <div class="main5_supporters_div main5_supporters_div_admin">
+            <img class="main5_supporters_img" alt="admin member img" src="img/cs.png">
             <div class="main5_supporters_description_div">
-              <a class="main5_supporters_description_rank main5_supporters_description_rank_admin">管理员</a>
-              <a class="main5_supporters_description_title" href="https://qun.qq.com/universal-share/share?ac=1&authKey=GezzDFpmsfK8J%2BZeepkxrd6M04ViYa718AkVpiprtexqtuUlpm%2FvOVKRE2eH043S&busi_data=eyJncm91cENvZGUiOiI1NzUwNzczMDgiLCJ0b2tlbiI6IjJQS3pXZm5YdjRra2NxUWZpMUNiZ1RZWEpQZ29sSENXSWJWS1RNMDR4bEkzV1hRKytkaFJ4aHljb0IvbFZISEciLCJ1aW4iOiIxNTAwMjk3NDU3In0%3D&data=EzrtcDDIGMGRHOqQ85Z-0LmHWvjTO2enYZREZWGoP8kHlk6T9uefvgUKq_YwO74RkyHAuZ6y_BzsfykXrl2WDw&svctype=4&tempid=h5_group_info">Jemmy</a>
-              <a class="main5_supporters_description">- 社团领袖（？）<br>- 群主</a>
+              <a class="main5_supporters_description_rank main5_supporters_description_rank_admin">出生</a>
+              <a class="main5_supporters_description_title" href="">b1ack_51av3</a>
+              <a class="main5_supporters_description">- 统治者<br>- 造成工业污染<br>- 屠戮无数生灵</a>
             </div>
           </div>
-          <div class="main5_supporters_div">
-            <img class="main5_supporters_img" alt="supporters member img" src="img/kale.jpg">
+          <div class="main5_supporters_div main5_supporters_div_supporter">
+            <img class="main5_supporters_img" alt="supporters member img" src="img/tomato.png">
             <div class="main5_supporters_description_div">
-              <a class="main5_supporters_description_rank main5_supporters_description_rank_supporter">艺术家</a>
-              <a class="main5_supporters_description_title" href="https://kaleidscoper.github.io">Kaleid Scoper</a>
-              <a class="main5_supporters_description">- 搭建网页<br>- 绘制Logo<br>- 很可爱</a>
+              <a class="main5_supporters_description_rank main5_supporters_description_rank_supporter">农民</a>
+              <a class="main5_supporters_description_title" href="">404tomato</a>
+              <a class="main5_supporters_description">- 提供农产品<br>- 消耗下界合金</a>
             </div>
           </div>
-          <div class="main5_supporters_div">
-            <img class="main5_supporters_img" alt="supporters member img" src="img/jsbuaict.jpg">
+          <div class="main5_supporters_div main5_supporters_div_supporter">
+            <img class="main5_supporters_img" alt="supporters member img" src="img/member_placeholder.webp">
             <div class="main5_supporters_description_div">
-              <a class="main5_supporters_description_rank main5_supporters_description_rank_supporter">工程师</a>
-              <a class="main5_supporters_description_title">JsbuaicT</a>
-              <a class="main5_supporters_description">- 群管理员<br>- 提供生电机器</a>
-            </div>
-          </div>
-          <div class="main5_supporters_div">
-            <img class="main5_supporters_img" alt="supporters member img" src="img/yzhc.jpg">
-            <div class="main5_supporters_description_div">
-              <a class="main5_supporters_description_rank main5_supporters_description_rank_supporter">工程师</a>
-              <a class="main5_supporters_description_title">影子哈彻</a>
-              <a class="main5_supporters_description">- 群管理员<br>- 提供生电机器</a>
-            </div>
-          </div>
-          <div class="main5_supporters_div">
-            <img class="main5_supporters_img" alt="supporters member img" src="img/ming.jpg">
-            <div class="main5_supporters_description_div">
-              <a class="main5_supporters_description_rank main5_supporters_description_rank_supporter">建筑师</a>
-              <a class="main5_supporters_description_title">Ming</a>
-              <a class="main5_supporters_description">- 群管理员<br>- 大兴土木</a>
+              <a class="main5_supporters_description_rank main5_supporters_description_rank_supporter">矿工</a>
+              <a class="main5_supporters_description_title">syr2004</a>
+              <a class="main5_supporters_description">- 提供矿石<br>- 很少上地面</a>
             </div>
           </div>
         </div>
