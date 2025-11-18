@@ -48,6 +48,17 @@ layout: page
     </div>
   </div>
 
+  <!-- C -->
+  <div class="card" data-gender="female" style="--bg:url('img/choy.webp')">
+    <div class="card-content">
+      <img src="img/choy.webp" alt="图片加载失败">
+      <h2>伊巧巧</h2>
+      <p class="subname">Choy</p>
+      <p class="intro">《美食大冒险》</p>
+      <a href="https://zh.moegirl.org.cn/美食大冒险系列" target="_blank" class="wiki-btn">萌娘百科</a>
+    </div>
+  </div>
+
   <!-- E -->
   <div class="card" data-gender="male" style="--bg:url('img/evil-morty.jpg')">
     <div class="card-content">
@@ -101,6 +112,17 @@ layout: page
     </div>
   </div>
 
+  <!-- H -->
+  <div class="card" data-gender="male" style="--bg:url('img/han-solo.webp')">
+    <div class="card-content">
+      <img src="img/han-solo.webp" alt="汉索罗">
+      <h2>汉 索罗</h2>
+      <p class="subname">Han Solo</p>
+      <p class="intro">《星球大战》</p>
+      <a href="https://zh.wikipedia.org/wiki/韓·蘇羅" target="_blank" class="wiki-btn">维基百科</a>
+    </div>
+  </div>
+
   <!-- K -->
   <div class="card" data-gender="female" style="--bg:url('img/kurusu-makina.png')">
     <div class="card-content">
@@ -120,6 +142,27 @@ layout: page
       <p class="subname">Mahn Swei</p>
       <p class="intro">《饿殍：明末千里行》</p>
       <a href="https://zh.moegirl.org.cn/满穗" target="_blank" class="wiki-btn">萌娘百科</a>
+    </div>
+  </div>
+
+  <div class="card" data-gender="na" style="--bg:url('img/millennium-falcon.webp')">
+    <div class="card-content">
+      <img src="img/millennium-falcon.webp" alt="图片加载失败">
+      <h2>千年隼号</h2>
+      <p class="subname">Millennium Falcon</p>
+      <p class="intro">《星球大战》</p>
+      <a href="https://zh.wikipedia.org/wiki/千年隼号" target="_blank" class="wiki-btn">维基百科</a>
+    </div>
+  </div>
+
+  <!-- P -->
+  <div class="card" data-gender="male" style="--bg:url('img/pineapplello.jpg')">
+    <div class="card-content">
+      <img src="img/pineapplello.jpg" alt="图片加载失败">
+      <h2>菠萝吹雪</h2>
+      <p class="subname">Pineapplello</p>
+      <p class="intro">《果宝特攻》</p>
+      <a href="https://zh.moegirl.org.cn/菠萝吹雪" target="_blank" class="wiki-btn">萌娘百科</a>
     </div>
   </div>
 
@@ -162,6 +205,16 @@ layout: page
       <p class="subname">Stewie Griffin</p>
       <p class="intro">《恶搞之家》</p>
       <a href="https://zh.moegirl.org.cn/斯图威·格里芬" target="_blank" class="wiki-btn">萌娘百科</a>
+    </div>
+  </div>
+
+  <div class="card" data-gender="na" style="--bg:url('img/steamer.webp')">
+    <div class="card-content">
+      <img src="img/steamer.webp" alt="图片加载失败">
+      <h2>蒸盒号</h2>
+      <p class="subname">Steamer</p>
+      <p class="intro">《美食大冒险》</p>
+      <a href="https://zh.moegirl.org.cn/美食大冒险系列" target="_blank" class="wiki-btn">萌娘百科</a>
     </div>
   </div>
 
