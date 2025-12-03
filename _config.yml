@@ -91,12 +91,6 @@ category_map:
   安卓开发: android
   桌面开发: desktop
 
-  游戏: game # 一级分类
-  我的世界: minecraft
-  三国杀: sanguosha
-  王者荣耀: kog
-  其他游戏: miscgame
-
   日记: diary # 一级分类，文章的文件名也直接采用diary-年份
   2010年: diary-2010
   2011年: diary-2011
@@ -121,6 +115,7 @@ category_map:
   国内: domestic
   国外: abroad
 
+  电子游戏: game # 二级分类
   电影剧集: movie
   漫画动漫: otaku
   音乐品鉴: music
@@ -135,6 +130,10 @@ tag_map:
   转载: repost
   原创: original
   翻译: translation
+
+  我的世界: minecraft
+  三国杀: sanguosha
+  王者荣耀: kog
 
   Git: git
   Markdown: markdown
