@@ -1,17 +1,23 @@
 .notice
+  --notice-bg: rgba(251, 251, 251, 0.31)
+  --notice-border: #e6e6e6
+  --notice-text: #969696
+  --notice-icon: #999
+
   margin-top 50px
   padding 20px
-  border 1px dashed #e6e6e6
-  color #969696
+  border 1px dashed var(--notice-border)
+  color var(--notice-text)
   position relative
   display inline-block
   width 100%
-  background rgba(251, 251, 251, 0.31)
+  background var(--notice-bg)
   border-radius 10px
+  transition background-color .2s ease, color .2s ease, border-color .2s ease
 
 .notice i
   float left
-  color #999
+  color var(--notice-icon)
   font-size 16px
   padding-right 10px
   vertical-align middle
@@ -20,4 +26,11 @@
 .notice-content
   display initial
   vertical-align middle
+
+body.darkmode
+  .notice
+    --notice-bg: rgba(255, 255, 255, 0.08)
+    --notice-border: rgba(255, 255, 255, 0.35)
+    --notice-text: #f0f0f0
+    --notice-icon: #ff9fb0
 
