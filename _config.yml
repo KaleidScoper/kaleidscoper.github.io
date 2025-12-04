@@ -91,29 +91,13 @@ category_map:
   安卓开发: android
   桌面开发: desktop
 
-  日记: diary # 一级分类，文章的文件名也直接采用diary-年份
-  2010年: diary-2010
-  2011年: diary-2011
-  2012年: diary-2012
-  2013年: diary-2013
-  2014年: diary-2014
-  2015年: diary-2015
-  2016年: diary-2016
-  2017年: diary-2017
-  2018年: diary-2018
-  2019年: diary-2019
-  2020年: diary-2020
-  2021年: diary-2021
-  2022年: diary-2022
-  2023年: diary-2023
-  2024年: diary-2024
-  2025年: diary-2025
-
   杂谈: talk # 一级分类
 
   旅行: travel # 二级分类，文章的文件名直接采用城市英文名
   国内: domestic
   国外: abroad
+
+  我的日记: diary # 二级分类，文章的文件名直接采用diary-年份
 
   电子游戏: game # 二级分类
   电影剧集: movie
