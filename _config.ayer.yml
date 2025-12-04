@@ -39,9 +39,9 @@ progressBar: true
 
 # 告示板模块
 broadcast:
-  enable: false # true开启，false关闭
+  enable: true # true开启，false关闭
   type: 1 # 1：自定义输入，2：一言api(https://hitokoto.cn/)
-  text: 是只能显示一行吗 # type为1时有效
+  text: 封面作者：Tamaki（Pixiv ID：19029917） # type为1时有效
 
 # 随机句子模块
 random_sentences: # txt文件中双空格为换行，单空格为空格
