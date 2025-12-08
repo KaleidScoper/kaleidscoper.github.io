@@ -192,6 +192,10 @@ friends_link:
     url: https://github.com/KaleidScoper
     img: /images/github.png
 
+  SCP CN 沙盒站:
+    url: https://scpsandboxcn.wikidot.com/kaleidoscoper
+    img: /images/scp.png
+
   Ayer 主题: #网站名称
     #网站地址
     url: https://github.com/KaleidScoper/hexo-theme-ayer-modified
