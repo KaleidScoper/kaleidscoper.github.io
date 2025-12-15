@@ -2,7 +2,7 @@
 
 KaleidScoper testing his Hexo blog.
 
-# 关于
+## 关于
 
 我原本是采用 WordPress + VPS 的方案部署的博客，该方案优缺点如下：
 
@@ -19,23 +19,11 @@ KaleidScoper testing his Hexo blog.
 2. 一键 push 更新，更新博文连浏览器都不用开，还能反映到Github活跃度。
 3. GitHub 提供 CDN ，国内访问速度比较好。
 
-# 部署
+## 部署
 
-仓 库 数：单仓库，工程文件与站点不分离，push不提交本地生成的静态网站`public`
+本网站为单仓库，工程文件与站点不分离，push不提交本地生成的静态网站`public`
 
 构建方法：GitHub Page -> Action，具体代码位于`\.github\workflows\pages.yml`
-
-总之先用一段时间再说。每个新功能更新将尽量留下说明文件。
-
-# 开发备忘录
-
-## 当前状态
-项目基于 Hexo 7.3.0 + Ayer 主题，已实现以下自定义功能：
-- 随机句子系统（古诗词库，防重复显示）
-- 电子手办柜（3D卡片展示）
-- 个人简历页面（中英文双语）
-- 水波纹动画页面
-- 完善的分类标签体系
 
 ## 画饼
 1. 国际化：侧边栏添加i18n按钮
