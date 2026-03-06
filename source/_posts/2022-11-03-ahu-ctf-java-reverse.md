@@ -3,6 +3,7 @@ title: AHU CTF 某 Java 逆向题解
 date: 2022-11-03 00:00:00
 categories: [技术, 安全, 逆向工程]
 tags: [原创, Java]
+author: KaleidScoper
 ---
 
 **前言：** 这是一道AHU-CTF比赛中的Java逆向题目分析。

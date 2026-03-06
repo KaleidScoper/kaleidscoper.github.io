@@ -3,6 +3,7 @@ title: 《无题古体诗（玉死天工）》赏析
 date: 2025-09-03 00:00:00
 categories: [杂谈, 书刊诗文]
 tags: [文学, 原创, 翻译]
+author: KaleidScoper
 ---
 
 **前言：** 原诗为小红书用户 [别声张.](https://www.xiaohongshu.com/user/profile/682abad2000000000d0085fb) 在另一位小红书用户 [三十二分之一的三流诗人](https://www.xiaohongshu.com/user/profile/67f3f4560000000006013135) 的贴文评论区中创作（原评论区已不存）。原诗版权归原作者所有。

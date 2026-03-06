@@ -3,6 +3,7 @@ title: 《百年孤独》书评
 date: 2025-03-21 00:00:00
 categories: [杂谈, 书刊诗文]
 tags: [原创]
+author: KaleidScoper
 ---
 
 <b>前言：</b> 
