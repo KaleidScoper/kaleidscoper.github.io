@@ -97,7 +97,8 @@ category_map:
   国内: domestic
   国外: abroad
 
-  我的日记: diary # 二级分类，文章的文件名直接采用diary-年份
+  我的笔记: diary # 二级分类，文章的文件名直接采用diary-年份
+  她的笔记: wife
 
   电子游戏: game # 二级分类
   电影剧集: movie

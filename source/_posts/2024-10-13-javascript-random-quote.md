@@ -6,7 +6,9 @@ tags: [JavaScript, 原创]
 author: KaleidScoper
 ---
 
-<b>前言：</b>装文艺用，用于在网页的某个位置显示一句诗。托管于[GitHub](https://github.com/KaleidScoper/random-quote)。可前往GitHub页面一键部署。
+<b>前言：</b>
+
+装文艺用，用于在网页的某个位置显示一句诗。托管于[GitHub](https://github.com/KaleidScoper/random-quote)。可前往GitHub页面一键部署。
 
 <!--more-->
 

@@ -6,7 +6,9 @@ tags: [原创, Java]
 author: KaleidScoper
 ---
 
-**前言：** 这是一道AHU-CTF比赛中的Java逆向题目分析。
+**前言：** 
+
+这是一道AHU-CTF比赛中的Java逆向题目分析。
 
 <!--more-->
 
