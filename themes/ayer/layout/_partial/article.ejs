@@ -67,14 +67,16 @@
   theme.valine.enable && !post.no_valine){ %> <%- partial('post/valine', { key:
   post.slug, title: post.title, url: config.url+url_for(post.path) }) %> <% } %>
 
-  <%#
+  <!--
     [2026-03 评论系统迁移] Gitalk / Twikoo → giscus
     以下两段 partial 引用已被 giscus 取代，对应模板文件内有详细注释。
     原 Gitalk 使用 !index 条件（全站非列表页），原 Twikoo 使用 is_post() 条件（仅文章页）。
     现 giscus 统一使用 !index 条件，与原 Gitalk 行为一致。
-  %>
-  <%# <% if (!index) { %> <%- partial('post/gitalk') %> <% } %> %>
-  <%# <% if (is_post()) { %> <%- partial('post/twikoo') %> <% } %> %>
+
+    原始代码:
+    <% if (!index) { %> <%- partial('post/gitalk') %> <% } %>
+    <% if (is_post()) { %> <%- partial('post/twikoo') %> <% } %>
+  -->
 
   <% if (!index) { %> <%- partial('post/giscus') %> <% } %>
 </article>
