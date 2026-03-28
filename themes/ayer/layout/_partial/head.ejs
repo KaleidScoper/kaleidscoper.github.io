@@ -38,21 +38,23 @@
       <script src="https://cdn.staticfile.org/pace/1.2.4/pace.min.js"></script>
       <% } %> <%- partial('google-analytics') %> <%- partial('baidu-analytics')
       %>
+      <% if (theme.lock && theme.lock.enable) { %>
       <link
         rel="stylesheet"
         href="https://cdn.staticfile.org/limonte-sweetalert2/11.0.19/sweetalert2.min.css"
       />
       <script src="https://cdn.staticfile.org/limonte-sweetalert2/11.0.19/sweetalert2.min.js"></script>
-
-      <!-- mermaid -->
-      <% if (theme.mermaid.enable) { %>
-      <script src="<%= theme.mermaid.cdn %>"></script>
-      <% } %>
       <style>
         .swal2-styled.swal2-confirm {
           font-size: 1.6rem;
         }
       </style>
+      <% } %>
+
+      <!-- mermaid -->
+      <% if (theme.mermaid.enable) { %>
+      <script src="<%= theme.mermaid.cdn %>"></script>
+      <% } %>
       
       <!-- 随机句子功能 -->
       <% if (theme.random_sentences && theme.random_sentences.enable){ %>

@@ -131,21 +131,23 @@
 
 ## 四、CI / 部署
 
-### 12. Dependabot 每日检查过于频繁
+### ✅ ~~12. Dependabot 每日检查过于频繁~~
 
-- **位置**: `.github/dependabot.yml`
-- **问题**: `interval: daily` 且 `open-pull-requests-limit: 20`，对博客项目来说产生过多噪音。
-- **建议**: 将 `interval` 改为 `weekly` 或 `monthly`，`open-pull-requests-limit` 降至 `5`。
+- ~~**位置**: `.github/dependabot.yml`~~
+- ~~**问题**: `interval: daily` 且 `open-pull-requests-limit: 20`，对博客项目来说产生过多噪音。~~
+- ~~**建议**: 将 `interval` 改为 `weekly` 或 `monthly`，`open-pull-requests-limit` 降至 `5`。~~
+- **修复（2026-03-29）**: 已将 `interval` 改为 `weekly`，`open-pull-requests-limit` 降至 `5`。
 
 ---
 
 ## 五、代码质量
 
-### 13. SweetAlert2 在每个页面无条件加载
+### ✅ ~~13. SweetAlert2 在每个页面无条件加载~~
 
-- **位置**: `themes/ayer/layout/_partial/head.ejs` 第 46-50 行
-- **问题**: 即使页面不需要弹窗，SweetAlert2 的 CSS 和 JS（约 40KB）也会在每个页面加载，影响首屏性能。
-- **建议**: 通过配置项条件加载，或为 `<script>` 添加 `defer` 属性。
+- ~~**位置**: `themes/ayer/layout/_partial/head.ejs` 第 46-50 行~~
+- ~~**问题**: 即使页面不需要弹窗，SweetAlert2 的 CSS 和 JS（约 40KB）也会在每个页面加载，影响首屏性能。~~
+- ~~**建议**: 通过配置项条件加载，或为 `<script>` 添加 `defer` 属性。~~
+- **修复（2026-03-29）**: 将 SweetAlert2 的 CSS、JS 及按钮样式覆写整体包裹在 `<% if (theme.lock && theme.lock.enable) { %>` 条件内。当 `lock.enable: false`（当前状态）时，SweetAlert2 完全不出现在 HTML 中，每页节省约 40KB + 2 次 HTTP 请求。
 
 ### ✅ ~~14. CDN 来源不统一~~
 
