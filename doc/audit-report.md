@@ -12,14 +12,15 @@
 
 ## 一、严重 — 安全
 
-### 1. Gitalk OAuth Client Secret 泄露
+### ✅ ~~1. Gitalk OAuth Client Secret 泄露~~
 
-- **位置**: `_config.ayer.yml` — `gitalk.clientSecret` 字段
-- **问题**: `clientSecret` 被硬编码在配置文件中并提交到仓库。若仓库公开，该 Secret 已泄露，攻击者可冒充 OAuth 应用发起请求。
-- **建议**:
-  1. 立即到 GitHub Developer Settings 中 regenerate Client Secret
-  2. Gitalk 的纯前端架构决定了 clientSecret 必须暴露给浏览器，这是已知设计缺陷
-  3. 长期方案：迁移到 [giscus](https://giscus.app/)（基于 GitHub Discussions，无需 Secret）
+- ~~**位置**: `_config.ayer.yml` — `gitalk.clientSecret` 字段~~
+- ~~**问题**: `clientSecret` 被硬编码在配置文件中并提交到仓库。若仓库公开，该 Secret 已泄露，攻击者可冒充 OAuth 应用发起请求。~~
+- ~~**建议**:~~
+  1. ~~立即到 GitHub Developer Settings 中 regenerate Client Secret~~
+  2. ~~Gitalk 的纯前端架构决定了 clientSecret 必须暴露给浏览器，这是已知设计缺陷~~
+  3. ~~长期方案：迁移到 [giscus](https://giscus.app/)（基于 GitHub Discussions，无需 Secret）~~
+- **修复（2026-03-29）**: OAuth App 已删除；`clientID` 与 `clientSecret` 已从配置中清除；评论系统已迁移至 giscus（基于 GitHub Discussions，无需 Secret）。旧 Gitalk/Twikoo 模板代码以注释形式保留供参考。
 
 ---
 
@@ -78,24 +79,26 @@
   keywords: 安全,Web开发,博客,技术笔记
   ```
 
-### 8. 语法高亮可能存在冲突
+### ✅ ~~8. 语法高亮可能存在冲突~~
 
-- **位置**: `_config.yml`（`syntax_highlighter: highlight.js`）+ `themes/ayer/layout/_partial/head.ejs`（CDN 加载 highlight.js）
-- **问题**: Hexo 在构建时使用内置 highlight.js 渲染代码块，同时 `head.ejs` 从 CDN 额外加载了 highlight.js 11.8.0，可能导致客户端重复渲染。
-- **建议**: 二选一：
-  - **方案 A**（推荐）：删除 `head.ejs` 中的 CDN highlight.js 引用（第 38-40 行），保留 Hexo 内置构建时渲染
-  - **方案 B**：将 `_config.yml` 中 `syntax_highlighter` 设为空，完全由客户端 CDN 渲染
-- **注意**: 方案 A 可能使代码块配色变化（从 "github" 主题变为主题内置样式），请在本地预览后决定。
+- ~~**位置**: `_config.yml`（`syntax_highlighter: highlight.js`）+ `themes/ayer/layout/_partial/head.ejs`（CDN 加载 highlight.js）~~
+- ~~**问题**: Hexo 在构建时使用内置 highlight.js 渲染代码块，同时 `head.ejs` 从 CDN 额外加载了 highlight.js 11.8.0，可能导致客户端重复渲染。~~
+- ~~**建议**: 二选一：~~
+  - ~~**方案 A**（推荐）：删除 `head.ejs` 中的 CDN highlight.js 引用（第 38-40 行），保留 Hexo 内置构建时渲染~~
+  - ~~**方案 B**：将 `_config.yml` 中 `syntax_highlighter` 设为空，完全由客户端 CDN 渲染~~
+- ~~**注意**: 方案 A 可能使代码块配色变化（从 "github" 主题变为主题内置样式），请在本地预览后决定。~~
+- **修复（2026-03-29）**: 采用方案 A 并进一步优化：移除 CDN highlight.js 引用及 `ayer.ejs` 中的冗余初始化脚本（节省约 40KB/页）；在 `source/css/custom.styl` 中通过 CSS 自定义属性重建整个代码块样式系统，实现亮色（VS Code Light+）/ 暗色（VS Code Dark+）双模式自动跟随全站主题切换；新增语言标签显示、行内代码独立样式、响应式字体尺寸及未高亮代码块的兜底样式。
 
-### 9. 评论系统逻辑混乱
+### ✅ ~~9. 评论系统逻辑混乱~~
 
-- **位置**: `themes/ayer/layout/_partial/article.ejs` 第 66-71 行
-- **问题**:
-  - Gitalk 的显示条件为 `!index`（全站非列表页生效）
-  - Twikoo 的显示条件为 `is_post()`（仅文章页生效）
-  - 第 70 行注释提到想"全站支持评论区"，但只修改了 Gitalk，Twikoo 未同步修改
-  - Twikoo 已被禁用（envId 为空），当前仅 Gitalk 在工作
-- **建议**: 明确保留一个评论系统。若只用 Gitalk，清理 Twikoo 相关模板代码；若要迁移到 giscus（见问题 #1），统一替换。
+- ~~**位置**: `themes/ayer/layout/_partial/article.ejs` 第 66-71 行~~
+- ~~**问题**:~~
+  - ~~Gitalk 的显示条件为 `!index`（全站非列表页生效）~~
+  - ~~Twikoo 的显示条件为 `is_post()`（仅文章页生效）~~
+  - ~~第 70 行注释提到想"全站支持评论区"，但只修改了 Gitalk，Twikoo 未同步修改~~
+  - ~~Twikoo 已被禁用（envId 为空），当前仅 Gitalk 在工作~~
+- ~~**建议**: 明确保留一个评论系统。若只用 Gitalk，清理 Twikoo 相关模板代码；若要迁移到 giscus（见问题 #1），统一替换。~~
+- **修复（2026-03-29）**: 统一替换为 giscus，使用 `!index` 条件（全站非列表页）。Gitalk 与 Twikoo 的 partial 引用已注释，对应模板文件（`gitalk.ejs`、`twikoo.ejs`）内保留完整原始代码及停用说明。新增 `giscus.ejs` 模板，并在 `ayer.js` 中实现暗色模式联动。
 
 ### 10. `markdown-it` 插件声明但未显式安装
 

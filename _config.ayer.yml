@@ -231,7 +231,28 @@ friends_link:
     img: /images/lup9304.jpg
 
 
-# 评论：1、Valine(推荐)；2、Gitalk；3、Twikoo;
+# ============================================================
+# 评论系统
+# 当前使用: giscus (基于 GitHub Discussions，无需 OAuth Secret)
+# 历史方案: Valine / Gitalk / Twikoo（均已停用，配置保留供参考）
+# 迁移记录: 2026-03 从 Gitalk 迁移至 giscus，原因见 doc/audit-report.md #1 #9
+# ============================================================
+
+# 4、giscus (https://giscus.app/)
+# 前往 https://giscus.app/ 完成配置向导后填入以下字段
+giscus:
+  enable: true
+  repo: KaleidScoper/blog-comments          # 启用了 Discussions 的仓库
+  repo_id: R_kgDOOMwbgQ                      # 从 giscus.app 获取
+  category: Announcements                    # 推荐使用 Announcements 分类
+  category_id: DIC_kwDOOMwbgc4C5fSF          # 从 giscus.app 获取
+  mapping: pathname                          # 页面与 Discussion 的映射方式
+  reactions_enabled: 1                       # 是否启用主帖回应（1=是 0=否）
+  emit_metadata: 0                           # 是否发送元数据（0=否）
+  input_position: top                     # 输入框位置: top / bottom
+  lang: zh-CN                                # 界面语言
+
+# --- 以下为已停用的评论系统，保留配置供参考 ---
 
 # 1、Valine[一款快速、简洁且高效的无后端评论系统](https://github.com/xCss/Valine)
 # 启用Valine必须先创建leancloud应用， 获取 id|key 填入即可
@@ -246,15 +267,18 @@ valine:
   placeholder: 给我的文章加点评论吧~ # placeholder
 
 # 2、Gitalk(https://github.com/gitalk/gitalk)
+# [已停用] OAuth App 已于 2026-03 删除，clientSecret 已失效
+# 历史评论保留在 blog-comments 仓库的 Issues 中
 gitalk:
-  enable: true # true
-  clientID: Ov23liCJEFZyi44Lnx0M # GitHub Application Client ID
-  clientSecret: 8cded70703b10f4fa4ed60d72fa7c345014ec7de # Client Secret
-  repo: blog-comments # Repository name
-  owner: KaleidScoper # GitHub ID
-  admin: KaleidScoper # GitHub ID
+  enable: false
+  clientID:      # 已清除 — OAuth App 已删除
+  clientSecret:  # 已清除 — 该 Secret 曾被泄露，详见 doc/audit-report.md #1
+  repo: blog-comments
+  owner: KaleidScoper
+  admin: KaleidScoper
 
 # 3、Twikoo(https://github.com/imaegoo/twikoo)
+# [未启用] 从未实际投入使用
 twikoo:
   enable: false
   envId:

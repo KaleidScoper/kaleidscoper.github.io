@@ -153,22 +153,36 @@
 
   // DarkMode
   // 默认为暗色模式，只有明确设置为亮色时才切换
+  function setGiscusTheme(theme) {
+    var iframe = document.querySelector("iframe.giscus-frame");
+    if (iframe) {
+      iframe.contentWindow.postMessage(
+        { giscus: { setConfig: { theme: theme } } },
+        "https://giscus.app"
+      );
+    }
+  }
+
   if (sessionStorage.getItem("darkmode") == 0) {
     $("body").removeClass("darkmode");
     $("#todark i").removeClass("ri-sun-line").addClass("ri-moon-line");
+    setGiscusTheme("light");
   } else {
     // 默认已经是 darkmode class，无需添加，只更新图标
     $("#todark i").removeClass("ri-moon-line").addClass("ri-sun-line");
+    setGiscusTheme("dark");
   }
   $("#todark").on("click", () => {
     if (sessionStorage.getItem("darkmode") == 0) {
       $("body").addClass("darkmode");
       $("#todark i").removeClass("ri-moon-line").addClass("ri-sun-line");
       sessionStorage.setItem("darkmode", 1);
+      setGiscusTheme("dark");
     } else {
       $("body").removeClass("darkmode");
       $("#todark i").removeClass("ri-sun-line").addClass("ri-moon-line");
       sessionStorage.setItem("darkmode", 0);
+      setGiscusTheme("light");
     }
   });
 

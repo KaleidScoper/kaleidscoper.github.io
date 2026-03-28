@@ -1,0 +1,40 @@
+<% if (theme.giscus && theme.giscus.enable && post.comments !== false) { %>
+<div class="giscus-container" style="margin-top: 2rem; padding: 0 1rem;">
+  <script
+    src="https://giscus.app/client.js"
+    data-repo="<%- theme.giscus.repo %>"
+    data-repo-id="<%- theme.giscus.repo_id %>"
+    data-category="<%- theme.giscus.category %>"
+    data-category-id="<%- theme.giscus.category_id %>"
+    data-mapping="<%- theme.giscus.mapping || 'pathname' %>"
+    data-strict="0"
+    data-reactions-enabled="<%- theme.giscus.reactions_enabled || 1 %>"
+    data-emit-metadata="<%- theme.giscus.emit_metadata || 0 %>"
+    data-input-position="<%- theme.giscus.input_position || 'top' %>"
+    data-theme="dark"
+    data-lang="<%- theme.giscus.lang || 'zh-CN' %>"
+    crossorigin="anonymous"
+    async
+  ></script>
+  <script>
+    /* giscus 通过 async 加载，iframe 可能在 ayer.js 初始化之后才就绪。
+       站点默认暗色模式所以 data-theme="dark" 覆盖多数情况，
+       但若用户之前选择了亮色模式（sessionStorage darkmode==0），
+       需要在 iframe 就绪后修正主题。 */
+    if (sessionStorage.getItem("darkmode") == 0) {
+      window.addEventListener("message", function _giscusThemeFix(e) {
+        if (e.origin !== "https://giscus.app") return;
+        if (!(typeof e.data === "object" && e.data.giscus)) return;
+        var f = document.querySelector("iframe.giscus-frame");
+        if (f) {
+          f.contentWindow.postMessage(
+            { giscus: { setConfig: { theme: "light" } } },
+            "https://giscus.app"
+          );
+        }
+        window.removeEventListener("message", _giscusThemeFix);
+      });
+    }
+  </script>
+</div>
+<% } %>
