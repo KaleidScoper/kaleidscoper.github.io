@@ -26,18 +26,19 @@
 
 ## 二、项目结构
 
-### 2. 主题的开发元文件被提交到仓库
+### ✅ ~~2. 主题的开发元文件被提交到仓库~~
 
-- **位置**: `themes/ayer/` 下
-- **涉及文件**:
-  - `themes/ayer/.github/`（FUNDING.yml、ISSUE_TEMPLATE/、workflows/npmpublish.yml）
-  - `themes/ayer/.travis.yml`
-  - `themes/ayer/.npmignore`
-  - `themes/ayer/.gitattributes`
-  - `themes/ayer/.stylintrc`
-  - `themes/ayer/README-random-sentences.md`
-- **问题**: 这些是上游 Ayer 主题的开发用文件，与站点运行无关，增加仓库噪音。
-- **建议**: 使用 `git rm` 删除并在 `.gitignore` 中排除。若需要从上游同步更新，考虑用 git submodule 或 npm 方式管理主题。
+- ~~**位置**: `themes/ayer/` 下~~
+- ~~**涉及文件**:~~
+  - ~~`themes/ayer/.github/`（FUNDING.yml、ISSUE_TEMPLATE/、workflows/npmpublish.yml）~~
+  - ~~`themes/ayer/.travis.yml`~~
+  - ~~`themes/ayer/.npmignore`~~
+  - ~~`themes/ayer/.gitattributes`~~
+  - ~~`themes/ayer/.stylintrc`~~
+  - ~~`themes/ayer/README-random-sentences.md`~~
+- ~~**问题**: 这些是上游 Ayer 主题的开发用文件，与站点运行无关，增加仓库噪音。~~
+- ~~**建议**: 使用 `git rm` 删除并在 `.gitignore` 中排除。若需要从上游同步更新，考虑用 git submodule 或 npm 方式管理主题。~~
+- **修复（2026-03-29）**: 原作者已永久停止更新，本项目为 Ayer 的唯一维护副本，无上游同步需求，采用 "absorb & own" 策略将主题视为一等公民代码。已 `git rm` 移除纯上游开发产物（`.github/`、`.travis.yml`、`.npmignore`、`.gitattributes`、`move_config.js`）；根目录 `.gitignore` 添加对应条目防止重新引入；`package.json` 元数据已更新为当前维护者信息（原作者保留于 `contributors` 字段）。保留有构建/lint 价值的 `.stylintrc`、`rollup.config.js`、`README*.md` 及法律要求的 `LICENSE`。
 
 ### 🔇 ~~3. `debug.py` 放在项目根目录~~
 

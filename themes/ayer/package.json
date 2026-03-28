@@ -1,17 +1,17 @@
 {
   "name": "hexo-theme-ayer",
   "version": "1.9.7-0",
-  "description": "a clean and elegant theme for hexo.",
+  "description": "A clean and elegant theme for Hexo. Maintained fork of Shen-Yu/hexo-theme-ayer.",
   "scripts": {
     "dev": "rollup -c -w",
     "build": "rollup -c",
-    "postinstall": "node ./move_config.js",
     "test": "stylint source-src/css/style.styl -c .stylintrc"
   },
   "source": "source-src/main.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shen-Yu/hexo-theme-ayer.git"
+    "url": "git+https://github.com/KaleidScoper/kaleidscoper.github.io.git",
+    "directory": "themes/ayer"
   },
   "keywords": [
     "hexo",
@@ -19,13 +19,15 @@
     "blog",
     "ayer"
   ],
-  "author": "Shen-Yu <shenyu@hotmail.com>",
+  "author": "Kaleid_5coper <kaleided.scoper@gmail.com>",
+  "contributors": [
+    "Shen-Yu <shenyu@hotmail.com> (original author)"
+  ],
   "license": "SATA",
   "bugs": {
-    "url": "https://github.com/Shen-Yu/hexo-theme-ayer/issues",
-    "email": "shenyu@hotmail.com"
+    "url": "https://github.com/KaleidScoper/kaleidscoper.github.io/issues"
   },
-  "homepage": "https://shen-yu.gitee.io/",
+  "homepage": "https://kaleidscoper.github.io/",
   "devDependencies": {
     "autoprefixer": "^9.8.6",
     "rollup": "^2.50.2",
