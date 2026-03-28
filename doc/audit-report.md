@@ -69,15 +69,16 @@
 
 ## 三、配置质量
 
-### 7. `description` 和 `keywords` 为空 — SEO 不利
+### ✅ ~~7. `description` 和 `keywords` 为空 — SEO 不利~~
 
-- **位置**: `_config.yml` — `description` 和 `keywords` 字段
-- **问题**: 两个字段为空，导致页面 `<meta>` 标签缺失，对搜索引擎收录不利。
-- **建议**: 填写有意义的站点描述和关键词，例如：
+- ~~**位置**: `_config.yml` — `description` 和 `keywords` 字段~~
+- ~~**问题**: 两个字段为空，导致页面 `<meta>` 标签缺失，对搜索引擎收录不利。~~
+- ~~**建议**: 填写有意义的站点描述和关键词，例如：~~
   ```yaml
   description: 'Kaleid Scoper 的个人技术博客，记录安全研究、Web 开发与生活随笔'
   keywords: 安全,Web开发,博客,技术笔记
   ```
+- **修复（2026-03-29）**: 已在 `_config.yml` 中填入站点描述与关键词。`head.ejs` 模板已具备完整的分级渲染逻辑（文章页优先使用 front-matter 的 `description`/`keywords`，回退到站点级配置），无需修改模板代码。
 
 ### ✅ ~~8. 语法高亮可能存在冲突~~
 
