@@ -5,6 +5,8 @@
 > **排除范围**: 构建产物（public/、node_modules/）、source/_posts/ 下的文章、"文章模板暂存处" 目录
 >
 > 本文档仅列出**尚未修复**的问题，供协作者参考处理。
+>
+> 标记说明：✅ 表示**已修复**，🔇 表示**已忽略**，对应条目以删除线标注。
 
 ---
 
@@ -36,17 +38,17 @@
 - **问题**: 这些是上游 Ayer 主题的开发用文件，与站点运行无关，增加仓库噪音。
 - **建议**: 使用 `git rm` 删除并在 `.gitignore` 中排除。若需要从上游同步更新，考虑用 git submodule 或 npm 方式管理主题。
 
-### 3. `debug.py` 放在项目根目录
+### 🔇 ~~3. `debug.py` 放在项目根目录~~
 
-- **位置**: 根目录 `debug.py`
-- **问题**: 本地调试启动脚本，不应出现在生产仓库中。
-- **建议**: 将 `debug.py` 加入 `.gitignore`，或移入 `tools/` 目录。
+- ~~**位置**: 根目录 `debug.py`~~
+- ~~**问题**: 本地调试启动脚本，不应出现在生产仓库中。~~
+- ~~**建议**: 将 `debug.py` 加入 `.gitignore`，或移入 `tools/` 目录。~~
 
-### 4. `source/test/` 测试页面被提交
+### 🔇 ~~4. `source/test/` 测试页面被提交~~
 
-- **位置**: `source/test/index.md`
-- **问题**: 视差滚动效果演示页会被构建并部署到正式站点的 `/test/` 路径。
-- **建议**: 删除该目录，或将 `test/**` 加入 `_config.yml` 的 `skip_render` 列表。
+- ~~**位置**: `source/test/index.md`~~
+- ~~**问题**: 视差滚动效果演示页会被构建并部署到正式站点的 `/test/` 路径。~~
+- ~~**建议**: 删除该目录，或将 `test/**` 加入 `_config.yml` 的 `skip_render` 列表。~~
 
 ### 5. 简历目录大量代码重复
 
@@ -59,7 +61,7 @@
 - **位置**:
   - `themes/ayer/source/js/jquery-3.6.0.min.js`（全站）
   - `source/resume/js/jquery-2.1.3.min.js` 和 `source/resume-en/js/jquery-2.1.3.min.js`（简历页）
-  - `source/mc-server/index.html` 第 14 行：从 Google CDN 加载 jQuery 3.5.1
+  - `source/mc-server/index.html` 第 14 行：从 Staticfile CDN 加载 jQuery 3.5.1
 - **建议**: 至少将 MC 服务器页面的 jQuery 版本与主站统一（3.6.0 或更新）。简历页如果模板允许也建议升级。
 
 ---
@@ -137,11 +139,12 @@
 - **问题**: 即使页面不需要弹窗，SweetAlert2 的 CSS 和 JS（约 40KB）也会在每个页面加载，影响首屏性能。
 - **建议**: 通过配置项条件加载，或为 `<script>` 添加 `defer` 属性。
 
-### 14. CDN 来源不统一
+### ✅ ~~14. CDN 来源不统一~~
 
-- **涉及文件**: `head.ejs`、`after-footer.ejs`、`source/mc-server/index.html`
-- **问题**: 同时使用 `cdn.staticfile.org`、`cdn.jsdelivr.net`、`cdnjs.cloudflare.com`、`ajax.googleapis.com` 等多个 CDN，增加 DNS 查询次数。
-- **建议**: 统一使用一个 CDN 提供商（推荐 `cdn.jsdelivr.net`），便于维护并减少连接开销。
+- ~~**涉及文件**: `head.ejs`、`after-footer.ejs`、`source/mc-server/index.html`~~
+- ~~**问题**: 同时使用 `cdn.staticfile.org`、`cdn.jsdelivr.net`、`cdnjs.cloudflare.com`、`ajax.googleapis.com` 等多个 CDN，增加 DNS 查询次数。~~
+- ~~**建议**: 统一使用一个 CDN 提供商（推荐 `cdn.jsdelivr.net`），便于维护并减少连接开销。~~
+- **修复（2026-03-29）**: 已将所有第三方库 CDN 统一为 `cdn.staticfile.org`；移除 `mc-server` 中对 `fonts.bunny.net` 的外部字体引用（回退至系统 sans-serif 字体）。
 
 ### 15. EJS 模板可读性差
 
@@ -179,14 +182,11 @@
 
 ## 六、工程规范
 
-### 19. Git 提交信息不规范
+### 🔇 ~~19. Git 提交信息不规范~~
 
-- **近期提交**: `up`, `fix`, `final`, `up5`, `up3`
-- **问题**: 无描述性信息，无法从日志回溯变更内容。
-- **建议**: 采用 [Conventional Commits](https://www.conventionalcommits.org/) 规范，例如：
-  - `feat: 添加随机句子功能`
-  - `fix: 修复页脚链接拼写错误`
-  - `chore: 清理无用依赖`
+- ~~**近期提交**: `up`, `fix`, `final`, `up5`, `up3`~~
+- ~~**问题**: 无描述性信息，无法从日志回溯变更内容。~~
+- ~~**建议**: 采用 [Conventional Commits](https://www.conventionalcommits.org/) 规范。~~
 
 ### 20. Scaffold 模板过于简陋
 
@@ -204,14 +204,15 @@
   ---
   ```
 
-### 21. URL 中保留冗余的 `index.html`
+### 🔇 ~~21. URL 中保留冗余的 `index.html`~~
 
-- **位置**: `_config.yml` — `pretty_urls.trailing_index: true` 和 `trailing_html: true`
-- **问题**: 生成的 URL 会包含 `/index.html` 后缀（如 `example.com/about/index.html`），不够简洁。
-- **建议**: 将两者设为 `false`，获得更干净的 URL（如 `example.com/about/`）。
+- ~~**位置**: `_config.yml` — `pretty_urls.trailing_index: true` 和 `trailing_html: true`~~
+- ~~**问题**: 生成的 URL 会包含 `/index.html` 后缀（如 `example.com/about/index.html`），不够简洁。~~
+- ~~**建议**: 将两者设为 `false`，获得更干净的 URL（如 `example.com/about/`）。~~
 
-### 22. 友盟 CNZZ 统计可能已过时
+### ✅ ~~22. 友盟 CNZZ 统计可能已过时~~
 
-- **位置**: `_config.ayer.yml` — `cnzz.enable: true`
-- **问题**: 友盟 CNZZ 已逐步淘汰部分功能，且脚本加载在 `<footer>` 的 `<li>` 中，语义不当。
-- **建议**: 考虑移除或替换为其他统计方案（如百度统计、Umami 等自托管方案）。
+- ~~**位置**: `_config.ayer.yml` — `cnzz.enable: true`~~
+- ~~**问题**: 友盟 CNZZ 已逐步淘汰部分功能，且脚本加载在 `<footer>` 的 `<li>` 中，语义不当。~~
+- ~~**建议**: 考虑移除或替换为其他统计方案（如百度统计、Umami 等自托管方案）。~~
+- **修复（2026-03-29）**: 已将 `cnzz.enable` 设为 `false`，CNZZ 脚本不再加载。配置项保留以供参考。
