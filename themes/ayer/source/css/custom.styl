@@ -49,3 +49,187 @@ if hexo-config('mouse.enable')
     br
         display block
         margin 0.2rem 0
+
+// ================================================================
+// 代码块样式系统 — 通过 CSS 自定义属性实现亮/暗模式跟随
+//
+// 本段覆盖 dist/main.css 中编译自 source-src/css/_partial/highlight.styl
+// 的硬编码暗色主题配色，使代码块颜色随全站亮/暗模式自动切换。
+// 加载顺序：head.ejs 先加载 dist/main.css，再加载 css/custom.css，
+// 因此同等优先级下此处的声明生效。
+// ================================================================
+
+@css {
+  /* ---------- 亮色模式（默认）— VS Code Light+ ---------- */
+  :root {
+    --hl-bg: #f8f8f8;
+    --hl-fg: #383a42;
+    --hl-comment: #008000;
+    --hl-keyword: #af00db;
+    --hl-function: #795e26;
+    --hl-string: #a31515;
+    --hl-number: #098658;
+    --hl-boolean: #0000ff;
+    --hl-class: #267f99;
+    --hl-variable: #001080;
+    --hl-operator: #383a42;
+    --hl-builtin: #267f99;
+    --hl-property: #001080;
+    --hl-tag: #800000;
+    --hl-attribute: #e50000;
+    --hl-gutter: #999999;
+    --inline-code-bg: #f0f2f5;
+    --inline-code-text: #d63384;
+  }
+
+  /* ---------- 暗色模式 — VS Code Dark+ ---------- */
+  body.darkmode {
+    --hl-bg: #1e1e1e;
+    --hl-fg: #d4d4d4;
+    --hl-comment: #6a9955;
+    --hl-keyword: #c586c0;
+    --hl-function: #dcdcaa;
+    --hl-string: #ce9178;
+    --hl-number: #b5cea8;
+    --hl-boolean: #569cd6;
+    --hl-class: #4ec9b0;
+    --hl-variable: #9cdcfe;
+    --hl-operator: #d4d4d4;
+    --hl-builtin: #4ec9b0;
+    --hl-property: #9cdcfe;
+    --hl-tag: #569cd6;
+    --hl-attribute: #9cdcfe;
+    --hl-gutter: #858585;
+    --inline-code-bg: #2e3440;
+    --inline-code-text: #ffcc99;
+  }
+
+  /* ---------- 代码块容器 ---------- */
+  figure.highlight {
+    position: relative;
+    background: var(--hl-bg) !important;
+    transition: background-color 0.3s ease;
+  }
+
+  .highlight {
+    color: var(--hl-fg);
+    font-size: 1.4rem;
+  }
+
+  .highlight .line {
+    height: auto;
+    line-height: 1.5;
+  }
+
+  .highlight .gutter pre {
+    color: var(--hl-gutter);
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* ---------- 语法着色 ---------- */
+  .highlight .keyword   { color: var(--hl-keyword); }
+  .highlight .function  { color: var(--hl-function); }
+  .highlight .string    { color: var(--hl-string); }
+  .highlight .number    { color: var(--hl-number); }
+  .highlight .boolean   { color: var(--hl-boolean); }
+  .highlight .comment   { color: var(--hl-comment); }
+  .highlight .class     { color: var(--hl-class); }
+  .highlight .variable  { color: var(--hl-variable); }
+  .highlight .operator  { color: var(--hl-operator); }
+  .highlight .builtin   { color: var(--hl-builtin); }
+  .highlight .property  { color: var(--hl-property); }
+  .highlight .tag       { color: var(--hl-tag); }
+  .highlight .attribute { color: var(--hl-attribute); }
+
+  /* ---------- 语言标签（悬停时淡出，为复制按钮让位） ---------- */
+  figure.highlight::before {
+    position: absolute;
+    top: 0;
+    right: 1rem;
+    padding: 0 0.5rem;
+    font-size: 1.2rem;
+    line-height: 2;
+    color: var(--hl-gutter);
+    text-transform: uppercase;
+    pointer-events: none;
+    opacity: 0.7;
+    transition: opacity 0.2s linear;
+  }
+
+  figure.highlight:hover::before {
+    opacity: 0;
+  }
+
+  figure.highlight.javascript::before,
+  figure.highlight.js::before       { content: "js"; }
+  figure.highlight.typescript::before,
+  figure.highlight.ts::before       { content: "ts"; }
+  figure.highlight.python::before,
+  figure.highlight.py::before       { content: "python"; }
+  figure.highlight.java::before     { content: "java"; }
+  figure.highlight.c::before        { content: "c"; }
+  figure.highlight.cpp::before      { content: "c++"; }
+  figure.highlight.csharp::before,
+  figure.highlight.cs::before       { content: "c#"; }
+  figure.highlight.html::before     { content: "html"; }
+  figure.highlight.css::before      { content: "css"; }
+  figure.highlight.bash::before,
+  figure.highlight.shell::before,
+  figure.highlight.sh::before       { content: "bash"; }
+  figure.highlight.json::before     { content: "json"; }
+  figure.highlight.yaml::before,
+  figure.highlight.yml::before      { content: "yaml"; }
+  figure.highlight.xml::before      { content: "xml"; }
+  figure.highlight.sql::before      { content: "sql"; }
+  figure.highlight.php::before      { content: "php"; }
+  figure.highlight.go::before       { content: "go"; }
+  figure.highlight.rust::before,
+  figure.highlight.rs::before       { content: "rust"; }
+  figure.highlight.ruby::before,
+  figure.highlight.rb::before       { content: "ruby"; }
+  figure.highlight.swift::before    { content: "swift"; }
+  figure.highlight.kotlin::before,
+  figure.highlight.kt::before       { content: "kotlin"; }
+  figure.highlight.markdown::before,
+  figure.highlight.md::before       { content: "md"; }
+  figure.highlight.diff::before     { content: "diff"; }
+  figure.highlight.lua::before      { content: "lua"; }
+  figure.highlight.powershell::before { content: "ps"; }
+  figure.highlight.plaintext::before,
+  figure.highlight.text::before,
+  figure.highlight.plain::before    { content: "text"; }
+  figure.highlight.ini::before      { content: "ini"; }
+  figure.highlight.toml::before     { content: "toml"; }
+  figure.highlight.nginx::before    { content: "nginx"; }
+  figure.highlight.dockerfile::before { content: "dockerfile"; }
+
+  /* ---------- 行内代码（非代码块内的 <code>） ---------- */
+  .article-entry :not(pre) > code {
+    background: var(--inline-code-bg) !important;
+    color: var(--inline-code-text) !important;
+    padding: 0.15em 0.4em;
+    border-radius: 3px;
+    font-size: 0.9em;
+    font-family: "Consolas", "Monaco", "Courier New", monospace;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* ---------- 兜底：未被 Hexo 高亮引擎处理的 <pre><code> 块 ---------- */
+  .article-entry pre:not(figure.highlight pre) {
+    background: var(--hl-bg);
+    border-radius: 5px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    overflow: auto;
+    transition: background-color 0.3s ease;
+  }
+
+  .article-entry pre:not(figure.highlight pre) code {
+    color: var(--hl-fg);
+    font-family: "Consolas", "Monaco", "Courier New", monospace;
+    font-size: 1.4rem;
+    background: none !important;
+    padding: 0;
+  }
+}

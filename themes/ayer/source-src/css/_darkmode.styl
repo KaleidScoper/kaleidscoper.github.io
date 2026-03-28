@@ -27,8 +27,9 @@ darkmode()
     &:hover
       color: dark-link-hover
 
-  // 文章正文中的代码块
-  .article-entry code
+  // 行内代码（排除代码块内部的 code 元素）
+  // ⚠️ 此规则已被 source/css/custom.styl 中的 CSS 自定义属性方案覆盖
+  .article-entry :not(pre) > code
     background: dark-code-bg !important
     color: dark-code-text !important
 
