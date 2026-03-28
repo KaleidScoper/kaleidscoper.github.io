@@ -8,27 +8,5 @@
 
   如需恢复，需要重新创建 OAuth App 并在 _config.ayer.yml 中
   设置 gitalk.enable: true 及对应的 clientID / clientSecret。
+  原始模板代码可在 git 历史记录中查看。
 %>
-<%# — 以下为原始代码，保留供参考 —
-
-<% if (theme.gitalk.enable && post.comments) { %>
-<div class="gitalk" id="gitalk-container"></div>
-<%- css('https://cdn.staticfile.org/gitalk/1.7.2/gitalk.min.css') %>
-<%- js('https://cdn.staticfile.org/gitalk/1.7.2/gitalk.min.js') %>
-<%- js('https://cdn.staticfile.org/blueimp-md5/2.19.0/js/md5.min.js') %>
-<script type="text/javascript">
-  var gitalk = new Gitalk({
-    clientID: '<%- theme.gitalk.clientID %>',
-    clientSecret: '<%- theme.gitalk.clientSecret %>',
-    repo: '<%- theme.gitalk.repo %>',
-    owner: '<%- theme.gitalk.owner %>',
-    admin: ['<%- theme.gitalk.admin %>'],
-    id: md5(location.pathname),
-    distractionFreeMode: false,
-    pagerDirection: 'last'
-  })
-  gitalk.render('gitalk-container')
-</script>
-<% } %>
-
-— 原始代码结束 — %>
