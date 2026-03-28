@@ -52,11 +52,12 @@
 - ~~**问题**: 视差滚动效果演示页会被构建并部署到正式站点的 `/test/` 路径。~~
 - ~~**建议**: 删除该目录，或将 `test/**` 加入 `_config.yml` 的 `skip_render` 列表。~~
 
-### 5. 简历目录大量代码重复
+### 🔇 ~~5. 简历目录大量代码重复~~
 
-- **位置**: `source/resume/` 与 `source/resume-en/`
-- **问题**: 两个目录下的 `css/`（含 font-awesome、micons 等）和 `js/`（jquery-2.1.3.min.js、modernizr.js、plugins.js 等）完全重复，约 500KB+ 冗余。
-- **建议**: 将共享的 CSS/JS 抽到 `source/resume-assets/` 公共目录，两个简历页面共用。
+- ~~**位置**: `source/resume/` 与 `source/resume-en/`~~
+- ~~**问题**: 两个目录下的 `css/`（含 font-awesome、micons 等）和 `js/`（jquery-2.1.3.min.js、modernizr.js、plugins.js 等）完全重复，约 500KB+ 冗余。~~
+- ~~**建议**: 将共享的 CSS/JS 抽到 `source/resume-assets/` 公共目录，两个简历页面共用。~~
+- **忽略（2026-03-29）**: 两份简历面向不同语言的雇主，计划未来各自独立定制（布局/样式可能分化），保持目录独立是刻意设计。
 
 ### 6. 项目中存在多个不同版本的 jQuery
 
@@ -102,11 +103,12 @@
 - ~~**建议**: 明确保留一个评论系统。若只用 Gitalk，清理 Twikoo 相关模板代码；若要迁移到 giscus（见问题 #1），统一替换。~~
 - **修复（2026-03-29）**: 统一替换为 giscus，使用 `!index` 条件（全站非列表页）。Gitalk 与 Twikoo 的 partial 引用已注释，对应模板文件（`gitalk.ejs`、`twikoo.ejs`）内保留完整原始代码及停用说明。新增 `giscus.ejs` 模板，并在 `ayer.js` 中实现暗色模式联动。
 
-### 10. `markdown-it` 插件声明但未显式安装
+### 🔇 ~~10. `markdown-it` 插件声明但未显式安装~~
 
-- **位置**: `_config.yml` — `markdown_it.plugins` 列表（10 个插件）vs `package.json`
-- **问题**: 配置了 `markdown-it-abbr`、`markdown-it-emoji`、`markdown-it-footnote` 等插件，但未在 `package.json` 中显式声明。它们可能作为 `hexo-renderer-markdown-it-katex` 的间接依赖被安装，但这种隐式依赖很脆弱。
-- **建议**: 执行 `npm ls markdown-it-abbr` 等命令确认这些包是否存在。如果是独立依赖，使用 `npm install --save` 显式添加。
+- ~~**位置**: `_config.yml` — `markdown_it.plugins` 列表（10 个插件）vs `package.json`~~
+- ~~**问题**: 配置了 `markdown-it-abbr`、`markdown-it-emoji`、`markdown-it-footnote` 等插件，但未在 `package.json` 中显式声明。它们可能作为 `hexo-renderer-markdown-it-katex` 的间接依赖被安装，但这种隐式依赖很脆弱。~~
+- ~~**建议**: 执行 `npm ls markdown-it-abbr` 等命令确认这些包是否存在。如果是独立依赖，使用 `npm install --save` 显式添加。~~
+- **忽略（2026-03-29）**: 经 `npm ls` 验证，全部 10 个插件均为 `hexo-renderer-markdown-it-katex@3.4.4` 的**直接 `dependencies`**（非 peer/optional），不存在真正的隐式依赖风险。该渲染器已停更（仅 3 个版本）且本项目锁定 `^3.4.4`，依赖链稳定。博客有多篇文章使用 KaTeX 数学公式，渲染器为必要依赖。额外显式安装反而可能引入版本去重问题，当前状态即为最佳实践。
 
 ### ✅ ~~11. 缺少 `hexo-generator-searchdb` 依赖~~
 
@@ -198,21 +200,12 @@
 - ~~**问题**: 无描述性信息，无法从日志回溯变更内容。~~
 - ~~**建议**: 采用 [Conventional Commits](https://www.conventionalcommits.org/) 规范。~~
 
-### 20. Scaffold 模板过于简陋
+### ✅ ~~20. Scaffold 模板过于简陋~~
 
-- **位置**: `scaffolds/post.md`
-- **问题**: 仅有 `title`、`date`、`tags`，但项目有 `categories`、`reward`、`copyright`、`no_word_count` 等常用 front-matter 选项，每次新建文章需手动添加。
-- **建议**: 丰富 scaffold：
-  ```yaml
-  ---
-  title: {{ title }}
-  date: {{ date }}
-  categories:
-  tags:
-  reward: false
-  copyright: true
-  ---
-  ```
+- ~~**位置**: `scaffolds/post.md`~~
+- ~~**问题**: 仅有 `title`、`date`、`tags`，但项目有 `categories`、`reward`、`copyright`、`no_word_count` 等常用 front-matter 选项，每次新建文章需手动添加。~~
+- ~~**建议**: 丰富 scaffold。~~
+- **修复（2026-03-29）**: 更新 `scaffolds/post.md` 和 `scaffolds/draft.md`，新增 `categories`、`reward: false`、`copyright: true` 字段。`reward` 默认关闭（配合 `reward_type: 1` 逐篇开启策略）；`copyright` 默认开启（当 `copyright_type` 调整为 `1` 或 `2` 时即刻生效）。
 
 ### 🔇 ~~21. URL 中保留冗余的 `index.html`~~
 
