@@ -57,10 +57,6 @@ highlight:
   tab_replace: ''
   wrap: true
   hljs: false
-prismjs:
-  preprocess: true
-  line_number: true
-  tab_replace: ''
 
 # Home page setting
 # path: Root path for your blogs index page. (default = '')
@@ -215,6 +211,4 @@ markdown_it:
     - markdown-it-sup
 
 # Deployment
-## Docs: https://hexo.io/docs/one-command-deployment
-deploy:
-  type: ''
+# 本站通过 GitHub Actions 部署，见 .github/workflows/pages.yml
