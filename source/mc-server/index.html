@@ -33,16 +33,6 @@
         <div class="icon" onclick="mobile_navbar_link_hider()">
             <i class="fa fa-bars"></i>
         </div>
-        <script>
-            function mobile_navbar_link_hider() {
-            var x = document.getElementById("mobile_navbar_links");
-            if (x.style.display === "flex") {
-                x.style.display = "none";
-            } else {
-                x.style.display = "flex";
-            }
-            } 
-        </script>
     </div>
     <div class="mainflex">
       <div class="main1">
@@ -59,40 +49,10 @@
             <br>
             <span class="main1_ipcopier_text2">点击复制</span>
           </button>
-          <script>
-            function copyText() {
-                navigator.clipboard.writeText
-            ("n3-33.yxsjmc.cn:20452");
-                }
-            $(document).ready(function() {
-            $('.main1_ipcopier').click(function() {
-                var popup = $('<div>', { class: 'main1_popup' })
-                .append($('<h3 class="copy_confirm">').text('已复制 IP 到剪贴板'))
-                $(this).after(popup);
-                setTimeout(function() {
-                popup.remove();
-                }, 1000);
-            });
-            });
-        </script>
         </div>
         <a href="#more" class="scroll">
           <img alt="downarrow" class="main1_downarrow" src="img/downarrow.png">
         </a>
-        <script>
-          const scrollLinks = document.querySelectorAll('.scroll');
-          scrollLinks.forEach(function(link) {
-            link.addEventListener('click', function(event) {
-              event.preventDefault();
-              const target = document.querySelector(link.getAttribute('href'));
-              const offsetTop = target.offsetTop;
-              window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
-              });
-            });
-          });
-        </script>
       </div>
       <div id="more"></div>
       <div class="main2">
@@ -139,22 +99,6 @@
           </div>
         </div>
       </div>
-      <script>
-        const chatCopyButton = document.getElementById('main4_chat_copy_button');
-        if (chatCopyButton) {
-          chatCopyButton.addEventListener('click', function(event) {
-            event.preventDefault();
-            navigator.clipboard.writeText('kaleided.scoper@gmail.com');
-            const popup = document.createElement('div');
-            popup.className = 'main4_popup';
-            popup.innerHTML = '<h3 class="copy_confirm">已复制邮箱地址</h3>';
-            chatCopyButton.appendChild(popup);
-            setTimeout(function() {
-              popup.remove();
-            }, 1000);
-          });
-        }
-      </script>
       <div id="about"></div>
       <div class="main5">
         <a class="headline">我们是谁</a>
@@ -229,5 +173,6 @@
     <footer class="copyright_div">
       <a href="https://github.com/KaleidScoper/MCServer-Web-Template-AHU" class="copyright">由 FQQD 制作于 2023 - 由 Kaleid Scoper 编辑于 2025</a>
     </footer>
+    <script src="script.js"></script>
   </body>
 </html>

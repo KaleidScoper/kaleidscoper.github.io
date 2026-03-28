@@ -210,5 +210,12 @@ markdown_it:
     - markdown-it-sub
     - markdown-it-sup
 
+# Local Search (hexo-generator-searchdb)
+search:
+  path: search.xml
+  field: post
+  content: true
+  format: html
+
 # Deployment
 # 本站通过 GitHub Actions 部署，见 .github/workflows/pages.yml

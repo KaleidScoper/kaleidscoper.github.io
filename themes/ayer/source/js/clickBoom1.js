@@ -12,7 +12,7 @@ const maxAnimeDuration = 1500;
 const minDiffuseRadius = 50;
 const maxDiffuseRadius = 100;
 
-let canvasEl = document.querySelector(".fireworks");
+let canvasEl = document.querySelector(".click-effect-canvas");
 let ctx = canvasEl.getContext("2d");
 let pointerX = 0;
 let pointerY = 0;

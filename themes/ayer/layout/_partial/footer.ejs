@@ -54,7 +54,7 @@
     <ul>
       <li>
         <div id="random-sentence" class="random-sentence" 
-             data-random-sentences-config='{"use_local_file": <%= theme.random_sentences.use_local_file || true %>}'></div>
+             data-random-sentences-config='{"use_local_file": <%= theme.random_sentences.use_local_file !== undefined ? theme.random_sentences.use_local_file : true %>}'></div>
       </li>
     </ul>
     <% } %>
