@@ -1,10 +1,10 @@
 # 博客项目代码审查报告
 
 > **审查日期**: 2026-03-28
+> **关闭日期**: 2026-03-29
 > **审查范围**: 主题配置、Hexo 配置文件、自定义脚本/插件/功能、模板文件、CSS/样式文件、项目根目录结构、CI/CD
 > **排除范围**: 构建产物（public/、node_modules/）、source/_posts/ 下的文章、"文章模板暂存处" 目录
->
-> 本文档仅列出**尚未修复**的问题，供协作者参考处理。
+> **最终结论**: 全部 22 项问题已关闭（✅ 已修复 15 项，🔇 已忽略 7 项）。
 >
 > 标记说明：✅ 表示**已修复**，🔇 表示**已忽略**，对应条目以删除线标注。
 
@@ -59,13 +59,14 @@
 - ~~**建议**: 将共享的 CSS/JS 抽到 `source/resume-assets/` 公共目录，两个简历页面共用。~~
 - **忽略（2026-03-29）**: 两份简历面向不同语言的雇主，计划未来各自独立定制（布局/样式可能分化），保持目录独立是刻意设计。
 
-### 6. 项目中存在多个不同版本的 jQuery
+### 🔇 ~~6. 项目中存在多个不同版本的 jQuery~~
 
-- **位置**:
-  - `themes/ayer/source/js/jquery-3.6.0.min.js`（全站）
-  - `source/resume/js/jquery-2.1.3.min.js` 和 `source/resume-en/js/jquery-2.1.3.min.js`（简历页）
-  - `source/mc-server/index.html` 第 14 行：从 Staticfile CDN 加载 jQuery 3.5.1
-- **建议**: 至少将 MC 服务器页面的 jQuery 版本与主站统一（3.6.0 或更新）。简历页如果模板允许也建议升级。
+- ~~**位置**:~~
+  - ~~`themes/ayer/source/js/jquery-3.6.0.min.js`（全站）~~
+  - ~~`source/resume/js/jquery-2.1.3.min.js` 和 `source/resume-en/js/jquery-2.1.3.min.js`（简历页）~~
+  - ~~`source/mc-server/index.html` 第 14 行：从 Staticfile CDN 加载 jQuery 3.5.1~~
+- ~~**建议**: 至少将 MC 服务器页面的 jQuery 版本与主站统一（3.6.0 或更新）。简历页如果模板允许也建议升级。~~
+- **忽略（2026-03-29）**: 三个 jQuery 版本分属完全隔离的页面（主站 / 简历 / MC 服务器），运行时互不加载，不存在版本冲突。简历页使用 jQuery 2.x 时代的第三方模板及其插件包（OwlCarousel、Waypoints 等），升级至 3.x 存在兼容性风险且收益为零；MC 服务器页 3.5.1 → 3.6.0 的 API 差异对其用法无影响。
 
 ---
 
