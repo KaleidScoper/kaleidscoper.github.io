@@ -107,21 +107,22 @@
 - **问题**: 配置了 `markdown-it-abbr`、`markdown-it-emoji`、`markdown-it-footnote` 等插件，但未在 `package.json` 中显式声明。它们可能作为 `hexo-renderer-markdown-it-katex` 的间接依赖被安装，但这种隐式依赖很脆弱。
 - **建议**: 执行 `npm ls markdown-it-abbr` 等命令确认这些包是否存在。如果是独立依赖，使用 `npm install --save` 显式添加。
 
-### 11. 缺少 `hexo-generator-searchdb` 依赖
+### ✅ ~~11. 缺少 `hexo-generator-searchdb` 依赖~~
 
-- **位置**: `_config.ayer.yml`（`search: true`）+ `themes/ayer/source/js/search.js`
-- **问题**: 搜索功能已启用且有对应 JS，但 `package.json` 中没有 `hexo-generator-searchdb` 或 `hexo-generator-search`。搜索功能可能完全不工作。
-- **建议**:
+- ~~**位置**: `_config.ayer.yml`（`search: true`）+ `themes/ayer/source/js/search.js`~~
+- ~~**问题**: 搜索功能已启用且有对应 JS，但 `package.json` 中没有 `hexo-generator-searchdb` 或 `hexo-generator-search`。搜索功能可能完全不工作。~~
+- ~~**建议**:~~
   ```bash
   npm install hexo-generator-searchdb --save
   ```
-  然后在 `_config.yml` 中添加：
+  ~~然后在 `_config.yml` 中添加：~~
   ```yaml
   search:
     path: search.xml
     field: post
     content: true
   ```
+- **修复（2026-03-29）**: 已安装 `hexo-generator-searchdb` 并在 `_config.yml` 中添加 `search` 配置段（`path: search.xml`、`field: post`、`content: true`、`format: html`）。
 
 ---
 
@@ -150,37 +151,41 @@
 - ~~**建议**: 统一使用一个 CDN 提供商（推荐 `cdn.jsdelivr.net`），便于维护并减少连接开销。~~
 - **修复（2026-03-29）**: 已将所有第三方库 CDN 统一为 `cdn.staticfile.org`；移除 `mc-server` 中对 `fonts.bunny.net` 的外部字体引用（回退至系统 sans-serif 字体）。
 
-### 15. EJS 模板可读性差
+### ✅ ~~15. EJS 模板可读性差~~
 
-- **位置**: `themes/ayer/layout/_partial/article.ejs` 等多个 `_partial/*.ejs` 文件
-- **问题**: 大量 EJS 条件逻辑被压缩到单行，例如：
+- ~~**位置**: `themes/ayer/layout/_partial/article.ejs` 等多个 `_partial/*.ejs` 文件~~
+- ~~**问题**: 大量 EJS 条件逻辑被压缩到单行，例如：~~
   ```ejs
   <% if (!index){ %> <%- partial('post/nav') %> <% } %> <% if (theme.valine &&
   theme.valine.enable && !post.no_valine){ %> <%- partial('post/valine', { key:
   ```
-- **建议**: 对条件块进行适当换行缩进，每个 `<% if %>` 独占一行，提高可维护性。
+- ~~**建议**: 对条件块进行适当换行缩进，每个 `<% if %>` 独占一行，提高可维护性。~~
+- **修复（2026-03-29）**: 对 `article.ejs`、`after-footer.ejs`、`ayer.ejs` 进行格式化重排，所有 `<% if %>` 条件块独占一行并带合理缩进，功能逻辑不变。
 
-### 16. `layout.ejs` 中的内联样式
+### ✅ ~~16. `layout.ejs` 中的内联样式~~
 
-- **位置**: `themes/ayer/layout/layout.ejs` 第 7-15 行（fireworks canvas 样式）
-- **建议**: 将内联 `<style>` 移入 `source-src/css/` 下的 Stylus 文件中，通过构建流程统一打包。
+- ~~**位置**: `themes/ayer/layout/layout.ejs` 第 7-15 行（fireworks canvas 样式）~~
+- ~~**建议**: 将内联 `<style>` 移入 `source-src/css/` 下的 Stylus 文件中，通过构建流程统一打包。~~
+- **修复（2026-03-29）**: 移除 `layout.ejs` 中 `click_effect` 2/3 的内联 `<style>` 和 `style` 属性，统一使用 `.click-effect-canvas` CSS 类；样式写入 `source/css/custom.styl`；同步更新 `clickBoom1.js` 中的选择器。
 
-### 17. `mc-server/index.html` 内联脚本过多
+### ✅ ~~17. `mc-server/index.html` 内联脚本过多~~
 
-- **位置**: `source/mc-server/index.html` 中有 4 段内联 `<script>`（导航切换、复制、平滑滚动等，约 40 行）
-- **建议**: 创建 `source/mc-server/script.js`，将所有内联脚本迁入。
+- ~~**位置**: `source/mc-server/index.html` 中有 4 段内联 `<script>`（导航切换、复制、平滑滚动等，约 40 行）~~
+- ~~**建议**: 创建 `source/mc-server/script.js`，将所有内联脚本迁入。~~
+- **修复（2026-03-29）**: 新建 `source/mc-server/script.js`，将 4 段内联脚本（导航折叠、IP 复制、平滑滚动、邮箱复制）全部迁入；HTML 末尾通过 `<script src="script.js">` 引用。
 
-### 18. `footer.ejs` 中 `random-sentences` 配置传递逻辑有误
+### ✅ ~~18. `footer.ejs` 中 `random-sentences` 配置传递逻辑有误~~
 
-- **位置**: `themes/ayer/layout/_partial/footer.ejs` 第 57 行
+- ~~**位置**: `themes/ayer/layout/_partial/footer.ejs` 第 57 行~~
   ```ejs
   data-random-sentences-config='{"use_local_file": <%= theme.random_sentences.use_local_file || true %>}'
   ```
-- **问题**: `|| true` 使得该值**永远**为 `true`，即使配置为 `false` 也会被覆盖。
-- **建议**: 改为：
+- ~~**问题**: `|| true` 使得该值**永远**为 `true`，即使配置为 `false` 也会被覆盖。~~
+- ~~**建议**: 改为：~~
   ```ejs
   data-random-sentences-config='{"use_local_file": <%= theme.random_sentences.use_local_file !== undefined ? theme.random_sentences.use_local_file : true %>}'
   ```
+- **修复（2026-03-29）**: 已将 `|| true` 改为三元运算符 `!== undefined ? value : true`，正确尊重用户配置的 `false` 值。
 
 ---
 
