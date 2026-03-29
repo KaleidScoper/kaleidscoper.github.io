@@ -46,7 +46,7 @@
       <% if ((theme.reward_type === 2 || (theme.reward_type === 1 && post.reward)) && !index && !post.no_reward) { %>
       <div id="reward-out">
         <div id="reward-btn" class="reward-trigger">
-          <i class="ri-cup-line"></i> <%= __('post.reward') %>
+          <i class="ri-cup-line"></i> <%= (theme.reward && theme.reward.button_text) ? theme.reward.button_text : __('post.reward') %>
         </div>
       </div>
       <% } %>
