@@ -89,7 +89,7 @@ word_count:
 # reward_type: 0-关闭 | 1-文章 front-matter 中 reward:true 才显示 | 2-所有文章显示
 # 单篇文章可在 front-matter 中设置 no_reward: true 强制关闭
 reward_type: 1
-reward_wording: "如果这篇文章对你有帮助，欢迎请作者喝杯咖啡"
+reward_wording: "如果这篇文章对你有帮助，欢迎请作者喝杯茶"
 
 # 打赏渠道列表（数据驱动，新增渠道只需追加条目）
 # name: 显示名称 | icon: RemixIcon 类名 | color: 品牌主题色
@@ -200,14 +200,6 @@ gongan:
 
 # 友情链接
 friends_link:
-
-  GitHub 主页:
-    url: https://github.com/KaleidScoper
-    img: /images/github.png
-
-  SCP CN 沙盒站:
-    url: https://scpsandboxcn.wikidot.com/kaleidoscoper
-    img: /images/scp.png
 
   Ayer 主题: #网站名称
     #网站地址

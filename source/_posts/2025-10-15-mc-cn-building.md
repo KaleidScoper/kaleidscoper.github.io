@@ -4,6 +4,7 @@ date: 2025-10-15 20:00:00
 categories: [杂谈,人文社科]
 tags: [教程,美学,建筑学,历史学,原创]
 author: KaleidScoper
+reward: true
 ---
 
 <b>前言：</b>
