@@ -14,15 +14,15 @@
 
 :root
   // Layout
-  --cat-gap: 1.5rem
+  --cat-gap: 1.8rem
   --cat-card-radius: 16px
-  --cat-card-padding: 1.5rem
-  --cat-child-indent: 0.75rem
+  --cat-card-padding: 1.8rem
+  --cat-child-indent: 1rem
 
   // Typography
-  --cat-font-size-1: 1.3rem
-  --cat-font-size-2: 1.1rem
-  --cat-font-size-3: 0.95rem
+  --cat-font-size-1: 1.7rem
+  --cat-font-size-2: 1.45rem
+  --cat-font-size-3: 1.25rem
   --cat-font-weight-1: 600
   --cat-font-weight-2: 500
   --cat-font-weight-3: 500
@@ -54,7 +54,7 @@
   --cat-child-badge-shadow: 0 2px 6px rgba(92, 169, 230, 0.30)
 
   // Toggle
-  --cat-toggle-size: 1.4rem
+  --cat-toggle-size: 1.8rem
   --cat-toggle-color: var(--cat-accent)
 
   // Transition
@@ -104,7 +104,7 @@ body.darkmode
 
 .cat-tree[data-depth="1"]
   display: grid
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr))
   gap: var(--cat-gap)
   list-style: none
   padding: 0
@@ -146,8 +146,8 @@ body.darkmode
   background-color: var(--cat-child-bg)
   border: 1px solid var(--cat-child-border)
   box-shadow: var(--cat-child-shadow)
-  margin-top: 0.65rem
-  padding: 1rem
+  margin-top: 0.75rem
+  padding: 1.2rem
 
   &:hover
     background-color: var(--cat-child-bg-hover)
@@ -161,7 +161,7 @@ body.darkmode
 .cat-node[data-depth="4"],
 .cat-node[data-depth="5"]
   border-radius: 10px
-  padding: 0.75rem 1rem
+  padding: 0.9rem 1.2rem
 
 // ---------------------------------------------------------------------------
 // Header row (toggle + link + badge)
@@ -170,7 +170,7 @@ body.darkmode
 .cat-header
   display: flex
   align-items: center
-  gap: 0.5rem
+  gap: 0.65rem
 
 // ---------------------------------------------------------------------------
 // Toggle Button
@@ -243,7 +243,7 @@ body.darkmode
   display: inline-flex
   align-items: center
   justify-content: center
-  padding: 0 0.55rem
+  padding: 0 0.65rem
   border-radius: 20px
   font-weight: 600
   flex-shrink: 0
@@ -251,9 +251,9 @@ body.darkmode
 
 // Depth 1 badge
 .cat-node[data-depth="1"] > .cat-header > .cat-count
-  min-width: 2rem
-  height: 2rem
-  font-size: 0.85rem
+  min-width: 2.4rem
+  height: 2.4rem
+  font-size: 1rem
   background: var(--cat-badge-bg)
   color: var(--cat-badge-text)
   box-shadow: var(--cat-badge-shadow)
@@ -263,9 +263,9 @@ body.darkmode
 
 // Depth 2 badge
 .cat-node[data-depth="2"] > .cat-header > .cat-count
-  min-width: 1.8rem
-  height: 1.8rem
-  font-size: 0.8rem
+  min-width: 2.2rem
+  height: 2.2rem
+  font-size: 0.95rem
   background: var(--cat-child-badge-bg)
   color: var(--cat-badge-text)
   box-shadow: var(--cat-child-badge-shadow)
@@ -274,9 +274,9 @@ body.darkmode
 .cat-node[data-depth="3"] > .cat-header > .cat-count,
 .cat-node[data-depth="4"] > .cat-header > .cat-count,
 .cat-node[data-depth="5"] > .cat-header > .cat-count
-  min-width: 1.6rem
-  height: 1.6rem
-  font-size: 0.75rem
+  min-width: 2rem
+  height: 2rem
+  font-size: 0.9rem
   background: rgba(61, 133, 198, 0.18)
   color: var(--cat-accent)
   border: 1px solid rgba(61, 133, 198, 0.30)
@@ -319,26 +319,26 @@ body.darkmode
     gap: 1rem
 
   .cat-node[data-depth="1"]
-    padding: 1.2rem
+    padding: 1.3rem
 
   .cat-node[data-depth="1"] > .cat-header > .cat-link
-    font-size: 1.15rem
+    font-size: 1.4rem
 
   .cat-node[data-depth="2"]
-    padding: 0.8rem
+    padding: 1rem
 
   .cat-node[data-depth="2"] > .cat-header > .cat-link
-    font-size: 1rem
+    font-size: 1.25rem
 
   .cat-node[data-depth="3"],
   .cat-node[data-depth="4"],
   .cat-node[data-depth="5"]
-    padding: 0.6rem 0.8rem
+    padding: 0.75rem 1rem
 
   .cat-node[data-depth="3"] > .cat-header > .cat-link,
   .cat-node[data-depth="4"] > .cat-header > .cat-link,
   .cat-node[data-depth="5"] > .cat-header > .cat-link
-    font-size: 0.9rem
+    font-size: 1.1rem
 
 // ---------------------------------------------------------------------------
 // Preserve tag/archive count parenthesis style
