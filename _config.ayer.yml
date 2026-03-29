@@ -97,17 +97,36 @@ reward_wording: "如果这篇文章对你有帮助，可以请我喝杯茶"
 reward:
   button_text: "赏杯茶"       # 按钮文字，留空则回退到语言包默认值
   channels:
+    - name: "支付宝"
+      icon: "ri-alipay-line"
+      color: "#1677FF"
+      qrcode: "/images/reward/alipay.jpg"
+      description: "支付宝扫一扫"
+
     - name: "微信支付"
       icon: "ri-wechat-pay-line"
       color: "#07C160"
       qrcode: "/images/reward/wechat.jpg"
       description: "微信扫一扫"
 
-    - name: "支付宝"
-      icon: "ri-alipay-line"
-      color: "#1677FF"
-      qrcode: "/images/reward/alipay.jpg"
-      description: "支付宝扫一扫"
+    - name: "比特币"
+      icon: "ri-bitcoin-line"
+      color: "#F7931A"
+      qrcode: "/images/reward/BTC.webp"
+      description: "扫码转账 BTC"
+    
+    - name: "USDT"
+      icon: "ri-coin-line"
+      color: "#50AF95"
+      description: "选择网络后扫码转账"
+      children:
+        - name: "TRC-20"
+          badge: "推荐"
+          qrcode: "/images/reward/USDT-TRC20.webp"
+          description: "Tron 链 · 手续费最低"
+        - name: "ERC-20"
+          qrcode: "/images/reward/USDT-ERC20.webp"
+          description: "以太坊主网"
 
 # 版权声明
 # 版权声明type设定：0-关闭版权声明； 1-文章对应的md文件里有copyright: true属性，才有版权声明； 2-所有文章均有版权声明

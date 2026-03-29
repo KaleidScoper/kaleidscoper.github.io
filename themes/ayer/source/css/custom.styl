@@ -749,4 +749,83 @@ if hexo-config('mouse.enable')
       height: 140px;
     }
   }
+
+  /* ===== 打赏弹层 — 多链子选择器 ===== */
+  .reward-chain-hint {
+    text-align: center;
+    font-size: 13px;
+    color: var(--reward-subtext) !important;
+    margin: 0 0 12px 0;
+  }
+
+  .reward-sub-tabs {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .reward-sub-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 14px;
+    border: 1px solid var(--reward-border);
+    border-radius: 14px;
+    background: transparent;
+    color: var(--reward-tab-text);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+    line-height: 1.4;
+  }
+
+  .reward-sub-tab:hover {
+    border-color: var(--reward-accent);
+    color: var(--reward-accent);
+  }
+
+  .reward-sub-tab.active {
+    background: var(--reward-accent);
+    border-color: var(--reward-accent);
+    color: #fff !important;
+  }
+
+  .reward-sub-badge {
+    font-size: 10px;
+    padding: 1px 5px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.25);
+    line-height: 1.3;
+  }
+
+  .reward-sub-tab:not(.active) .reward-sub-badge {
+    background: var(--reward-tab-bg);
+    color: var(--reward-accent);
+  }
+
+  .reward-sub-panel {
+    display: none;
+    text-align: center;
+    animation: rewardFadeIn 0.25s ease;
+  }
+
+  .reward-sub-panel.active {
+    display: block;
+  }
+
+  @media (max-width: 480px) {
+    .reward-sub-tabs {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      justify-content: flex-start;
+      -webkit-overflow-scrolling: touch;
+    }
+    .reward-sub-tab {
+      padding: 4px 10px;
+      font-size: 12px;
+    }
+  }
 }

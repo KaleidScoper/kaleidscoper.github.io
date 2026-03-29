@@ -173,6 +173,19 @@
     $("#reward").css("--reward-accent", color);
   });
 
+  $(document).on("click", ".reward-sub-tab", function () {
+    var $this = $(this);
+    var parent = $this.data("parent");
+    var sub = $this.data("sub");
+    var $panel = $('.reward-panel[data-index="' + parent + '"]');
+
+    $panel.find(".reward-sub-tab").removeClass("active");
+    $this.addClass("active");
+
+    $panel.find(".reward-sub-panel").removeClass("active");
+    $panel.find('.reward-sub-panel[data-sub="' + sub + '"]').addClass("active");
+  });
+
   $(document).on("keydown", function (e) {
     if (e.key === "Escape") {
       $("#mask").fadeOut(100);

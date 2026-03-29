@@ -25,6 +25,38 @@
   <div class="reward-panels">
     <% channels.forEach(function(ch, i) { %>
     <div class="reward-panel<%= i === 0 ? ' active' : '' %>" data-index="<%= i %>">
+
+      <% if (ch.children && ch.children.length) { %>
+      <% if (ch.description) { %>
+      <p class="reward-chain-hint"><%= ch.description %></p>
+      <% } %>
+      <div class="reward-sub-tabs">
+        <% ch.children.forEach(function(sub, j) { %>
+        <button class="reward-sub-tab<%= j === 0 ? ' active' : '' %>"
+                data-parent="<%= i %>" data-sub="<%= j %>">
+          <%= sub.name %>
+          <% if (sub.badge) { %><span class="reward-sub-badge"><%= sub.badge %></span><% } %>
+        </button>
+        <% }); %>
+      </div>
+      <% ch.children.forEach(function(sub, j) { %>
+      <div class="reward-sub-panel<%= j === 0 ? ' active' : '' %>"
+           data-parent="<%= i %>" data-sub="<%= j %>">
+        <div class="reward-qrcode-wrap">
+          <img class="reward-qrcode" src="<%- url_for(sub.qrcode) %>" alt="<%= ch.name %> - <%= sub.name %>">
+        </div>
+        <% if (sub.description) { %>
+        <p class="reward-desc"><%= sub.description %></p>
+        <% } %>
+        <% if (sub.link) { %>
+        <a class="reward-link" href="<%= sub.link %>" target="_blank" rel="noopener">
+          前往<%= sub.name %> <i class="ri-external-link-line"></i>
+        </a>
+        <% } %>
+      </div>
+      <% }); %>
+      <% } else { %>
+
       <div class="reward-qrcode-wrap">
         <img class="reward-qrcode" src="<%- url_for(ch.qrcode) %>" alt="<%= ch.name %>">
       </div>
@@ -36,6 +68,8 @@
         前往<%= ch.name %> <i class="ri-external-link-line"></i>
       </a>
       <% } %>
+      <% } %>
+
     </div>
     <% }); %>
   </div>
