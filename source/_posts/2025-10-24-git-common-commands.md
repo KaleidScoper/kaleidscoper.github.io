@@ -4,6 +4,7 @@ date: 2025-10-24 20:00:00
 categories: [技术, 开发, 桌面开发]
 tags: [Git, 教程, 计算机科学, 原创]
 author: KaleidScoper
+reward: true
 ---
 
 **前言：** 

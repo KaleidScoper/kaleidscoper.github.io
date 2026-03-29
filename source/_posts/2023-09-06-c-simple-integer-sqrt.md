@@ -4,6 +4,7 @@ date: 2023-09-06 22:44:32
 categories: [技术, 开发, 桌面开发]
 tags: [C, 原创]
 author: KaleidScoper
+reward: true
 ---
 
 Talk is cheap, show you my code.

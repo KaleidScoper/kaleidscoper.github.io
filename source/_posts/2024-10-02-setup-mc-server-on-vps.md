@@ -4,6 +4,7 @@ date: 2024-10-02 18:24:55
 categories: [杂谈,电子游戏]
 tags: [原创,我的世界]
 author: KaleidScoper
+reward: true
 ---
 
 ## 一、租用云主机

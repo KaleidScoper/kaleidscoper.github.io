@@ -4,6 +4,7 @@ date: 2025-09-12 10:00:00
 categories: [杂谈,人文社科]
 tags: [教程,美学,语言学,原创]
 author: KaleidScoper
+reward: true
 ---
 
 <b>前言：</b>

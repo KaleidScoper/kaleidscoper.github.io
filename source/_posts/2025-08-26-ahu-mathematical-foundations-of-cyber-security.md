@@ -4,6 +4,7 @@ date: 2025-08-26 12:00:00
 categories: [技术, 安全, 密码学]
 tags: [教程,数学,原创]
 author: KaleidScoper
+reward: true
 ---
 
 <b>前言：</b>

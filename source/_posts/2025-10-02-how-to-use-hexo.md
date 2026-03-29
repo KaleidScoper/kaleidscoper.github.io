@@ -4,6 +4,7 @@ date: 2025-10-02 20:00:00
 categories: [技术, 开发, Web开发]
 tags: [教程,Hexo,原创]
 author: KaleidScoper
+reward: true
 ---
 
 <b>前言：</b>
