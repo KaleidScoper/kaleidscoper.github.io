@@ -141,14 +141,43 @@
     $sidebar.toggleClass("on");
   });
 
-  // Reward
-  $("#reward-btn").on("click", () => {
-    $("#reward").fadeIn(150);
-    $("#mask").fadeIn(150);
+  // Reward Modal
+  $(document).on("click", ".reward-trigger, #reward-btn", function () {
+    var $modal = $("#reward");
+    var $mask = $("#mask");
+    if (!$modal.length) return;
+
+    var firstColor = $modal.find(".reward-tab.active").data("color");
+    if (firstColor) $modal.css("--reward-accent", firstColor);
+
+    $mask.fadeIn(150);
+    $modal.addClass("visible");
   });
-  $("#reward .close, #mask").on("click", () => {
+
+  $(document).on("click", "#reward .reward-close, #mask", function () {
     $("#mask").fadeOut(100);
-    $("#reward").fadeOut(100);
+    $("#reward").removeClass("visible");
+  });
+
+  $(document).on("click", ".reward-tab", function () {
+    var $this = $(this);
+    var idx = $this.data("index");
+    var color = $this.data("color");
+
+    $(".reward-tab").removeClass("active");
+    $this.addClass("active");
+
+    $(".reward-panel").removeClass("active");
+    $('.reward-panel[data-index="' + idx + '"]').addClass("active");
+
+    $("#reward").css("--reward-accent", color);
+  });
+
+  $(document).on("keydown", function (e) {
+    if (e.key === "Escape") {
+      $("#mask").fadeOut(100);
+      $("#reward").removeClass("visible");
+    }
   });
 
   // DarkMode

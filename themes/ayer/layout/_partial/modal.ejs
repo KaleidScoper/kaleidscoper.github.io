@@ -1,21 +1,43 @@
 <div id="mask"></div>
 
-<!-- #reward -->
-<div id="reward">
-  <span class="close"><i class="ri-close-line"></i></span>
-  <p class="reward-p"><i class="ri-cup-line"></i><%= theme.reward_wording%></p>
-  <div class="reward-box">
-    <% if(theme.alipay) {%>
-    <div class="reward-item">
-      <img class="reward-img" src="<%- url_for(theme.alipay) %>">
-      <span class="reward-type">支付宝</span>
+<% var channels = (theme.reward && theme.reward.channels) ? theme.reward.channels : []; %>
+<% if (channels.length > 0) { %>
+<div id="reward" class="reward-modal" style="--reward-accent: <%= channels[0].color %>">
+  <span class="reward-close"><i class="ri-close-line"></i></span>
+
+  <p class="reward-wording">
+    <i class="ri-cup-line"></i><%= theme.reward_wording %>
+  </p>
+
+  <% if (channels.length > 1) { %>
+  <div class="reward-tabs">
+    <% channels.forEach(function(ch, i) { %>
+    <button class="reward-tab<%= i === 0 ? ' active' : '' %>"
+            data-index="<%= i %>"
+            data-color="<%= ch.color %>">
+      <i class="<%= ch.icon %>"></i>
+      <span><%= ch.name %></span>
+    </button>
+    <% }); %>
+  </div>
+  <% } %>
+
+  <div class="reward-panels">
+    <% channels.forEach(function(ch, i) { %>
+    <div class="reward-panel<%= i === 0 ? ' active' : '' %>" data-index="<%= i %>">
+      <div class="reward-qrcode-wrap">
+        <img class="reward-qrcode" src="<%- url_for(ch.qrcode) %>" alt="<%= ch.name %>">
+      </div>
+      <% if (ch.description) { %>
+      <p class="reward-desc"><%= ch.description %></p>
+      <% } %>
+      <% if (ch.link) { %>
+      <a class="reward-link" href="<%= ch.link %>" target="_blank" rel="noopener">
+        前往<%= ch.name %> <i class="ri-external-link-line"></i>
+      </a>
+      <% } %>
     </div>
-    <% } %>
-    <% if(theme.weixin) {%>
-    <div class="reward-item">
-      <img class="reward-img" src="<%- url_for(theme.weixin) %>">
-      <span class="reward-type">微信</span>
-    </div>
-    <% } %>
+    <% }); %>
   </div>
 </div>
+<% } %>

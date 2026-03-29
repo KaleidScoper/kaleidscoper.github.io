@@ -466,4 +466,287 @@ if hexo-config('mouse.enable')
     background: none !important;
     padding: 0;
   }
+
+  /* ===== 打赏弹层 — 亮色模式变量 ===== */
+  :root {
+    --reward-bg: rgba(255, 255, 255, 0.88);
+    --reward-border: rgba(0, 0, 0, 0.08);
+    --reward-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+    --reward-text: #333333;
+    --reward-subtext: #666666;
+    --reward-tab-bg: rgba(0, 0, 0, 0.04);
+    --reward-tab-text: #555555;
+    --reward-tab-hover: rgba(0, 0, 0, 0.08);
+    --reward-accent: #07C160;
+    --reward-overlay: rgba(0, 0, 0, 0.5);
+  }
+
+  /* ===== 打赏弹层 — 暗色模式变量 ===== */
+  body.darkmode {
+    --reward-bg: rgba(42, 47, 58, 0.95);
+    --reward-border: rgba(255, 255, 255, 0.1);
+    --reward-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --reward-text: #d0d0d0;
+    --reward-subtext: #aaaaaa;
+    --reward-tab-bg: rgba(255, 255, 255, 0.06);
+    --reward-tab-text: #bbbbbb;
+    --reward-tab-hover: rgba(255, 255, 255, 0.1);
+    --reward-overlay: rgba(0, 0, 0, 0.7);
+  }
+
+  /* ===== 打赏弹层 — 遮罩层 ===== */
+  #mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9998;
+    background: var(--reward-overlay);
+    display: none;
+  }
+
+  /* ===== 打赏弹层 — 主面板 ===== */
+  .reward-modal {
+    position: fixed;
+    z-index: 9999;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    width: 420px;
+    max-width: 94vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 28px;
+    background: var(--reward-bg);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--reward-border);
+    border-radius: 16px;
+    box-shadow: var(--reward-shadow);
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .reward-modal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--reward-accent);
+    border-radius: 16px 16px 0 0;
+    transition: background 0.3s ease;
+  }
+
+  .reward-modal.visible {
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* ===== 打赏弹层 — 关闭按钮 ===== */
+  .reward-close {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    color: var(--reward-subtext);
+  }
+  .reward-close:hover {
+    background: var(--reward-tab-hover);
+  }
+  .reward-close i {
+    font-size: 20px;
+    color: var(--reward-subtext) !important;
+  }
+
+  /* ===== 打赏弹层 — 引导文字 ===== */
+  .reward-wording {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--reward-text) !important;
+    margin: 0 0 20px 0;
+    line-height: 1.6;
+  }
+  .reward-wording i {
+    margin-right: 6px;
+    color: var(--reward-accent) !important;
+    transition: color 0.3s ease;
+  }
+
+  /* ===== 打赏弹层 — 渠道标签页 ===== */
+  .reward-tabs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .reward-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    background: var(--reward-tab-bg);
+    color: var(--reward-tab-text);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    font-family: inherit;
+    line-height: 1.4;
+  }
+  .reward-tab:hover {
+    background: var(--reward-tab-hover);
+  }
+  .reward-tab.active {
+    background: var(--reward-accent);
+    color: #fff !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+  .reward-tab i {
+    font-size: 16px;
+    color: var(--reward-tab-text) !important;
+    transition: color 0.3s ease;
+  }
+  .reward-tab.active i {
+    color: #fff !important;
+  }
+
+  /* ===== 打赏弹层 — 二维码面板 ===== */
+  .reward-panel {
+    display: none;
+    text-align: center;
+    animation: rewardFadeIn 0.25s ease;
+  }
+  .reward-panel.active {
+    display: block;
+  }
+
+  @keyframes rewardFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reward-qrcode-wrap {
+    display: inline-block;
+    padding: 12px;
+    border: 2px solid var(--reward-accent);
+    border-radius: 12px;
+    background: #ffffff;
+    transition: border-color 0.3s ease;
+  }
+
+  .reward-qrcode {
+    display: block;
+    width: 200px;
+    height: 200px;
+    border-radius: 6px;
+  }
+
+  .reward-desc {
+    margin: 12px 0 0;
+    font-size: 14px;
+    color: var(--reward-accent) !important;
+    transition: color 0.3s ease;
+  }
+
+  .reward-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 12px;
+    padding: 8px 20px;
+    background: var(--reward-accent);
+    color: #fff !important;
+    border-radius: 20px;
+    font-size: 14px;
+    text-decoration: none !important;
+    transition: all 0.3s ease;
+  }
+  .reward-link:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+    color: #fff !important;
+  }
+
+  /* ===== 打赏按钮（文章内） ===== */
+  #reward-out {
+    position: relative;
+    width: 100%;
+    text-align: center;
+  }
+
+  .reward-trigger,
+  #reward-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 40px;
+    padding: 0 24px;
+    margin: 48px 0;
+    font-size: 15px;
+    color: #fff !important;
+    background: var(--reward-accent);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    transition: all 0.3s ease;
+    font-family: inherit;
+    line-height: 1;
+  }
+  .reward-trigger:hover,
+  #reward-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    opacity: 0.9;
+  }
+
+  /* ===== 打赏弹层 — 移动端适配 ===== */
+  @media (max-width: 768px) {
+    .reward-modal {
+      width: 90vw;
+      padding: 20px;
+    }
+    .reward-qrcode {
+      width: 160px;
+      height: 160px;
+    }
+    .reward-tabs {
+      gap: 6px;
+    }
+    .reward-tab {
+      padding: 6px 12px;
+      font-size: 13px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .reward-tabs {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      justify-content: flex-start;
+      padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .reward-qrcode {
+      width: 140px;
+      height: 140px;
+    }
+  }
 }

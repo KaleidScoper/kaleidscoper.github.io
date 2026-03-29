@@ -86,14 +86,27 @@ word_count:
   only_article_visit: true
 
 # 打赏
-# 打赏type设定：0-关闭打赏； 1-文章对应的md文件里有reward:true属性，才有打赏； 2-所有文章均有打赏
+# reward_type: 0-关闭 | 1-文章 front-matter 中 reward:true 才显示 | 2-所有文章显示
+# 单篇文章可在 front-matter 中设置 no_reward: true 强制关闭
 reward_type: 1
-# 打赏wording
-reward_wording: "欢迎打赏支持作者"
-# 支付宝二维码图片地址，跟你设置logo的方式一样。比如：/images/alipay.jpg
-alipay: /images/alipay.jpg
-# 微信二维码图片地址
-weixin: /images/wechat.jpg
+reward_wording: "如果这篇文章对你有帮助，欢迎请作者喝杯咖啡"
+
+# 打赏渠道列表（数据驱动，新增渠道只需追加条目）
+# name: 显示名称 | icon: RemixIcon 类名 | color: 品牌主题色
+# qrcode: 二维码图片路径 | description: 辅助文字 | link: 可选外链
+reward:
+  channels:
+    - name: "微信支付"
+      icon: "ri-wechat-pay-line"
+      color: "#07C160"
+      qrcode: "/images/reward/wechat.jpg"
+      description: "微信扫一扫"
+
+    - name: "支付宝"
+      icon: "ri-alipay-line"
+      color: "#1677FF"
+      qrcode: "/images/reward/alipay.jpg"
+      description: "支付宝扫一扫"
 
 # 版权声明
 # 版权声明type设定：0-关闭版权声明； 1-文章对应的md文件里有copyright: true属性，才有版权声明； 2-所有文章均有版权声明
