@@ -1,32 +1,353 @@
-// Tags
+// ==========================================================================
+// Tag Cloud — Weighted Tag System
+//
+// Architecture:
+//   - CSS custom properties define all visual tokens at :root
+//   - body.darkmode overrides only the token values (single source of truth)
+//   - 5-level weighting via `data-level` attribute selectors
+//   - Staggered entrance animation via JS-set animation-delay
+// ==========================================================================
 
-.tag-list
-  list-unstyled()
-  margin-right -.5rem
-  margin-left -.5rem
-  > .tag-list-item
-    display inline-block
-    padding .5rem 1rem
-    font-size 120%
-    &:before
-      content "\eec3"
-      font-family remixicon
-      margin-right .5rem
-      display inline-block
-      vertical-align middle
-      color: tag-color
-    .tag-list-link
-      display inline-block
-      vertical-align middle
-      text-decoration: none
-      height 30px
-      line-height 30px
-      padding: 0 15px
-      font-size: 1.5rem
-      border-radius: 15px
-      background-color tag-color
-      color white
-      box-shadow: 0 3px 5px rgba(0,0,0,0.12)
-      transition: .2s
-      &:hover
-        transform: scale(1.1)
+// ---------------------------------------------------------------------------
+// Token Definitions
+// ---------------------------------------------------------------------------
+
+:root
+  // Layout
+  --tag-cloud-gap: 0.7rem
+  --tag-cloud-radius: 16px
+  --tag-cloud-padding: 2rem
+  --tag-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1)
+
+  // Container
+  --tag-card-bg: rgba(255, 255, 255, 0.6)
+  --tag-card-border: rgba(255, 255, 255, 0.8)
+  --tag-card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.10)
+
+  // Controls
+  --tag-ctrl-bg: rgba(255, 255, 255, 0.5)
+  --tag-ctrl-bg-hover: rgba(255, 255, 255, 0.8)
+  --tag-ctrl-border: rgba(0, 0, 0, 0.08)
+  --tag-ctrl-text: #555
+  --tag-ctrl-active-bg: #3d85c6
+  --tag-ctrl-active-text: #fff
+
+  // Stats
+  --tag-stats-text: #888
+
+  // Accent
+  --tag-accent: #3d85c6
+
+  // Item sizes (5 levels)
+  --tag-size-1: 1.15rem
+  --tag-size-2: 1.3rem
+  --tag-size-3: 1.5rem
+  --tag-size-4: 1.7rem
+  --tag-size-5: 1.95rem
+
+  // Item font weights
+  --tag-weight-1: 400
+  --tag-weight-2: 400
+  --tag-weight-3: 500
+  --tag-weight-4: 600
+  --tag-weight-5: 700
+
+  // Item backgrounds (5 levels)
+  --tag-bg-1: rgba(61, 133, 198, 0.07)
+  --tag-bg-2: rgba(61, 133, 198, 0.13)
+  --tag-bg-3: rgba(61, 133, 198, 0.22)
+  --tag-bg-4: rgba(61, 133, 198, 0.38)
+  --tag-bg-5: linear-gradient(135deg, #3d85c6 0%, #0681d0 100%)
+
+  // Item text colors
+  --tag-text-1: #777
+  --tag-text-2: #666
+  --tag-text-3: #4a6a8a
+  --tag-text-4: #fff
+  --tag-text-5: #fff
+
+  // Item hover
+  --tag-hover-shadow: 0 4px 16px rgba(61, 133, 198, 0.25)
+
+  // Count badge
+  --tag-badge-bg: rgba(61, 133, 198, 0.15)
+  --tag-badge-text: #3d85c6
+
+// ---------------------------------------------------------------------------
+// Dark Mode Token Overrides (single source of truth)
+// ---------------------------------------------------------------------------
+
+body.darkmode
+  --tag-card-bg: rgba(40, 40, 40, 0.6)
+  --tag-card-border: rgba(255, 255, 255, 0.10)
+  --tag-card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.40)
+
+  --tag-ctrl-bg: rgba(255, 255, 255, 0.08)
+  --tag-ctrl-bg-hover: rgba(255, 255, 255, 0.15)
+  --tag-ctrl-border: rgba(255, 255, 255, 0.10)
+  --tag-ctrl-text: #bbb
+  --tag-ctrl-active-bg: #5ca9e6
+  --tag-ctrl-active-text: #fff
+
+  --tag-stats-text: #999
+  --tag-accent: #5ca9e6
+
+  --tag-bg-1: rgba(92, 169, 230, 0.08)
+  --tag-bg-2: rgba(92, 169, 230, 0.15)
+  --tag-bg-3: rgba(92, 169, 230, 0.25)
+  --tag-bg-4: rgba(92, 169, 230, 0.42)
+  --tag-bg-5: linear-gradient(135deg, #5ca9e6 0%, #3d85c6 100%)
+
+  --tag-text-1: #aaa
+  --tag-text-2: #bbb
+  --tag-text-3: #9ec5e8
+  --tag-text-4: #f0f0f0
+  --tag-text-5: #fff
+
+  --tag-hover-shadow: 0 4px 16px rgba(92, 169, 230, 0.30)
+
+  --tag-badge-bg: rgba(92, 169, 230, 0.20)
+  --tag-badge-text: #7abce8
+
+// ---------------------------------------------------------------------------
+// Keyframes
+// ---------------------------------------------------------------------------
+
+@keyframes tagFadeIn
+  from
+    opacity: 0
+    transform: translateY(14px) scale(0.90)
+  to
+    opacity: 1
+    transform: translateY(0) scale(1)
+
+// ---------------------------------------------------------------------------
+// Container Card
+// ---------------------------------------------------------------------------
+
+.tag-cloud
+  max-width: 100%
+  margin: 2rem 0
+  padding: var(--tag-cloud-padding)
+  background: var(--tag-card-bg)
+  border: 1px solid var(--tag-card-border)
+  border-radius: var(--tag-cloud-radius)
+  box-shadow: var(--tag-card-shadow)
+  backdrop-filter: blur(12px)
+  -webkit-backdrop-filter: blur(12px)
+
+// ---------------------------------------------------------------------------
+// Header — Stats + Controls
+// ---------------------------------------------------------------------------
+
+.tag-cloud-header
+  display: flex
+  flex-wrap: wrap
+  align-items: center
+  justify-content: space-between
+  gap: 1rem
+  margin-bottom: 1.8rem
+
+.tag-cloud-stats
+  font-size: 1.3rem
+  color: var(--tag-stats-text)
+  strong
+    color: var(--tag-accent)
+    font-weight: 600
+
+.tag-cloud-controls
+  display: flex
+  align-items: center
+  gap: 0.75rem
+  flex-wrap: wrap
+
+// ---------------------------------------------------------------------------
+// Search Input
+// ---------------------------------------------------------------------------
+
+.tag-cloud-search
+  position: relative
+  display: flex
+  align-items: center
+  > i
+    position: absolute
+    left: 0.8rem
+    font-size: 1.3rem
+    color: var(--tag-ctrl-text)
+    pointer-events: none
+
+.tag-cloud-input
+  width: 160px
+  height: 32px
+  padding: 0 0.8rem 0 2.4rem
+  border: 1px solid var(--tag-ctrl-border)
+  border-radius: 8px
+  background: var(--tag-ctrl-bg)
+  color: var(--tag-ctrl-text)
+  font-size: 1.2rem
+  outline: none
+  transition: border-color 0.2s, background 0.2s, width 0.3s ease
+  &:focus
+    border-color: var(--tag-accent)
+    background: var(--tag-ctrl-bg-hover)
+    width: 200px
+
+// ---------------------------------------------------------------------------
+// Sort Buttons
+// ---------------------------------------------------------------------------
+
+.tag-cloud-sort
+  display: flex
+  gap: 0.4rem
+
+.tag-sort-btn
+  display: inline-flex
+  align-items: center
+  gap: 0.35rem
+  height: 32px
+  padding: 0 0.9rem
+  border: 1px solid var(--tag-ctrl-border)
+  border-radius: 8px
+  background: var(--tag-ctrl-bg)
+  color: var(--tag-ctrl-text)
+  font-size: 1.15rem
+  cursor: pointer
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, border-color 0.2s
+  &:hover
+    background: var(--tag-ctrl-bg-hover)
+  &.is-active
+    background: var(--tag-ctrl-active-bg)
+    color: var(--tag-ctrl-active-text)
+    border-color: transparent
+    box-shadow: 0 2px 8px rgba(61, 133, 198, 0.30)
+
+// ---------------------------------------------------------------------------
+// Tag Items Wrap
+// ---------------------------------------------------------------------------
+
+.tag-cloud-wrap
+  display: flex
+  flex-wrap: wrap
+  align-items: center
+  gap: var(--tag-cloud-gap)
+
+// ---------------------------------------------------------------------------
+// Tag Item — Base
+// ---------------------------------------------------------------------------
+
+.tag-cloud-item
+  display: inline-flex
+  align-items: center
+  gap: 0.3em
+  padding: 0.35em 0.85em
+  border-radius: 10px
+  text-decoration: none
+  white-space: nowrap
+  cursor: pointer
+  opacity: 0
+  will-change: transform, opacity
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease
+  &:hover
+    transform: translateY(-2px) scale(1.06)
+    box-shadow: var(--tag-hover-shadow)
+
+// Entrance animation
+.tag-cloud-wrap.is-animated .tag-cloud-item
+  animation: tagFadeIn 0.45s cubic-bezier(0.23, 1, 0.32, 1) forwards
+
+// ---------------------------------------------------------------------------
+// Level-based Visual Differentiation
+// ---------------------------------------------------------------------------
+
+.tag-cloud-item[data-level="1"]
+  font-size: var(--tag-size-1)
+  font-weight: var(--tag-weight-1)
+  color: var(--tag-text-1)
+  background: var(--tag-bg-1)
+
+.tag-cloud-item[data-level="2"]
+  font-size: var(--tag-size-2)
+  font-weight: var(--tag-weight-2)
+  color: var(--tag-text-2)
+  background: var(--tag-bg-2)
+
+.tag-cloud-item[data-level="3"]
+  font-size: var(--tag-size-3)
+  font-weight: var(--tag-weight-3)
+  color: var(--tag-text-3)
+  background: var(--tag-bg-3)
+
+.tag-cloud-item[data-level="4"]
+  font-size: var(--tag-size-4)
+  font-weight: var(--tag-weight-4)
+  color: var(--tag-text-4)
+  background: var(--tag-bg-4)
+
+.tag-cloud-item[data-level="5"]
+  font-size: var(--tag-size-5)
+  font-weight: var(--tag-weight-5)
+  color: var(--tag-text-5)
+  background: var(--tag-bg-5)
+
+// ---------------------------------------------------------------------------
+// Count Badge
+// ---------------------------------------------------------------------------
+
+.tag-cloud-count
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  min-width: 1.5em
+  height: 1.5em
+  padding: 0 0.4em
+  border-radius: 0.75em
+  font-size: 0.8em
+  font-weight: 600
+  line-height: 1
+  background: var(--tag-badge-bg)
+  color: var(--tag-badge-text)
+
+.tag-cloud-item[data-level="4"] .tag-cloud-count,
+.tag-cloud-item[data-level="5"] .tag-cloud-count
+  background: rgba(255, 255, 255, 0.25)
+  color: #fff
+
+// ---------------------------------------------------------------------------
+// Tag Name
+// ---------------------------------------------------------------------------
+
+.tag-cloud-name
+  line-height: 1.2
+
+// ---------------------------------------------------------------------------
+// Empty State
+// ---------------------------------------------------------------------------
+
+.tag-cloud-empty
+  display: none
+  text-align: center
+  padding: 3rem 1rem
+  margin: 0
+  color: var(--tag-stats-text)
+  font-size: 1.4rem
+
+// ---------------------------------------------------------------------------
+// Responsive
+// ---------------------------------------------------------------------------
+
+@media (max-width: 768px)
+  .tag-cloud
+    padding: 1.3rem
+    border-radius: 12px
+
+  .tag-cloud-header
+    flex-direction: column
+    align-items: flex-start
+
+  .tag-cloud-input
+    width: 140px
+    &:focus
+      width: 170px
+
+  .tag-cloud-wrap
+    gap: 0.5rem

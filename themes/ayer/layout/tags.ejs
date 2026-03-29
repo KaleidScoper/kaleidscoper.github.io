@@ -1,7 +1,125 @@
 <section class="outer">
-  <% if (site.tags.length){ %>
+  <% if (site.tags.length) { %>
     <h1 class="page-type-title"><%= __('tags') %></h1>
-    <%- list_tags({show_count: theme.show_count}) %>
+
+    <%
+      var tagList = site.tags.sort('name');
+      var counts = [];
+      tagList.each(function(tag) { counts.push(tag.posts.length); });
+      var maxCount = Math.max.apply(null, counts);
+      var minCount = Math.min.apply(null, counts);
+      var logMax = Math.log(maxCount);
+      var logMin = Math.log(Math.max(1, minCount));
+      var logRange = logMax - logMin;
+    %>
+
+    <div class="tag-cloud">
+      <div class="tag-cloud-header">
+        <span class="tag-cloud-stats">
+          共 <strong><%= site.tags.length %></strong> 个标签，<strong><%= site.posts.length %></strong> 篇文章
+        </span>
+        <div class="tag-cloud-controls">
+          <div class="tag-cloud-search">
+            <i class="ri-search-line"></i>
+            <input type="text"
+                   class="tag-cloud-input"
+                   placeholder="搜索标签…"
+                   aria-label="搜索标签" />
+          </div>
+          <div class="tag-cloud-sort">
+            <button type="button" class="tag-sort-btn is-active" data-sort="name">
+              <i class="ri-font-size-2"></i> 名称
+            </button>
+            <button type="button" class="tag-sort-btn" data-sort="count">
+              <i class="ri-fire-line"></i> 热度
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tag-cloud-wrap">
+        <% var idx = 0;
+           tagList.each(function(tag) {
+             var ratio = logRange === 0 ? 0.5
+               : (Math.log(tag.posts.length) - logMin) / logRange;
+             var level = Math.min(5, Math.ceil(ratio * 4) + 1);
+        %>
+        <a class="tag-cloud-item"
+           href="<%- url_for(tag.path) %>"
+           data-level="<%= level %>"
+           data-count="<%= tag.posts.length %>"
+           data-name="<%= tag.name.toLowerCase() %>">
+          <span class="tag-cloud-name"><%= tag.name %></span>
+          <span class="tag-cloud-count"><%= tag.posts.length %></span>
+        </a>
+        <% idx++; }); %>
+      </div>
+
+      <p class="tag-cloud-empty">没有匹配的标签</p>
+    </div>
   <% } %>
 </section>
 
+<script>
+(function () {
+  var wrap = document.querySelector('.tag-cloud-wrap');
+  if (!wrap) return;
+
+  var allItems = Array.prototype.slice.call(wrap.querySelectorAll('.tag-cloud-item'));
+  var input = document.querySelector('.tag-cloud-input');
+  var sortBtns = document.querySelectorAll('.tag-sort-btn');
+  var empty = document.querySelector('.tag-cloud-empty');
+
+  function triggerEntrance() {
+    wrap.classList.remove('is-animated');
+    void wrap.offsetWidth;
+    var idx = 0;
+    allItems.forEach(function (el) {
+      if (el.style.display !== 'none') {
+        el.style.animationDelay = (idx * 25) + 'ms';
+        idx++;
+      }
+    });
+    wrap.classList.add('is-animated');
+  }
+
+  if (input) {
+    var timer;
+    input.addEventListener('input', function () {
+      clearTimeout(timer);
+      var self = this;
+      timer = setTimeout(function () {
+        var q = self.value.trim().toLowerCase();
+        var visible = 0;
+        allItems.forEach(function (el) {
+          var match = !q || el.getAttribute('data-name').indexOf(q) !== -1;
+          el.style.display = match ? '' : 'none';
+          if (match) visible++;
+        });
+        if (empty) empty.style.display = visible ? 'none' : '';
+        triggerEntrance();
+      }, 120);
+    });
+  }
+
+  sortBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      sortBtns.forEach(function (b) { b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+
+      var mode = btn.getAttribute('data-sort');
+      allItems.sort(function (a, b) {
+        if (mode === 'count') {
+          var diff = (+b.getAttribute('data-count')) - (+a.getAttribute('data-count'));
+          if (diff !== 0) return diff;
+        }
+        return a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'), 'zh-CN');
+      });
+      allItems.forEach(function (el) { wrap.appendChild(el); });
+      triggerEntrance();
+    });
+  });
+
+  requestAnimationFrame(triggerEntrance);
+})();
+</script>
