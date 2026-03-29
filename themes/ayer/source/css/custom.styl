@@ -479,6 +479,13 @@ if hexo-config('mouse.enable')
     --reward-tab-hover: rgba(0, 0, 0, 0.08);
     --reward-accent: #07C160;
     --reward-overlay: rgba(0, 0, 0, 0.5);
+    --reward-btn-bg: rgba(255, 255, 255, 0.5);
+    --reward-btn-border: rgba(255, 255, 255, 0.75);
+    --reward-btn-text: #555555;
+    --reward-btn-icon: #888888;
+    --reward-btn-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    --reward-btn-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    --reward-btn-hover-bg: rgba(255, 255, 255, 0.7);
   }
 
   /* ===== 打赏弹层 — 暗色模式变量 ===== */
@@ -492,6 +499,13 @@ if hexo-config('mouse.enable')
     --reward-tab-text: #bbbbbb;
     --reward-tab-hover: rgba(255, 255, 255, 0.1);
     --reward-overlay: rgba(0, 0, 0, 0.7);
+    --reward-btn-bg: rgba(255, 255, 255, 0.08);
+    --reward-btn-border: rgba(255, 255, 255, 0.15);
+    --reward-btn-text: #cccccc;
+    --reward-btn-icon: #999999;
+    --reward-btn-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    --reward-btn-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    --reward-btn-hover-bg: rgba(255, 255, 255, 0.14);
   }
 
   /* ===== 打赏弹层 — 遮罩层 ===== */
@@ -684,7 +698,7 @@ if hexo-config('mouse.enable')
     color: #fff !important;
   }
 
-  /* ===== 打赏按钮（文章内） ===== */
+  /* ===== 打赏按钮（文章内）— 液态玻璃风格 ===== */
   #reward-out {
     position: relative;
     width: 100%;
@@ -700,21 +714,28 @@ if hexo-config('mouse.enable')
     padding: 0 24px;
     margin: 48px 0;
     font-size: 15px;
-    color: #fff !important;
-    background: var(--reward-accent);
-    border: none;
+    color: var(--reward-btn-text) !important;
+    background: var(--reward-btn-bg);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--reward-btn-border);
     border-radius: 20px;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--reward-btn-shadow), var(--reward-btn-highlight);
     transition: all 0.3s ease;
     font-family: inherit;
     line-height: 1;
   }
+  .reward-trigger i,
+  #reward-btn i {
+    color: var(--reward-btn-icon) !important;
+    transition: color 0.3s ease;
+  }
   .reward-trigger:hover,
   #reward-btn:hover {
+    background: var(--reward-btn-hover-bg);
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-    opacity: 0.9;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1), var(--reward-btn-highlight);
   }
 
   /* ===== 打赏弹层 — 移动端适配 ===== */
