@@ -23,7 +23,7 @@ layout: page
   <a href="https://github.com/KaleidScoper" target="_blank" title="GitHub" class="social-icon" style="--brand-color: #8534F3">
     <i class="ri-github-fill"></i>
   </a>
-  <a href="https://space.bilibili.com/1577779901" target="_blank" title="Bilibili" class="social-icon" style="--brand-color: #00A1D6">
+  <a href="https://space.bilibili.com/1577779901" target="_blank" title="Bilibili" class="social-icon" style="--brand-color: #FF6699">
     <i class="ri-bilibili-fill"></i>
   </a>
   <a href="https://x.com/KaleidScoper" target="_blank" title="Twitter / X" class="social-icon" style="--brand-color: #1DA1F2">
