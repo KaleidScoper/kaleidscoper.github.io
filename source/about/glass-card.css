@@ -194,3 +194,54 @@ body.darkmode .avatar-link:hover {
     font-size: 16px;
   }
 }
+
+/* ── Social Links ── */
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin: 30px 0;
+}
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--brand-color, #ccc);
+  font-size: 24px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.social-icon svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+.social-icon:hover {
+  transform: translateY(-3px);
+  background: color-mix(in srgb, var(--brand-color, #555) 20%, rgba(255, 255, 255, 0.1));
+  color: var(--brand-color, #fff);
+  border-color: color-mix(in srgb, var(--brand-color, #555) 40%, rgba(255, 255, 255, 0.2));
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--brand-color, #555) 25%, transparent);
+  text-decoration: none;
+}
+
+body.darkmode .social-icon {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+body.darkmode .social-icon:hover {
+  background: color-mix(in srgb, var(--brand-color, #555) 18%, rgba(255, 255, 255, 0.06));
+  border-color: color-mix(in srgb, var(--brand-color, #555) 35%, rgba(255, 255, 255, 0.12));
+}
