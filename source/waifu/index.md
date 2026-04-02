@@ -6,24 +6,10 @@ layout: page
 {% raw %}
 
 <link rel="stylesheet" href="/waifu/style.css">
-<div id="gender-stats" class="gender-stats" aria-live="polite">
-  <div class="stats-header">
-    <span class="stats-title">性别比例<span class="stats-note"> · 不含无性别角色</span></span>
-    <span id="status-badge" class="status-badge ok">性取向正常</span>
-  </div>
-  <div class="combined-track">
-    <div id="bar-female" class="fill female" style="width:0%"></div>
-    <div id="bar-male" class="fill male" style="width:0%"></div>
-  </div>
-  <div class="stats-legend">
-    <span class="legend-item female">♀ 女 <span id="pct-female">0%</span></span>
-    <span class="legend-item male">♂ 男 <span id="pct-male">0%</span></span>
-  </div>
-</div>
 <div class="grid">
 
   <!-- A -->
-  <div class="card" data-gender="na" style="--bg:url('img/abyss.jpg')">
+  <div class="card" style="--bg:url('img/abyss.jpg')">
     <div class="card-content">
       <img src="img/abyss.jpg" loading="lazy" decoding="async" width="100" height="100" alt="奈落">
       <h2>阿比斯深渊</h2>
@@ -33,7 +19,7 @@ layout: page
     </div>
   </div>
 
-  <div class="card" data-gender="female" style="--bg:url('img/altair.webp')">
+  <div class="card" style="--bg:url('img/altair.webp')">
     <div class="card-content">
       <img src="img/altair.webp" loading="lazy" decoding="async" width="100" height="100" alt="军服公主">
       <h2>阿尔泰尔</h2>
@@ -43,7 +29,7 @@ layout: page
     </div>
   </div>
 
-  <div class="card" data-gender="female" style="--bg:url('img/momo-bg.jpg'); --img-border-color: #5ff3d6;">
+  <div class="card" style="--bg:url('img/momo-bg.jpg'); --img-border-color: #5ff3d6;">
     <div class="card-content">
       <img src="img/momo.jpg" loading="lazy" decoding="async" width="100" height="100" alt="绫濑 桃">
       <h2>绫濑 桃</h2>
@@ -54,7 +40,7 @@ layout: page
   </div>
 
   <!-- C -->
-  <div class="card" data-gender="female" style="--bg:url('img/choy.webp')">
+  <div class="card" style="--bg:url('img/choy.webp')">
     <div class="card-content">
       <img src="img/choy.webp" loading="lazy" decoding="async" width="100" height="100" alt="伊巧巧">
       <h2>伊巧巧</h2>
@@ -65,7 +51,7 @@ layout: page
   </div>
 
   <!-- E -->
-  <div class="card" data-gender="male" style="--bg:url('img/evil-morty.jpg')">
+  <div class="card" style="--bg:url('img/evil-morty.jpg')">
     <div class="card-content">
       <img src="img/evil-morty.jpg" loading="lazy" decoding="async" width="100" height="100" alt="邪恶莫蒂">
       <h2>邪恶莫蒂</h2>
@@ -76,7 +62,7 @@ layout: page
   </div>
 
   <!-- F -->
-  <div class="card" data-gender="na" style="--bg:url('img/fanghe.jpg')">
+  <div class="card" style="--bg:url('img/fanghe.jpg')">
     <div class="card-content">
       <img src="img/fanghe.jpg" loading="lazy" decoding="async" width="100" height="100" alt="方和">
       <h2>方和</h2>
@@ -86,7 +72,7 @@ layout: page
     </div>
   </div>
 
-  <div class="card" data-gender="female" style="--bg:url('img/fareeda.jpg')">
+  <div class="card" style="--bg:url('img/fareeda.jpg')">
     <div class="card-content">
       <img src="img/fareeda.jpg" loading="lazy" decoding="async" width="100" height="100" alt="法里达">
       <h2>法里达</h2>
@@ -96,7 +82,7 @@ layout: page
     </div>
   </div>
 
-  <div class="card" data-gender="female" style="--bg:url('img/frieren.jpg')">
+  <div class="card" style="--bg:url('img/frieren.jpg')">
     <div class="card-content">
       <img src="img/frieren.jpg" loading="lazy" decoding="async" width="100" height="100" alt="葬送的芙莉莲">
       <h2>芙莉莲</h2>
@@ -107,7 +93,7 @@ layout: page
   </div>
 
   <!-- G -->
-  <div class="card" data-gender="female" style="--bg:url('img/gina.webp')">
+  <div class="card" style="--bg:url('img/gina.webp')">
     <div class="card-content">
       <img src="img/gina.webp" loading="lazy" decoding="async" width="100" height="100" alt="雷斯垂德警长">
       <h2>吉娜 雷斯垂德</h2>
@@ -117,7 +103,7 @@ layout: page
     </div>
   </div>
 
-  <div class="card" data-gender="male" style="--bg:url('img/gojo.jpg'); --img-border-color: #57d1ee;">
+  <div class="card" style="--bg:url('img/gojo.jpg'); --img-border-color: #57d1ee;">
     <div class="card-content">
       <img src="img/gojo.jpg" loading="lazy" decoding="async" width="100" height="100" alt="五条 悟">
       <h2>五条 悟</h2>
@@ -128,7 +114,7 @@ layout: page
   </div>
 
   <!-- H -->
-  <div class="card" data-gender="male" style="--bg:url('img/han-solo.webp')">
+  <div class="card" style="--bg:url('img/han-solo.webp')">
     <div class="card-content">
       <img src="img/han-solo.webp" loading="lazy" decoding="async" width="100" height="100" alt="千年隼号船长">
       <h2>汉 索罗</h2>
@@ -139,7 +125,7 @@ layout: page
   </div>
 
   <!-- K -->
-  <div class="card" data-gender="female" style="--bg:url('img/kurusu-makina.png')">
+  <div class="card" style="--bg:url('img/kurusu-makina.png')">
     <div class="card-content">
       <img src="img/kurusu-makina.png" loading="lazy" decoding="async" width="100" height="100" alt="来栖 真希奈">
       <h2>来栖 真希奈</h2>
@@ -150,7 +136,7 @@ layout: page
   </div>
 
   <!-- M -->
-  <div class="card" data-gender="female" style="--bg:url('img/mansui.png')">
+  <div class="card" style="--bg:url('img/mansui.png')">
     <div class="card-content">
       <img src="img/mansui.png" loading="lazy" decoding="async" width="100" height="100" alt="满穗">
       <h2>满穗</h2>
@@ -160,7 +146,7 @@ layout: page
     </div>
   </div>
 
-  <div class="card" data-gender="na" style="--bg:url('img/millennium-falcon.webp')">
+  <div class="card" style="--bg:url('img/millennium-falcon.webp')">
     <div class="card-content">
       <img src="img/millennium-falcon.webp" loading="lazy" decoding="async" width="100" height="100" alt="千年隼">
       <h2>千年隼号</h2>
@@ -171,7 +157,7 @@ layout: page
   </div>
 
   <!-- P -->
-  <div class="card" data-gender="male" style="--bg:url('img/pineapplello.jpg')">
+  <div class="card" style="--bg:url('img/pineapplello.jpg')">
     <div class="card-content">
       <img src="img/pineapplello.jpg" loading="lazy" decoding="async" width="100" height="100" alt="菠萝吹雪">
       <h2>菠萝吹雪</h2>
@@ -182,7 +168,7 @@ layout: page
   </div>
 
   <!-- R -->
-  <div class="card" data-gender="male" style="--bg:url('img/rick.jpg'); --img-border-color: #57d1ee;">
+  <div class="card" style="--bg:url('img/rick.jpg'); --img-border-color: #57d1ee;">
     <div class="card-content">
       <img src="img/rick.jpg" loading="lazy" decoding="async" width="100" height="100" alt="C-137 瑞克 桑切斯">
       <h2>瑞克 桑切斯</h2>
@@ -193,7 +179,7 @@ layout: page
   </div>
 
   <!-- S -->
-  <div class="card" data-gender="male" style="--bg:url('img/skipper.jpg')">
+  <div class="card" style="--bg:url('img/skipper.jpg')">
     <div class="card-content">
       <img src="img/skipper.jpg" loading="lazy" decoding="async" width="100" height="100" alt="老大">
       <h2>老大</h2>
@@ -203,7 +189,7 @@ layout: page
     </div>
   </div>
 
-  <div class="card" data-gender="female" style="--bg:url('img/star-butterfly.png')">
+  <div class="card" style="--bg:url('img/star-butterfly.png')">
     <div class="card-content">
       <img src="img/star-butterfly.png" loading="lazy" decoding="async" width="100" height="100" alt="星蝶公主">
       <h2>星蝶</h2>
@@ -213,7 +199,7 @@ layout: page
     </div>
   </div>
 
-  <div class="card" data-gender="male" style="--bg:url('img/stewie.jpg')">
+  <div class="card" style="--bg:url('img/stewie.jpg')">
     <div class="card-content">
       <img src="img/stewie.jpg" loading="lazy" decoding="async" width="100" height="100" alt="斯图威 格里芬">
       <h2>斯图威 格里芬</h2>
@@ -223,7 +209,7 @@ layout: page
     </div>
   </div>
 
-  <div class="card" data-gender="na" style="--bg:url('img/steamer.webp')">
+  <div class="card" style="--bg:url('img/steamer.webp')">
     <div class="card-content">
       <img src="img/steamer.webp" loading="lazy" decoding="async" width="100" height="100" alt="蒸盒号">
       <h2>蒸盒号</h2>
@@ -234,7 +220,7 @@ layout: page
   </div>
 
   <!-- T -->
-  <div class="card" data-gender="male" style="--bg:url('img/ken-bg.jpg'); --img-border-color: #ca2534;">
+  <div class="card" style="--bg:url('img/ken-bg.jpg'); --img-border-color: #ca2534;">
     <div class="card-content">
       <img src="img/takakura-ken.png" loading="lazy" decoding="async" width="100" height="100" alt="厄卡伦">
       <h2>高仓 健</h2>
@@ -244,7 +230,7 @@ layout: page
     </div>
   </div>
 
-  <div class="card" data-gender="male" style="--bg:url('img/tangxiaoyi.jpg')">
+  <div class="card" style="--bg:url('img/tangxiaoyi.jpg')">
     <div class="card-content">
       <img src="img/tangxiaoyi.jpg" loading="lazy" decoding="async" width="100" height="100" alt="唐晓翼">
       <h2>唐晓翼</h2>
@@ -255,7 +241,7 @@ layout: page
   </div>
 
   <!-- V -->
-  <div class="card" data-gender="female" style="--bg:url('img/violet.jpg')">
+  <div class="card" style="--bg:url('img/violet.jpg')">
     <div class="card-content">
       <img src="img/violet.jpg" loading="lazy" decoding="async" width="100" height="100" alt="薇尔莉特">
       <h2>薇尔莉特 伊芙加登</h2>
@@ -267,7 +253,7 @@ layout: page
 
   <!-- W -->
 
-  <div class="card" data-gender="male" style="--bg:url('img/webber.png')">
+  <div class="card" style="--bg:url('img/webber.png')">
     <div class="card-content">
       <img src="img/webber.png" loading="lazy" decoding="async" width="100" height="100" alt="韦伯">
       <h2>韦伯</h2>
@@ -277,7 +263,7 @@ layout: page
     </div>
   </div>
 
-  <div class="card" data-gender="na" style="--bg:url('img/wulingni.jpg')">
+  <div class="card" style="--bg:url('img/wulingni.jpg')">
     <div class="card-content">
       <img src="img/wulingni.jpg" loading="lazy" decoding="async" width="100" height="100" alt="吴凌旎">
       <h2>吴凌旎</h2>
@@ -287,7 +273,7 @@ layout: page
     </div>
   </div>
 
-  <div class="card" data-gender="male" style="--bg:url('img/wanderer.png')">
+  <div class="card" style="--bg:url('img/wanderer.png')">
     <div class="card-content">
       <img src="img/wanderer.png" loading="lazy" decoding="async" width="100" height="100" alt="散兵">
       <h2>流浪者</h2>
@@ -298,6 +284,5 @@ layout: page
   </div>
 
 </div>
-<script src="/waifu/stats.js" defer></script>
 
 {% endraw %}
