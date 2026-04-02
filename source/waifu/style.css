@@ -7,7 +7,7 @@
   margin: 0 auto;
   padding: 20px 0;
   /* 优化渲染性能 */
-  contain: layout style paint;
+  contain: layout paint;
 }
 
 /* --- LIGHT MODE STYLES (DEFAULT) --- */
@@ -177,25 +177,16 @@ body.darkmode .wiki-btn:hover {
   outline-offset: 2px;
 }
 
-/* 图片懒加载优化 */
-.card img {
-  loading: lazy;
-}
-
-/* 减少重绘优化 */
 .card {
-  will-change: transform;
-}
-
-.card:hover {
-  will-change: auto;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 320px;
 }
 
 /* ---- Gender Stats Panel ---- */
 .gender-stats {
   --panel-bg: rgba(255, 255, 255, 0.6);
   --panel-border: rgba(0, 0, 0, 0.08);
-  --panel-shadow: rgba(0, 0, 0, 0.08);
+  --panel-shadow: rgba(0, 0, 0, 0.06);
   --text-primary: #1f2937;
   --text-secondary: #6b7280;
   --ok-bg: rgba(16, 185, 129, 0.15);
@@ -204,20 +195,22 @@ body.darkmode .wiki-btn:hover {
   --error-bg: rgba(239, 68, 68, 0.15);
   --error-text: #dc2626;
   --error-border: rgba(239, 68, 68, 0.35);
-  --male-grad: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
-  --female-grad: linear-gradient(90deg, #f472b6, #ec4899, #db2777);
-  --track-bg: rgba(0, 0, 0, 0.08);
+  --female-color: #ec4899;
+  --male-color: #3b82f6;
+  --female-grad: linear-gradient(90deg, #f472b6, #ec4899);
+  --male-grad: linear-gradient(90deg, #60a5fa, #3b82f6);
+  --track-bg: rgba(0, 0, 0, 0.06);
 
   max-width: 1200px;
-  margin: 0 auto 12px auto;
-  padding: 14px 16px;
+  margin: 0 auto 12px;
+  padding: 14px 18px;
   border-radius: 14px;
   border: 1px solid var(--panel-border);
   background: var(--panel-bg);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   color: var(--text-primary);
-  box-shadow: 0 8px 28px 0 var(--panel-shadow);
+  box-shadow: 0 4px 20px 0 var(--panel-shadow);
 }
 
 .gender-stats .stats-header {
@@ -225,22 +218,30 @@ body.darkmode .wiki-btn:hover {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
-.gender-stats .stats-header strong {
-  font-size: 1rem;
+.gender-stats .stats-title {
+  font-size: 0.95rem;
+  font-weight: 600;
   letter-spacing: .02em;
+}
+
+.gender-stats .stats-note {
+  font-weight: 400;
+  font-size: 0.8em;
+  color: var(--text-secondary);
 }
 
 .status-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: .9rem;
-  padding: 6px 10px;
+  font-size: .8rem;
+  padding: 4px 10px;
   border-radius: 999px;
   border: 1px solid transparent;
+  font-weight: 500;
+  white-space: nowrap;
   transition: all .25s ease;
   user-select: none;
 }
@@ -257,52 +258,42 @@ body.darkmode .wiki-btn:hover {
   border-color: var(--error-border);
 }
 
-.gender-stats .stats-bars {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-}
-
-.gender-stats .bar {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 10px;
-}
-
-.gender-stats .bar .label {
-  font-size: .9rem;
-  color: var(--text-secondary);
-  width: 2em;
-}
-
-.gender-stats .bar .track {
-  position: relative;
-  height: 10px;
+.combined-track {
+  display: flex;
+  height: 8px;
   border-radius: 999px;
-  background: var(--track-bg);
   overflow: hidden;
+  background: var(--track-bg);
 }
 
-.gender-stats .bar .fill {
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 0%;
-  transition: width .6s cubic-bezier(.22,.61,.36,1);
+.combined-track .fill {
+  height: 100%;
+  transition: width .6s cubic-bezier(.22, .61, .36, 1);
 }
 
-.gender-stats .bar.female .fill {
+.combined-track .fill.female {
   background: var(--female-grad);
 }
 
-.gender-stats .bar.male .fill {
+.combined-track .fill.male {
   background: var(--male-grad);
 }
 
-.gender-stats .bar .percent {
+.stats-legend {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
-  min-width: 3.5em;
-  text-align: right;
+}
+
+.legend-item.female {
+  color: var(--female-color);
+}
+
+.legend-item.male {
+  color: var(--male-color);
 }
 
 /* Dark mode overrides */
@@ -312,5 +303,5 @@ body.darkmode .gender-stats {
   --panel-shadow: rgba(0, 0, 0, 0.35);
   --text-primary: #e5e7eb;
   --text-secondary: #9ca3af;
-  --track-bg: rgba(255, 255, 255, 0.12);
+  --track-bg: rgba(255, 255, 255, 0.1);
 }
