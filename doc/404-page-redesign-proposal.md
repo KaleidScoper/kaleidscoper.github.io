@@ -215,7 +215,7 @@ body::before {
                "Microsoft JhengHei", "Microsoft YaHei",
                Helvetica Neue, Helvetica, Arial, sans-serif;
   font-size: 7rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1;
   color: #fff;
@@ -229,6 +229,7 @@ body::before {
 **设计说明**：
 - 字体栈与主页封面 `.cover-inner h1` 完全一致，使用 `Titillium Web` 作为首选。
 - 字号 `7rem` 与主页封面标题对齐（`html { font-size: 62.5% }` 下等于 `70px`）。
+- `font-weight: 700` 对齐主页封面 `h1` 的浏览器默认 bold 权重（`ayer.styl` 中未显式指定，浏览器 `h1` 默认 `bold` 即 700）。注意 `.error-code` 使用 `div` 而非 `h1`，因此必须显式声明 `font-weight`。
 - 白色文字 + `text-shadow` 确保在背景图上的可读性，与主页封面的白色标题风格统一。
 - `opacity: 0.95` 与主页封面一致，避免纯白过于刺眼。
 
@@ -359,7 +360,7 @@ body::before {
 
 ```html
 <footer class="error-footer">
-  &copy; 2026 · <a href="/">KaleidScoper</a>
+  &copy; 2022-2026 · <a href="/">Kaleid Scoper</a>
 </footer>
 ```
 
@@ -462,7 +463,7 @@ body::before {
                    "Microsoft JhengHei", "Microsoft YaHei",
                    Helvetica Neue, Helvetica, Arial, sans-serif;
       font-size: 7rem;
-      font-weight: 800;
+      font-weight: 700;
       letter-spacing: -0.02em;
       line-height: 1;
       color: #fff;
@@ -595,7 +596,7 @@ body::before {
     </nav>
   </div>
   <footer class="error-footer">
-    &copy; 2026 · <a href="/">KaleidScoper</a>
+    &copy; 2022-2026 · <a href="/">Kaleid Scoper</a>
   </footer>
 </body>
 </html>
