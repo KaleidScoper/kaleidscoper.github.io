@@ -2,7 +2,7 @@
 title: 一血诸葛诞翻盘
 date: 2024-11-26 19:01:13
 categories: [杂谈,电子游戏]
-tags: [原创,三国杀]
+tags: [三国杀,原创]
 author: KaleidScoper
 ---
 

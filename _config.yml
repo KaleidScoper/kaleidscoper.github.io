@@ -75,11 +75,10 @@ category_map:
 
   安全: sec # 二级分类
   开源情报: osint
+  反社工: opsec
   Web安全: websec
   逆向工程: reverse
-  二进制安全: pwn
   密码学: crypto
-  杂项: misc
 
   开发: dev # 二级分类
   Web开发: webdev
@@ -101,7 +100,7 @@ category_map:
   漫画动漫: otaku
   音乐品鉴: music
   书刊诗文: book
-  人文社科: humanity # 下辖历史、哲学、政治等分类，但此二级分类处不再细分，使用tag
+  人文社科: humanity # 下辖历史、哲学、政治等分类，但此二级分类处不再细分，使用tag。为什么呢？因为分类具有唯一性。同理书刊、电影等分类也是如此。
 
   未分类: uncategorized # 一级分类
 
@@ -115,6 +114,14 @@ tag_map:
   我的世界: minecraft
   三国杀: sanguosha
   王者荣耀: kog
+
+  科幻: science_fiction
+  奇幻: fantasy
+  悬疑: mystery
+  恐怖: horror
+  爱情: romance
+  战争: war
+  灾难: disaster
 
   Git: git
   Markdown: markdown
@@ -142,19 +149,19 @@ tag_map:
   文学: literature
   语言学: linguistics
   美学: aesthetics
-  经济学: economics
-  政治学: politics
-  法学: law
+  经济: economics
+  政治: politics
+  法学: jurisprudence
   教育学: education
   心理学: psychology
   社会学: sociology
   人类学: anthropology
-  地理学: geography
+  地理: geography
   生物学: biology
   化学: chemistry
   物理学: physics
   数学: mathematics
-  计算机科学: computer science
+  计算机科学: computer
   医学: medicine
   管理学: management
   统计学: statistics

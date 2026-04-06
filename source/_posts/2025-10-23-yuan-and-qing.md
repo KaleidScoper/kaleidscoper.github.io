@@ -2,7 +2,7 @@
 title: 元清是否属于中国
 date: 2025-10-23 20:00:00
 categories: [杂谈,人文社科]
-tags: [历史学,原创]
+tags: [历史,政治,原创]
 author: KaleidScoper
 ---
 

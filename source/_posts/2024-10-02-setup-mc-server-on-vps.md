@@ -2,7 +2,7 @@
 title: 使用VPS搭建MC服务器
 date: 2024-10-02 18:24:55
 categories: [杂谈,电子游戏]
-tags: [原创,我的世界]
+tags: [我的世界,原创]
 author: KaleidScoper
 reward: true
 ---
