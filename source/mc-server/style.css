@@ -59,7 +59,7 @@ body {
 
 
 .headline {
-    margin-top: 2rem;
+    margin: 2rem 0 0;
     color: #fff;
     font-size:3rem;
     text-align: center;
@@ -514,163 +514,164 @@ body {
     align-items: center;
 }
 
-.main5_admin_div{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    padding: 1rem 1rem .5rem 1rem;
+/* ── Team Section: Role Labels ── */
+.member-role {
+    display: inline-block;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
 }
-.main5_admins_div{
-    display: flex;
-    max-width: 46rem;
-    min-height: 18rem;
-    background-color: var(--background1);
-    border-radius: var(--roundness);
-    margin-top: 1rem;
-    margin-right: 1rem;
-    margin-left: 1rem;
-}
-.main5_admins_dev_type1 {
-    flex-direction:row;
-    padding-right: 2rem;
-}
-.main5_admins_dev_type2 {
-    flex-direction: row-reverse;
-    padding-left: 2rem;
+.member-role--owner { color: #f1c40f; }
+.member-role--admin { color: #f82f2f; }
+.member-role--member { color: #80cfff; }
+
+.member-tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 400;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.5);
+    vertical-align: middle;
+    letter-spacing: 0.02em;
 }
 
-.main5_admins_img {
-    border-radius: var(--roundness);
-    width: 16rem;
-    height: 16rem;
-    object-fit: cover;
-    align-self: center;
-    flex-shrink: 0;
-}
-.main5_admins_description_div {
+.member-titles {
     display: flex;
-    justify-content: center;
-    justify-self: center;
-    max-width: 60%;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+/* ── Team Section: Member Grid ── */
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    max-width: 48rem;
+    margin: 2rem auto 1.5rem;
+    padding: 0 1rem;
+}
+
+.team-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: var(--background1);
+    border-radius: var(--roundness);
+    border: 1px solid transparent;
+    transition: border-color 0.4s, box-shadow 0.4s, transform 0.4s;
+}
+.team-card:hover {
+    transform: translateY(-3px);
+}
+
+.team-card--owner {
+    border-color: rgba(241, 196, 15, 0.15);
+}
+.team-card--owner:hover {
+    border-color: rgba(241, 196, 15, 0.4);
+    box-shadow: 0 8px 24px rgba(241, 196, 15, 0.06);
+}
+.team-card--admin {
+    border-color: rgba(248, 47, 47, 0.12);
+}
+.team-card--admin:hover {
+    border-color: rgba(248, 47, 47, 0.35);
+    box-shadow: 0 8px 24px rgba(248, 47, 47, 0.06);
+}
+.team-card--member {
+    border-color: rgba(128, 207, 255, 0.08);
+}
+.team-card--member:hover {
+    border-color: rgba(128, 207, 255, 0.3);
+    box-shadow: 0 8px 24px rgba(128, 207, 255, 0.06);
+}
+
+.team-card__avatar {
+    width: 56px;
+    height: auto;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
+    image-rendering: pixelated;
+    transition: transform 0.3s ease;
+}
+.team-card:hover .team-card__avatar {
+    transform: scale(1.1);
+}
+
+.team-card__info {
+    display: flex;
     flex-direction: column;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    margin-left: auto;
-    margin-right: auto;
+    gap: 0.2rem;
+    min-width: 0;
 }
-.main5_admins_description_rank {
-    text-align: center;
-    font-size:1.5rem;
-    font-weight: 700;
-    margin-bottom: .5rem;
-}
-.main5_admins_description_rank_owner {
-    color: #3498db;
-}
-.main5_admins_description_rank_admin {
-    color: #f82f2f;
-}
-.main5_admins_description_title {
-    text-align: center;
-    font-size:1.5rem;
+
+.team-card__name {
+    font-size: 1.15rem;
     font-weight: 700;
     color: #fff;
+}
+.team-card__name--link {
     text-decoration: none;
-    transition: all .5s;
-    margin-bottom: .5rem;
+    transition: color 0.3s;
 }
-.main5_admins_description_title:hover {
+.team-card__name--link:hover {
     color: var(--accent1);
-    transform: scale(1.05)
 }
 
-.main5_admins_description {
-    margin-bottom: auto;
-    font-size:1.2rem;
+.team-card__desc {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.55);
+    margin: 0.2rem 0 0;
 }
 
+/* ── Team Section: Scroll-in Animation ── */
+.team-card,
+.team-recruit {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.4s, box-shadow 0.4s;
+}
+.team-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.team-card.team-visible:hover {
+    transform: translateY(-3px);
+}
 
-.main5_supporter_div {
+/* ── Team Section: Recruit CTA ── */
+.team-recruit {
     display: flex;
-    max-width: 825px;
-    justify-content: center;
     align-items: center;
-    flex-direction:row;
-    flex-wrap: wrap;
-    margin-bottom: 1.5rem;
-}
-
-.main5_supporters_div {
-    width: 23.5rem;
-    min-height: 16rem;
-    background-color: var(--background1);
-    border-radius: var(--roundness);
-    margin: .5rem;
-    display: flex;
-}
-
-.main5_supporters_img {
-    border-radius: var(--roundness);
-    width: 5rem;
-    height: 5rem;
-    object-fit: cover;
-    align-self: center;
-    margin: 1rem;
-    flex-shrink: 0;
-    border: 3px solid transparent;
-}
-.main5_supporters_div_owner .main5_supporters_img {
-    border-color: #f1c40f;
-}
-.main5_supporters_div_admin .main5_supporters_img {
-    border-color: #f82f2f;
-}
-.main5_supporters_div_supporter .main5_supporters_img {
-    border-color: #80cfff;
-}
-.main5_supporters_description_div {
-    display: flex;
     justify-content: center;
-    width: 100%;
-    padding: 1rem 1.5rem 1rem 1rem;
-    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
 }
-.main5_supporters_description_rank {
-    text-align: center;
-    font-size:1.2rem;
-    font-weight: 700;
-    margin-bottom: .5rem;
+.team-recruit__text {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.55);
+    margin: 0;
 }
-.main5_supporters_description_rank_supporter {
-    color: #80cfff;
-}
-.main5_supporters_description_rank_owner {
-    color: #f1c40f;
-}
-.main5_supporters_description_rank_admin {
-    color: #f82f2f;
-}
-.main5_supporters_description_title {
-    text-align: center;
-    font-size:1.3rem;
-    font-weight: 700;
+.team-recruit__btn {
+    padding: 0.5rem 1.5rem;
+    border: 1px solid var(--accent1);
+    border-radius: var(--roundness);
     color: #fff;
     text-decoration: none;
-    transition: all .5s;
-    margin-bottom: .5rem;
+    font-weight: 600;
+    transition: background 0.4s, border-color 0.4s, transform 0.3s;
 }
-.main5_supporters_description_title:hover {
-    color: var(--accent1);
-    transform: scale(1.05)
-}
-
-.main5_supporters_description {
-    font-size:1.2rem;
-    margin-bottom: auto;
+.team-recruit__btn:hover {
+    background: var(--accent2);
+    border-color: var(--accent2);
+    transform: scale(1.05);
 }
 
 
@@ -799,19 +800,9 @@ body {
     .main1_ipcopier {
         display: none;
     }
-    .main5_admins_img {
-        align-self: center;
-        padding-top: 1rem;
-        width: 12rem;
-        height: 12rem;
-    }
-    .main5_admins_div{
-        flex-direction: column;
-        min-height: 0;
-    }
-    .main5_admins_description_div {
-        max-width: 100%;
-        padding: 2rem;
+    .team-grid {
+        grid-template-columns: 1fr;
+        padding: 0 0.75rem;
     }
     .main4_chat_div {
         flex-direction: column;
@@ -837,12 +828,6 @@ body {
     .main3_join_values {
         text-align: center;
         font-size: 1.1rem;
-    }
-    .main5_admins_dev_type1 {
-        padding-right: 0;
-    }
-    .main5_admins_dev_type2 {
-        padding-left: 0;
     }
 }
 @media only screen and (max-width: 360px) {

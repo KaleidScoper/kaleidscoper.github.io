@@ -40,6 +40,24 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  var teamObserver = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("team-visible");
+          teamObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+  document
+    .querySelectorAll(".team-card, .team-recruit")
+    .forEach(function (el, i) {
+      el.style.transitionDelay = i * 0.08 + "s";
+      teamObserver.observe(el);
+    });
+
   var chatCopyButton = document.getElementById("main4_chat_copy_button");
   if (chatCopyButton) {
     chatCopyButton.addEventListener("click", function (event) {
