@@ -521,9 +521,6 @@ body {
     font-weight: 700;
     letter-spacing: 0.05em;
 }
-.member-role--owner { color: #f1c40f; }
-.member-role--admin { color: #f82f2f; }
-.member-role--member { color: #80cfff; }
 
 .member-tag {
     display: inline-block;
@@ -562,33 +559,12 @@ body {
     padding: 1.25rem;
     background: var(--background1);
     border-radius: var(--roundness);
-    border: 1px solid transparent;
+    border: 1px solid var(--card-border, transparent);
     transition: border-color 0.4s, box-shadow 0.4s, transform 0.4s;
 }
 .team-card:hover {
-    transform: translateY(-3px);
-}
-
-.team-card--owner {
-    border-color: rgba(241, 196, 15, 0.15);
-}
-.team-card--owner:hover {
-    border-color: rgba(241, 196, 15, 0.4);
-    box-shadow: 0 8px 24px rgba(241, 196, 15, 0.06);
-}
-.team-card--admin {
-    border-color: rgba(248, 47, 47, 0.12);
-}
-.team-card--admin:hover {
-    border-color: rgba(248, 47, 47, 0.35);
-    box-shadow: 0 8px 24px rgba(248, 47, 47, 0.06);
-}
-.team-card--member {
-    border-color: rgba(128, 207, 255, 0.08);
-}
-.team-card--member:hover {
-    border-color: rgba(128, 207, 255, 0.3);
-    box-shadow: 0 8px 24px rgba(128, 207, 255, 0.06);
+    border-color: var(--card-border-hover, transparent);
+    box-shadow: 0 8px 24px var(--card-glow, transparent);
 }
 
 .team-card__avatar {
