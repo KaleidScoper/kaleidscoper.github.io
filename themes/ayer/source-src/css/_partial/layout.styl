@@ -43,20 +43,28 @@
   &.on
     left 0
 
-.navbar-toggle
-  position absolute
-  top gutter-width
-  left: gutter-width + aside-width
+.float-btn
   border none
   height 4rem
   width 4rem
   border-radius 50%
   background-color rgba(black, .5)
   color white
+  display flex
+  align-items center
+  justify-content center
   transition(transition-base)
   opacity .5
+  cursor pointer
+  & > i
+    font-size 1.7rem
   &:hover
     opacity 1
+
+.navbar-toggle
+  position absolute
+  top gutter-width
+  left: gutter-width + aside-width
   &::before
     content '\ee09'
     font-family remixicon
