@@ -89,6 +89,11 @@ darkmode()
     color: #c8d3dc !important
     background-color: rgba(74, 158, 255, 0.08) !important
 
+  // 图片降亮：减轻暗色背景下图片的刺眼感
+  img
+    filter: brightness(.8)
+    transition: filter .3s ease
+
   // 友情链接
   #friends_link .friends_li a
     background-color: rgba(255, 255, 255, 0.05)
