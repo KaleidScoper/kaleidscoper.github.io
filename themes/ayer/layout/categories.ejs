@@ -6,21 +6,3 @@
     </div>
   <% } %>
 </section>
-
-<script>
-(function () {
-  var box = document.querySelector('.categories-box');
-  if (!box) return;
-
-  box.addEventListener('click', function (e) {
-    var btn = e.target.closest('.cat-toggle');
-    if (!btn) return;
-
-    var node = btn.closest('.cat-node');
-    if (!node) return;
-
-    var isExpanded = node.getAttribute('data-expanded') === 'true';
-    node.setAttribute('data-expanded', String(!isExpanded));
-  });
-})();
-</script>

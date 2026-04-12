@@ -3,26 +3,16 @@
 /**
  * Custom category tree helper for the /categories page.
  *
- * Generates semantic HTML with `data-depth` attributes and toggle controls,
- * enabling recursive CSS styling via custom properties and JS-driven
- * collapse/expand interactions.
+ * Generates a "dual-column block" per root category:
+ *   Left  — category name (large) + total post count
+ *   Right — subcategories as a tree list with indent guide lines
  *
  * Usage in EJS:  <%- category_tree([options]) %>
- *
- * Options (all optional, can also be set via theme config `category_tree`):
- *   - max_depth  {Number}  Maximum nesting depth to render (default: Infinity)
- *   - count      {Boolean} Show post count badge (default: true)
- *   - collapsed  {Boolean} Render children collapsed by default (default: false)
- *   - orderby    {String}  Sort field: 'name' | 'count' (default: 'name')
- *   - order      {Number}  1 = ascending, -1 = descending (default: 1)
  */
 
 hexo.extend.helper.register('category_tree', function (options) {
   const opts = Object.assign(
     {
-      max_depth: Infinity,
-      count: true,
-      collapsed: false,
       orderby: 'name',
       order: 1,
     },
@@ -48,41 +38,31 @@ hexo.extend.helper.register('category_tree', function (options) {
     return arr;
   }
 
-  function renderLevel(cats, depth) {
-    if (depth > opts.max_depth) return '';
+  function totalPostCount(cat) {
+    let count = cat.posts.length;
+    const children = categories.filter(c => c.parent === cat._id);
+    children.forEach(child => {
+      count += totalPostCount(child);
+    });
+    return count;
+  }
 
+  function renderSubtree(cats) {
     const sorted = sortCategories(cats);
     if (!sorted.length) return '';
 
-    const isExpanded = !opts.collapsed;
-    let html = `<ul class="cat-tree" data-depth="${depth}">`;
+    let html = '<ul class="cat-subtree">';
 
     sorted.forEach(cat => {
-      const children = cat.posts ? categories.filter(c => c.parent === cat._id) : { length: 0 };
+      const children = categories.filter(c => c.parent === cat._id);
       const hasChildren = children.length > 0;
-      const nodeClass = 'cat-node' + (hasChildren ? ' has-children' : '');
-      const expandedAttr = hasChildren ? ` data-expanded="${isExpanded}"` : '';
 
-      html += `<li class="${nodeClass}" data-depth="${depth}"${expandedAttr}>`;
-      html += '<div class="cat-header">';
+      html += '<li class="cat-subitem">';
+      html += `<a class="cat-sublink" href="${self.url_for(cat.path)}">${cat.name}</a>`;
+      html += `<span class="cat-subcount">\uff08${cat.posts.length}\uff09</span>`;
 
       if (hasChildren) {
-        html += `<button class="cat-toggle" aria-label="Toggle"><i class="ri-arrow-right-s-line"></i></button>`;
-      }
-
-      html += `<a class="cat-link" href="${self.url_for(cat.path)}">${cat.name}</a>`;
-
-      if (opts.count) {
-        html += `<span class="cat-count">${cat.posts.length}</span>`;
-      }
-
-      html += '</div>';
-
-      if (hasChildren && depth < opts.max_depth) {
-        const childHtml = renderLevel(children, depth + 1);
-        if (childHtml) {
-          html += `<div class="cat-children">${childHtml}</div>`;
-        }
+        html += renderSubtree(children);
       }
 
       html += '</li>';
@@ -92,6 +72,28 @@ hexo.extend.helper.register('category_tree', function (options) {
     return html;
   }
 
-  const roots = categories.filter(cat => !cat.parent);
-  return renderLevel(roots, 1);
+  const roots = sortCategories(categories.filter(cat => !cat.parent));
+  let html = '';
+
+  roots.forEach(cat => {
+    const total = totalPostCount(cat);
+    const children = categories.filter(c => c.parent === cat._id);
+
+    html += '<div class="cat-block">';
+
+    html += '<div class="cat-block-left">';
+    html += `<a class="cat-block-name" href="${self.url_for(cat.path)}">${cat.name}</a>`;
+    html += `<span class="cat-block-total">${total} 篇文章</span>`;
+    html += '</div>';
+
+    html += '<div class="cat-block-right">';
+    if (children.length > 0) {
+      html += renderSubtree(children);
+    }
+    html += '</div>';
+
+    html += '</div>';
+  });
+
+  return html;
 });

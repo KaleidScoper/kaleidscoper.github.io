@@ -1,347 +1,125 @@
 // ==========================================================================
-// Categories Tree — Recursive Token System
+// Categories — Dual-Column Block Layout
 //
-// Architecture:
-//   - CSS custom properties define all visual tokens at :root
-//   - body.darkmode overrides only the token values (single source of truth)
-//   - Depth-based scaling is handled via `data-depth` selectors, not nesting
-//   - The .cat-node component is a single, reusable block at every depth
+// Each root category renders as a two-column block:
+//   Left  : name (large, bold) + "xx 篇文章"
+//   Center: vertical separator line
+//   Right : subcategory tree with indent guide lines
+//
+// All decorative lines use `currentColor` so they follow the body text
+// color in both light and dark modes automatically.
 // ==========================================================================
-
-// ---------------------------------------------------------------------------
-// Token Definitions
-// ---------------------------------------------------------------------------
-
-:root
-  // Layout
-  --cat-gap: 1.8rem
-  --cat-card-radius: 16px
-  --cat-card-padding: 1.8rem
-  --cat-child-indent: 1rem
-
-  // Typography
-  --cat-font-size-1: 1.7rem
-  --cat-font-size-2: 1.45rem
-  --cat-font-size-3: 1.25rem
-  --cat-font-weight-1: 600
-  --cat-font-weight-2: 500
-  --cat-font-weight-3: 500
-
-  // Colors — light mode
-  --cat-bg: rgba(255, 255, 255, 0.6)
-  --cat-bg-hover: rgba(255, 255, 255, 0.82)
-  --cat-border: rgba(255, 255, 255, 0.8)
-  --cat-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.10)
-  --cat-shadow-hover: 0 8px 32px 0 rgba(0, 0, 0, 0.17)
-  --cat-text: #333
-  --cat-text-secondary: #555
-  --cat-accent: #3d85c6
-  --cat-accent-hover: #0681d0
-
-  // Badge
-  --cat-badge-bg: linear-gradient(135deg, #3d85c6 0%, #0681d0 100%)
-  --cat-badge-text: #fff
-  --cat-badge-shadow: 0 2px 8px rgba(61, 133, 198, 0.30)
-  --cat-badge-shadow-hover: 0 2px 12px rgba(61, 133, 198, 0.55)
-
-  // Child node overrides (depth >= 2)
-  --cat-child-bg: rgba(255, 255, 255, 0.35)
-  --cat-child-bg-hover: rgba(255, 255, 255, 0.55)
-  --cat-child-border: rgba(255, 255, 255, 0.55)
-  --cat-child-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.07)
-  --cat-child-shadow-hover: 0 4px 16px 0 rgba(0, 0, 0, 0.13)
-  --cat-child-badge-bg: linear-gradient(135deg, #5ca9e6 0%, #3d85c6 100%)
-  --cat-child-badge-shadow: 0 2px 6px rgba(92, 169, 230, 0.30)
-
-  // Toggle
-  --cat-toggle-size: 1.8rem
-  --cat-toggle-color: var(--cat-accent)
-
-  // Transition
-  --cat-transition: 0.25s ease
-
-// ---------------------------------------------------------------------------
-// Dark Mode Token Overrides (single source of truth)
-// ---------------------------------------------------------------------------
-
-body.darkmode
-  --cat-bg: rgba(40, 40, 40, 0.6)
-  --cat-bg-hover: rgba(55, 55, 55, 0.8)
-  --cat-border: rgba(255, 255, 255, 0.10)
-  --cat-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.40)
-  --cat-shadow-hover: 0 8px 32px 0 rgba(0, 0, 0, 0.60)
-  --cat-text: #f0f0f0
-  --cat-text-secondary: #cbd5e0
-  --cat-accent: #5ca9e6
-  --cat-accent-hover: #7abce8
-
-  --cat-badge-bg: linear-gradient(135deg, #5ca9e6 0%, #3d85c6 100%)
-  --cat-badge-shadow: 0 2px 8px rgba(92, 169, 230, 0.35)
-  --cat-badge-shadow-hover: 0 2px 12px rgba(92, 169, 230, 0.55)
-
-  --cat-child-bg: rgba(45, 55, 72, 0.50)
-  --cat-child-bg-hover: rgba(55, 65, 82, 0.70)
-  --cat-child-border: rgba(255, 255, 255, 0.08)
-  --cat-child-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.30)
-  --cat-child-shadow-hover: 0 4px 16px 0 rgba(0, 0, 0, 0.45)
-  --cat-child-badge-bg: linear-gradient(135deg, #7abce8 0%, #5ca9e6 100%)
-  --cat-child-badge-shadow: 0 2px 6px rgba(92, 169, 230, 0.40)
-
-  --cat-toggle-color: #5ca9e6
-
-// ---------------------------------------------------------------------------
-// Container
-// ---------------------------------------------------------------------------
 
 .categories-box
   max-width: 100%
-  margin: 2rem 0
-  padding: 1rem 0
-
-// ---------------------------------------------------------------------------
-// Tree Root (depth=1 grid)
-// ---------------------------------------------------------------------------
-
-.cat-tree[data-depth="1"]
-  display: grid
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr))
-  gap: var(--cat-gap)
-  list-style: none
+  margin: 1rem 0
   padding: 0
-  margin: 0
-
-// Nested trees are simple lists
-.cat-tree[data-depth]:not([data-depth="1"])
-  list-style: none
-  padding: 0
-  margin: 0
 
 // ---------------------------------------------------------------------------
-// Node — single reusable component
+// Dual-Column Block
 // ---------------------------------------------------------------------------
 
-.cat-node
-  position: relative
-  border-radius: var(--cat-card-radius)
-  padding: var(--cat-card-padding)
-  transition: background-color var(--cat-transition), box-shadow var(--cat-transition)
-
-// Depth 1 — top-level cards with glassmorphism
-.cat-node[data-depth="1"]
-  background-color: var(--cat-bg)
-  border: 1px solid var(--cat-border)
-  box-shadow: var(--cat-shadow)
-  backdrop-filter: blur(10px)
-  -webkit-backdrop-filter: blur(10px)
-
-  &:hover
-    background-color: var(--cat-bg-hover)
-    box-shadow: var(--cat-shadow-hover)
-
-// Depth 2+ — lighter nested cards, no nested blur
-.cat-node[data-depth="2"],
-.cat-node[data-depth="3"],
-.cat-node[data-depth="4"],
-.cat-node[data-depth="5"]
-  background-color: var(--cat-child-bg)
-  border: 1px solid var(--cat-child-border)
-  box-shadow: var(--cat-child-shadow)
-  margin-top: 0.75rem
-  padding: 1.2rem
-
-  &:hover
-    background-color: var(--cat-child-bg-hover)
-    box-shadow: var(--cat-child-shadow-hover)
-
-// Progressive visual diminishing
-.cat-node[data-depth="2"]
-  border-radius: 12px
-
-.cat-node[data-depth="3"],
-.cat-node[data-depth="4"],
-.cat-node[data-depth="5"]
-  border-radius: 10px
-  padding: 0.9rem 1.2rem
-
-// ---------------------------------------------------------------------------
-// Header row (toggle + link + badge)
-// ---------------------------------------------------------------------------
-
-.cat-header
+.cat-block
   display: flex
-  align-items: center
-  gap: 0.65rem
+  align-items: flex-start
+  margin-bottom: 3.5rem
 
-// ---------------------------------------------------------------------------
-// Toggle Button
-// ---------------------------------------------------------------------------
-
-.cat-toggle
-  display: inline-flex
-  align-items: center
-  justify-content: center
-  width: var(--cat-toggle-size)
-  height: var(--cat-toggle-size)
-  padding: 0
-  border: none
-  background: none
-  cursor: pointer
-  color: var(--cat-toggle-color)
-  font-size: var(--cat-toggle-size)
-  transition: transform var(--cat-transition)
+// Left column — category name + total count
+.cat-block-left
   flex-shrink: 0
+  padding-right: 2.5rem
+  padding-top: 0.1em
 
-  i
-    display: block
-    line-height: 1
-
-// Expanded state — rotate arrow
-.cat-node[data-expanded="true"] > .cat-header > .cat-toggle
-  transform: rotate(90deg)
-
-// ---------------------------------------------------------------------------
-// Category Link
-// ---------------------------------------------------------------------------
-
-.cat-link
-  flex: 1
-  text-decoration: none
-  transition: color var(--cat-transition)
-
-// Depth-based typography
-.cat-node[data-depth="1"] > .cat-header > .cat-link
-  font-size: var(--cat-font-size-1)
-  font-weight: var(--cat-font-weight-1)
-  color: var(--cat-text)
-
-  &:hover
-    color: var(--cat-accent-hover)
-
-.cat-node[data-depth="2"] > .cat-header > .cat-link
-  font-size: var(--cat-font-size-2)
-  font-weight: var(--cat-font-weight-2)
-  color: var(--cat-text-secondary)
-
-  &:hover
-    color: var(--cat-accent-hover)
-
-.cat-node[data-depth="3"] > .cat-header > .cat-link,
-.cat-node[data-depth="4"] > .cat-header > .cat-link,
-.cat-node[data-depth="5"] > .cat-header > .cat-link
-  font-size: var(--cat-font-size-3)
-  font-weight: var(--cat-font-weight-3)
-  color: var(--cat-text-secondary)
-
-  &:hover
-    color: var(--cat-accent-hover)
-
-// ---------------------------------------------------------------------------
-// Count Badge
-// ---------------------------------------------------------------------------
-
-.cat-count
-  display: inline-flex
-  align-items: center
-  justify-content: center
-  padding: 0 0.65rem
-  border-radius: 20px
+.cat-block-name
+  display: block
+  font-size: 2.4rem
   font-weight: 600
-  flex-shrink: 0
-  transition: box-shadow var(--cat-transition)
-
-// Depth 1 badge
-.cat-node[data-depth="1"] > .cat-header > .cat-count
-  min-width: 2.4rem
-  height: 2.4rem
-  font-size: 1rem
-  background: var(--cat-badge-bg)
-  color: var(--cat-badge-text)
-  box-shadow: var(--cat-badge-shadow)
-
+  line-height: 1.3
+  text-decoration: none
+  color: inherit
   &:hover
-    box-shadow: var(--cat-badge-shadow-hover)
+    text-decoration: underline
 
-// Depth 2 badge
-.cat-node[data-depth="2"] > .cat-header > .cat-count
-  min-width: 2.2rem
-  height: 2.2rem
-  font-size: 0.95rem
-  background: var(--cat-child-badge-bg)
-  color: var(--cat-badge-text)
-  box-shadow: var(--cat-child-badge-shadow)
+.cat-block-total
+  display: block
+  margin-top: 0.35em
+  font-size: 1.25rem
+  opacity: 0.45
 
-// Depth 3+ badge — subtle inline style
-.cat-node[data-depth="3"] > .cat-header > .cat-count,
-.cat-node[data-depth="4"] > .cat-header > .cat-count,
-.cat-node[data-depth="5"] > .cat-header > .cat-count
-  min-width: 2rem
-  height: 2rem
-  font-size: 0.9rem
-  background: rgba(61, 133, 198, 0.18)
-  color: var(--cat-accent)
-  border: 1px solid rgba(61, 133, 198, 0.30)
-  box-shadow: none
+// Right column — subcategory tree, with vertical separator on its left edge
+.cat-block-right
+  position: relative
+  flex: 1
+  min-width: 0
+  padding-left: 2.5rem
 
-body.darkmode
-  .cat-node[data-depth="3"] > .cat-header > .cat-count,
-  .cat-node[data-depth="4"] > .cat-header > .cat-count,
-  .cat-node[data-depth="5"] > .cat-header > .cat-count
-    background: rgba(92, 169, 230, 0.25)
-    color: #b3daef
-    border-color: rgba(92, 169, 230, 0.40)
+  &::before
+    content: ''
+    position: absolute
+    left: 0
+    top: 0
+    bottom: 0
+    width: 1px
+    background: currentColor
+    opacity: 0.18
 
 // ---------------------------------------------------------------------------
-// Children Container — collapse / expand
+// Subcategory Tree
 // ---------------------------------------------------------------------------
 
-.cat-children
-  overflow: hidden
-  padding-left: var(--cat-child-indent)
-  transition: max-height 0.35s ease, opacity 0.25s ease
+.cat-subtree
+  list-style: none
+  margin: 0
+  padding: 0
 
-// Expanded (default)
-.cat-node[data-expanded="true"] > .cat-children
-  max-height: 2000px
-  opacity: 1
+// Nested subtrees — IDE / tree-command style indent guide lines
+.cat-subtree .cat-subtree
+  position: relative
+  margin-left: 0.4em
+  padding-left: 1.3em
 
-// Collapsed
-.cat-node[data-expanded="false"] > .cat-children
-  max-height: 0
-  opacity: 0
+  &::before
+    content: ''
+    position: absolute
+    left: 0
+    top: 0.3em
+    bottom: 0.3em
+    width: 1px
+    background: currentColor
+    opacity: 0.12
+
+.cat-subitem
+  font-size: 1.4rem
+  line-height: 2.2
+
+.cat-sublink
+  text-decoration: none
+  color: inherit
+  &:hover
+    text-decoration: underline
+
+.cat-subcount
+  font-size: 0.9em
+  opacity: 0.45
 
 // ---------------------------------------------------------------------------
-// Responsive
+// Responsive — stack columns on narrow screens
 // ---------------------------------------------------------------------------
 
 @media (max-width: 768px)
-  .cat-tree[data-depth="1"]
-    grid-template-columns: 1fr
-    gap: 1rem
+  .cat-block
+    flex-direction: column
+    margin-bottom: 2.5rem
 
-  .cat-node[data-depth="1"]
-    padding: 1.3rem
+  .cat-block-left
+    padding-right: 0
+    margin-bottom: 1rem
 
-  .cat-node[data-depth="1"] > .cat-header > .cat-link
-    font-size: 1.4rem
-
-  .cat-node[data-depth="2"]
-    padding: 1rem
-
-  .cat-node[data-depth="2"] > .cat-header > .cat-link
-    font-size: 1.25rem
-
-  .cat-node[data-depth="3"],
-  .cat-node[data-depth="4"],
-  .cat-node[data-depth="5"]
-    padding: 0.75rem 1rem
-
-  .cat-node[data-depth="3"] > .cat-header > .cat-link,
-  .cat-node[data-depth="4"] > .cat-header > .cat-link,
-  .cat-node[data-depth="5"] > .cat-header > .cat-link
-    font-size: 1.1rem
+  .cat-block-right
+    padding-left: 1.5rem
 
 // ---------------------------------------------------------------------------
-// Preserve tag/archive count parenthesis style
+// Legacy selectors kept for other pages that may reference them
 // ---------------------------------------------------------------------------
 
 .tag-list-count:before, .archive-list-count:before
