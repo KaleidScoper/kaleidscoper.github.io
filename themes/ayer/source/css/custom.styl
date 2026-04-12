@@ -59,6 +59,125 @@ if hexo-config('mouse.enable')
         margin 0.2rem 0
 
 // ================================================================
+// Typography — 字体系统
+//
+// 思源宋体 (Noto Serif SC) — 正文、标题、引用等阅读性内容
+// 思源黑体 (Noto Sans SC) — 导航、元信息、标签、页脚等功能性文本
+// 等宽字体 — 代码块、行内代码
+//
+// CDN 在 head.ejs 中通过 <link> 引入：
+//   Noto Serif SC  wght@400;700
+//   Noto Sans SC   wght@300;400
+// ================================================================
+
+$serif = "Noto Serif SC", "Source Han Serif SC", "STSong", Georgia, "Times New Roman", serif
+$sans  = "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif
+$mono  = "Consolas", "Monaco", "Courier New", monospace
+
+// --- 全局正文 ---
+body
+  font-family $serif
+
+// --- 封面标题 — 宋体 Bold ---
+.cover-inner
+  h1
+    font-family $serif
+    font-weight 700
+  #subtitle-box
+    font-family $sans
+    font-weight 300
+
+// --- 文章标题 — 宋体 Bold ---
+.article-header .article-title
+  font-family $serif
+  font-weight 700
+
+// --- 文章正文 — 宋体 Regular ---
+.article-entry
+  font-family $serif
+
+// --- 文章内标题 — 宋体 Bold ---
+.article-entry h1,
+.article-entry h2,
+.article-entry h3,
+.article-entry h4,
+.article-entry h5,
+.article-entry h6
+  font-family $serif
+  font-weight 700
+
+// --- 导航 — 黑体 Regular ---
+.navbar
+  font-family $sans
+
+// --- 日期、分类 — 黑体 Light ---
+.article-date,
+.article-category
+  font-family $sans
+  font-weight 300
+
+// --- 标签 — 黑体 Light ---
+.article-tag-list
+  font-family $sans
+  font-weight 300
+
+// --- 字数统计 — 黑体 Light ---
+.word_count
+  font-family $sans
+  font-weight 300
+
+// --- 归档页 — 黑体 ---
+.archive-article-date
+  font-family $sans
+  font-weight 300
+
+.archive-year
+  font-family $sans
+
+.archive-article-title
+  font-family $serif
+
+// --- 翻页导航 — 黑体 ---
+.page-nav
+  font-family $sans
+
+// --- 分类页 — 分类名用宋体 Bold，计数和子分类用黑体 ---
+.cat-block-name
+  font-family $serif
+  font-weight 700
+
+.cat-block-total,
+.cat-subitem
+  font-family $sans
+  font-weight 300
+
+// --- 页脚 — 黑体 ---
+.footer
+  font-family $sans
+
+// --- 前后篇导航 — 黑体 ---
+.article-nav
+  font-family $sans
+
+// --- 版权声明 — 黑体 Light ---
+.declare
+  font-family $sans
+  font-weight 300
+
+// --- 搜索 — 黑体 ---
+.local-search-input
+  font-family $sans
+
+// --- 随机句子 — 黑体 Light，与正文宋体形成对比 ---
+.random-sentence
+  font-family $sans
+  font-weight 300
+
+// --- 置顶标签 — 黑体 ---
+.article-topping
+  font-family $sans
+
+// ================================================================
 // 自定义样式覆盖 — 通过 CSS 自定义属性实现亮/暗模式跟随
 //
 // 加载顺序：head.ejs 先加载 dist/main.css，再加载 css/custom.css，
