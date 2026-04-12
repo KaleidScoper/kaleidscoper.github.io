@@ -38,15 +38,6 @@ hexo.extend.helper.register('category_tree', function (options) {
     return arr;
   }
 
-  function totalPostCount(cat) {
-    let count = cat.posts.length;
-    const children = categories.filter(c => c.parent === cat._id);
-    children.forEach(child => {
-      count += totalPostCount(child);
-    });
-    return count;
-  }
-
   function renderSubtree(cats) {
     const sorted = sortCategories(cats);
     if (!sorted.length) return '';
@@ -76,7 +67,7 @@ hexo.extend.helper.register('category_tree', function (options) {
   let html = '';
 
   roots.forEach(cat => {
-    const total = totalPostCount(cat);
+    const total = cat.posts.length;
     const children = categories.filter(c => c.parent === cat._id);
 
     html += '<div class="cat-block">';
