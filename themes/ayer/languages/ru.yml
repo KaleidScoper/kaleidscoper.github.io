@@ -21,6 +21,7 @@ tag: Метка
 site_visitors: Visitors
 page_views: Views
 friends: друзья
+posts_count: "%d записей"
 
 post:
   word_count: Количество слов

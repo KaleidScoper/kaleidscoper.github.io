@@ -74,7 +74,7 @@ hexo.extend.helper.register('category_tree', function (options) {
 
     html += '<div class="cat-block-left">';
     html += `<a class="cat-block-name" href="${self.url_for(cat.path)}">${cat.name}</a>`;
-    html += `<span class="cat-block-total">${total} 篇文章</span>`;
+    html += `<span class="cat-block-total">${self.__('posts_count', total)}</span>`;
     html += '</div>';
 
     html += '<div class="cat-block-right">';

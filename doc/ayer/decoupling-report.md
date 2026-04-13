@@ -51,30 +51,13 @@
 
 **影响**：用户安装主题后无法获知任何可配置项的默认值，主题无法开箱即用。
 
-#### B. 缺少必要的 JS 第三方库（严重）
+#### ~~B. 缺少必要的 JS 第三方库~~ （已更正：误报）
 
-`layout/_partial/after-footer.ejs` 引用了以下 JS 文件，但它们**不存在于**主题的 `source/js/` 中，也不存在于站点的 `source/js/` 中，整个仓库中均未找到：
+> **勘误（2026-04-14）**：Glob 搜索工具无法检索二进制文件，导致此前误判为缺失。经文件系统直接核实，以下文件**全部存在**且已被 Git 跟踪：`jquery-3.6.0.min.js`、`tocbot.min.js`、`busuanzi-2.3.pure.min.js`、`clickLove.js`、`dz.js`。主题 JS 库完整，共 10 个文件。
 
-| 引用路径 | 用途 | 状态 |
-|----------|------|------|
-| `/js/jquery-3.6.0.min` | jQuery 核心库 | **缺失** |
-| `/js/tocbot.min` | 目录生成 | **缺失** |
-| `/js/busuanzi-2.3.pure.min` | 不蒜子访问统计 | **缺失** |
-| `/js/clickLove` | 点击爱心特效 | **缺失** |
-| `/js/dz` | Canvas 动态背景 | **缺失** |
+#### ~~C. 缺少字体文件~~ （已更正：误报）
 
-**推测**：这些文件可能在以往某次清理中被误删，或曾从 `node_modules` 复制但未纳入版本管理。这会导致 jQuery 依赖、TOC 功能、不蒜子统计、爱心点击特效和 Canvas 背景功能全部失效。
-
-#### C. 缺少字体文件（严重）
-
-`source/css/fonts/remixicon.css` 的 `@font-face` 声明引用了 `.eot`、`.woff2`、`.woff`、`.ttf` 四种字体格式，但主题中仅存在 `.css` 和 `.svg` 两个文件，实际字体文件**全部缺失**：
-
-- `remixicon.eot` — 缺失
-- `remixicon.woff2` — 缺失
-- `remixicon.woff` — 缺失
-- `remixicon.ttf` — 缺失
-
-**影响**：主题的所有图标（菜单、搜索、RSS、社交图标等）将无法显示。
+> **勘误（2026-04-14）**：同上原因。`remixicon.eot`、`.woff2`、`.woff`、`.ttf` 四个字体文件**全部存在**于 `source/css/fonts/` 中，图标功能正常。
 
 #### D. 硬编码的站点专属内容
 
@@ -138,11 +121,11 @@
 
 #### 第一步：补齐缺失文件
 
+> **勘误**：原报告列出的 JS 库和 RemixIcon 字体文件经文件系统实际核查**均存在且已被 Git 跟踪**。此前判断为缺失系 Glob 搜索工具无法检索二进制文件导致的误报。
+
 | 操作 | 说明 |
 |------|------|
 | 创建 `themes/ayer/_config.yml` | 以当前 `_config.ayer.yml` 为蓝本，**将所有个人数据替换为通用默认值/空值**，作为主题的默认配置 |
-| 补齐 JS 第三方库到 `themes/ayer/source/js/` | `jquery-3.6.0.min.js`、`tocbot.min.js`、`busuanzi-2.3.pure.min.js`、`clickLove.js`、`dz.js` |
-| 补齐 RemixIcon 字体文件到 `themes/ayer/source/css/fonts/` | `remixicon.eot`、`remixicon.woff2`、`remixicon.woff`、`remixicon.ttf`（从 [RemixIcon v2.1.0 Release](https://github.com/Remix-Design/RemixIcon/releases/tag/v2.1.0) 获取） |
 
 #### 第二步：去除站点专属硬编码
 
@@ -336,8 +319,8 @@ npm publish
 
 | 优先级 | 任务 | 预估工作量 |
 |--------|------|-----------|
-| **P0 — 阻断发布** | 补齐缺失 JS 库（jQuery、tocbot 等） | 0.5h |
-| **P0 — 阻断发布** | 补齐 RemixIcon 字体文件 | 0.5h |
+| ~~P0~~ | ~~补齐缺失 JS 库~~ — **误报**，文件存在（Glob 工具不检索二进制文件） | — |
+| ~~P0~~ | ~~补齐 RemixIcon 字体文件~~ — **误报**，文件存在 | — |
 | **P0 — 阻断发布** | 创建主题内 `_config.yml` 默认配置 | 1h |
 | **P1 — 必须修复** | 去除 `hello.js`、`package.json`、`README.md` 中的硬编码 | 1h |
 | **P1 — 必须修复** | 迁出站点专属图片（友链头像、大背景图）到站点侧 `source/images/` | 0.5h |

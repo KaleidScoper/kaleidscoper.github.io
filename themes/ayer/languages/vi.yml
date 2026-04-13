@@ -21,6 +21,7 @@ tag: thẻ
 site_visitors: Visitors
 page_views: Views
 friends: Bạn
+posts_count: "%d bài viết"
 
 post:
   word_count: Đếm từ

@@ -21,6 +21,7 @@ tag: タグ
 site_visitors: Visitors
 page_views: Views
 friends: 友達
+posts_count: "%d 件の記事"
 
 post:
   word_count: 単語数

@@ -21,6 +21,7 @@ tag: Tag
 site_visitors: Visitors
 page_views: Views
 friends: Friends
+posts_count: "%d posts"
 
 post:
   word_count: Word count

@@ -21,6 +21,7 @@ tag: Label
 site_visitors: Visitors
 page_views: Views
 friends: Vrienden
+posts_count: "%d berichten"
 
 post:
   word_count: Aantal woorden in artikel

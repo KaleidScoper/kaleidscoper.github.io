@@ -21,6 +21,7 @@ tag: Tag
 site_visitors: Visitors
 page_views: Views
 friends: Venner
+posts_count: "%d innlegg"
 
 post:
   word_count: Ordtelling
