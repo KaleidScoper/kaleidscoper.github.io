@@ -45,29 +45,16 @@
 
 以下是**如果立即将 `themes/ayer` 目录单独发布为 npm 包或 Git 仓库**时会遇到的问题：
 
-#### A. 缺少默认配置文件 `_config.yml`（严重）
+#### A. 硬编码的站点专属内容
 
-主题内**不存在** `_config.yml`。所有 325 行主题配置完全存放于站点根目录的 `_config.ayer.yml`，`scripts/default_config.js` 仅包含一个 `meta_generator: true` 的兜底值。
+| 文件 | 硬编码内容 | 状态 |
+|------|-----------|------|
+| `package.json` | `repository.url`、`bugs.url`、`homepage` 均指向个人站仓库 | 待处理 |
+| `README.md` | 第 13 行写死个人网站链接和标语 | 待处理 |
 
-**影响**：用户安装主题后无法获知任何可配置项的默认值，主题无法开箱即用。
+> `hello.js` 的硬编码已修复，现从 `hexo.config.title` 和 `hexo.config.url` 动态读取。
 
-#### ~~B. 缺少必要的 JS 第三方库~~ （已更正：误报）
-
-> **勘误（2026-04-14）**：Glob 搜索工具无法检索二进制文件，导致此前误判为缺失。经文件系统直接核实，以下文件**全部存在**且已被 Git 跟踪：`jquery-3.6.0.min.js`、`tocbot.min.js`、`busuanzi-2.3.pure.min.js`、`clickLove.js`、`dz.js`。主题 JS 库完整，共 10 个文件。
-
-#### ~~C. 缺少字体文件~~ （已更正：误报）
-
-> **勘误（2026-04-14）**：同上原因。`remixicon.eot`、`.woff2`、`.woff`、`.ttf` 四个字体文件**全部存在**于 `source/css/fonts/` 中，图标功能正常。
-
-#### D. 硬编码的站点专属内容
-
-| 文件 | 硬编码内容 |
-|------|-----------|
-| `scripts/events/lib/hello.js` | 启动横幅写死 "Ka1eid's SandBox"、`https://kaleidscoper.github.io` |
-| `package.json` | `repository.url`、`bugs.url`、`homepage` 均指向个人站仓库 |
-| `README.md` | 第 13 行写死个人网站链接和标语 |
-
-#### E. 不适合发布的文件
+#### B. 不适合发布的文件
 
 | 文件 | 原因 |
 |------|------|
@@ -77,11 +64,10 @@
 | `source/favicon.svg` | 站主的个人 favicon，非通用 |
 | `README-random-sentences.md` | 单功能说明，应合并入主 README 或独立为文档 |
 
-#### F. 缺少标准发布文件
+#### C. 缺少标准发布文件
 
 - **无 `CHANGELOG.md`**：无变更日志
 - **无 `.npmignore`**（被 `.gitignore` 显式排除了）：发布 npm 时会将 `source-src/`、`.stylintrc` 等开发文件全部打包
-- **无示例配置**：缺少 `_config.example.yml` 供用户参考
 
 ---
 
@@ -91,12 +77,12 @@
 
 | 功能 | 当前位置 | 应归属 | 说明 |
 |------|---------|--------|------|
-| **完整默认配置** | `_config.ayer.yml`（站点根） | 主题内 `_config.yml` | 用户首次安装需要一份开箱即用的默认配置；Hexo 5+ 的 `_config.[theme].yml` 机制本就是让用户*覆盖*主题内默认值，而非替代 |
+| ~~**完整默认配置**~~ | ~~`_config.ayer.yml`（站点根）~~ | ~~主题内 `_config.yml`~~ | **已完成**：`themes/ayer/_config.yml` 已创建，个人数据均替换为通用默认值。 |
 | **Scaffold 模板** | `scaffolds/post.md`、`scaffolds/draft.md` | 主题可附带示例 scaffold | 模板中包含 `reward: false`、`copyright: true` 等 Ayer 专有 front-matter 字段。新用户不知道需要手动创建这些 scaffold |
 | **打赏二维码图片** | `source/images/reward/*.jpg/webp` | 保留在站点侧 ✓ | 正确做法：这是用户个人资源，不属于主题；但主题 README 应说明路径约定 |
-| **友链头像图片** | 实际位于 `themes/ayer/source/images/`（`ahumc.png`、`PASRC.png` 等） | 应迁至站点侧 `source/images/` | 这些是站主个人的友链头像，属于站点内容而非主题资源。之所以能正常显示，是因为 Hexo 会合并主题和站点两侧的 `source/` 目录到 `public/`。发布主题后其他用户会自带这些图片 |
-| **大尺寸背景图** | `themes/ayer/source/images/background.jpg`（2MB） | 考虑移除或缩小 | 主题附带的示例封面图应尽量轻量；`cover1-6.jpg` 共约 1.8MB 可酌情保留几张作为示例 |
 | **分类/标签/友链页面** | `source/categories/index.md` 等 | 保留在站点侧 ✓ | 正确做法：这是用户内容页面，主题只提供对应 layout |
+
+> 友链头像图片（`ahumc.png`、`PASRC.png`、`unialogo.png`、`xmoon.png`）和大尺寸背景图 `background.jpg` 已从主题侧迁出到 `source/images/`。由于 Hexo 的源文件合并机制，URL 路径不变，前端无感。
 
 ### 2.2 在站点侧且不应移动的功能（确认无耦合问题）
 
@@ -109,59 +95,22 @@
 - `source/water/` — 静态 HTML
 - `.github/workflows/` — CI/CD 配置
 
-### 2.3 分类树 Helper 中的硬编码文本
-
-`scripts/helpers/category-tree.js` 第 77 行硬编码了中文 `"篇文章"` 字符串，未走 i18n。对于非中文用户，此处应改为调用语言包。
-
 ---
 
 ## 三、解耦合方案
 
 ### 3.1 文件层面的具体操作清单
 
-#### 第一步：补齐缺失文件
-
-> **勘误**：原报告列出的 JS 库和 RemixIcon 字体文件经文件系统实际核查**均存在且已被 Git 跟踪**。此前判断为缺失系 Glob 搜索工具无法检索二进制文件导致的误报。
-
-| 操作 | 说明 |
-|------|------|
-| 创建 `themes/ayer/_config.yml` | 以当前 `_config.ayer.yml` 为蓝本，**将所有个人数据替换为通用默认值/空值**，作为主题的默认配置 |
-
-#### 第二步：去除站点专属硬编码
+#### 第一步：去除剩余站点专属硬编码
 
 | 文件 | 操作 |
 |------|------|
-| `scripts/events/lib/hello.js` | 将横幅文本改为通用的 Ayer 主题介绍，移除个人站 URL；可从 `hexo.config.title` 和 `hexo.config.url` 动态读取 |
 | `package.json` | `repository.url` 改为主题独立仓库地址；`bugs.url` 和 `homepage` 同步更新 |
 | `README.md` | 重写为面向用户的通用安装/配置文档，移除个人站点链接和标语 |
 
-#### 第三步：迁出站点专属图片资源
+> `hello.js` 已完成动态化改造，`source/images/` 中的站点专属图片已迁出。
 
-主题的 `source/images/` 目录中混入了站主个人的友链头像和大尺寸背景图。Hexo 会将主题和站点两侧的 `source/` 合并输出到 `public/`（站点侧优先），因此只需将文件从主题侧移至站点侧，URL 路径不变，前端无感。
-
-**需从主题迁出到 `source/images/` 的文件**：
-
-| 文件 | 性质 |
-|------|------|
-| `ahumc.png` | 友链头像（安徽大学 MC 社区） |
-| `PASRC.png` | 友链头像（杭州泛美） |
-| `unialogo.png` | 友链头像（Unia） |
-| `xmoon.png` | 友链头像（星月号） |
-| `background.jpg`（2MB） | 大尺寸背景图，不适合作为主题默认资源 |
-
-**可保留在主题中的文件**（属于主题功能资源）：
-
-| 文件 | 用途 |
-|------|------|
-| `ayer.svg`、`ayer-side.svg` | 主题 Logo |
-| `cover1-6.*` | 示例封面图（可酌情保留 1-2 张，其余移除以减小包体积） |
-| `forkme.png` | GitHub Ribbon 功能所需 |
-| `hexo.png` | 通用的 Hexo 图标 |
-| `beian.png` | 备案图标 |
-| `mouse.cur` | 自定义鼠标功能所需 |
-| `gitee.png`、`github.png`、`hexo-tag-chart.png` | 主题文档/功能所需 |
-
-#### 第四步：清理不应发布的文件
+#### 第二步：清理不应发布的文件
 
 | 文件 | 操作 |
 |------|------|
@@ -170,19 +119,14 @@
 | `source/test-random-sentences.html` | 删除或移到 `test/` 目录 |
 | `README-random-sentences.md` | 内容合并入主 README 后删除 |
 
-#### 第五步：创建发布配套文件
+#### 第三步：创建发布配套文件
 
 | 文件 | 说明 |
 |------|------|
-| `_config.yml` | 完整默认配置（见第一步） |
 | `.npmignore` | 排除 `source-src/`、`.stylintrc`、`rollup.config.js`、`.github/`、`test-*`、`*.old` 等开发文件 |
 | `CHANGELOG.md` | 变更日志，记录从原版 Ayer 以来的改动 |
 
-#### 第六步：i18n 修复
-
-- `scripts/helpers/category-tree.js`：将 `"篇文章"` 改为 `this.__('posts_count')` 并在各语言包中添加对应翻译条目。
-
-#### 第七步：scaffold 示例
+#### 第四步：scaffold 示例
 
 在主题目录下创建 `_scaffolds/`（或在 README 中说明），提供包含 Ayer 专属 front-matter 字段的 scaffold 示例：
 
@@ -203,8 +147,9 @@ copyright: true
 
 1. **保留 `_config.ayer.yml`**：这是 Hexo 5+ 的标准覆盖机制，用户的个人配置继续存放于此，它会自动覆盖主题内 `_config.yml` 的默认值。
 2. **保留 `source/images/reward/`**：打赏二维码等个人资源继续放在站点侧。
-3. **接收从主题迁出的友链头像**：将 `themes/ayer/source/images/` 中的站点专属图片（`ahumc.png`、`PASRC.png`、`unialogo.png`、`xmoon.png`、`lup9304.jpg` 等）移至 `source/images/`。由于 Hexo 的源文件合并机制，路径不变，前端无感。
-4. **保留 `scaffolds/`**：已有的 scaffold 继续使用。
+3. **保留 `scaffolds/`**：已有的 scaffold 继续使用。
+
+> 友链头像已迁入 `source/images/`，无需额外操作。
 
 ### 3.3 解耦后的目录对照
 
@@ -317,15 +262,14 @@ npm publish
 
 ## 五、优先级与实施建议
 
-| 优先级 | 任务 | 预估工作量 |
-|--------|------|-----------|
-| ~~P0~~ | ~~补齐缺失 JS 库~~ — **误报**，文件存在（Glob 工具不检索二进制文件） | — |
-| ~~P0~~ | ~~补齐 RemixIcon 字体文件~~ — **误报**，文件存在 | — |
-| **P0 — 阻断发布** | 创建主题内 `_config.yml` 默认配置 | 1h |
-| **P1 — 必须修复** | 去除 `hello.js`、`package.json`、`README.md` 中的硬编码 | 1h |
-| **P1 — 必须修复** | 迁出站点专属图片（友链头像、大背景图）到站点侧 `source/images/` | 0.5h |
-| **P1 — 必须修复** | 清理旧文件和测试文件 | 0.5h |
-| **P2 — 建议修复** | 创建 `.npmignore`、`CHANGELOG.md` | 0.5h |
-| **P2 — 建议修复** | i18n 修复（category-tree 硬编码中文） | 0.5h |
-| **P3 — 可选** | 提供 scaffold 示例 | 0.5h |
-| **P3 — 可选** | 建立 subtree 工作流 | 1h |
+| 优先级 | 任务 | 预估工作量 | 状态 |
+|--------|------|-----------|------|
+| **P1 — 必须修复** | 去除 `package.json`、`README.md` 中的硬编码 | 1h | 待处理 |
+| **P1 — 必须修复** | 清理旧文件和测试文件 | 0.5h | 待处理 |
+| **P2 — 建议修复** | 创建 `.npmignore`、`CHANGELOG.md` | 0.5h | 待处理 |
+| **P3 — 可选** | 提供 scaffold 示例 | 0.5h | 待处理 |
+| **P3 — 可选** | 建立 subtree 工作流 | 1h | 待处理 |
+| ~~P0~~ | ~~创建主题内 `_config.yml` 默认配置~~ | — | **已完成** |
+| ~~P1~~ | ~~去除 `hello.js` 硬编码~~ | — | **已完成** |
+| ~~P1~~ | ~~迁出站点专属图片到 `source/images/`~~ | — | **已完成** |
+| ~~P2~~ | ~~i18n 修复（category-tree 硬编码中文）~~ | — | **已完成** |

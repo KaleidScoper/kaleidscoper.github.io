@@ -1,0 +1,271 @@
+# ============================================================
+# Ayer 主题默认配置
+# 用户请在站点根目录的 _config.ayer.yml 中覆盖所需选项
+# ============================================================
+
+# 侧边栏菜单
+menu:
+  主页: /
+  全部文章: /archives
+  文章分类: /categories
+  全部标签: /tags
+  友情链接: /friends
+  关于本站: /about
+
+# 站点次标题和打字动效
+# https://github.com/mattboldt/typed.js
+subtitle:
+  enable: false # 是否开启动效
+  text: Hello World # 显示的文字
+  text2: # 滚动播放，如果不需要可以留空
+  text3: # 最多支持三段文字
+  startDelay: 1000 # 延迟时间
+  typeSpeed: 200 # 打字速度
+  loop: true # 是否循环
+  backSpeed: 100 # 回退速度
+  showCursor: true # 是否显示光标
+
+# 网站图标和侧边栏logo
+favicon: /favicon.svg
+logo: /favicon.svg
+
+# 封面配置
+# enable-是否启用封面；path-封面背景图；logo-封面logo
+cover:
+  enable: true
+  path: /images/cover.jpg
+  logo: false #/images/ayer.svg，如果不要直接设置成false
+
+# 页面顶部进度条
+progressBar: true
+
+# 告示板模块
+broadcast:
+  enable: false # true开启，false关闭
+  type: 2 # 1：自定义输入，2：一言api(https://hitokoto.cn/)
+  text: # type为1时有效
+
+# 随机句子模块
+random_sentences: # txt文件中双空格为换行，单空格为空格
+  enable: false # true开启，false关闭
+  use_local_file: false # true使用本地txt文件，false使用内置句子库
+  queue_size: 5 # 防重复队列大小，存储最近显示的句子数量
+
+# 文章配置
+# 文章太长，截断按钮文字(在需要截断的行增加此标记：<!--more-->)
+excerpt_link: 显示更多...
+# 如果你嫌每篇文章手动加more标记比较麻烦，又不想在首页全文显示，可以把excerpt_all设置成true，这样首页只会显示文章归档
+excerpt_all: false
+
+# 是否开启代码复制按钮
+copy_btn: true
+# 是否开启文章分享按钮
+share_enable: true
+# 国内的社交平台(If you are not in China, maybe you prefer to set:false)
+share_china: true
+# 文章分享文字
+share_text: 分享
+
+# 分页文字
+nav_text:
+  page_prev: 上一页
+  page_next: 下一页
+  post_prev: 上一篇
+  post_next: 下一篇
+
+# 文章页是否显示目录
+toc: true
+
+# 文章中的图片是否支持点击放大
+image_viewer: true
+
+# https://github.com/willin/hexo-wordcount
+# 是否开启字数统计(关闭请设置enable为false)
+# 也可以单独在md文件里Front-matter设置`no_word_count: true`属性，来自定义关闭字数统计
+word_count:
+  enable: true
+  # 只在文章详情显示(不在首页显示)
+  only_article_visit: true
+
+# 打赏
+# reward_type: 0-关闭 | 1-文章 front-matter 中 reward:true 才显示 | 2-所有文章显示
+# 单篇文章可在 front-matter 中设置 no_reward: true 强制关闭
+reward_type: 0
+reward_wording: "如果这篇文章对你有帮助，可以请我喝杯茶"
+
+# 打赏渠道列表（数据驱动，新增渠道只需追加条目）
+# name: 显示名称 | icon: RemixIcon 类名 | color: 品牌主题色
+# qrcode: 二维码图片路径 | description: 辅助文字 | link: 可选外链
+reward:
+  button_text: "" # 按钮文字，留空则回退到语言包默认值
+  channels:
+    # - name: "支付宝"
+    #   icon: "ri-alipay-line"
+    #   color: "#1677FF"
+    #   qrcode: "/images/reward/alipay.jpg"
+    #   description: "支付宝扫一扫"
+
+    # - name: "微信支付"
+    #   icon: "ri-wechat-pay-line"
+    #   color: "#07C160"
+    #   qrcode: "/images/reward/wechat.jpg"
+    #   description: "微信扫一扫"
+
+# 版权声明
+# 版权声明type设定：0-关闭版权声明； 1-文章对应的md文件里有copyright: true属性，才有版权声明； 2-所有文章均有版权声明
+copyright_type: 0
+
+# 是否启用搜索
+# 需要安装hexo-generator-searchdb(https://github.com/theme-next/hexo-generator-searchdb)
+search: false
+
+# RSS订阅(先安装hexo-generator-feed插件，再去博客根目录config进行配置)
+# 不想显示可以直接留空
+rss:
+
+# 是否启用黑夜模式开关
+darkmode: true
+
+# 动态背景效果: 0-关闭，1-动态线条(跟随鼠标)
+canvas_bg: 0
+
+# 自定义鼠标样式，直接替换/images/mouse.cur文件
+mouse:
+  enable: false
+  path: /images/mouse.cur
+
+# 鼠标点击效果：0-关闭，1-爱心，2-爆炸烟花，3-粒子烟花
+click_effect: 0
+
+# 页面宽度自定义（不建议修改，可能造成布局混乱），article_width文章宽度，sidebar_width侧边栏宽度
+layout:
+  article_width: 80rem
+  sidebar_width: 8rem
+
+# GitHub Ribbons-封面右上角的forkme，换样式直接在source/images目录下替换forkme图片
+github:
+  # (关闭请设置为false)
+  enable: false
+  url: https://github.com/Shen-Yu/hexo-theme-ayer
+
+# 网易云音乐插件
+music:
+  enable: false
+  # 播放器尺寸类型(1：小尺寸、2：大尺寸)
+  type: 1
+  id: 22707008 # 网易云分享的音乐ID(更换音乐请更改此配置项)
+  autoPlay: true # 是否开启自动播放
+
+# 访问量统计(不蒜子)
+busuanzi:
+  enable: false
+
+# 友盟cnzz统计(url填js代码src链接)
+cnzz:
+  enable: false
+  url:
+
+# Google Analytics
+google_analytics: ""
+# 百度统计
+baidu_analytics: ""
+
+# Mathjax数学公式
+mathjax: false
+
+# Katex数学公式(allpost设置为false时只有头部设置math:true的文章才开启)
+# 需要更换hexo渲染器，npm un hexo-renderer-marked -S && npm i hexo-renderer-markdown-it-katex -S
+katex:
+  enable: false
+  allpost: true
+  copy_tex: false
+
+# mermaid流程图 三个选项缺一不可(https://mermaid-js.github.io/mermaid/)
+mermaid:
+  enable: false
+  cdn: https://cdn.staticfile.org/mermaid/8.14.0/mermaid.min.js
+  theme: forest
+
+# 网站成立年份(默认为 2019，若填入年份小于当前年份，则显示为 2018-2019 类似的格式)
+since: 2019
+
+# ICP备案信息尾部显示
+icp:
+  enable: false
+  url: "https://beian.miit.gov.cn/" # 备案链接
+  text: "" # 备案信息
+# 公安备案信息尾部显示
+gongan:
+  enable: false
+  img: /images/beian.png #公安备案图片
+  url: "" #公安备案链接
+  text: "" #公安备案信息
+
+# 友情链接
+friends_link:
+  # 示例（在 _config.ayer.yml 中覆盖为你自己的友链）
+  Ayer 主题:
+    url: https://github.com/Shen-Yu/hexo-theme-ayer
+    img: /images/ayer.png
+
+  Hexo 官网:
+    url: https://hexo.io
+    img: /images/hexo.png
+
+# ============================================================
+# 评论系统（四选一，其余保持 enable: false）
+# ============================================================
+
+# 1、Valine[一款快速、简洁且高效的无后端评论系统](https://github.com/xCss/Valine)
+# 启用Valine必须先创建leancloud应用， 获取 id|key 填入即可
+leancloud:
+  enable: false
+  app_id:
+  app_key:
+# Valine配置
+valine:
+  enable: false # 是否启用
+  avatar: monsterid # 头像样式(https://valine.js.org/avatar.html)
+  placeholder: 给我的文章加点评论吧~ # placeholder
+
+# 2、Gitalk(https://github.com/gitalk/gitalk)
+gitalk:
+  enable: false
+  clientID:
+  clientSecret:
+  repo:
+  owner:
+  admin:
+
+# 3、Twikoo(https://github.com/imaegoo/twikoo)
+twikoo:
+  enable: false
+  envId:
+
+# 4、giscus (https://giscus.app/)
+# 前往 https://giscus.app/ 完成配置向导后填入以下字段
+giscus:
+  enable: false
+  repo: # 启用了 Discussions 的仓库，格式：owner/repo
+  repo_id: # 从 giscus.app 获取
+  category: Announcements # 推荐使用 Announcements 分类
+  category_id: # 从 giscus.app 获取
+  mapping: pathname # 页面与 Discussion 的映射方式
+  reactions_enabled: 1 # 是否启用主帖回应（1=是 0=否）
+  emit_metadata: 0 # 是否发送元数据（0=否）
+  input_position: top # 输入框位置: top / bottom
+  lang: zh-CN # 界面语言
+
+# 首页广告配置
+# 可以根据需要自行增加ad_3，ad_4...，留空则不显示，建议图片和url不要带ad等关键词，否则可能会被adblock等插件屏蔽
+ads:
+ad_1:
+  title: # 广告标题
+  url: # 广告链接
+  img: # 广告图片地址
+  width: # 广告宽度
+
+# 网站开启加密访问，密码可设置任何字符
+lock:
+  enable: false
+  password: 123456
