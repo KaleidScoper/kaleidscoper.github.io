@@ -50,7 +50,7 @@
 | 文件 | 硬编码内容 | 状态 |
 |------|-----------|------|
 | `package.json` | `repository.url`、`bugs.url`、`homepage` 均指向个人站仓库 | 待处理 |
-| `README.md` | 第 13 行写死个人网站链接和标语 | 待处理 |
+| ~~`README.md`~~ | ~~第 13 行写死个人网站链接和标语~~ | **已完成** |
 
 > `hello.js` 的硬编码已修复，现从 `hexo.config.title` 和 `hexo.config.url` 动态读取。
 
@@ -62,7 +62,7 @@
 | `source/favicon.ico.old` | 旧文件备份 |
 | `source/test-random-sentences.html` | 测试文件 |
 | `source/favicon.svg` | 站主的个人 favicon，非通用 |
-| `README-random-sentences.md` | 单功能说明，应合并入主 README 或独立为文档 |
+| `README-random-sentences.md` | 单功能说明，已合并入主 README，待删除 |
 
 #### C. 缺少标准发布文件
 
@@ -106,9 +106,8 @@
 | 文件 | 操作 |
 |------|------|
 | `package.json` | `repository.url` 改为主题独立仓库地址；`bugs.url` 和 `homepage` 同步更新 |
-| `README.md` | 重写为面向用户的通用安装/配置文档，移除个人站点链接和标语 |
 
-> `hello.js` 已完成动态化改造，`source/images/` 中的站点专属图片已迁出。
+> `hello.js` 已完成动态化改造，`source/images/` 中的站点专属图片已迁出，`README.md` 已重写为通用文档。
 
 #### 第二步：清理不应发布的文件
 
@@ -117,7 +116,7 @@
 | `source/favicon.svg` | 替换为一个通用占位 favicon，或移除（让用户自行配置） |
 | `source/favicon.svg.old`、`source/favicon.ico.old` | 删除 |
 | `source/test-random-sentences.html` | 删除或移到 `test/` 目录 |
-| `README-random-sentences.md` | 内容合并入主 README 后删除 |
+| `README-random-sentences.md` | 内容已合并入主 README，删除即可 |
 
 #### 第三步：创建发布配套文件
 
@@ -264,12 +263,13 @@ npm publish
 
 | 优先级 | 任务 | 预估工作量 | 状态 |
 |--------|------|-----------|------|
-| **P1 — 必须修复** | 去除 `package.json`、`README.md` 中的硬编码 | 1h | 待处理 |
+| **P1 — 必须修复** | 去除 `package.json` 中的硬编码 | 0.5h | 待处理 |
 | **P1 — 必须修复** | 清理旧文件和测试文件 | 0.5h | 待处理 |
 | **P2 — 建议修复** | 创建 `.npmignore`、`CHANGELOG.md` | 0.5h | 待处理 |
 | **P3 — 可选** | 提供 scaffold 示例 | 0.5h | 待处理 |
 | **P3 — 可选** | 建立 subtree 工作流 | 1h | 待处理 |
 | ~~P0~~ | ~~创建主题内 `_config.yml` 默认配置~~ | — | **已完成** |
+| ~~P1~~ | ~~重写 `README.md` 为通用安装/配置文档~~ | — | **已完成** |
 | ~~P1~~ | ~~去除 `hello.js` 硬编码~~ | — | **已完成** |
 | ~~P1~~ | ~~迁出站点专属图片到 `source/images/`~~ | — | **已完成** |
 | ~~P2~~ | ~~i18n 修复（category-tree 硬编码中文）~~ | — | **已完成** |
