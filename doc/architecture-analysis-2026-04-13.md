@@ -9,36 +9,40 @@
 
 ## 总评
 
-| 维度 | 评分 | 说明 |
-|------|------|------|
-| 目录结构 | ★★★☆☆ | Hexo 标准骨架完整，但根目录存在非标准目录和残留文件 |
-| 配置体系 | ★★★★☆ | 分层配置清晰（`_config.yml` + `_config.ayer.yml`），少数配置项可优化 |
-| 主题架构 | ★★★☆☆ | "吸收式"管理合理，但 custom.styl 严重偏离 Stylus 范式 |
-| CI/CD | ★★★★☆ | GitHub Actions 流程规范，缺少质量门禁 |
-| 性能 | ★★★☆☆ | 存在无条件加载资源、字体加载策略欠佳等问题 |
-| 安全 | ★★★★☆ | 已修复 OAuth 泄露，仍有少量风险点 |
-| SEO | ★★☆☆☆ | 缺少 Sitemap、RSS、robots.txt 等基础设施 |
-| 可维护性 | ★★★☆☆ | 自定义页面与 Hexo 模板体系脱节，缺乏自动化质量检查 |
+
+| 维度    | 评分    | 说明                                                  |
+| ----- | ----- | --------------------------------------------------- |
+| 目录结构  | ★★★☆☆ | Hexo 标准骨架完整，但根目录存在非标准目录和残留文件                        |
+| 配置体系  | ★★★★☆ | 分层配置清晰（`_config.yml` + `_config.ayer.yml`），少数配置项可优化 |
+| 主题架构  | ★★★☆☆ | "吸收式"管理合理，但 custom.styl 严重偏离 Stylus 范式              |
+| CI/CD | ★★★★☆ | GitHub Actions 流程规范，缺少质量门禁                          |
+| 性能    | ★★★☆☆ | 存在无条件加载资源、字体加载策略欠佳等问题                               |
+| 安全    | ★★★★☆ | 已修复 OAuth 泄露，仍有少量风险点                                |
+| SEO   | ★★☆☆☆ | 缺少 Sitemap、RSS、robots.txt 等基础设施                     |
+| 可维护性  | ★★★☆☆ | 自定义页面与 Hexo 模板体系脱节，缺乏自动化质量检查                        |
+
 
 ---
 
 ## 一、目录结构
 
-### 1.1 根目录存在非标准目录
+### 1.1 （已修复）根目录存在非标准目录
 
 **位置**: 项目根目录
 
 **问题**: `文章模板暂存处/` 目录位于项目根目录，内含未发布的 Markdown 草稿和无关文件（如 `哲学.py`、`编剧.md`、`生产资料.md`）。该目录：
+
 - 不符合 Hexo 标准目录约定（Hexo 草稿应使用 `source/_drafts/`）
 - 包含与博客无关的文件（Python 脚本、创意文档）
 - 名称使用中文，在部分终端和工具中可能引发编码问题
 
 **建议**:
+
 - 将真正的文章草稿迁移至 `source/_drafts/`，通过 `hexo new draft <title>` 创建
 - 将创意文档等非博客内容移出仓库，或归入 `doc/drafts/`
 - 删除 `哲学.py` 等无关文件
 
-### 1.2 残留配置文件
+### 1.2 （已修复）残留配置文件
 
 **位置**: `_config.landscape.yml`
 
@@ -46,7 +50,7 @@
 
 **建议**: 删除该文件。
 
-### 1.3 主题目录中的 `.gitkeep`
+### 1.3 （已忽略）主题目录中的 `.gitkeep`
 
 **位置**: `themes/.gitkeep`
 
@@ -54,9 +58,10 @@
 
 **建议**: 删除该文件。
 
-### 1.4 测试文件残留
+### 1.4 （已忽略）测试文件残留
 
 **位置**:
+
 - `source/images/test.png`
 - `themes/ayer/source/test-random-sentences.html`
 
@@ -69,6 +74,7 @@
 **位置**: `source/images/` 下多个文件，如 `丹凤门.jpg`、`京都八坂神社西门.webp`、`伪史论.jpeg` 等
 
 **问题**: 中文文件名在 URL 编码后会变成长串百分号字符（如 `%E4%B8%B9%E5%87%A4%E9%97%A8.jpg`），影响：
+
 - URL 可读性和可分享性
 - 部分旧版服务器/CDN 的兼容性
 - 终端操作体验
@@ -92,6 +98,7 @@
 **位置**: `_config.yml` — `post_asset_folder: false`
 
 **问题**: 所有文章图片集中在 `source/images/` 全局目录，而非按文章组织。随着文章增多：
+
 - 难以确定某张图片属于哪篇文章
 - 删除文章时无法安全清理关联图片
 - 图片与文章的引用关系不明确
@@ -103,6 +110,7 @@
 **位置**: `_config.yml` — `permalink: :year/:month/:day/:title/`
 
 **问题**: 生成类似 `/2025/10/02/how-to-use-hexo/` 的 URL，层级达 4 层。行业趋势是更扁平的 URL 结构：
+
 - 不利于 SEO（搜索引擎偏好浅层 URL）
 - URL 过长，不利于分享
 
@@ -115,14 +123,15 @@
 **问题**: 站点没有 RSS feed。虽然 RSS 使用率下降，但对于技术博客而言，仍有相当比例的读者通过 RSS 阅读器订阅。
 
 **建议**:
+
 1. 安装 `hexo-generator-feed`
 2. 在 `_config.yml` 中配置：
-   ```yaml
+  ```yaml
    feed:
      type: atom
      path: atom.xml
      limit: 20
-   ```
+  ```
 3. 在 `_config.ayer.yml` 的 `rss:` 字段填入 `/atom.xml`
 
 ---
@@ -134,12 +143,14 @@
 **位置**: `themes/ayer/source/css/custom.styl`（约 973 行）
 
 **问题**: 该文件大量使用 `@css {}` 块（原始 CSS 注入），绕过了 Stylus 预处理器。这意味着：
+
 - 无法使用 Stylus 变量、嵌套、混入等特性
 - 代码实质上是原始 CSS，失去了使用预处理器的意义
 - 与主题其他 Stylus 文件（`source-src/css/`）的风格完全不一致
 - 维护时需在两套语法体系间切换
 
 **建议**: 将 `@css {}` 块内的 CSS 转换为标准 Stylus 语法，纳入 `source-src/css/` 构建管线。这是一个较大的重构工作，可分阶段进行：
+
 1. 优先将 CSS 自定义属性声明转为 Stylus 变量
 2. 将搜索弹窗、代码块、打赏弹层样式分别拆分为独立 partial
 3. 通过 `rollup` 构建后输出到 `source/dist/main.css`
@@ -149,6 +160,7 @@
 **位置**: `themes/ayer/source/dist/`（`main.css`、`main.js`）
 
 **问题**: Rollup 构建的产物（`source/dist/main.css` 和 `source/dist/main.js`）被直接提交到 Git 仓库。这是 Hexo 主题的常见做法（因为 Hexo 直接使用 `source/` 下的文件），但从工程角度看：
+
 - 每次 `npm run build` 后需手动检查 diff 并提交
 - 构建产物与源码混在同一仓库，增加仓库体积和 diff 噪音
 - 可能出现源码更新但忘记重新构建的情况
@@ -167,11 +179,12 @@
 
 ## 四、自定义页面架构
 
-### 4.1 简历页面与 Hexo 模板体系完全脱节
+### 4.1 （已忽略）简历页面与 Hexo 模板体系完全脱节
 
 **位置**: `source/resume/`、`source/resume-en/`
 
 **问题**: 这两个目录是完整的独立 HTML 站点（含自己的 CSS、JS、字体文件），通过 `skip_render` 跳过 Hexo 渲染。问题包括：
+
 - 与主站主题风格完全不同（无暗色模式、无导航栏、无页脚）
 - 两个目录间 CSS/JS/字体文件大量重复（约 500KB+）
 - 使用 Font Awesome 4.7（2017 年版本），主站使用 RemixIcon
@@ -179,26 +192,29 @@
 - `baiduanalysis.js` 和 `gtag.js` 中的分析脚本可能包含过时的追踪 ID
 
 **建议**:
+
 - 短期：将共享资源提取到 `source/resume-assets/`，两个页面共用
 - 中期：将简历页面重构为 Hexo layout 模板，融入主站主题
 - 长期：考虑使用现代简历生成方案（如 JSON Resume + 主题模板）
 
-### 4.2 MC 服务器页面架构独立
+### 4.2 （已忽略）MC 服务器页面架构独立
 
 **位置**: `source/mc-server/`
 
 **问题**: 该页面是完全独立的 HTML/CSS/JS 应用，通过 `skip_render` 跳过 Hexo 渲染。虽然功能上合理（该页面有独特的交互需求），但存在以下问题：
+
 - 与主站无导航关联（用户无法从 MC 页面返回主站，除了左上角 logo）
 - 使用 Font Awesome 4.7 CDN，与主站 RemixIcon 不一致
 - `members.js` 中的数据硬编码在 JS 文件中，而非使用 Hexo 数据文件机制
 - 第三方头像 API `mc-heads.net` 无错误重试机制
 
 **建议**:
+
 - 添加返回主站的导航链接
 - 将 Font Awesome 图标替换为 RemixIcon（与主站一致）
 - 考虑将成员数据迁移至 `source/_data/mc-members.yml`，通过 Hexo 模板渲染
 
-### 4.3 电子手办柜页面使用 `{% raw %}` 嵌入大量 HTML
+### 4.3 （已忽略）电子手办柜页面使用 `{% raw %}` 嵌入大量 HTML
 
 **位置**: `source/waifu/index.md`
 
@@ -206,11 +222,12 @@
 
 **建议**: 将该页面改为 `index.html`（直接使用 HTML），或使用 Hexo 数据文件 + 模板方案（将角色数据提取到 `source/_data/waifu.yml`，通过 EJS 模板循环渲染）。
 
-### 4.4 关于页面混合 Markdown 与 HTML/CSS
+### 4.4 （已忽略）关于页面混合 Markdown 与 HTML/CSS
 
 **位置**: `source/about/index.md`
 
 **问题**: 该文件在 Markdown 中通过 `<link>` 引入外部 CSS、使用大量原始 HTML 标签。虽然 Hexo markdown-it 配置了 `html: true` 允许内联 HTML，但这种混合方式：
+
 - 增加维护复杂度
 - CSS 文件 `glass-card.css` 独立于主题样式体系
 - 无法通过主题的暗色模式切换自动适配（需手动编写 `body.darkmode` 选择器）
@@ -228,6 +245,7 @@
 **问题**: `jquery-3.6.0.min.js`（约 90KB minified）在每个页面无条件加载。jQuery 在现代前端中已非必需，且该主题中 jQuery 的实际使用场景有限（modal、justifiedGallery 等插件依赖）。
 
 **建议**:
+
 - 短期：为 jQuery 及其依赖插件添加 `defer` 属性
 - 中期：评估是否可用原生 JS 替代 jQuery 依赖
 - 长期：移除 jQuery，使用原生 DOM API 或轻量级替代库
@@ -239,6 +257,7 @@
 **问题**: `jquery-modal`（JS + CSS）和 `justifiedGallery` 在每个页面加载，但仅在包含图片画廊的文章页中使用。
 
 **建议**: 添加条件判断，仅在文章页且文章包含画廊标记时加载：
+
 ```ejs
 <% if (!index && (post.photos || post.gallery)) { %>
   <script src="...jquery.modal.min.js"></script>
@@ -252,12 +271,14 @@
 **位置**: `themes/ayer/layout/_partial/head.ejs` — 第 37-39 行
 
 **问题**:
+
 - 使用 `fonts.font.im` 镜像加载 Noto Serif SC 和 Noto Sans SC 字体
 - 字体在 `<head>` 中同步加载（虽使用了 `preconnect`），会阻塞首屏渲染
 - Noto 系列中文字体文件体积巨大（单个字重可达 5-15MB），即使使用 CDN 分片加载，仍显著影响首屏性能
 - `font.im` 是第三方镜像服务，可用性和隐私政策不受控
 
 **建议**:
+
 - 使用 `font-display: swap` 确保文字先以系统字体显示（CDN 链接中已含 `display=swap`，确认生效）
 - 评估是否真的需要两个字体家族四个字重——考虑减少至 1-2 个字重
 - 考虑使用 `fonts.googleapis.com` 官方源（配合 `fonts.gstatic.com`），或完全自托管字体子集
@@ -268,6 +289,7 @@
 **问题**: 项目中没有图片压缩、格式转换或响应式图片的自动化流程。`source/images/` 下同时存在 `.jpg`、`.png`、`.webp` 格式，但无统一规范。
 
 **建议**:
+
 - 在 CI 中添加图片压缩步骤（如 `imagemin`）
 - 统一使用 WebP 格式（保留 JPG 作为 fallback）
 - 在文章模板中使用 `<picture>` 元素实现格式回退
@@ -292,6 +314,7 @@
 **问题**: 所有通过 CDN 加载的第三方脚本和样式表均未设置 `integrity` 属性（Subresource Integrity）。如果 CDN 被入侵或文件被篡改，浏览器无法检测并拒绝执行恶意代码。
 
 **建议**: 为所有 CDN 资源添加 `integrity` 和 `crossorigin="anonymous"` 属性。例如：
+
 ```html
 <script src="https://cdn.staticfile.org/pace/1.2.4/pace.min.js"
         integrity="sha384-..."
@@ -315,15 +338,19 @@
 **问题**: 项目未安装 `hexo-generator-sitemap`，搜索引擎无法通过 `sitemap.xml` 高效发现站点页面。
 
 **建议**:
+
 ```bash
 npm install hexo-generator-sitemap --save
 ```
+
 在 `_config.yml` 中配置：
+
 ```yaml
 sitemap:
   path: sitemap.xml
   template: ./sitemap_template.xml
 ```
+
 并在 Google Search Console 和 Bing Webmaster Tools 中提交。
 
 ### 7.2 缺少 robots.txt
@@ -331,6 +358,7 @@ sitemap:
 **问题**: `source/` 目录下没有 `robots.txt` 文件，搜索引擎爬虫将默认抓取所有页面。
 
 **建议**: 创建 `source/robots.txt`：
+
 ```
 User-agent: *
 Allow: /
@@ -365,12 +393,14 @@ Disallow: /resume-en/
 **位置**: `.github/workflows/pages.yml`
 
 **问题**: CI 流程仅包含 `install → build → deploy`，没有质量检查步骤：
+
 - 无 HTML 有效性验证
 - 无死链检测
 - 无 Lighthouse 性能评分
 - 无 ESLint/Stylelint 代码检查
 
 **建议**: 在 `build` 和 `deploy` 之间增加验证步骤：
+
 ```yaml
 - name: Lint
   run: npx htmlhint public/**/*.html || true
@@ -383,6 +413,7 @@ Disallow: /resume-en/
 **问题**: 主题的 Rollup 构建（`npm run build` 在 `themes/ayer/` 下）需在本地手动执行。如果忘记构建，部署的将是旧的 `source/dist/` 文件。
 
 **建议**: 在 CI 的 `npm run build` 之前添加主题构建步骤：
+
 ```yaml
 - name: Build theme
   run: cd themes/ayer && npm install && npm run build
@@ -401,6 +432,7 @@ Disallow: /resume-en/
 ### 9.1 缺乏代码规范工具
 
 **问题**: 项目没有配置任何代码规范工具：
+
 - 无 `.editorconfig`（统一缩进、换行符等）
 - 无 ESLint（JS 代码检查）
 - 无 Stylelint（CSS/Stylus 代码检查）
@@ -416,9 +448,10 @@ Disallow: /resume-en/
 
 **补充建议**: 如果确实需要保留，至少将其移入 `scripts/` 或 `tools/` 目录，并在 `.gitignore` 中添加对本地工具脚本的说明。
 
-### 9.3 Git 提交信息不规范
+### 9.3 （已忽略）Git 提交信息不规范
 
 **问题**: 此问题在 2026-03-28 审查中被标记为"已忽略"。但从长期可维护性角度，无规范的提交信息使得：
+
 - 无法通过 `git log` 快速定位变更
 - 无法自动生成 CHANGELOG
 - `git bisect` 定位问题效率极低
@@ -436,6 +469,7 @@ Disallow: /resume-en/
 **问题**: 该渲染器是 `hexo-renderer-markdown-it` 的非官方分支，仅发布过 3 个版本，已停更。如果该包出现安全漏洞或与未来 Node.js 版本不兼容，整个站点的 Markdown 渲染将中断。
 
 **建议**:
+
 - 锁定精确版本号（当前为 `^3.4.4`，建议改为 `3.4.4`）
 - 监控该包的维护状态
 - 准备备选方案：官方 `hexo-renderer-markdown-it` + 独立 KaTeX 插件
@@ -452,11 +486,12 @@ Disallow: /resume-en/
 
 ## 十一、可访问性（Accessibility）
 
-### 11.1 缺少跳过导航链接
+### 11.1 （问题需复查）缺少跳过导航链接
 
 **问题**: 站点没有 "Skip to content" 链接，使用键盘导航的用户每次需跳过侧边栏才能到达正文。
 
 **建议**: 在 `layout.ejs` 的 `<body>` 开头添加：
+
 ```html
 <a href="#main" class="skip-link">跳至正文</a>
 ```
@@ -468,6 +503,7 @@ Disallow: /resume-en/
 **问题**: 社交图标使用 `<i>` 标签（RemixIcon），屏幕阅读器无法识别其含义。虽然有 `title` 属性，但缺少 `aria-label`。
 
 **建议**: 为每个社交链接添加 `aria-label` 属性：
+
 ```html
 <a href="..." aria-label="GitHub" class="social-icon">
 ```
@@ -478,53 +514,59 @@ Disallow: /resume-en/
 
 ### 🔴 高优先级（影响用户体验或站点可发现性）
 
-| # | 问题 | 类别 |
-|---|------|------|
-| 7.1 | 缺少 Sitemap | SEO |
-| 7.2 | 缺少 robots.txt | SEO |
-| 5.1 | jQuery 每页无条件加载 | 性能 |
-| 8.2 | 主题构建未纳入 CI | CI/CD |
+
+| #   | 问题                              | 类别    |
+| --- | ------------------------------- | ----- |
+| 7.1 | 缺少 Sitemap                      | SEO   |
+| 7.2 | 缺少 robots.txt                   | SEO   |
+| 5.1 | jQuery 每页无条件加载                  | 性能    |
+| 8.2 | 主题构建未纳入 CI                      | CI/CD |
 | 8.3 | CI 使用 `npm install` 而非 `npm ci` | CI/CD |
+
 
 ### 🟡 中优先级（影响可维护性或工程规范）
 
-| # | 问题 | 类别 |
-|---|------|------|
-| 3.1 | custom.styl 偏离 Stylus 范式 | 主题架构 |
-| 4.1 | 简历页面与主站脱节 | 自定义页面 |
-| 1.1 | 根目录非标准目录 | 目录结构 |
-| 2.4 | RSS 未配置 | 配置 |
-| 5.2 | jquery-modal/justifiedGallery 无条件加载 | 性能 |
-| 5.3 | Google Fonts 加载策略 | 性能 |
-| 6.2 | CDN 资源缺少 SRI | 安全 |
-| 7.3 | 缺少 Open Graph / Twitter Card | SEO |
-| 9.1 | 缺乏代码规范工具 | 可维护性 |
-| 10.1 | 渲染器单点依赖 | 依赖管理 |
+
+| #    | 问题                                  | 类别    |
+| ---- | ----------------------------------- | ----- |
+| 3.1  | custom.styl 偏离 Stylus 范式            | 主题架构  |
+| 4.1  | 简历页面与主站脱节                           | 自定义页面 |
+| 1.1  | 根目录非标准目录                            | 目录结构  |
+| 2.4  | RSS 未配置                             | 配置    |
+| 5.2  | jquery-modal/justifiedGallery 无条件加载 | 性能    |
+| 5.3  | Google Fonts 加载策略                   | 性能    |
+| 6.2  | CDN 资源缺少 SRI                        | 安全    |
+| 7.3  | 缺少 Open Graph / Twitter Card        | SEO   |
+| 9.1  | 缺乏代码规范工具                            | 可维护性  |
+| 10.1 | 渲染器单点依赖                             | 依赖管理  |
+
 
 ### 🟢 低优先级（优化建议，不影响功能）
 
-| # | 问题 | 类别 |
-|---|------|------|
-| 1.2 | 残留 `_config.landscape.yml` | 目录结构 |
-| 1.3 | 无用的 `.gitkeep` | 目录结构 |
-| 1.4 | 测试文件残留 | 目录结构 |
-| 1.5 | 图片文件名使用中文 | 目录结构 |
-| 2.1 | `future: true` | 配置 |
-| 2.2 | `post_asset_folder: false` | 配置 |
-| 2.3 | 日期型永久链接层级过深 | 配置 |
-| 4.2 | MC 页面架构独立 | 自定义页面 |
-| 4.3 | 手办柜页面 raw HTML | 自定义页面 |
-| 4.4 | 关于页面混合 Markdown/HTML | 自定义页面 |
-| 5.4 | 缺少图片优化管线 | 性能 |
-| 6.1 | 简历分析脚本可能过时 | 安全 |
-| 6.3 | 网站加密功能安全性不足 | 安全 |
-| 7.4 | URL 保留冗余后缀 | SEO |
-| 8.1 | 缺少质量门禁 | CI/CD |
-| 9.2 | debug.py 留在仓库 | 可维护性 |
-| 9.3 | Git 提交信息不规范 | 可维护性 |
-| 10.2 | 主题 devDependencies 未在 CI 安装 | 依赖管理 |
-| 11.1 | 缺少跳过导航链接 | 可访问性 |
-| 11.2 | 社交图标缺少可访问文本 | 可访问性 |
+
+| #    | 问题                          | 类别    |
+| ---- | --------------------------- | ----- |
+| 1.2  | 残留 `_config.landscape.yml`  | 目录结构  |
+| 1.3  | 无用的 `.gitkeep`              | 目录结构  |
+| 1.4  | 测试文件残留                      | 目录结构  |
+| 1.5  | 图片文件名使用中文                   | 目录结构  |
+| 2.1  | `future: true`              | 配置    |
+| 2.2  | `post_asset_folder: false`  | 配置    |
+| 2.3  | 日期型永久链接层级过深                 | 配置    |
+| 4.2  | MC 页面架构独立                   | 自定义页面 |
+| 4.3  | 手办柜页面 raw HTML              | 自定义页面 |
+| 4.4  | 关于页面混合 Markdown/HTML        | 自定义页面 |
+| 5.4  | 缺少图片优化管线                    | 性能    |
+| 6.1  | 简历分析脚本可能过时                  | 安全    |
+| 6.3  | 网站加密功能安全性不足                 | 安全    |
+| 7.4  | URL 保留冗余后缀                  | SEO   |
+| 8.1  | 缺少质量门禁                      | CI/CD |
+| 9.2  | debug.py 留在仓库               | 可维护性  |
+| 9.3  | Git 提交信息不规范                 | 可维护性  |
+| 10.2 | 主题 devDependencies 未在 CI 安装 | 依赖管理  |
+| 11.1 | 缺少跳过导航链接                    | 可访问性  |
+| 11.2 | 社交图标缺少可访问文本                 | 可访问性  |
+
 
 ---
 
@@ -533,17 +575,11 @@ Disallow: /resume-en/
 本节列出项目中值得肯定的设计决策，供参考：
 
 1. **主题 "吸收式" 管理**：将已停更的上游 Ayer 主题吸收为项目一等公民代码，避免了 submodule 同步负担，是合理的架构选择。
-
 2. **评论系统迁移**：从 Gitalk（存在 OAuth Secret 泄露风险）迁移至 giscus（基于 GitHub Discussions，无需 Secret），安全性和可维护性显著提升。
-
 3. **数据驱动的打赏系统**：`_config.ayer.yml` 中的 `reward.channels` 采用数据驱动设计，新增渠道只需追加 YAML 条目，无需修改模板代码。
-
 4. **MC 服务器成员数据分离**：`members.js` 将成员数据与渲染逻辑分离，新增成员只需编辑数据数组。
-
 5. **GitHub Actions 部署流程**：使用 `actions/cache` 缓存 npm 依赖、`upload-pages-artifact` + `deploy-pages` 官方 Action，流程规范。
-
 6. **Dependabot 配置**：已调整为每周检查、最多 5 个 PR，减少噪音同时保持依赖更新。
-
 7. **搜索弹窗重设计**：使用 CSS 自定义属性实现亮/暗模式自动跟随，交互体验良好。
-
 8. **代码块样式系统**：通过 CSS 自定义属性实现 VS Code 风格的亮/暗双模式代码高亮，支持语言标签显示。
+
