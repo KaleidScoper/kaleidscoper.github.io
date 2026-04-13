@@ -1,0 +1,26 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="hex-clip">
+      <path d="M50 5L89 27.5V72.5L50 95L11 72.5V27.5L50 5Z" />
+    </clipPath>
+    
+    <linearGradient id="grad1" x1="50" y1="50" x2="100" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6366F1" />
+      <stop offset="1" stop-color="#A855F7" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="50" y1="50" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3B82F6" />
+      <stop offset="1" stop-color="#2DD4BF" />
+    </linearGradient>
+  </defs>
+
+  <g clip-path="url(#hex-clip)">
+    <path d="M50 50L89 27.5V72.5L50 50Z" fill="url(#grad1)" fill-opacity="0.9"/>
+    <path d="M50 50L50 95L11 72.5L50 50Z" fill="url(#grad2)" fill-opacity="0.8"/>
+    <path d="M50 50L11 27.5L50 5L50 50Z" fill="#818CF8" fill-opacity="0.7"/>
+    
+    <path d="M50 5V95M11 27.5L89 72.5M11 72.5L89 27.5" stroke="white" stroke-width="1.5" stroke-opacity="0.3"/>
+  </g>
+  
+  <circle cx="50" cy="50" r="4" fill="white" fill-opacity="0.8"/>
+</svg>
