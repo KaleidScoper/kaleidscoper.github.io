@@ -1,7 +1,7 @@
-# Ayer → Ayeria 主题解耦合与重命名方案
+# Ayer → Ayeria 主题解耦合与发布方案
 
 > 生成日期：2026-04-14
-> 调查范围：`themes/ayer` 全目录、站点根 `_config.ayer.yml`、`source/`、`scaffolds/`、`package.json` 等
+> 调查范围：`themes/ayeria` 全目录、站点根 `_config.ayeria.yml`、`source/`、`scaffolds/`、`package.json` 等
 
 ---
 
@@ -9,13 +9,13 @@
 
 ### 1.1 当前主题可独立提供的功能
 
-`themes/ayer` 目录包含 **约 143 个文件**，布局模板 49 个 EJS，14 种语言包，Rollup 构建流水线，以下功能已在主题内实现并可独立工作：
+`themes/ayeria` 目录包含 **约 143 个文件**，布局模板 49 个 EJS，14 种语言包，Rollup 构建流水线，以下功能已在主题内实现并可独立工作：
 
 | 功能类别 | 具体能力 | 关键文件 |
 |----------|---------|---------|
 | **布局系统** | 首页、文章页、归档、分类、标签、友链、通用页、纯内容页 | `layout/*.ejs`（9 个） + `layout/_partial/`（40 个） |
 | **侧边栏导航** | 配置式菜单、Logo、搜索入口、RSS 入口 | `_partial/sidebar.ejs` |
-| **封面** | 全屏背景图 + typed.js 打字动效 | `_partial/ayer.ejs` |
+| **封面** | 全屏背景图 + typed.js 打字动效 | `_partial/ayeria.ejs` |
 | **深色模式** | 一键切换 dark/light | `source-src/css/_darkmode.styl`、`dist/main.js` |
 | **进度条** | 页面顶部加载进度条（Pace.js CDN） | `_partial/head.ejs` |
 | **公告栏** | 自定义文本 / 一言 API | `_partial/broadcast.ejs` |
@@ -29,7 +29,7 @@
 | **广告位** | 可配置广告栏 | `_partial/ads.ejs` |
 | **加密锁屏** | SweetAlert2 密码保护 | `_partial/lock.ejs` |
 | **备案信息** | ICP / 公安备案页脚 | `_partial/footer.ejs` |
-| **GitHub Ribbon** | 封面右上角 Fork-me 图标 | `_partial/ayer.ejs` |
+| **GitHub Ribbon** | 封面右上角 Fork-me 图标 | `_partial/ayeria.ejs` |
 | **鼠标特效** | 自定义光标、点击爱心/爆炸/粒子 | `source/js/clickBoom*.js` 等 |
 | **Canvas 背景** | 动态线条跟随鼠标 | `_partial/after-footer.ejs` |
 | **音乐播放器** | 网易云音乐嵌入 | `_partial/music.ejs` |
@@ -43,16 +43,16 @@
 
 ### 1.2 直接发布会缺失的关键文件
 
-以下是**如果立即将 `themes/ayer` 目录单独发布为 npm 包或 Git 仓库**时会遇到的问题：
+以下是**如果立即将 `themes/ayeria` 目录单独发布为 npm 包或 Git 仓库**时会遇到的问题：
 
 #### A. 硬编码的站点专属内容
 
 | 文件 | 硬编码内容 | 状态 |
 |------|-----------|------|
-| `package.json` | `repository.url`、`bugs.url`、`homepage` 均指向个人站仓库 | 待处理 |
+| ~~`package.json`~~ | ~~`repository.url`、`bugs.url`、`homepage` 均指向个人站仓库~~ | **已完成** |
 | ~~`README.md`~~ | ~~第 13 行写死个人网站链接和标语~~ | **已完成** |
 
-> `hello.js` 的硬编码已修复，现从 `hexo.config.title` 和 `hexo.config.url` 动态读取。
+> `hello.js` 的硬编码已修复，现从 `hexo.config.title` 和 `hexo.config.url` 动态读取。`package.json` 已更新为指向独立仓库 `hexo-theme-ayeria`。
 
 #### B. 不适合发布的文件
 
@@ -77,8 +77,8 @@
 
 | 功能 | 当前位置 | 应归属 | 说明 |
 |------|---------|--------|------|
-| ~~**完整默认配置**~~ | ~~`_config.ayer.yml`（站点根）~~ | ~~主题内 `_config.yml`~~ | **已完成**：`themes/ayer/_config.yml` 已创建，个人数据均替换为通用默认值。 |
-| **Scaffold 模板** | `scaffolds/post.md`、`scaffolds/draft.md` | 主题可附带示例 scaffold | 模板中包含 `reward: false`、`copyright: true` 等 Ayer 专有 front-matter 字段。新用户不知道需要手动创建这些 scaffold |
+| ~~**完整默认配置**~~ | ~~`_config.ayer.yml`（站点根）~~ | ~~主题内 `_config.yml`~~ | **已完成**：`themes/ayeria/_config.yml` 已创建，个人数据均替换为通用默认值。 |
+| **Scaffold 模板** | `scaffolds/post.md`、`scaffolds/draft.md` | 主题可附带示例 scaffold | 模板中包含 `reward: false`、`copyright: true` 等 Ayeria 专有 front-matter 字段。新用户不知道需要手动创建这些 scaffold |
 | **打赏二维码图片** | `source/images/reward/*.jpg/webp` | 保留在站点侧 ✓ | 正确做法：这是用户个人资源，不属于主题；但主题 README 应说明路径约定 |
 | **分类/标签/友链页面** | `source/categories/index.md` 等 | 保留在站点侧 ✓ | 正确做法：这是用户内容页面，主题只提供对应 layout |
 
@@ -101,13 +101,9 @@
 
 ### 3.1 文件层面的具体操作清单
 
-#### 第一步：去除剩余站点专属硬编码
+#### ~~第一步：去除剩余站点专属硬编码~~
 
-| 文件 | 操作 |
-|------|------|
-| `package.json` | `repository.url` 改为主题独立仓库地址；`bugs.url` 和 `homepage` 同步更新 |
-
-> `hello.js` 已完成动态化改造，`source/images/` 中的站点专属图片已迁出，`README.md` 已重写为通用文档。
+> **已完成**：`package.json` 已更新为指向独立仓库 `hexo-theme-ayeria`。`hello.js` 已完成动态化改造，`source/images/` 中的站点专属图片已迁出，`README.md` 已重写为通用文档。
 
 #### 第二步：清理不应发布的文件
 
@@ -127,7 +123,7 @@
 
 #### 第四步：scaffold 示例
 
-在主题目录下创建 `_scaffolds/`（或在 README 中说明），提供包含 Ayer 专属 front-matter 字段的 scaffold 示例：
+在主题目录下创建 `_scaffolds/`（或在 README 中说明），提供包含 Ayeria 专属 front-matter 字段的 scaffold 示例：
 
 ```yaml
 ---
@@ -144,7 +140,7 @@ copyright: true
 
 完成上述操作后，站点侧需要：
 
-1. **保留 `_config.ayer.yml`**：这是 Hexo 5+ 的标准覆盖机制，用户的个人配置继续存放于此，它会自动覆盖主题内 `_config.yml` 的默认值。
+1. **保留 `_config.ayeria.yml`**：这是 Hexo 5+ 的标准覆盖机制，用户的个人配置继续存放于此，它会自动覆盖主题内 `_config.yml` 的默认值。
 2. **保留 `source/images/reward/`**：打赏二维码等个人资源继续放在站点侧。
 3. **保留 `scaffolds/`**：已有的 scaffold 继续使用。
 
@@ -183,7 +179,7 @@ copyright: true
 
 ### 4.1 Git Subtree（推荐方案）
 
-**核心思路**：将 `themes/ayer` 目录作为 Git subtree 管理，主题拥有独立仓库，站点仓库通过 subtree 引入。
+**核心思路**：将 `themes/ayeria` 目录作为 Git subtree 管理，主题拥有独立仓库，站点仓库通过 subtree 引入。
 
 ```bash
 # 一次性设置：将现有目录推送到独立的主题仓库
@@ -203,7 +199,7 @@ git subtree pull --prefix=themes/ayeria ayeria-theme main --squash
 ```
 
 **优势**：
-- 日常开发中 `themes/ayer` 就是普通目录，无特殊工作流
+- 日常开发中 `themes/ayeria` 就是普通目录，无特殊工作流
 - 不需要 submodule 的 `.gitmodules` 和 detached HEAD 痛点
 - 站点与主题的提交历史可双向同步
 - 发布时只需一条 `subtree push` 命令
@@ -215,8 +211,8 @@ git subtree pull --prefix=themes/ayeria ayeria-theme main --squash
 ### 4.2 Git Submodule（备选方案）
 
 ```bash
-# 将 themes/ayer 改为 submodule
-git submodule add <theme-repo-url> themes/ayer
+# 将 themes/ayeria 改为 submodule
+git submodule add <theme-repo-url> themes/ayeria
 ```
 
 **优势**：主题仓库完全独立。
@@ -227,7 +223,7 @@ git submodule add <theme-repo-url> themes/ayer
 无论选择 subtree 还是 submodule，都建议同时在 npm 发布主题包：
 
 ```bash
-cd themes/ayer
+cd themes/ayeria
 npm publish
 ```
 
@@ -259,129 +255,9 @@ npm publish
 
 ---
 
-## 五、主题重命名方案：Ayer → Ayeria
+## ~~五、主题重命名：Ayer → Ayeria~~
 
-### 5.1 重命名动机
-
-| 动机 | 说明 |
-|------|------|
-| **npm 避免重名** | npm 上已存在 `hexo-theme-ayer`（原作者 Shen-Yu 发布），直接发布会产生命名冲突 |
-| **体现继承关系** | "Ayeria" 保留 "Ayer" 词根，附加后缀形成衍生名称，清晰表达 fork 继承关系 |
-| **建立独立品牌** | 独立命名有利于后续独立演进，避免与上游混淆 |
-
-### 5.2 命名规范
-
-| 场景 | 写法 | 示例 |
-|------|------|------|
-| 品牌展示名 | **Ayeria** | "Hexo 博客 · Ayeria 主题" |
-| 目录名 / Hexo theme 值 | `ayeria`（全小写） | `theme: ayeria`、`themes/ayeria/` |
-| npm 包名 | `hexo-theme-ayeria` | `npm i hexo-theme-ayeria` |
-| 配置覆盖文件 | `_config.ayeria.yml` | 站点根目录 |
-| JS/CSS 源文件名 | `ayeria.*`（全小写） | `ayeria.js`、`ayeria.styl`、`ayeria.ejs` |
-| JS 变量名 | `ayeria` 前缀（camelCase） | `ayeriaConfig`、`ayeriaInfo` |
-| 日志前缀 | `[Ayeria]` | `[Ayeria] 配置已合并` |
-
-### 5.3 需要修改的完整清单
-
-#### A. 文件/目录重命名
-
-| 原路径 | 新路径 | 说明 |
-|--------|--------|------|
-| `themes/ayer/` | `themes/ayeria/` | 主题根目录 |
-| `_config.ayer.yml` | `_config.ayeria.yml` | 站点根配置覆盖文件（Hexo 按 `_config.<theme>.yml` 约定匹配） |
-| `layout/_partial/ayer.ejs` | `layout/_partial/ayeria.ejs` | 封面模板 |
-| `source-src/js/ayer.js` | `source-src/js/ayeria.js` | 封面 JS 源码 |
-| `source-src/css/_partial/ayer.styl` | `source-src/css/_partial/ayeria.styl` | 封面 Stylus 源码 |
-| `scripts/helpers/ayer-plus-vendors.js` | `scripts/helpers/ayeria-plus-vendors.js` | Vendor helper 脚本 |
-| `source/images/ayer.png` | `source/images/ayeria.png` | 主题 Logo 图片 |
-| `source/images/ayer.svg` | `source/images/ayeria.svg` | 主题 Logo SVG |
-
-#### B. `package.json` 字段更新
-
-```jsonc
-{
-  "name": "hexo-theme-ayeria",                        // 原 hexo-theme-ayer
-  "description": "... Maintained fork of Shen-Yu/hexo-theme-ayer.",  // 保留原作者信息
-  "repository": {
-    "directory": "themes/ayeria"                       // 原 themes/ayer
-  },
-  "keywords": ["ayeria", "ayer", ...]                  // 保留 ayer 作为搜索关键词
-}
-```
-
-#### C. 代码引用更新
-
-| 文件 | 改动 |
-|------|------|
-| `source-src/main.js` | `import "./js/ayer"` → `import "./js/ayeria"` |
-| `source-src/js/ayeria.js`（重命名后） | `ayerInfo` → `ayeriaInfo`，`ayerURL` → `ayeriaURL`，`ayerNameStr` → `ayeriaNameStr`，以及对应的 style 变量；URL 改为新仓库地址 |
-| `layout/index.ejs` | `partial('_partial/ayer')` → `partial('_partial/ayeria')` |
-| `layout/_partial/after-footer.ejs` | `var ayerConfig = {` → `var ayeriaConfig = {` |
-| `layout/_partial/footer.ejs` | `hexo-theme-ayer` → `hexo-theme-ayeria`，`>Ayer<` → `>Ayeria<` |
-| `scripts/filters/meta_generator.js` | `content="hexo-theme-ayer"` → `content="hexo-theme-ayeria"` |
-| `scripts/helpers/ayeria-plus-vendors.js`（重命名后） | `helper.register('ayer_plus_vendors', ...)` → `helper.register('ayeria_plus_vendors', ...)` |
-| `scripts/events/lib/hello.js` | `Ayer 主题` / `Theme Ayer` → `Ayeria 主题` / `Theme Ayeria` |
-| `scripts/events/lib/merge-configs.js` | 日志前缀 `[Ayer]` → `[Ayeria]` |
-
-#### D. 模板中的 Helper 调用
-
-> 如果模板中有调用 `ayer_plus_vendors()` 的地方，需同步改为 `ayeria_plus_vendors()`。
-
-#### E. CSS/Stylus 引用更新
-
-| 文件 | 改动 |
-|------|------|
-| `source-src/css/style.styl` | `@import "_partial/ayer"` → `@import "_partial/ayeria"` |
-
-#### F. 配置文件内容更新
-
-| 文件 | 改动 |
-|------|------|
-| 站点根 `_config.yml` | `theme: ayer` → `theme: ayeria` |
-| `_config.ayeria.yml`（重命名后） | 注释中的 `ayer` 引用改为 `ayeria`，Logo 路径 `/images/ayer.svg` → `/images/ayeria.svg`，友链示例 URL 及图片路径同步更新 |
-| 主题内 `_config.yml` | 注释 `Ayer 主题默认配置` → `Ayeria 主题默认配置`，`_config.ayer.yml` → `_config.ayeria.yml`，Logo 路径、友链示例同步更新 |
-
-#### G. 文档更新
-
-| 文件 | 改动 |
-|------|------|
-| `README.md` | 所有 `hexo-theme-ayer` → `hexo-theme-ayeria`，`Ayer` → `Ayeria`，`themes/ayer` → `themes/ayeria`，`theme: ayer` → `theme: ayeria`，`_config.ayer.yml` → `_config.ayeria.yml` |
-| `README-random-sentences.md` | 同上（若保留该文件） |
-| `LICENSE` | 保留原作者信息，更新 Project URL 为新仓库地址 |
-
-#### H. 站点根 `.gitignore` 路径
-
-| 改动 |
-|------|
-| `themes/ayer/.github/` 等路径改为 `themes/ayeria/.github/` |
-| 注释中的 `Ayer theme` 改为 `Ayeria theme` |
-
-#### I. 构建产物
-
-> `rollup.config.js` 自身无 `ayer` 引用，无需改动。但重命名源文件后需要 **重新执行 `npm run build`** 以重新生成 `source/dist/` 中的打包产物。
-
-### 5.4 无需改动的误报项
-
-以下匹配到 `ayer` 子串，但与主题名无关，**不要修改**：
-
-| 文件 | 匹配内容 | 原因 |
-|------|---------|------|
-| `layout/_partial/google-analytics.ejs` | `dataLayer` | Google Analytics 全局对象名 |
-| `layout/_partial/music.ejs` | `.../player?...` | URL 中的 `player` |
-| `source/favicon.svg.old` | `id="Layer_1"` | SVG 图层命名 |
-
-### 5.5 实施顺序建议
-
-1. **先重命名文件/目录**（5.3-A），确保 Git 能正确追踪文件移动（使用 `git mv`）
-2. **批量替换代码引用**（5.3-B ~ 5.3-H），可借助 IDE 全局搜索替换，注意排除 5.4 中的误报项
-3. **重新构建**（5.3-I）：执行 `npm run build` 重新生成打包产物
-4. **本地测试**：`hexo clean && hexo s` 确认站点正常运行，重点检查：
-   - 封面是否正常渲染
-   - 深色模式切换
-   - Helper 函数（如 vendor 链接）是否正常
-   - 控制台是否输出新品牌名称
-   - `meta generator` 标签内容
-5. **提交变更**：一次性提交重命名改动，commit message 建议 `rename theme: Ayer → Ayeria`
+> **已完成**（2026-04-14）。所有文件/目录重命名、代码引用、配置文件、文档均已更新。`source/dist/` 构建产物待重新执行 `npm run build`。
 
 ---
 
@@ -389,12 +265,12 @@ npm publish
 
 | 优先级 | 任务 | 预估工作量 | 状态 |
 |--------|------|-----------|------|
-| **P0 — 首要** | 主题重命名 Ayer → Ayeria（文件/目录/代码/配置/文档，详见第五章） | 2h | 待处理 |
-| **P1 — 必须修复** | 去除 `package.json` 中的硬编码（可与重命名合并执行） | 0.5h | 待处理 |
 | **P1 — 必须修复** | 清理旧文件和测试文件 | 0.5h | 待处理 |
 | **P2 — 建议修复** | 创建 `.npmignore`、`CHANGELOG.md` | 0.5h | 待处理 |
 | **P3 — 可选** | 提供 scaffold 示例 | 0.5h | 待处理 |
 | **P3 — 可选** | 建立 subtree 工作流（仓库名同步改为 `hexo-theme-ayeria`） | 1h | 待处理 |
+| ~~P0~~ | ~~主题重命名 Ayer → Ayeria（文件/目录/代码/配置/文档）~~ | — | **已完成** |
+| ~~P1~~ | ~~去除 `package.json` 中的硬编码~~ | — | **已完成** |
 | ~~P0~~ | ~~创建主题内 `_config.yml` 默认配置~~ | — | **已完成** |
 | ~~P1~~ | ~~重写 `README.md` 为通用安装/配置文档~~ | — | **已完成** |
 | ~~P1~~ | ~~去除 `hello.js` 硬编码~~ | — | **已完成** |
