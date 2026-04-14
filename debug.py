@@ -66,7 +66,7 @@ def main():
     
     # 获取项目根目录
     root_dir = Path(__file__).parent.absolute()
-    theme_dir = root_dir / "themes" / "ayer"
+    theme_dir = root_dir / "themes" / "ayeria"
     
     print(f"📁 项目根目录: {root_dir}")
     print(f"🎨 主题目录: {theme_dir}")

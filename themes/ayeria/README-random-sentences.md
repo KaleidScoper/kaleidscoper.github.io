@@ -5,7 +5,7 @@
 
 ## 配置方法
 
-### 1. 在 `_config.ayer.yml` 中启用功能
+### 1. 在 `_config.ayeria.yml` 中启用功能
 ```yaml
 # 随机句子模块
 random_sentences:
@@ -17,7 +17,7 @@ random_sentences:
 **配置说明：**
 - `enable`: 控制整个随机句子功能的开启/关闭
 - `use_local_file`: 控制句子来源
-  - `true`: 从 `themes/ayer/source/data/random-sentences.txt` 文件读取句子
+  - `true`: 从 `themes/ayeria/source/data/random-sentences.txt` 文件读取句子
   - `false`: 使用内置的默认句子库
 - `queue_size`: 防重复队列大小（默认5）
   - 设置最近显示句子的存储数量
@@ -25,7 +25,7 @@ random_sentences:
   - 建议设置为句子库总数的1/4到1/3
 
 ### 2. 自定义句子库
-编辑 `themes/ayer/source/data/random-sentences.txt` 文件，每行添加一个句子。
+编辑 `themes/ayeria/source/data/random-sentences.txt` 文件，每行添加一个句子。
 
 **格式说明：**
 - 每行一个句子
@@ -64,7 +64,7 @@ random_sentences:
 ## 文件结构
 
 ```
-themes/ayer/
+themes/ayeria/
 ├── source/
 │   ├── data/
 │   │   └── random-sentences.txt    # 句子库文件
@@ -76,12 +76,12 @@ themes/ayer/
 │   └── _partial/
 │       ├── footer.ejs              # 底部布局文件
 │       └── head.ejs                # 头部布局文件
-└── _config.ayer.yml                # 主题配置文件
+└── _config.ayeria.yml              # 主题配置文件
 ```
 
 ## 自定义样式
 
-可以通过修改 `themes/ayer/source/css/custom.styl` 文件中的 `.random-sentence` 样式来自定义显示效果。
+可以通过修改 `themes/ayeria/source/css/custom.styl` 文件中的 `.random-sentence` 样式来自定义显示效果。
 
 ## 防重复算法说明
 

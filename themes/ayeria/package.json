@@ -1,5 +1,5 @@
 {
-  "name": "hexo-theme-ayer",
+  "name": "hexo-theme-ayeria",
   "version": "1.9.7-0",
   "description": "A clean and elegant theme for Hexo. Maintained fork of Shen-Yu/hexo-theme-ayer.",
   "scripts": {
@@ -10,13 +10,14 @@
   "source": "source-src/main.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KaleidScoper/kaleidscoper.github.io.git",
-    "directory": "themes/ayer"
+    "url": "git+https://github.com/KaleidScoper/hexo-theme-ayeria.git",
+    "directory": "themes/ayeria"
   },
   "keywords": [
     "hexo",
     "theme",
     "blog",
+    "ayeria",
     "ayer"
   ],
   "author": "Kaleid_5coper <kaleided.scoper@gmail.com>",
@@ -25,9 +26,9 @@
   ],
   "license": "SATA",
   "bugs": {
-    "url": "https://github.com/KaleidScoper/kaleidscoper.github.io/issues"
+    "url": "https://github.com/KaleidScoper/hexo-theme-ayeria/issues"
   },
-  "homepage": "https://kaleidscoper.github.io/",
+  "homepage": "https://github.com/KaleidScoper/hexo-theme-ayeria",
   "devDependencies": {
     "autoprefixer": "^9.8.6",
     "rollup": "^2.50.2",

@@ -1,3 +1,3 @@
 import "./css/style.styl";
-import "./js/ayer";
+import "./js/ayeria";
 import "./js/share";

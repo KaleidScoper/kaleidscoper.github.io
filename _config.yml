@@ -194,7 +194,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: ayer
+theme: ayeria
 
 # Markdown-it configuration
 markdown_it:

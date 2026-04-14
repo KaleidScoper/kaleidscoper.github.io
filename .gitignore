@@ -8,9 +8,9 @@ public/
 _multiconfig.yml
 pnpm-lock.yaml
 
-# Ayer theme — upstream dev artifacts (removed, prevent re-introduction)
-themes/ayer/.github/
-themes/ayer/.travis.yml
-themes/ayer/.npmignore
-themes/ayer/.gitattributes
-themes/ayer/move_config.js
+# Ayeria theme — upstream dev artifacts (removed, prevent re-introduction)
+themes/ayeria/.github/
+themes/ayeria/.travis.yml
+themes/ayeria/.npmignore
+themes/ayeria/.gitattributes
+themes/ayeria/move_config.js

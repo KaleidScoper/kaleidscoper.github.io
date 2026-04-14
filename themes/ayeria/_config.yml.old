@@ -1,6 +1,6 @@
 # ============================================================
-# Ayer 主题默认配置
-# 用户请在站点根目录的 _config.ayer.yml 中覆盖所需选项
+# Ayeria 主题默认配置
+# 用户请在站点根目录的 _config.ayeria.yml 中覆盖所需选项
 # ============================================================
 
 # 侧边栏菜单
@@ -34,7 +34,7 @@ logo: /favicon.svg
 cover:
   enable: true
   path: /images/cover.jpg
-  logo: false #/images/ayer.svg，如果不要直接设置成false
+  logo: false #/images/ayeria.svg，如果不要直接设置成false
 
 # 页面顶部进度条
 progressBar: true
@@ -146,7 +146,7 @@ layout:
 github:
   # (关闭请设置为false)
   enable: false
-  url: https://github.com/Shen-Yu/hexo-theme-ayer
+  url: https://github.com/KaleidScoper/hexo-theme-ayeria
 
 # 网易云音乐插件
 music:
@@ -203,10 +203,10 @@ gongan:
 
 # 友情链接
 friends_link:
-  # 示例（在 _config.ayer.yml 中覆盖为你自己的友链）
-  Ayer 主题:
-    url: https://github.com/Shen-Yu/hexo-theme-ayer
-    img: /images/ayer.png
+  # 示例（在 _config.ayeria.yml 中覆盖为你自己的友链）
+  Ayeria 主题:
+    url: https://github.com/KaleidScoper/hexo-theme-ayeria
+    img: /images/ayeria.png
 
   Hexo 官网:
     url: https://hexo.io

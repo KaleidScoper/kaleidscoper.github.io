@@ -15,8 +15,8 @@ module.exports = (hexo) => {
   const W = 44;
   const line1 = pad(title, W);
   const line2 = isZh
-    ? pad('Hexo 博客 · Ayer 主题', W)
-    : pad('Hexo Blog · Theme Ayer', W);
+    ? pad('Hexo 博客 · Ayeria 主题', W)
+    : pad('Hexo Blog · Theme Ayeria', W);
   const line3 = pad(url, W);
 
   hexo.log.info(`

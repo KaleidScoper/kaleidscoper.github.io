@@ -9,7 +9,7 @@ function hexoMetaGeneratorInject(data) {
     return;
   }
 
-  const hexoGeneratorTag = `\n  <meta name="generator" content="hexo-theme-ayer">`;
+  const hexoGeneratorTag = `\n  <meta name="generator" content="hexo-theme-ayeria">`;
 
   return data.replace('</title>', '</title>' + hexoGeneratorTag);
 }

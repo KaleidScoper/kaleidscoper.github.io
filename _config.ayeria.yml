@@ -32,7 +32,7 @@ logo: /favicon.svg
 cover:
   enable: true
   path: /images/cover2.webp # /source/images目录下附送多张美图，可更换
-  logo: false #/images/ayer.svg，如果不要直接设置成false
+  logo: false #/images/ayeria.svg，如果不要直接设置成false
 
 # 页面顶部进度条
 progressBar: true
@@ -163,7 +163,7 @@ layout:
 github:
   # (关闭请设置为false)
   enable: false
-  url: https://github.com/Shen-Yu/hexo-theme-ayer
+  url: https://github.com/KaleidScoper/hexo-theme-ayeria
 
 # 网易云音乐插件
 music:
@@ -221,11 +221,11 @@ gongan:
 # 友情链接
 friends_link:
 
-  Ayer 主题: #网站名称
+  Ayeria 主题: #网站名称
     #网站地址
-    url: https://github.com/KaleidScoper/hexo-theme-ayer-modified
+    url: https://github.com/KaleidScoper/hexo-theme-ayeria
     #网站图片(可忽略不写)
-    img: /images/ayer.png
+    img: /images/ayeria.png
   
   Hexo 官网:
     url: https://hexo.io
