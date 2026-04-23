@@ -2,7 +2,7 @@
 
 <% var channels = (theme.reward && theme.reward.channels) ? theme.reward.channels : []; %>
 <% if (channels.length > 0) { %>
-<div id="reward" class="reward-modal" style="--reward-accent: <%= channels[0].color %>">
+<div id="reward" class="reward-modal">
   <span class="reward-close"><i class="ri-close-line"></i></span>
 
   <p class="reward-wording">
@@ -13,8 +13,7 @@
   <div class="reward-tabs">
     <% channels.forEach(function(ch, i) { %>
     <button class="reward-tab<%= i === 0 ? ' active' : '' %>"
-            data-index="<%= i %>"
-            data-color="<%= ch.color %>">
+            data-index="<%= i %>">
       <i class="<%= ch.icon %>"></i>
       <span><%= ch.name %></span>
     </button>

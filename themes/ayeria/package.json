@@ -1,6 +1,6 @@
 {
   "name": "hexo-theme-ayeria",
-  "version": "1.9.7-0",
+  "version": "1.9.8",
   "description": "A clean and elegant theme for Hexo. Maintained fork of Shen-Yu/hexo-theme-ayer.",
   "scripts": {
     "dev": "rollup -c -w",

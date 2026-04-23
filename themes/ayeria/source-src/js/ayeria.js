@@ -147,9 +147,6 @@
     var $mask = $("#mask");
     if (!$modal.length) return;
 
-    var firstColor = $modal.find(".reward-tab.active").data("color");
-    if (firstColor) $modal.css("--reward-accent", firstColor);
-
     $mask.fadeIn(150);
     $modal.addClass("visible");
   });
@@ -162,15 +159,12 @@
   $(document).on("click", ".reward-tab", function () {
     var $this = $(this);
     var idx = $this.data("index");
-    var color = $this.data("color");
 
     $(".reward-tab").removeClass("active");
     $this.addClass("active");
 
     $(".reward-panel").removeClass("active");
     $('.reward-panel[data-index="' + idx + '"]').addClass("active");
-
-    $("#reward").css("--reward-accent", color);
   });
 
   $(document).on("click", ".reward-sub-tab", function () {
