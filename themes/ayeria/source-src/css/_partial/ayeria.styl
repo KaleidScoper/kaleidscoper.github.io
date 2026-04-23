@@ -68,15 +68,26 @@
   width 4rem
   float right
 
-#mask
+// click-effect canvas (fireworks / clickBoom)
+.click-effect-canvas
   position fixed
   left 0
   top 0
-  width 100%
-  height 100%
-  background-color rgba(0,0,0,.8)
-  z-index 9998
-  display none
+  z-index 99999
+  pointer-events none
+
+// 随机句子
+.random-sentence
+  text-align center
+  margin 0
+  padding 0
+  font-size 100%
+  color inherit
+  font-style normal
+  line-height inherit
+  br
+    display block
+    margin 0.2rem 0
 
 .word_count
   margin-top 5px

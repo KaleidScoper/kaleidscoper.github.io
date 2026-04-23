@@ -1,2 +1,348 @@
-// 打赏功能样式已迁移至 source/css/custom.styl（CSS 自定义属性方案）
-// 保留此文件以防 style.styl 的 @import 报错
+// Reward / donation modal — glass-morphism design
+// Uses CSS custom properties for light/dark mode.
+
+// Light mode variables
+\:root
+  --reward-bg: rgba(255, 255, 255, 0.88)
+  --reward-border: rgba(0, 0, 0, 0.08)
+  --reward-shadow: 0 8px 32px rgba(31, 38, 135, 0.15)
+  --reward-text: #333333
+  --reward-subtext: #666666
+  --reward-tab-bg: rgba(0, 0, 0, 0.04)
+  --reward-tab-text: #555555
+  --reward-tab-hover: rgba(0, 0, 0, 0.08)
+  --reward-accent: #07C160
+  --reward-overlay: rgba(0, 0, 0, 0.5)
+  --reward-btn-bg: rgba(255, 255, 255, 0.5)
+  --reward-btn-border: rgba(255, 255, 255, 0.75)
+  --reward-btn-text: #555555
+  --reward-btn-icon: #888888
+  --reward-btn-shadow: 0 4px 16px rgba(0, 0, 0, 0.06)
+  --reward-btn-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.6)
+  --reward-btn-hover-bg: rgba(255, 255, 255, 0.7)
+
+// Dark mode variables
+body.darkmode
+  --reward-bg: rgba(42, 47, 58, 0.95)
+  --reward-border: rgba(255, 255, 255, 0.1)
+  --reward-shadow: 0 8px 32px rgba(0, 0, 0, 0.5)
+  --reward-text: #d0d0d0
+  --reward-subtext: #aaaaaa
+  --reward-tab-bg: rgba(255, 255, 255, 0.06)
+  --reward-tab-text: #bbbbbb
+  --reward-tab-hover: rgba(255, 255, 255, 0.1)
+  --reward-overlay: rgba(0, 0, 0, 0.7)
+  --reward-btn-bg: rgba(255, 255, 255, 0.08)
+  --reward-btn-border: rgba(255, 255, 255, 0.15)
+  --reward-btn-text: #cccccc
+  --reward-btn-icon: #999999
+  --reward-btn-shadow: 0 4px 16px rgba(0, 0, 0, 0.25)
+  --reward-btn-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.1)
+  --reward-btn-hover-bg: rgba(255, 255, 255, 0.14)
+
+// Overlay mask
+#mask
+  position fixed
+  top 0
+  left 0
+  right 0
+  bottom 0
+  z-index 9998
+  background var(--reward-overlay)
+  display none
+
+// Modal panel
+.reward-modal
+  position fixed
+  z-index 9999
+  left 50%
+  top 50%
+  transform translate(-50%, -50%) scale(0.95)
+  width 420px
+  max-width 94vw
+  max-height 90vh
+  overflow-y auto
+  padding 28px
+  background var(--reward-bg)
+  -webkit-backdrop-filter blur(16px)
+  backdrop-filter blur(16px)
+  border 1px solid var(--reward-border)
+  border-radius 16px
+  box-shadow var(--reward-shadow)
+  display none
+  opacity 0
+  transition opacity 0.3s ease, transform 0.3s ease
+
+  &::before
+    content ''
+    position absolute
+    top 0
+    left 0
+    right 0
+    height 3px
+    background var(--reward-accent)
+    border-radius 16px 16px 0 0
+    transition background 0.3s ease
+
+  &.visible
+    display block
+    opacity 1
+    transform translate(-50%, -50%) scale(1)
+
+// Close button
+.reward-close
+  position absolute
+  right 12px
+  top 12px
+  width 32px
+  height 32px
+  display flex
+  align-items center
+  justify-content center
+  border-radius 50%
+  cursor pointer
+  transition background 0.2s ease
+  color var(--reward-subtext)
+
+  &:hover
+    background var(--reward-tab-hover)
+
+  i
+    font-size 20px
+    color var(--reward-subtext) !important
+
+// Heading text
+.reward-wording
+  text-align center
+  font-size 16px
+  font-weight 500
+  color var(--reward-text) !important
+  margin 0 0 20px 0
+  line-height 1.6
+
+  i
+    margin-right 6px
+    color var(--reward-accent) !important
+    transition color 0.3s ease
+
+// Channel tabs
+.reward-tabs
+  display flex
+  gap 8px
+  justify-content center
+  margin-bottom 20px
+  flex-wrap wrap
+
+.reward-tab
+  display inline-flex
+  align-items center
+  gap 6px
+  padding 8px 16px
+  border none
+  border-radius 20px
+  background var(--reward-tab-bg)
+  color var(--reward-tab-text)
+  font-size 14px
+  cursor pointer
+  transition all 0.3s ease
+  white-space nowrap
+  font-family inherit
+  line-height 1.4
+
+  &:hover
+    background var(--reward-tab-hover)
+
+  &.active
+    background var(--reward-accent)
+    color #fff !important
+    box-shadow 0 2px 8px rgba(0, 0, 0, 0.15)
+
+  i
+    font-size 16px
+    color var(--reward-tab-text) !important
+    transition color 0.3s ease
+
+  &.active i
+    color #fff !important
+
+// QR code panel
+.reward-panel
+  display none
+  text-align center
+  animation rewardFadeIn 0.25s ease
+
+  &.active
+    display block
+
+@keyframes rewardFadeIn
+  from
+    opacity 0
+    transform translateY(8px)
+  to
+    opacity 1
+    transform translateY(0)
+
+.reward-qrcode-wrap
+  display inline-block
+  padding 12px
+  border 2px solid var(--reward-accent)
+  border-radius 12px
+  background #ffffff
+  transition border-color 0.3s ease
+
+.reward-qrcode
+  display block
+  width 200px
+  height 200px
+  border-radius 6px
+
+.reward-desc
+  margin 12px 0 0
+  font-size 14px
+  color var(--reward-accent) !important
+  transition color 0.3s ease
+
+.reward-link
+  display inline-flex
+  align-items center
+  gap 4px
+  margin-top 12px
+  padding 8px 20px
+  background var(--reward-accent)
+  color #fff !important
+  border-radius 20px
+  font-size 14px
+  text-decoration none !important
+  transition all 0.3s ease
+
+  &:hover
+    opacity 0.85
+    transform translateY(-1px)
+    color #fff !important
+
+// Trigger button (inside article) — liquid glass style
+#reward-out
+  position relative
+  width 100%
+  text-align center
+
+.reward-trigger,
+#reward-btn
+  display inline-flex
+  align-items center
+  gap 6px
+  height 40px
+  padding 0 24px
+  margin 48px 0
+  font-size 15px
+  color var(--reward-btn-text) !important
+  background var(--reward-btn-bg)
+  -webkit-backdrop-filter blur(12px)
+  backdrop-filter blur(12px)
+  border 1px solid var(--reward-btn-border)
+  border-radius 20px
+  cursor pointer
+  box-shadow var(--reward-btn-shadow)
+  transition all 0.3s ease
+  font-family inherit
+  line-height 1
+
+  i
+    color var(--reward-btn-icon) !important
+    transition color 0.3s ease
+
+  &:hover
+    background var(--reward-btn-hover-bg)
+    transform translateY(-2px)
+    box-shadow 0 6px 20px rgba(0, 0, 0, 0.1)
+
+// Multi-chain sub-tabs
+.reward-chain-hint
+  text-align center
+  font-size 13px
+  color var(--reward-subtext) !important
+  margin 0 0 12px 0
+
+.reward-sub-tabs
+  display flex
+  gap 6px
+  justify-content center
+  margin-bottom 16px
+  flex-wrap wrap
+
+.reward-sub-tab
+  display inline-flex
+  align-items center
+  gap 4px
+  padding 5px 14px
+  border 1px solid var(--reward-border)
+  border-radius 14px
+  background transparent
+  color var(--reward-tab-text)
+  font-size 13px
+  cursor pointer
+  transition all 0.25s ease
+  font-family inherit
+  line-height 1.4
+
+  &:hover
+    border-color var(--reward-accent)
+    color var(--reward-accent)
+
+  &.active
+    background var(--reward-accent)
+    border-color var(--reward-accent)
+    color #fff !important
+
+.reward-sub-badge
+  font-size 10px
+  padding 1px 5px
+  border-radius 6px
+  background rgba(255, 255, 255, 0.25)
+  line-height 1.3
+
+.reward-sub-tab:not(.active) .reward-sub-badge
+  background var(--reward-tab-bg)
+  color var(--reward-accent)
+
+.reward-sub-panel
+  display none
+  text-align center
+  animation rewardFadeIn 0.25s ease
+
+  &.active
+    display block
+
+// Mobile
+@media (max-width: 768px)
+  .reward-modal
+    width 90vw
+    padding 20px
+
+  .reward-qrcode
+    width 160px
+    height 160px
+
+  .reward-tabs
+    gap 6px
+
+  .reward-tab
+    padding 6px 12px
+    font-size 13px
+
+@media (max-width: 480px)
+  .reward-tabs,
+  .reward-sub-tabs
+    flex-wrap nowrap
+    overflow-x auto
+    justify-content flex-start
+    padding-bottom 4px
+    -webkit-overflow-scrolling touch
+
+  .reward-qrcode
+    width 140px
+    height 140px
+
+  .reward-sub-tab
+    padding 4px 10px
+    font-size 12px
