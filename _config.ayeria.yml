@@ -14,7 +14,7 @@ menu:
 # https://github.com/mattboldt/typed.js
 subtitle:
   enable: false # 是否开启动效
-  text: 半窗松月毫端浸  一纸烟霞腕底生 # 显示的文字
+  text: 千秋岁月毫端聚  一纸烟霞腕底生 # 显示的文字
   text2: 一抹斜阳 # 滚动播放，如果不需要可以留空
   text3: 数点寒鸦 # 最多支持三段文字
   startDelay: 1000 # 延迟时间

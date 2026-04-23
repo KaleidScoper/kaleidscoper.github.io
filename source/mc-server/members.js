@@ -66,7 +66,7 @@ const TEAM_MEMBERS = [
   {
     id: "eeee567",
     role: "成员",
-    tag: "屠龙者",
+    tag: "探险家",
     color: "#80cfff",
     description: "精通 PVP/VE 战斗，单人率先击败了本服的末影龙\n据说他直接住在试炼要塞中",
   },
