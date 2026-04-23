@@ -21,7 +21,6 @@ def run_command(command, cwd=None, description=""):
     print(f"{'='*60}\n")
     
     try:
-        # Windows下需要使用shell=True
         process = subprocess.Popen(
             command,
             shell=True,
@@ -33,11 +32,9 @@ def run_command(command, cwd=None, description=""):
             errors='replace'
         )
         
-        # 实时输出
         for line in process.stdout:
             print(line, end='')
         
-        # 等待进程完成
         return_code = process.wait()
         
         if return_code != 0:
@@ -50,6 +47,29 @@ def run_command(command, cwd=None, description=""):
     except Exception as e:
         print(f"\n❌ 执行出错: {str(e)}")
         return False
+
+
+def kill_port(port: int):
+    """杀掉占用指定端口的进程 (Windows)"""
+    try:
+        result = subprocess.check_output(
+            f"netstat -ano | findstr :{port}",
+            shell=True, text=True, stderr=subprocess.DEVNULL
+        )
+        pids_killed = set()
+        for line in result.strip().splitlines():
+            parts = line.split()
+            if parts and parts[-1].isdigit():
+                pid = int(parts[-1])
+                if pid != 0 and pid not in pids_killed:
+                    subprocess.run(
+                        f"taskkill /PID {pid} /F",
+                        shell=True, stderr=subprocess.DEVNULL
+                    )
+                    print(f"🔪 已终止占用端口 {port} 的进程 (PID: {pid})")
+                    pids_killed.add(pid)
+    except subprocess.CalledProcessError:
+        pass  # 端口未被占用，正常
 
 
 def main():
@@ -87,7 +107,7 @@ def main():
     
     # 步骤2: 生成Hexo静态文件
     if not run_command(
-        "hexo generate",
+        "npx hexo generate",
         cwd=str(root_dir),
         description="步骤 2/3 - 生成 Hexo 静态文件"
     ):
@@ -97,17 +117,20 @@ def main():
     # 步骤3: 启动本地服务器
     print(f"\n{'='*60}")
     print(f"📌 步骤 3/3 - 启动本地服务器")
-    print(f"💻 执行命令: hexo server")
+    print(f"💻 执行命令: npx hexo server")
     print(f"📂 工作目录: {root_dir}")
     print(f"{'='*60}\n")
+
+    # 清理可能残留的端口占用
+    kill_port(4000)
+
     print("🌐 本地服务器启动中...")
     print("📝 访问地址: http://localhost:4000")
     print("⚠️  按 Ctrl+C 停止服务器\n")
     
     try:
-        # 启动服务器（这个命令会一直运行，直到用户中断）
         subprocess.run(
-            "hexo server",
+            "npx hexo server",
             shell=True,
             cwd=str(root_dir),
             check=True
@@ -129,4 +152,3 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"\n❌ 发生未预期的错误: {e}")
         sys.exit(1)
-
