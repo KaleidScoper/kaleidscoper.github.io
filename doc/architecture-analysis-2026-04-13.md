@@ -1,6 +1,7 @@
 # 博客项目架构分析报告
 
 > **分析日期**: 2026-04-13
+> **最后更新**: 2026-04-24（勘误：主题品牌改名 ayer → ayeria；更新 3.1 修复状态；新增 1.4/1.6/9.2 变动）
 > **分析范围**: 项目整体架构、目录结构、配置体系、主题架构、CI/CD、性能、安全、SEO、可维护性
 > **参考基准**: Hexo 官方最佳实践、GitHub Pages 部署惯例、静态站点生成器行业通用规范
 > **前置审查**: 本报告基于 [2026-03-28 审查报告](archive/audit-report-2026-03-28.md) 的修复成果，不重复已关闭问题，仅关注架构层面
@@ -12,14 +13,14 @@
 
 | 维度    | 评分    | 说明                                                  |
 | ----- | ----- | --------------------------------------------------- |
-| 目录结构  | ★★★☆☆ | Hexo 标准骨架完整，但根目录存在非标准目录和残留文件                        |
-| 配置体系  | ★★★★☆ | 分层配置清晰（`_config.yml` + `_config.ayer.yml`），少数配置项可优化 |
-| 主题架构  | ★★★☆☆ | "吸收式"管理合理，但 custom.styl 严重偏离 Stylus 范式              |
+| 目录结构  | ★★★☆☆ | Hexo 标准骨架完整，但根目录存在非标准文件，`source/_drafts/` 仍混有非 Markdown 文件 |
+| 配置体系  | ★★★★☆ | 分层配置清晰（`_config.yml` + `_config.ayeria.yml`），少数配置项可优化 |
+| 主题架构  | ★★★★☆ | 样式系统已全面重构为模块化 Stylus partials，主要遗留问题为构建产物仍提交仓库 |
 | CI/CD | ★★★★☆ | GitHub Actions 流程规范，缺少质量门禁                          |
 | 性能    | ★★★☆☆ | 存在无条件加载资源、字体加载策略欠佳等问题                               |
 | 安全    | ★★★★☆ | 已修复 OAuth 泄露，仍有少量风险点                                |
 | SEO   | ★★☆☆☆ | 缺少 Sitemap、RSS、robots.txt 等基础设施                     |
-| 可维护性  | ★★★☆☆ | 自定义页面与 Hexo 模板体系脱节，缺乏自动化质量检查                        |
+| 可维护性  | ★★★☆☆ | 根目录调试脚本增多，缺乏自动化质量检查                                  |
 
 
 ---
@@ -30,31 +31,23 @@
 
 **位置**: 项目根目录
 
-**问题**: `文章模板暂存处/` 目录位于项目根目录，内含未发布的 Markdown 草稿和无关文件（如 `哲学.py`、`编剧.md`、`生产资料.md`）。该目录：
+**原问题**: `文章模板暂存处/` 目录位于项目根目录，内含未发布的 Markdown 草稿和无关文件（如 `哲学.py`、`编剧.md`、`生产资料.md`）。
 
-- 不符合 Hexo 标准目录约定（Hexo 草稿应使用 `source/_drafts/`）
-- 包含与博客无关的文件（Python 脚本、创意文档）
-- 名称使用中文，在部分终端和工具中可能引发编码问题
+**修复情况**: `文章模板暂存处/` 目录已从根目录移除，相关内容迁移至 `source/_drafts/`，符合 Hexo 草稿约定。但 `source/_drafts/` 中仍残留非 Markdown 文件（`哲学.py`、`生产资料.md`、`编剧.md`、`丝路创意文档.md`、`漂海录创意文档.md` 等），这些文件虽不会被 Hexo 构建，但增加了仓库的认知负担，不符合 `_drafts/` 目录作为文章草稿区的语义。
 
-**建议**:
-
-- 将真正的文章草稿迁移至 `source/_drafts/`，通过 `hexo new draft <title>` 创建
-- 将创意文档等非博客内容移出仓库，或归入 `doc/drafts/`
-- 删除 `哲学.py` 等无关文件
+**建议**: 将 `source/_drafts/` 中的非 Markdown 文件（特别是 `哲学.py`）移出仓库，或归入 `doc/drafts/`。
 
 ### 1.2 （已修复）残留配置文件
 
 **位置**: `_config.landscape.yml`
 
-**问题**: 该文件为空（0 字节），是 Hexo 初始化时自动生成的 Landscape 主题配置。当前使用 Ayer 主题，此文件无任何作用。
-
-**建议**: 删除该文件。
+已删除，无需再跟进。
 
 ### 1.3 （已忽略）主题目录中的 `.gitkeep`
 
 **位置**: `themes/.gitkeep`
 
-**问题**: 该文件用于在 Git 中保留空的 `themes/` 目录。由于 `themes/ayer/` 已有内容，此文件已无必要。
+**问题**: 该文件用于在 Git 中保留空的 `themes/` 目录。由于 `themes/ayeria/` 已有内容，此文件已无必要。
 
 **建议**: 删除该文件。
 
@@ -62,12 +55,13 @@
 
 **位置**:
 
-- `source/images/test.png`
-- `themes/ayer/source/test-random-sentences.html`
+- ~~`source/images/test.png`~~（已删除 ✓）
+- `themes/ayeria/source/test-random-sentences.html`（仍存在）
+- `source/test/`（新增：视差滚动效果演示页面，含 `index.md` 和 `img/` 图片）
 
-**问题**: 测试文件被提交到仓库并可能被部署到生产站点。
+**问题**: `test-random-sentences.html` 是随机句子功能的测试页，通过站点可直接访问。`source/test/index.md` 是视差滚动演示页，也会被 Hexo 构建并部署到生产站点（当前未在 `skip_render` 中排除）。
 
-**建议**: 删除测试文件，或将 `test.png` 加入 `skip_render`（仅对 Hexo 渲染管线的文件有效；对于 `source/images/` 下的静态资源，需直接删除）。
+**建议**: 删除或将 `source/test/` 加入 `_config.yml` 的 `skip_render`，`test-random-sentences.html` 同理。
 
 ### 1.5 图片文件名使用中文
 
@@ -80,6 +74,18 @@
 - 终端操作体验
 
 **建议**: 将图片文件名统一为英文或拼音，在 Markdown 中更新引用路径。
+
+### 1.6 主题目录内遗留备份文件
+
+**位置**:
+
+- `themes/ayeria/_config.yml.old`
+- `themes/ayeria/source/favicon.ico.old`
+- `themes/ayeria/source/favicon.svg.old`
+
+**问题**: 这些 `.old` 后缀文件是开发过程中遗留的备份，无实际功能，会被 Hexo 原样复制至 `public/`（已确认 `public/favicon.ico.old` 和 `public/favicon.svg.old` 出现在构建产物中）。
+
+**建议**: 删除上述文件；`_config.yml.old` 中的历史配置如需留存，提交至 Git 历史即可，无需作为文件保留在仓库中。
 
 ---
 
@@ -118,7 +124,7 @@
 
 ### 2.4 RSS 订阅未配置
 
-**位置**: `_config.yml` — `rss:` 为空；`_config.ayer.yml` — `rss:` 为空
+**位置**: `_config.yml` — `rss:` 为空；`_config.ayeria.yml` — `rss:` 为空
 
 **问题**: 站点没有 RSS feed。虽然 RSS 使用率下降，但对于技术博客而言，仍有相当比例的读者通过 RSS 阅读器订阅。
 
@@ -132,32 +138,25 @@
      path: atom.xml
      limit: 20
   ```
-3. 在 `_config.ayer.yml` 的 `rss:` 字段填入 `/atom.xml`
+3. 在 `_config.ayeria.yml` 的 `rss:` 字段填入 `/atom.xml`
 
 ---
 
 ## 三、主题架构
 
-### 3.1 `custom.styl` 严重偏离 Stylus 范式
+### 3.1 （已修复）`custom.styl` 严重偏离 Stylus 范式
 
-**位置**: `themes/ayer/source/css/custom.styl`（约 973 行）
+**原位置**: `themes/ayeria/source/css/custom.styl`（约 973 行）
 
-**问题**: 该文件大量使用 `@css {}` 块（原始 CSS 注入），绕过了 Stylus 预处理器。这意味着：
+**原问题**: 大量使用 `@css {}` 块（原始 CSS 注入），绕过 Stylus 预处理器，无法使用 Stylus 变量、嵌套、混入等特性。
 
-- 无法使用 Stylus 变量、嵌套、混入等特性
-- 代码实质上是原始 CSS，失去了使用预处理器的意义
-- 与主题其他 Stylus 文件（`source-src/css/`）的风格完全不一致
-- 维护时需在两套语法体系间切换
+**修复情况**: 已于 commit `92eb855` 完成全面重构。`custom.styl` 现仅 17 行，作为面向站点用户的覆盖样式入口（空白模板，附使用示例注释）。原有的全部样式逻辑已按功能拆分至 `source-src/css/_partial/` 下的 29 个独立 Stylus partial 文件（`article.styl`、`reward.styl`、`search.styl`、`highlight.styl` 等），通过 `style.styl` 统一 import，经 Rollup 构建输出。
 
-**建议**: 将 `@css {}` 块内的 CSS 转换为标准 Stylus 语法，纳入 `source-src/css/` 构建管线。这是一个较大的重构工作，可分阶段进行：
-
-1. 优先将 CSS 自定义属性声明转为 Stylus 变量
-2. 将搜索弹窗、代码块、打赏弹层样式分别拆分为独立 partial
-3. 通过 `rollup` 构建后输出到 `source/dist/main.css`
+**遗留事项**: `source/css/` 下仍有 `ayeria-layout.styl` 和 `clipboard.styl` 两个独立 Stylus 文件直接被 `head.ejs` 引用，未纳入 Rollup 构建管线（作为独立 CSS 输出）。这是有意的架构选择（避免与 `dist/main.css` 合并），但需在主题文档中说明。
 
 ### 3.2 主题构建产物提交到仓库
 
-**位置**: `themes/ayer/source/dist/`（`main.css`、`main.js`）
+**位置**: `themes/ayeria/source/dist/`（`main.css`、`main.js`）
 
 **问题**: Rollup 构建的产物（`source/dist/main.css` 和 `source/dist/main.js`）被直接提交到 Git 仓库。这是 Hexo 主题的常见做法（因为 Hexo 直接使用 `source/` 下的文件），但从工程角度看：
 
@@ -169,7 +168,7 @@
 
 ### 3.3 主题 `index.js` 为空壳
 
-**位置**: `themes/ayer/index.js`
+**位置**: `themes/ayeria/index.js`
 
 **问题**: 该文件仅包含一行注释，用于防止 `hexo clean` 报错。这是 Hexo 5.0+ 的已知问题，但空壳文件增加了认知负担。
 
@@ -240,7 +239,7 @@
 
 ### 5.1 jQuery 在每个页面无条件加载
 
-**位置**: `themes/ayer/layout/_partial/after-footer.ejs` — 第 1 行
+**位置**: `themes/ayeria/layout/_partial/after-footer.ejs` — 第 1 行
 
 **问题**: `jquery-3.6.0.min.js`（约 90KB minified）在每个页面无条件加载。jQuery 在现代前端中已非必需，且该主题中 jQuery 的实际使用场景有限（modal、justifiedGallery 等插件依赖）。
 
@@ -252,7 +251,7 @@
 
 ### 5.2 jquery-modal 和 justifiedGallery 无条件加载
 
-**位置**: `themes/ayer/layout/_partial/after-footer.ejs` — 第 21-23 行
+**位置**: `themes/ayeria/layout/_partial/after-footer.ejs` — 第 22-24 行
 
 **问题**: `jquery-modal`（JS + CSS）和 `justifiedGallery` 在每个页面加载，但仅在包含图片画廊的文章页中使用。
 
@@ -268,7 +267,7 @@
 
 ### 5.3 Google Fonts 加载策略欠佳
 
-**位置**: `themes/ayer/layout/_partial/head.ejs` — 第 37-39 行
+**位置**: `themes/ayeria/layout/_partial/head.ejs` — 第 35-37 行
 
 **问题**:
 
@@ -309,7 +308,7 @@
 
 ### 6.2 CDN 资源缺少 SRI 校验
 
-**位置**: `themes/ayer/layout/_partial/head.ejs`、`after-footer.ejs`、`source/mc-server/index.html`
+**位置**: `themes/ayeria/layout/_partial/head.ejs`、`after-footer.ejs`、`source/mc-server/index.html`
 
 **问题**: 所有通过 CDN 加载的第三方脚本和样式表均未设置 `integrity` 属性（Subresource Integrity）。如果 CDN 被入侵或文件被篡改，浏览器无法检测并拒绝执行恶意代码。
 
@@ -323,7 +322,7 @@
 
 ### 6.3 网站加密功能安全性不足
 
-**位置**: `_config.ayer.yml` — `lock` 配置
+**位置**: `_config.ayeria.yml` — `lock` 配置
 
 **问题**: 网站加密功能（`lock.enable: false`，当前已关闭）使用前端 JavaScript 实现密码验证。即使启用，密码以明文存储在配置文件中，验证逻辑在客户端执行，任何人查看源码即可绕过。
 
@@ -370,7 +369,7 @@ Disallow: /resume-en/
 
 ### 7.3 缺少 Open Graph 和 Twitter Card 元数据
 
-**位置**: `themes/ayer/layout/_partial/head.ejs`
+**位置**: `themes/ayeria/layout/_partial/head.ejs`
 
 **问题**: 页面 `<head>` 中没有 Open Graph（`og:title`、`og:description`、`og:image` 等）和 Twitter Card 元标签。分享链接到社交平台时无法显示预览卡片。
 
@@ -410,13 +409,13 @@ Disallow: /resume-en/
 
 ### 8.2 主题构建未纳入 CI
 
-**问题**: 主题的 Rollup 构建（`npm run build` 在 `themes/ayer/` 下）需在本地手动执行。如果忘记构建，部署的将是旧的 `source/dist/` 文件。
+**问题**: 主题的 Rollup 构建（`npm run build` 在 `themes/ayeria/` 下）需在本地手动执行。如果忘记构建，部署的将是旧的 `source/dist/` 文件。
 
 **建议**: 在 CI 的 `npm run build` 之前添加主题构建步骤：
 
 ```yaml
 - name: Build theme
-  run: cd themes/ayer && npm install && npm run build
+  run: cd themes/ayeria && npm install && npm run build
 ```
 
 ### 8.3 缺少部署环境锁定
@@ -440,13 +439,13 @@ Disallow: /resume-en/
 
 **建议**: 至少添加 `.editorconfig` 和 Prettier 配置，确保多人协作时代码风格一致。
 
-### 9.2 `debug.py` 仍留在仓库中
+### 9.2 根目录调试脚本积累
 
-**位置**: 根目录 `debug.py`
+**位置**: 根目录 `debug.py`、`debug_wsl.py`
 
-**问题**: 此文件是本地调试辅助脚本，不应出现在生产仓库中。此问题在 2026-03-28 审查中被标记为"已忽略"。
+**问题**: 两个调试辅助脚本均位于项目根目录。`debug_wsl.py` 于 2026-04-24 新增（"添加 Hexo 博客 WSL 环境一键调试脚本"），与既有的 `debug.py` 并列，根目录调试脚本数量持续增长。此问题在 2026-03-28 审查中被标记为"已忽略"，但现在问题有所扩大。
 
-**补充建议**: 如果确实需要保留，至少将其移入 `scripts/` 或 `tools/` 目录，并在 `.gitignore` 中添加对本地工具脚本的说明。
+**建议**: 将 `debug.py`、`debug_wsl.py` 统一移入 `scripts/` 目录，并在 `.gitignore` 中注明这些文件的性质，或通过 `CLAUDE.md` / `README.md` 说明调试脚本的维护规范。
 
 ### 9.3 （已忽略）Git 提交信息不规范
 
@@ -476,7 +475,7 @@ Disallow: /resume-en/
 
 ### 10.2 主题 devDependencies 未在 CI 中安装
 
-**位置**: `themes/ayer/package.json` — `devDependencies`
+**位置**: `themes/ayeria/package.json` — `devDependencies`
 
 **问题**: 主题的 `devDependencies`（rollup、autoprefixer 等）在 CI 中不会被安装（根目录 `npm install` 不会处理子目录的 `package.json`）。这意味着 CI 无法执行主题构建。
 
@@ -529,9 +528,7 @@ Disallow: /resume-en/
 
 | #    | 问题                                  | 类别    |
 | ---- | ----------------------------------- | ----- |
-| 3.1  | custom.styl 偏离 Stylus 范式            | 主题架构  |
 | 4.1  | 简历页面与主站脱节                           | 自定义页面 |
-| 1.1  | 根目录非标准目录                            | 目录结构  |
 | 2.4  | RSS 未配置                             | 配置    |
 | 5.2  | jquery-modal/justifiedGallery 无条件加载 | 性能    |
 | 5.3  | Google Fonts 加载策略                   | 性能    |
@@ -546,13 +543,16 @@ Disallow: /resume-en/
 
 | #    | 问题                          | 类别    |
 | ---- | --------------------------- | ----- |
-| 1.2  | 残留 `_config.landscape.yml`  | 目录结构  |
+| 1.1  | `source/_drafts/` 混有非 Markdown 文件 | 目录结构  |
 | 1.3  | 无用的 `.gitkeep`              | 目录结构  |
-| 1.4  | 测试文件残留                      | 目录结构  |
+| 1.4  | 测试文件/页面残留                   | 目录结构  |
 | 1.5  | 图片文件名使用中文                   | 目录结构  |
+| 1.6  | 主题目录内遗留 `.old` 备份文件         | 目录结构  |
 | 2.1  | `future: true`              | 配置    |
 | 2.2  | `post_asset_folder: false`  | 配置    |
 | 2.3  | 日期型永久链接层级过深                 | 配置    |
+| 3.2  | 主题构建产物提交仓库                  | 主题架构  |
+| 3.3  | `index.js` 为空壳              | 主题架构  |
 | 4.2  | MC 页面架构独立                   | 自定义页面 |
 | 4.3  | 手办柜页面 raw HTML              | 自定义页面 |
 | 4.4  | 关于页面混合 Markdown/HTML        | 自定义页面 |
@@ -561,7 +561,7 @@ Disallow: /resume-en/
 | 6.3  | 网站加密功能安全性不足                 | 安全    |
 | 7.4  | URL 保留冗余后缀                  | SEO   |
 | 8.1  | 缺少质量门禁                      | CI/CD |
-| 9.2  | debug.py 留在仓库               | 可维护性  |
+| 9.2  | 根目录调试脚本积累（debug.py + debug_wsl.py） | 可维护性  |
 | 9.3  | Git 提交信息不规范                 | 可维护性  |
 | 10.2 | 主题 devDependencies 未在 CI 安装 | 依赖管理  |
 | 11.1 | 缺少跳过导航链接                    | 可访问性  |
@@ -574,12 +574,12 @@ Disallow: /resume-en/
 
 本节列出项目中值得肯定的设计决策，供参考：
 
-1. **主题 "吸收式" 管理**：将已停更的上游 Ayer 主题吸收为项目一等公民代码，避免了 submodule 同步负担，是合理的架构选择。
-2. **评论系统迁移**：从 Gitalk（存在 OAuth Secret 泄露风险）迁移至 giscus（基于 GitHub Discussions，无需 Secret），安全性和可维护性显著提升。
-3. **数据驱动的打赏系统**：`_config.ayer.yml` 中的 `reward.channels` 采用数据驱动设计，新增渠道只需追加 YAML 条目，无需修改模板代码。
-4. **MC 服务器成员数据分离**：`members.js` 将成员数据与渲染逻辑分离，新增成员只需编辑数据数组。
-5. **GitHub Actions 部署流程**：使用 `actions/cache` 缓存 npm 依赖、`upload-pages-artifact` + `deploy-pages` 官方 Action，流程规范。
-6. **Dependabot 配置**：已调整为每周检查、最多 5 个 PR，减少噪音同时保持依赖更新。
-7. **搜索弹窗重设计**：使用 CSS 自定义属性实现亮/暗模式自动跟随，交互体验良好。
-8. **代码块样式系统**：通过 CSS 自定义属性实现 VS Code 风格的亮/暗双模式代码高亮，支持语言标签显示。
-
+1. **主题 "吸收式" 管理**：将已停更的上游 Ayer 主题吸收为项目一等公民代码，并完成品牌重命名（Ayeria），避免了 submodule 同步负担，是合理的架构选择。
+2. **样式系统模块化重构**：`custom.styl` 从 973 行 `@css {}` 堆砌重构为 17 行用户覆盖入口，29 个 Stylus partial 分功能管理样式，彻底纳入 Rollup 构建管线，是本报告周期内最重要的架构改进。
+3. **评论系统迁移**：从 Gitalk（存在 OAuth Secret 泄露风险）迁移至 giscus（基于 GitHub Discussions，无需 Secret），安全性和可维护性显著提升。
+4. **数据驱动的打赏系统**：`_config.ayeria.yml` 中的 `reward.channels` 采用数据驱动设计，新增渠道只需追加 YAML 条目，无需修改模板代码，且已支持带子选项的多链路加密货币打赏。
+5. **MC 服务器成员数据分离**：`members.js` 将成员数据与渲染逻辑分离，新增成员只需编辑数据数组。
+6. **GitHub Actions 部署流程**：使用 `actions/cache` 缓存 npm 依赖、`upload-pages-artifact` + `deploy-pages` 官方 Action，流程规范。
+7. **Dependabot 配置**：已调整为每周检查、最多 5 个 PR，减少噪音同时保持依赖更新。
+8. **搜索弹窗重设计**：使用 CSS 自定义属性实现亮/暗模式自动跟随，交互体验良好。
+9. **代码块样式系统**：通过 CSS 自定义属性实现 VS Code 风格的亮/暗双模式代码高亮，支持语言标签显示。
