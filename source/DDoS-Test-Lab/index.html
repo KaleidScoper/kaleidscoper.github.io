@@ -84,7 +84,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   cursor:pointer;user-select:none;list-style:none}
 #quick-ref summary::-webkit-details-marker{display:none}
 #quick-ref summary::before{content:'▶  ';font-size:9px;color:var(--text-muted)}
-details[open] > summary::before{content:'▼  '}
+#quick-ref[open] summary::before{content:'▼  '}
 #quick-ref ul{padding:7px 14px 7px 26px;list-style:disc;font-size:11px;
   color:var(--text-muted);line-height:1.75;columns:2;column-gap:20px}
 .mono{font-family:var(--font-mono);color:var(--text-code);font-size:10.5px}
@@ -625,6 +625,10 @@ function drawYLabel(ctx, p, label, color) {
 
 function drawLine(ctx, data, xK, yK, xMin, xMax, yMin, yMax, p, color, lw) {
   if (!data || data.length < 2) return;
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(p.x0, p.y0, p.pw, p.ph);
+  ctx.clip();
   ctx.strokeStyle = color;
   ctx.lineWidth = lw || 1.5;
   ctx.setLineDash([]);
@@ -636,6 +640,7 @@ function drawLine(ctx, data, xK, yK, xMin, xMax, yMin, yMax, p, color, lw) {
     if (first) { ctx.moveTo(x, y); first = false; } else ctx.lineTo(x, y);
   }
   ctx.stroke();
+  ctx.restore();
 }
 
 function drawVLine(ctx, xVal, xMin, xMax, p, color, label) {
@@ -805,15 +810,20 @@ function drawCUSUM() {
   drawXLabel(ctx, W, H, 'Time (s)');
   drawYLabel(ctx, p, 'Sₙ');
 
-  // h threshold line
-  if (175 <= yMax) {
+  // h threshold line (visible only when scale allows; annotate otherwise)
+  ctx.font = '8.5px Consolas,monospace';
+  ctx.fillStyle = PAL.red;
+  if (yMax <= 5000) {
     const yh = cy(175, yMin, yMax, p);
     ctx.strokeStyle = PAL.red; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
     ctx.beginPath(); ctx.moveTo(p.x0, yh); ctx.lineTo(p.x0 + p.pw, yh); ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle = PAL.red; ctx.font = '8.5px Consolas,monospace';
     ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
     ctx.fillText('h=175', p.x0 + 2, yh - 1);
+  } else {
+    // Scale too large to show h=175 — annotate at bottom
+    ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+    ctx.fillText('h=175 (已超)', p.x0 + 3, p.y0 + p.ph - 2);
   }
 
   drawLine(ctx, data, 't', 'sn', xMin, xMax, yMin, yMax, p, PAL.orange, 1.5);
@@ -842,6 +852,8 @@ function drawTier() {
   const keys = ['wl', 'nm', 'sp', 'bl'];
   const colors = [PAL.green, PAL.blue, PAL.orange, PAL.red];
 
+  ctx.save();
+  ctx.beginPath(); ctx.rect(p.x0, p.y0, p.pw, p.ph); ctx.clip();
   for (let layer = 0; layer < 4; layer++) {
     ctx.beginPath();
     // top edge of this layer (forward)
@@ -866,6 +878,7 @@ function drawTier() {
     ctx.fillStyle = colors[layer] + 'b3'; // ~0.7 alpha
     ctx.fill();
   }
+  ctx.restore();
 
   drawGrid(ctx, p, 4, 7);
   drawYTicks(ctx, p, yMin, yMax, 7, '#333', 'left', v => v.toFixed(0));
@@ -1198,8 +1211,9 @@ function setPhase(ph) {
   document.getElementById('phase-info').textContent = PHASE_DESC[ph] || '';
 
   updateUI();
-  if (ph === 5) setTimeout(drawAblation, 60);
-  if (ph === 6) setTimeout(drawNS3, 60);
+  setTimeout(renderAll, 60);
+  if (ph === 5) setTimeout(drawAblation, 120);
+  if (ph === 6) setTimeout(drawNS3, 120);
 }
 
 // === TICK ===
@@ -1211,7 +1225,7 @@ function tick() {
   // Auto-advance baseline after 30 ticks
   if (S.phase === 1 && S.simTime >= 30) {
     setPhase(2);
-    return;
+    return; // setPhase triggers renderAll via setTimeout
   }
 
   updateUI();
