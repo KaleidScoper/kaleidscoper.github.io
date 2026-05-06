@@ -35,6 +35,7 @@ skip_render:
   - resume-en/**
   - 404.html
   - mc-server/**
+  - DDoS-Test-Lab/**
 
 
 # Writing

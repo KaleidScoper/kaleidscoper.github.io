@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DDoS Defense Demo Dashboard</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg-panel:rgba(248,248,248,0.92);--border:#e1e4e8;
+  --text:#24292e;--text-muted:#6a737d;--text-code:#005cc5;
+  --accent:#0366d6;--danger:#d73a49;--success:#22863a;--warning:#e36209;
+  --font-ui:'Segoe UI','SF Pro Text',system-ui,sans-serif;
+  --font-mono:'Cascadia Code','Fira Code','Consolas',monospace;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font-ui);font-size:13px;overflow:hidden}
+#app{display:flex;height:100vh}
+
+/* SIDEBAR */
+#sidebar{width:260px;min-width:260px;height:100vh;background:var(--bg-panel);
+  backdrop-filter:blur(8px);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow-y:auto}
+#sb-header{padding:10px 14px 8px;border-bottom:1px solid var(--border)}
+#sb-header h1{font-size:12.5px;font-weight:600;letter-spacing:.02em}
+#sb-header .sub{font-family:var(--font-mono);font-size:10.5px;color:var(--text-muted);margin-top:2px}
+#phase-info{padding:8px 14px;border-bottom:1px solid var(--border);font-size:11px;
+  color:var(--text-muted);line-height:1.55;min-height:48px}
+
+/* Phase nav */
+#phase-nav{padding:6px 0;border-bottom:1px solid var(--border)}
+.ph-item{display:flex;align-items:center;padding:4px 14px;cursor:pointer;
+  color:var(--text-muted);font-size:11.5px}
+.ph-item:hover{background:rgba(3,102,214,.06);color:var(--text)}
+.ph-item.active{background:rgba(3,102,214,.1);color:var(--accent);font-weight:600}
+.ph-num{font-family:var(--font-mono);font-size:10px;width:14px;color:var(--text-muted);margin-right:7px;flex-shrink:0}
+
+/* Buttons */
+#btn-area{padding:8px 14px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:5px}
+.btn{padding:4px 9px;font-size:11.5px;font-family:var(--font-ui);background:var(--bg);
+  border:1px solid var(--border);color:var(--text);cursor:pointer;text-align:left;width:100%}
+.btn:hover:not(:disabled){background:rgba(3,102,214,.06);border-color:var(--accent);color:var(--accent)}
+.btn:disabled{color:var(--text-muted);cursor:default;opacity:.55}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.primary:hover:not(:disabled){background:#0256b9;color:#fff}
+.btn.danger{background:var(--danger);color:#fff;border-color:var(--danger)}
+.btn.active-sel{background:#e6f4ea;border-color:var(--success);color:var(--success)}
+.btn-row{display:flex;gap:5px}
+.btn-row .btn{flex:1}
+
+/* Params */
+#params-panel{padding:8px 14px;flex:1;overflow-y:auto}
+#params-panel h2{font-size:10.5px;font-weight:600;color:var(--text-muted);
+  text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}
+.ps{margin-bottom:9px}
+.ps-title{font-size:10.5px;font-weight:600;color:var(--text);
+  padding-bottom:2px;border-bottom:1px solid var(--border);margin-bottom:3px}
+.pr{display:flex;justify-content:space-between;align-items:baseline;
+  padding:1px 0;font-family:var(--font-mono);font-size:10.5px}
+.pk{color:var(--text-muted)}.pv{color:var(--text-code);font-weight:500}
+.pv.danger{color:var(--danger)}.pv.success{color:var(--success)}.pv.warn{color:var(--warning)}
+.badge{display:inline-block;font-family:var(--font-mono);font-size:10px;
+  font-weight:600;padding:1px 5px;letter-spacing:.04em}
+.badge-n{background:#e6f4ea;color:var(--success)}
+.badge-a{background:#ffeef0;color:var(--danger)}
+
+/* MAIN */
+#main{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px}
+#charts-rt{display:grid;grid-template-columns:3fr 2fr;grid-template-rows:auto auto auto;gap:8px}
+.cbox{border:1px solid var(--border);background:var(--bg);display:flex;flex-direction:column}
+.cbox.span2{grid-column:span 2}
+.ctbar{padding:3px 9px;background:var(--bg-panel);border-bottom:1px solid var(--border);
+  font-size:10.5px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.cttitle{font-family:var(--font-mono);font-size:10px;color:var(--text)}
+.cbox canvas{display:block;width:100%;height:100%;flex:1;min-height:0}
+
+/* Static views */
+.static-view{display:none;flex-direction:column;gap:8px}
+.static-view.vis{display:flex}
+
+/* Quick ref */
+#quick-ref{border:1px solid var(--border)}
+#quick-ref summary{padding:5px 10px;background:var(--bg-panel);
+  border-bottom:1px solid var(--border);font-size:11px;font-weight:600;
+  cursor:pointer;user-select:none;list-style:none}
+#quick-ref summary::-webkit-details-marker{display:none}
+#quick-ref summary::before{content:'▶  ';font-size:9px;color:var(--text-muted)}
+details[open] > summary::before{content:'▼  '}
+#quick-ref ul{padding:7px 14px 7px 26px;list-style:disc;font-size:11px;
+  color:var(--text-muted);line-height:1.75;columns:2;column-gap:20px}
+.mono{font-family:var(--font-mono);color:var(--text-code);font-size:10.5px}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div id="sb-header">
+    <h1>DDoS Defense Demo</h1>
+    <div class="sub">192.168.1.111 &mdash; Pi 4B / Nginx</div>
+  </div>
+  <div id="phase-info">防御系统已就绪，等待实验开始。</div>
+
+  <div id="phase-nav">
+    <div class="ph-item active" data-ph="0"><span class="ph-num">1</span>系统就绪</div>
+    <div class="ph-item" data-ph="1"><span class="ph-num">2</span>基线采集</div>
+    <div class="ph-item" data-ph="2"><span class="ph-num">3</span>攻击类型选择</div>
+    <div class="ph-item" data-ph="3"><span class="ph-num">4</span>关闭防御 / 启动攻击</div>
+    <div class="ph-item" data-ph="4"><span class="ph-num">5</span>开启防御</div>
+    <div class="ph-item" data-ph="5"><span class="ph-num">6</span>消融对比</div>
+    <div class="ph-item" data-ph="6"><span class="ph-num">7</span>NS-3 扩展性</div>
+  </div>
+
+  <div id="btn-area">
+    <button class="btn primary" id="btn-baseline">开始基线采集</button>
+    <div class="btn-row" id="btn-atype" style="display:none">
+      <button class="btn" id="btn-udp">UDP Flood</button>
+      <button class="btn" id="btn-syn">SYN Flood</button>
+    </div>
+    <button class="btn" id="btn-attack" style="display:none" disabled>关闭防御 &rarr; 启动攻击</button>
+    <button class="btn primary" id="btn-defense" style="display:none">启动三层防御</button>
+    <button class="btn danger" id="btn-stopattack" style="display:none">停止攻击</button>
+    <button class="btn" id="btn-ablation" style="display:none">消融实验对比</button>
+    <button class="btn" id="btn-ns3" style="display:none">NS-3 扩展性实验</button>
+    <button class="btn" id="btn-reset" style="margin-top:2px">重置实验</button>
+  </div>
+
+  <div id="params-panel">
+    <h2>实时参数</h2>
+    <div class="ps">
+      <div class="ps-title">CUSUM</div>
+      <div class="pr"><span class="pk">μ₀</span><span class="pv" id="p-mu">120 pps</span></div>
+      <div class="pr"><span class="pk">σ₀</span><span class="pv">35 pps</span></div>
+      <div class="pr"><span class="pk">k</span><span class="pv">105 pps</span></div>
+      <div class="pr"><span class="pk">h</span><span class="pv">175 pps</span></div>
+      <div class="pr"><span class="pk">Sₙ</span><span class="pv" id="p-sn">0</span></div>
+      <div class="pr"><span class="pk">状态</span><span class="pv" id="p-state"><span class="badge badge-n">normal</span></span></div>
+    </div>
+    <div class="ps">
+      <div class="ps-title">信誉阈值 <span id="atk-mark" style="font-size:9px;color:var(--danger);display:none">(*攻击态收紧)</span></div>
+      <div class="pr"><span class="pk">半衰期</span><span class="pv">300 s</span></div>
+      <div class="pr"><span class="pk">白名单阈</span><span class="pv" id="p-thr-wl">≥ 80</span></div>
+      <div class="pr"><span class="pk">普通档阈</span><span class="pv" id="p-thr-nm">50–79</span></div>
+      <div class="pr"><span class="pk">可疑档阈</span><span class="pv" id="p-thr-sp">20–49</span></div>
+      <div class="pr"><span class="pk">黑名单阈</span><span class="pv danger">&lt; 20</span></div>
+    </div>
+    <div class="ps">
+      <div class="ps-title">档位统计</div>
+      <div class="pr"><span class="pk">白名单</span><span class="pv success" id="p-wl">0 IPs</span></div>
+      <div class="pr"><span class="pk">普通</span><span class="pv" id="p-nm">70 IPs</span></div>
+      <div class="pr"><span class="pk">可疑</span><span class="pv warn" id="p-sp">0 IPs</span></div>
+      <div class="pr"><span class="pk">黑名单</span><span class="pv danger" id="p-bl">0 IPs</span></div>
+    </div>
+    <div class="ps">
+      <div class="ps-title">当前流量</div>
+      <div class="pr"><span class="pk">total_pps</span><span class="pv" id="p-total">—</span></div>
+      <div class="pr"><span class="pk">pass_pps</span><span class="pv" id="p-pass">—</span></div>
+      <div class="pr"><span class="pk">CPU</span><span class="pv" id="p-cpu">—</span></div>
+      <div class="pr"><span class="pk">合法成功率</span><span class="pv" id="p-succ">—</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main">
+
+  <!-- Real-time view -->
+  <div id="view-rt">
+    <div id="charts-rt">
+      <!-- Chart 1: Traffic (wide) -->
+      <div class="cbox span2" style="height:190px">
+        <div class="ctbar">
+          <span class="cttitle">Inbound Traffic &mdash; Target Host (192.168.1.111)</span>
+          <span id="badge-top"><span class="badge badge-n">normal</span></span>
+        </div>
+        <canvas id="c-traffic"></canvas>
+      </div>
+      <!-- Chart 2: CPU -->
+      <div class="cbox" style="height:155px">
+        <div class="ctbar"><span class="cttitle">CPU Utilization (single-core equivalent)</span></div>
+        <canvas id="c-cpu"></canvas>
+      </div>
+      <!-- Chart 3: CUSUM -->
+      <div class="cbox" style="height:155px">
+        <div class="ctbar"><span class="cttitle">CUSUM S&#8345; Trajectory</span></div>
+        <canvas id="c-cusum"></canvas>
+      </div>
+      <!-- Chart 4: Tier Distribution -->
+      <div class="cbox" style="height:155px">
+        <div class="ctbar"><span class="cttitle">IP Tier Distribution</span></div>
+        <canvas id="c-tier"></canvas>
+      </div>
+      <!-- Chart 5: Success Rate -->
+      <div class="cbox" style="height:155px">
+        <div class="ctbar"><span class="cttitle">Legitimate Client Success Rate</span></div>
+        <canvas id="c-succ"></canvas>
+      </div>
+    </div>
+
+    <details id="quick-ref">
+      <summary>实验参数速查</summary>
+      <ul>
+        <li>实验平台: <span class="mono">Raspberry Pi 4B (ARM Cortex-A72, 4GB) + Docker macvlan</span></li>
+        <li>客户端: <span class="mono">20 合法容器 (192.168.1.128–.147) + 最多 50 攻击容器 (.150–.199)</span></li>
+        <li>防御控制器: <span class="mono">Python 3.11，1 Hz 决策循环</span></li>
+        <li>内核执行: <span class="mono">nftables 1.0.6，事务性增量下发</span></li>
+        <li>UDP Flood 工具: <span class="mono">hping3 --flood --udp</span></li>
+        <li>SYN Flood 工具: <span class="mono">hping3 --flood -S</span></li>
+        <li>拦截率定义: <span class="mono">drop_pps / total_pps（稳态 t&gt;60s 均值）</span></li>
+        <li>合法吞吐定义: <span class="mono">legit_pass_pps / (20 × baseline_pps_per_client)</span></li>
+      </ul>
+    </details>
+  </div>
+
+  <!-- Ablation view -->
+  <div id="view-abl" class="static-view">
+    <div class="cbox" style="height:380px">
+      <div class="ctbar"><span class="cttitle">Ablation Study &mdash; Intercept Rate &amp; Legitimate Throughput</span></div>
+      <canvas id="c-abl"></canvas>
+    </div>
+    <div class="cbox">
+      <div class="ctbar"><span class="cttitle">消融实验说明</span></div>
+      <div style="padding:9px 14px;font-size:11.5px;line-height:1.85;color:var(--text-muted)">
+        <b style="color:var(--text)">A 完整方案</b>：CUSUM 全局检测 + IP 信誉动态维护 + nftables 四档分级限速 &nbsp;|&nbsp; 拦截率 99.5%，合法吞吐 97%<br>
+        <b style="color:var(--text)">B 无 CUSUM</b>：移除全局态检测，始终以普通态阈值运行 &nbsp;|&nbsp; 拦截率降至 97.5%，合法吞吐 90%<br>
+        <b style="color:var(--text)">C 无信誉层</b>：移除 IP 信誉系统，仅依赖固定限速规则 &nbsp;|&nbsp; 拦截率降至 93.0%，合法吞吐 94%<br>
+        <b style="color:var(--text)">D 开题方案</b>：仅单层限速，无 CUSUM、无信誉 &nbsp;|&nbsp; 拦截率 91.0%，合法吞吐仅 78%
+      </div>
+    </div>
+  </div>
+
+  <!-- NS-3 view -->
+  <div id="view-ns3" class="static-view">
+    <div class="cbox" style="height:380px">
+      <div class="ctbar"><span class="cttitle">NS-3 Scalability &mdash; Intercept Rate &amp; Alert Latency</span></div>
+      <canvas id="c-ns3"></canvas>
+    </div>
+    <div class="cbox">
+      <div class="ctbar"><span class="cttitle">NS-3 扩展性实验说明</span></div>
+      <div style="padding:9px 14px;font-size:11.5px;line-height:1.85;color:var(--text-muted)">
+        固定每攻击节点发包速率 <span class="mono">1000 pps</span>，横向扩展攻击节点数（50 → 500）。<br>
+        评估 CUSUM 检测时延与拦截率随攻击规模的变化趋势。<br>
+        结果：即使扩展至 500 节点（总攻击流量 500,000 pps），拦截率仍维持 <span class="mono">99.75%</span>，告警时延仅增至 <span class="mono">1.8 s</span>。
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+'use strict';
+
+// === STATE ===
+const S = {
+  phase: 0,
+  attackType: null,   // 'udp' | 'syn'
+  attackActive: false,
+  defenseActive: false,
+  attackStopped: false,
+  simTime: 0,
+  globalTime: 0,
+
+  cusum_sn: 0,
+  cusum_state: 'normal',
+  cusum_cooldown: 0,
+  cusum_atk_ticks: 0,   // ticks since cusum entered attack state
+
+  thr_wl: 80, thr_nm: 50, thr_sp: 20,
+
+  // 70 IPs: [0-19]=legit (.128-.147), [20-69]=attacker (.150-.199)
+  rep: new Float64Array(70).fill(50),
+  // staggered detection delay per attacker IP (0-28 ticks)
+  detDelay: new Float64Array(50),
+
+  ts: [],   // time series, max 120 entries
+  ar_prev: 0,
+  attackRamp: 0,
+
+  attackStartT: -1,
+  defenseStartT: -1,
+  cusumTriggerT: -1,
+
+  timerHandle: null,
+};
+
+// Pre-generate detection delays (shuffled)
+(function initDelays() {
+  for (let i = 0; i < 50; i++) S.detDelay[i] = (i / 49) * 28 + Math.random() * 2;
+  // shuffle
+  for (let i = 49; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [S.detDelay[i], S.detDelay[j]] = [S.detDelay[j], S.detDelay[i]];
+  }
+})();
+
+const PHASE_DESC = [
+  '防御系统在线，nftables 规则已加载。靶机 192.168.1.111 运行 Nginx，20 个合法客户端待命。点击"开始基线采集"进入实验。',
+  '20 个合法客户端容器运行中（192.168.1.128–.147），采集 10 分钟基线流量。模拟快进，约 30 秒内完成…',
+  '基线采集完成。μ₀ = 120 pps，σ₀ = 35 pps。请选择攻击类型，然后点击"关闭防御 → 启动攻击"。',
+  '防御已关闭，攻击容器发包中。观察 total_pps 暴增与合法客户端成功率骤降，无任何过滤措施。',
+  '三层防御激活：CUSUM 全局检测 → IP 信誉动态维护 → nftables 四档分级限速。实时观察 Sₙ 累积、信誉下降与拦截效果。',
+  '消融实验对比：完整方案（A）vs 各消融配置（B/C/D）拦截率与合法吞吐差异。',
+  'NS-3 仿真扩展性实验：固定单节点 1000 pps，节点数 50→500，评估 CUSUM 告警时延与拦截率的规模适应性。',
+];
+
+// === UTILITIES ===
+function randn() {
+  let u = 0, v = 0;
+  while (!u) u = Math.random();
+  while (!v) v = Math.random();
+  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+function fmtPPS(v) {
+  if (v >= 1e6) return (v / 1e6).toFixed(2) + 'M';
+  if (v >= 1e3) return (v / 1e3).toFixed(1) + 'K';
+  return v.toFixed(0);
+}
+function fmtSn(v) {
+  if (v >= 1e8) return (v / 1e8).toFixed(2) + 'e8';
+  if (v >= 1e6) return (v / 1e6).toFixed(2) + 'e6';
+  if (v >= 1e3) return (v / 1e3).toFixed(1) + 'K';
+  return v.toFixed(1);
+}
+
+// === CUSUM ENGINE ===
+function stepCUSUM(xn) {
+  const mu0 = 120, k = 105, h = 175;
+  S.cusum_sn = Math.max(0, S.cusum_sn + xn - mu0 - k);
+
+  if (S.cusum_state === 'normal' && S.cusum_sn > h) {
+    S.cusum_state = 'attack';
+    S.cusum_cooldown = 0;
+    S.cusum_atk_ticks = 0;
+    S.thr_wl = 90; S.thr_nm = 60; S.thr_sp = 30;
+    if (S.cusumTriggerT < 0) S.cusumTriggerT = S.globalTime;
+  } else if (S.cusum_state === 'attack') {
+    S.cusum_atk_ticks++;
+    if (S.cusum_sn <= 0) {
+      S.cusum_cooldown++;
+      if (S.cusum_cooldown >= 30) {
+        S.cusum_state = 'normal';
+        S.cusum_cooldown = 0;
+        S.cusum_atk_ticks = 0;
+        S.thr_wl = 80; S.thr_nm = 50; S.thr_sp = 20;
+      }
+    } else {
+      S.cusum_cooldown = 0;
+    }
+  }
+}
+
+// === IP REPUTATION ENGINE ===
+function getIPTier(rep) {
+  const wl = S.thr_wl, nm = S.thr_nm, sp = S.thr_sp;
+  if (rep >= wl) return 0; // whitelist
+  if (rep >= nm) return 1; // normal
+  if (rep >= sp) return 2; // suspect
+  return 3;                // blacklist
+}
+
+function updateReputation() {
+  // Legitimate IPs: +0.5/tick, cap 100
+  for (let i = 0; i < 20; i++) {
+    S.rep[i] = clamp(S.rep[i] + 0.5, 0, 100);
+  }
+  // Attacker IPs: staggered detection
+  if (S.defenseActive && S.cusum_state === 'attack') {
+    const basePen = S.attackType === 'syn' ? 12 : 10;
+    for (let i = 0; i < 50; i++) {
+      if (S.cusum_atk_ticks >= S.detDelay[i]) {
+        S.rep[20 + i] = clamp(S.rep[20 + i] - basePen, 0, 100);
+      }
+    }
+  } else if (!S.attackActive || !S.defenseActive) {
+    // Slow decay toward 50
+    for (let i = 20; i < 70; i++) {
+      if (!S.attackActive) {
+        const delta = (50 - S.rep[i]) * 0.005;
+        S.rep[i] = clamp(S.rep[i] + delta, 0, 100);
+      }
+    }
+  }
+}
+
+function countTiers() {
+  let wl = 0, nm = 0, sp = 0, bl = 0;
+  for (let i = 0; i < 70; i++) {
+    const t = getIPTier(S.rep[i]);
+    if (t === 0) wl++;
+    else if (t === 1) nm++;
+    else if (t === 2) sp++;
+    else bl++;
+  }
+  return { wl, nm, sp, bl };
+}
+
+// === DATA SIMULATOR ===
+function generateTick() {
+  S.simTime++;
+  S.globalTime++;
+
+  let total = 0, pass = 0, cpu = 50, succ = 100;
+  const ph = S.phase;
+
+  if (ph === 0 || ph === 1 || ph === 2) {
+    // Baseline: AR(1) noise around 120 pps
+    const noise = 0.3 * S.ar_prev + randn() * 35;
+    S.ar_prev = noise;
+    total = clamp(120 + noise, 20, 350);
+    pass = total;
+    cpu = clamp(50 + randn() * 3, 42, 62);
+    succ = clamp(100 + randn() * 0.2, 99, 100);
+    updateReputation();
+
+  } else if (ph === 3) {
+    // Attack, no defense
+    const targetPPS = S.attackType === 'udp' ? 300000 : 163000;
+    const noiseAmp = S.attackType === 'udp' ? 35000 : 7000;
+    S.attackRamp = clamp(S.attackRamp + 0.1, 0, 1);
+    const baseNoise = 0.3 * S.ar_prev + randn() * noiseAmp * S.attackRamp;
+    S.ar_prev = baseNoise;
+    total = clamp(targetPPS * S.attackRamp + 120 * (1 - S.attackRamp) + baseNoise, 0, 500000);
+    pass = total;
+    cpu = clamp(50 + 18 * S.attackRamp + randn() * 3, 45, 80);
+    const minSucc = S.attackType === 'udp' ? 4 : 2;
+    succ = clamp(100 - (100 - minSucc) * S.attackRamp + randn() * 0.8, 0, 100);
+    updateReputation();
+
+  } else if (ph === 4) {
+    // Attack with defense
+    if (S.attackStopped) {
+      // Attack stopped: return to baseline
+      const noise = 0.3 * S.ar_prev + randn() * 35;
+      S.ar_prev = noise;
+      total = clamp(120 + noise, 20, 350);
+    } else {
+      const targetPPS = S.attackType === 'udp' ? 300000 : 163000;
+      const noiseAmp = S.attackType === 'udp' ? 35000 : 7000;
+      const noise = 0.3 * S.ar_prev + randn() * noiseAmp;
+      S.ar_prev = noise;
+      total = clamp(targetPPS + noise, 100000, 450000);
+    }
+
+    stepCUSUM(total);
+    updateReputation();
+
+    // Compute pass_pps
+    if (S.attackStopped) {
+      pass = total;
+    } else {
+      // Each legit IP: ~6 pps; each attacker: ~6000 pps (UDP) or ~3260 pps (SYN)
+      const legitPPS = 120;
+      const attackerPPSper = S.attackType === 'udp' ? 6000 : 3260;
+      let blacklisted = 0;
+      for (let i = 20; i < 70; i++) {
+        if (getIPTier(S.rep[i]) === 3) blacklisted++;
+      }
+      const blocked = blacklisted * attackerPPSper * 0.995;
+      const suspectPPS = (() => {
+        let sp = 0;
+        for (let i = 20; i < 70; i++) {
+          if (getIPTier(S.rep[i]) === 2) sp++;
+        }
+        return sp * attackerPPSper * 0.6;
+      })();
+      pass = clamp(total - blocked - suspectPPS, legitPPS * 0.5, total);
+    }
+
+    cpu = clamp(50 + randn() * 3, 44, 62);
+
+    // Success rate: recovers after defense
+    if (S.attackStopped) {
+      succ = clamp(100 + randn() * 0.3, 98, 100);
+    } else {
+      const tiers = countTiers();
+      const blFrac = tiers.bl / 50;   // fraction of attackers blacklisted
+      const target = S.attackType === 'udp' ? 97 : 94;
+      const base = S.attackType === 'udp' ? 4 : 2;
+      succ = clamp(base + (target - base) * blFrac * 1.05 + randn() * 1, 0, 100);
+    }
+  }
+
+  const tiers = countTiers();
+  const entry = {
+    t: S.globalTime,
+    total,
+    pass,
+    cpu,
+    succ,
+    sn: S.cusum_sn,
+    state: S.cusum_state,
+    wl: tiers.wl,
+    nm: tiers.nm,
+    sp: tiers.sp,
+    bl: tiers.bl,
+  };
+  S.ts.push(entry);
+  if (S.ts.length > 120) S.ts.shift();
+  return entry;
+}
+
+// === CHART BASE RENDERER ===
+const PAL = {
+  blue:   '#1f77b4',
+  orange: '#ff7f0e',
+  green:  '#2ca02c',
+  red:    '#d62728',
+  purple: '#9467bd',
+  axisbg: '#f8f8f8',
+};
+
+function initCanvas(id) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return null;
+  const rect = canvas.getBoundingClientRect();
+  const W = Math.floor(rect.width);
+  const H = Math.floor(rect.height);
+  if (W < 10 || H < 10) return null;
+  const dpr = window.devicePixelRatio || 1;
+  if (canvas.width !== W * dpr || canvas.height !== H * dpr) {
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, W, H };
+}
+
+function calcPlot(W, H, ml, mr, mt, mb) {
+  return {
+    x0: ml, y0: mt,
+    pw: W - ml - mr,
+    ph: H - mt - mb,
+  };
+}
+
+// Map data value to canvas coordinate
+function cx(v, vmin, vmax, p) { return p.x0 + (v - vmin) / (vmax - vmin) * p.pw; }
+function cy(v, vmin, vmax, p) { return p.y0 + p.ph - (v - vmin) / (vmax - vmin) * p.ph; }
+
+function drawGrid(ctx, p, nx, ny) {
+  ctx.strokeStyle = 'rgba(0,0,0,0.13)';
+  ctx.lineWidth = 0.7;
+  ctx.setLineDash([3, 3]);
+  for (let i = 0; i <= ny; i++) {
+    const y = p.y0 + p.ph * (1 - i / ny);
+    ctx.beginPath(); ctx.moveTo(p.x0, y); ctx.lineTo(p.x0 + p.pw, y); ctx.stroke();
+  }
+  for (let i = 0; i <= nx; i++) {
+    const x = p.x0 + p.pw * i / nx;
+    ctx.beginPath(); ctx.moveTo(x, p.y0); ctx.lineTo(x, p.y0 + p.ph); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+}
+
+function drawAxesBorder(ctx, p) {
+  ctx.strokeStyle = '#111';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(p.x0, p.y0, p.pw, p.ph);
+}
+
+function drawYTicks(ctx, p, yMin, yMax, ny, color, side, fmt) {
+  ctx.fillStyle = color || '#333';
+  ctx.font = '9.5px Consolas,monospace';
+  ctx.textBaseline = 'middle';
+  for (let i = 0; i <= ny; i++) {
+    const v = yMin + (i / ny) * (yMax - yMin);
+    const y = cy(v, yMin, yMax, p);
+    const label = fmt ? fmt(v, yMax) : yTickFmt(v, yMax);
+    if (side === 'right') {
+      ctx.textAlign = 'left';
+      ctx.fillText(label, p.x0 + p.pw + 3, y);
+      ctx.beginPath(); ctx.moveTo(p.x0 + p.pw, y); ctx.lineTo(p.x0 + p.pw + 3, y);
+    } else {
+      ctx.textAlign = 'right';
+      ctx.fillText(label, p.x0 - 3, y);
+      ctx.beginPath(); ctx.moveTo(p.x0 - 3, y); ctx.lineTo(p.x0, y);
+    }
+    ctx.strokeStyle = color || '#333'; ctx.lineWidth = 0.7; ctx.stroke();
+  }
+}
+
+function drawXTicks(ctx, p, xMin, xMax, nx) {
+  ctx.fillStyle = '#333';
+  ctx.font = '9.5px Consolas,monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  for (let i = 0; i <= nx; i++) {
+    const v = xMin + (i / nx) * (xMax - xMin);
+    const x = cx(v, xMin, xMax, p);
+    ctx.fillText(v.toFixed(0), x, p.y0 + p.ph + 2);
+    ctx.strokeStyle = '#333'; ctx.lineWidth = 0.7;
+    ctx.beginPath(); ctx.moveTo(x, p.y0 + p.ph); ctx.lineTo(x, p.y0 + p.ph + 3); ctx.stroke();
+  }
+}
+
+function yTickFmt(v, yMax) {
+  if (yMax >= 1e8) return (v / 1e8).toFixed(1) + 'e8';
+  if (yMax >= 1e6) return (v / 1e6).toFixed(1) + 'M';
+  if (yMax >= 2e3) return (v / 1e3).toFixed(0) + 'K';
+  return v.toFixed(0);
+}
+
+function drawXLabel(ctx, W, H, label) {
+  ctx.fillStyle = '#444';
+  ctx.font = '9.5px Segoe UI,sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  ctx.fillText(label || 'Time (s)', W / 2, H - 1);
+}
+
+function drawYLabel(ctx, p, label, color) {
+  ctx.save();
+  ctx.translate(7, p.y0 + p.ph / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillStyle = color || '#444';
+  ctx.font = '9.5px Segoe UI,sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(label, 0, 0);
+  ctx.restore();
+}
+
+function drawLine(ctx, data, xK, yK, xMin, xMax, yMin, yMax, p, color, lw) {
+  if (!data || data.length < 2) return;
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lw || 1.5;
+  ctx.setLineDash([]);
+  ctx.beginPath();
+  let first = true;
+  for (const d of data) {
+    const x = cx(d[xK], xMin, xMax, p);
+    const y = cy(d[yK], yMin, yMax, p);
+    if (first) { ctx.moveTo(x, y); first = false; } else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+}
+
+function drawVLine(ctx, xVal, xMin, xMax, p, color, label) {
+  const x = cx(xVal, xMin, xMax, p);
+  if (x < p.x0 - 2 || x > p.x0 + p.pw + 2) return;
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 3]);
+  ctx.beginPath(); ctx.moveTo(x, p.y0); ctx.lineTo(x, p.y0 + p.ph); ctx.stroke();
+  ctx.setLineDash([]);
+  if (label) {
+    ctx.fillStyle = color;
+    ctx.font = '8.5px Consolas,monospace';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillText(label, x + 2, p.y0 + 2);
+  }
+}
+
+function drawLegend(ctx, items, x, y, fw) {
+  ctx.font = '9px Consolas,monospace';
+  ctx.textBaseline = 'middle';
+  // measure
+  let totalW = 0;
+  for (const it of items) {
+    totalW += 18 + ctx.measureText(it.label).width + 10;
+  }
+  const bx = x - 4, by = y - 9, bw = totalW + 4, bh = 18;
+  ctx.fillStyle = 'rgba(255,255,255,0.88)';
+  ctx.fillRect(bx, by, bw, bh);
+  ctx.strokeStyle = '#ccc'; ctx.lineWidth = 0.7;
+  ctx.strokeRect(bx, by, bw, bh);
+  let cx2 = x;
+  for (const it of items) {
+    ctx.fillStyle = it.color;
+    ctx.fillRect(cx2, y - 4, 12, 8);
+    ctx.strokeStyle = it.color; ctx.lineWidth = 0.8;
+    ctx.strokeRect(cx2, y - 4, 12, 8);
+    cx2 += 15;
+    ctx.fillStyle = '#222';
+    ctx.textAlign = 'left';
+    ctx.fillText(it.label, cx2, y);
+    cx2 += ctx.measureText(it.label).width + 10;
+  }
+}
+
+// === CHART 1: TRAFFIC ===
+function drawTraffic() {
+  const cv = initCanvas('c-traffic');
+  if (!cv) return;
+  const { ctx, W, H } = cv;
+  const data = S.ts;
+
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+
+  if (!data.length) return;
+
+  const ml = 62, mr = 14, mt = 6, mb = 30;
+  const p = calcPlot(W, H, ml, mr, mt, mb);
+
+  const xMax = data[data.length - 1].t;
+  const xMin = Math.max(0, xMax - 120);
+  const rawMax = Math.max(...data.map(d => d.total), 300);
+  const yMax = rawMax * 1.12;
+  const yMin = 0;
+
+  ctx.fillStyle = PAL.axisbg; ctx.fillRect(p.x0, p.y0, p.pw, p.ph);
+  drawGrid(ctx, p, 6, 5);
+
+  // Attack state background on traffic chart
+  let inAtk = false, ax0 = 0;
+  for (const d of data) {
+    const x = cx(d.t, xMin, xMax, p);
+    if (d.state === 'attack' && !inAtk) { inAtk = true; ax0 = x; }
+    else if (d.state !== 'attack' && inAtk) {
+      inAtk = false;
+      ctx.fillStyle = 'rgba(255,0,0,0.04)';
+      ctx.fillRect(ax0, p.y0, x - ax0, p.ph);
+    }
+  }
+  if (inAtk) { ctx.fillStyle = 'rgba(255,0,0,0.04)'; ctx.fillRect(ax0, p.y0, p.x0 + p.pw - ax0, p.ph); }
+
+  drawYTicks(ctx, p, yMin, yMax, 5, '#333', 'left', yTickFmt);
+  drawXTicks(ctx, p, xMin, xMax, 6);
+  drawAxesBorder(ctx, p);
+  drawXLabel(ctx, W, H, 'Time (s)');
+  drawYLabel(ctx, p, 'pps');
+
+  // Vertical markers
+  if (S.attackStartT > 0) drawVLine(ctx, S.attackStartT, xMin, xMax, p, PAL.red, 'Attack Start');
+  if (S.defenseStartT > 0) drawVLine(ctx, S.defenseStartT, xMin, xMax, p, PAL.green, 'Defense Active');
+
+  drawLine(ctx, data, 't', 'total', xMin, xMax, yMin, yMax, p, PAL.blue, 1.6);
+  drawLine(ctx, data, 't', 'pass', xMin, xMax, yMin, yMax, p, PAL.green, 1.6);
+
+  drawLegend(ctx, [
+    { color: PAL.blue, label: 'total_pps' },
+    { color: PAL.green, label: 'pass_pps' },
+  ], p.x0 + p.pw - 140, p.y0 + 11);
+}
+
+// === CHART 2: CPU ===
+function drawCPU() {
+  const cv = initCanvas('c-cpu');
+  if (!cv) return;
+  const { ctx, W, H } = cv;
+  const data = S.ts;
+
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  if (!data.length) return;
+
+  const ml = 38, mr = 12, mt = 6, mb = 30;
+  const p = calcPlot(W, H, ml, mr, mt, mb);
+
+  const xMax = data[data.length - 1].t;
+  const xMin = Math.max(0, xMax - 120);
+
+  ctx.fillStyle = PAL.axisbg; ctx.fillRect(p.x0, p.y0, p.pw, p.ph);
+  drawGrid(ctx, p, 4, 5);
+  drawYTicks(ctx, p, 0, 100, 5, '#333', 'left', v => v.toFixed(0) + '%');
+  drawXTicks(ctx, p, xMin, xMax, 4);
+  drawAxesBorder(ctx, p);
+  drawXLabel(ctx, W, H, 'Time (s)');
+  drawYLabel(ctx, p, '%');
+
+  drawLine(ctx, data, 't', 'cpu', xMin, xMax, 0, 100, p, PAL.blue, 1.5);
+}
+
+// === CHART 3: CUSUM ===
+function drawCUSUM() {
+  const cv = initCanvas('c-cusum');
+  if (!cv) return;
+  const { ctx, W, H } = cv;
+  const data = S.ts;
+
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  if (!data.length) return;
+
+  const ml = 60, mr = 12, mt = 6, mb = 30;
+  const p = calcPlot(W, H, ml, mr, mt, mb);
+
+  const xMax = data[data.length - 1].t;
+  const xMin = Math.max(0, xMax - 120);
+  const rawMax = Math.max(...data.map(d => d.sn), 200);
+  const yMax = rawMax * 1.15;
+  const yMin = 0;
+
+  ctx.fillStyle = PAL.axisbg; ctx.fillRect(p.x0, p.y0, p.pw, p.ph);
+
+  // Attack state shading
+  let inAtk = false, ax0 = 0;
+  for (const d of data) {
+    const x = cx(d.t, xMin, xMax, p);
+    if (d.state === 'attack' && !inAtk) { inAtk = true; ax0 = x; }
+    else if (d.state !== 'attack' && inAtk) {
+      inAtk = false;
+      ctx.fillStyle = 'rgba(255,0,0,0.05)';
+      ctx.fillRect(ax0, p.y0, x - ax0, p.ph);
+    }
+  }
+  if (inAtk) { ctx.fillStyle = 'rgba(255,0,0,0.05)'; ctx.fillRect(ax0, p.y0, p.x0 + p.pw - ax0, p.ph); }
+
+  drawGrid(ctx, p, 4, 5);
+  drawYTicks(ctx, p, yMin, yMax, 5, '#333', 'left', yTickFmt);
+  drawXTicks(ctx, p, xMin, xMax, 4);
+  drawAxesBorder(ctx, p);
+  drawXLabel(ctx, W, H, 'Time (s)');
+  drawYLabel(ctx, p, 'Sₙ');
+
+  // h threshold line
+  if (175 <= yMax) {
+    const yh = cy(175, yMin, yMax, p);
+    ctx.strokeStyle = PAL.red; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(p.x0, yh); ctx.lineTo(p.x0 + p.pw, yh); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = PAL.red; ctx.font = '8.5px Consolas,monospace';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+    ctx.fillText('h=175', p.x0 + 2, yh - 1);
+  }
+
+  drawLine(ctx, data, 't', 'sn', xMin, xMax, yMin, yMax, p, PAL.orange, 1.5);
+}
+
+// === CHART 4: IP TIER DISTRIBUTION (stacked area) ===
+function drawTier() {
+  const cv = initCanvas('c-tier');
+  if (!cv) return;
+  const { ctx, W, H } = cv;
+  const data = S.ts;
+
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  if (!data.length) return;
+
+  const ml = 35, mr = 12, mt = 6, mb = 30;
+  const p = calcPlot(W, H, ml, mr, mt, mb);
+
+  const xMax = data[data.length - 1].t;
+  const xMin = Math.max(0, xMax - 120);
+  const yMax = 70, yMin = 0;
+
+  ctx.fillStyle = PAL.axisbg; ctx.fillRect(p.x0, p.y0, p.pw, p.ph);
+
+  // Stacked area: bottom = whitelist (green), then normal (blue), suspect (orange), blacklist (red)
+  const keys = ['wl', 'nm', 'sp', 'bl'];
+  const colors = [PAL.green, PAL.blue, PAL.orange, PAL.red];
+
+  for (let layer = 0; layer < 4; layer++) {
+    ctx.beginPath();
+    // top edge of this layer (forward)
+    let first = true;
+    for (const d of data) {
+      let cumTop = 0;
+      for (let l = 0; l <= layer; l++) cumTop += d[keys[l]];
+      const x = cx(d.t, xMin, xMax, p);
+      const y = cy(cumTop, yMin, yMax, p);
+      if (first) { ctx.moveTo(x, y); first = false; } else ctx.lineTo(x, y);
+    }
+    // bottom edge (backward)
+    for (let i = data.length - 1; i >= 0; i--) {
+      const d = data[i];
+      let cumBot = 0;
+      for (let l = 0; l < layer; l++) cumBot += d[keys[l]];
+      const x = cx(d.t, xMin, xMax, p);
+      const y = cy(cumBot, yMin, yMax, p);
+      ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.fillStyle = colors[layer] + 'b3'; // ~0.7 alpha
+    ctx.fill();
+  }
+
+  drawGrid(ctx, p, 4, 7);
+  drawYTicks(ctx, p, yMin, yMax, 7, '#333', 'left', v => v.toFixed(0));
+  drawXTicks(ctx, p, xMin, xMax, 4);
+  drawAxesBorder(ctx, p);
+  drawXLabel(ctx, W, H, 'Time (s)');
+  drawYLabel(ctx, p, 'IPs');
+
+  drawLegend(ctx, [
+    { color: PAL.green, label: 'WL' },
+    { color: PAL.blue, label: 'Normal' },
+    { color: PAL.orange, label: 'Suspect' },
+    { color: PAL.red, label: 'BL' },
+  ], p.x0 + 2, p.y0 + 11);
+}
+
+// === CHART 5: SUCCESS RATE ===
+function drawSucc() {
+  const cv = initCanvas('c-succ');
+  if (!cv) return;
+  const { ctx, W, H } = cv;
+  const data = S.ts;
+
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  if (!data.length) return;
+
+  const ml = 38, mr = 12, mt = 6, mb = 30;
+  const p = calcPlot(W, H, ml, mr, mt, mb);
+
+  const xMax = data[data.length - 1].t;
+  const xMin = Math.max(0, xMax - 120);
+
+  ctx.fillStyle = PAL.axisbg; ctx.fillRect(p.x0, p.y0, p.pw, p.ph);
+  drawGrid(ctx, p, 4, 5);
+  drawYTicks(ctx, p, 0, 100, 5, '#333', 'left', v => v.toFixed(0) + '%');
+  drawXTicks(ctx, p, xMin, xMax, 4);
+  drawAxesBorder(ctx, p);
+  drawXLabel(ctx, W, H, 'Time (s)');
+  drawYLabel(ctx, p, '%');
+
+  if (S.attackStartT > 0) drawVLine(ctx, S.attackStartT, xMin, xMax, p, PAL.red, '');
+  if (S.defenseStartT > 0) drawVLine(ctx, S.defenseStartT, xMin, xMax, p, PAL.green, '');
+
+  drawLine(ctx, data, 't', 'succ', xMin, xMax, 0, 100, p, PAL.green, 1.5);
+}
+
+// === CHART 6: ABLATION ===
+function drawAblation() {
+  const cv = initCanvas('c-abl');
+  if (!cv) return;
+  const { ctx, W, H } = cv;
+
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+
+  const ml = 55, mr = 30, mt = 36, mb = 50;
+  const p = calcPlot(W, H, ml, mr, mt, mb);
+
+  const cfgs = ['A 完整方案', 'B 无CUSUM', 'C 无信誉层', 'D 开题方案'];
+  const iRate = [99.5, 97.5, 93.0, 91.0];
+  const lRate = [97, 90, 94, 78];
+
+  ctx.fillStyle = PAL.axisbg; ctx.fillRect(p.x0, p.y0, p.pw, p.ph);
+
+  // Grid
+  ctx.strokeStyle = 'rgba(0,0,0,0.12)'; ctx.lineWidth = 0.7; ctx.setLineDash([3, 3]);
+  for (let i = 0; i <= 5; i++) {
+    const y = p.y0 + p.ph * (1 - i / 5);
+    ctx.beginPath(); ctx.moveTo(p.x0, y); ctx.lineTo(p.x0 + p.pw, y); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+  ctx.strokeStyle = '#111'; ctx.lineWidth = 1; ctx.strokeRect(p.x0, p.y0, p.pw, p.ph);
+
+  // Y ticks
+  ctx.fillStyle = '#333'; ctx.font = '9.5px Consolas,monospace';
+  ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+  for (let i = 0; i <= 5; i++) {
+    const v = i * 20;
+    const y = p.y0 + p.ph * (1 - v / 100);
+    ctx.fillText(v + '%', p.x0 - 3, y);
+    ctx.beginPath(); ctx.moveTo(p.x0 - 3, y); ctx.lineTo(p.x0, y);
+    ctx.strokeStyle = '#333'; ctx.lineWidth = 0.7; ctx.stroke();
+  }
+
+  const ng = 4;
+  const gw = p.pw / ng;
+  const bw = gw * 0.27;
+  const gap = gw * 0.05;
+
+  for (let g = 0; g < ng; g++) {
+    const gx = p.x0 + g * gw + gw * 0.5 - bw - gap / 2;
+
+    // Intercept bar (blue)
+    const ih = (iRate[g] / 100) * p.ph;
+    ctx.fillStyle = PAL.blue + 'cc';
+    ctx.fillRect(gx, p.y0 + p.ph - ih, bw, ih);
+    ctx.strokeStyle = PAL.blue; ctx.lineWidth = 0.8;
+    ctx.strokeRect(gx, p.y0 + p.ph - ih, bw, ih);
+    ctx.fillStyle = PAL.blue; ctx.font = '8.5px Consolas,monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillText(iRate[g] + '%', gx + bw / 2, p.y0 + p.ph - ih - 1);
+
+    // Legit bar (orange)
+    const lh = (lRate[g] / 100) * p.ph;
+    const lx = gx + bw + gap;
+    ctx.fillStyle = PAL.orange + 'cc';
+    ctx.fillRect(lx, p.y0 + p.ph - lh, bw, lh);
+    ctx.strokeStyle = PAL.orange; ctx.lineWidth = 0.8;
+    ctx.strokeRect(lx, p.y0 + p.ph - lh, bw, lh);
+    ctx.fillStyle = PAL.orange; ctx.font = '8.5px Consolas,monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillText(lRate[g] + '%', lx + bw / 2, p.y0 + p.ph - lh - 1);
+
+    // X label
+    ctx.fillStyle = '#333'; ctx.font = '10px Segoe UI,sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    ctx.fillText(cfgs[g], p.x0 + g * gw + gw / 2, p.y0 + p.ph + 4);
+  }
+
+  // Legend
+  drawLegend(ctx, [
+    { color: PAL.blue, label: '拦截率 (%)' },
+    { color: PAL.orange, label: '合法吞吐 (%)' },
+  ], p.x0 + p.pw - 175, p.y0 + 14);
+
+  // Title
+  ctx.fillStyle = '#333'; ctx.font = '11px Segoe UI,sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  ctx.fillText('Ablation Study — Intercept Rate & Legitimate Throughput', W / 2, 6);
+}
+
+// === CHART 7: NS-3 ===
+function drawNS3() {
+  const cv = initCanvas('c-ns3');
+  if (!cv) return;
+  const { ctx, W, H } = cv;
+
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+
+  const ml = 62, mr = 70, mt = 36, mb = 50;
+  const p = calcPlot(W, H, ml, mr, mt, mb);
+
+  const nodes = [50, 100, 200, 500];
+  const iRates = [99.90, 99.85, 99.80, 99.75];
+  const latency = [1.0, 1.1, 1.3, 1.8];
+
+  ctx.fillStyle = PAL.axisbg; ctx.fillRect(p.x0, p.y0, p.pw, p.ph);
+  ctx.strokeStyle = 'rgba(0,0,0,0.12)'; ctx.lineWidth = 0.7; ctx.setLineDash([3, 3]);
+  for (let i = 0; i <= 5; i++) {
+    const y = p.y0 + p.ph * (1 - i / 5);
+    ctx.beginPath(); ctx.moveTo(p.x0, y); ctx.lineTo(p.x0 + p.pw, y); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+  ctx.strokeStyle = '#111'; ctx.lineWidth = 1; ctx.strokeRect(p.x0, p.y0, p.pw, p.ph);
+
+  const xMin = 30, xMax = 530;
+  const yL0 = 99.5, yL1 = 100.05;
+  const yR0 = 0.7, yR1 = 2.1;
+
+  // Left Y axis (intercept rate, blue)
+  ctx.fillStyle = PAL.blue; ctx.font = '9.5px Consolas,monospace';
+  ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+  const lTicks = [99.5, 99.6, 99.7, 99.8, 99.9, 100.0];
+  for (const v of lTicks) {
+    const y = cy(v, yL0, yL1, p);
+    ctx.fillText(v.toFixed(1) + '%', p.x0 - 3, y);
+    ctx.beginPath(); ctx.moveTo(p.x0 - 3, y); ctx.lineTo(p.x0, y);
+    ctx.strokeStyle = PAL.blue; ctx.lineWidth = 0.7; ctx.stroke();
+  }
+
+  // Right Y axis (latency, orange)
+  ctx.fillStyle = PAL.orange; ctx.textAlign = 'left';
+  const rTicks = [0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0];
+  for (const v of rTicks) {
+    const y = cy(v, yR0, yR1, p);
+    ctx.fillText(v.toFixed(1) + 's', p.x0 + p.pw + 3, y);
+    ctx.beginPath(); ctx.moveTo(p.x0 + p.pw, y); ctx.lineTo(p.x0 + p.pw + 3, y);
+    ctx.strokeStyle = PAL.orange; ctx.lineWidth = 0.7; ctx.stroke();
+  }
+
+  // X ticks
+  ctx.fillStyle = '#333'; ctx.font = '9.5px Consolas,monospace';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  for (const n of nodes) {
+    const x = cx(n, xMin, xMax, p);
+    ctx.fillText(n, x, p.y0 + p.ph + 3);
+    ctx.beginPath(); ctx.moveTo(x, p.y0 + p.ph); ctx.lineTo(x, p.y0 + p.ph + 3);
+    ctx.strokeStyle = '#333'; ctx.lineWidth = 0.7; ctx.stroke();
+  }
+  ctx.fillStyle = '#333'; ctx.font = '9.5px Segoe UI,sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+  ctx.fillText('攻击节点数', W / 2, H - 1);
+
+  // Left Y label
+  ctx.save(); ctx.translate(9, p.y0 + p.ph / 2); ctx.rotate(-Math.PI / 2);
+  ctx.fillStyle = PAL.blue; ctx.font = '9.5px Segoe UI,sans-serif';
+  ctx.textAlign = 'center'; ctx.fillText('拦截率 (%)', 0, 0); ctx.restore();
+
+  // Right Y label
+  ctx.save(); ctx.translate(W - 9, p.y0 + p.ph / 2); ctx.rotate(Math.PI / 2);
+  ctx.fillStyle = PAL.orange; ctx.font = '9.5px Segoe UI,sans-serif';
+  ctx.textAlign = 'center'; ctx.fillText('告警时延 (s)', 0, 0); ctx.restore();
+
+  // Blue line: intercept rate
+  ctx.strokeStyle = PAL.blue; ctx.lineWidth = 1.8; ctx.setLineDash([]);
+  ctx.beginPath();
+  for (let i = 0; i < nodes.length; i++) {
+    const x = cx(nodes[i], xMin, xMax, p);
+    const y = cy(iRates[i], yL0, yL1, p);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  for (let i = 0; i < nodes.length; i++) {
+    const x = cx(nodes[i], xMin, xMax, p);
+    const y = cy(iRates[i], yL0, yL1, p);
+    ctx.fillStyle = PAL.blue;
+    ctx.beginPath(); ctx.arc(x, y, 3.5, 0, Math.PI * 2); ctx.fill();
+    // label
+    ctx.fillStyle = PAL.blue; ctx.font = '8.5px Consolas,monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillText(iRates[i].toFixed(2) + '%', x, y - 4);
+  }
+
+  // Orange line: latency
+  ctx.strokeStyle = PAL.orange; ctx.lineWidth = 1.8;
+  ctx.beginPath();
+  for (let i = 0; i < nodes.length; i++) {
+    const x = cx(nodes[i], xMin, xMax, p);
+    const y = cy(latency[i], yR0, yR1, p);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  for (let i = 0; i < nodes.length; i++) {
+    const x = cx(nodes[i], xMin, xMax, p);
+    const y = cy(latency[i], yR0, yR1, p);
+    ctx.fillStyle = PAL.orange;
+    ctx.beginPath(); ctx.arc(x, y, 3.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = PAL.orange; ctx.font = '8.5px Consolas,monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    ctx.fillText(latency[i].toFixed(1) + 's', x, y + 4);
+  }
+
+  // Legend
+  drawLegend(ctx, [
+    { color: PAL.blue, label: '拦截率（左轴）' },
+    { color: PAL.orange, label: '告警时延（右轴）' },
+  ], p.x0 + 4, p.y0 + 14);
+
+  // Title
+  ctx.fillStyle = '#333'; ctx.font = '11px Segoe UI,sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  ctx.fillText('NS-3 Scalability — Intercept Rate & Alert Latency', W / 2, 6);
+}
+
+// === RENDER ALL ===
+function renderAll() {
+  drawTraffic();
+  drawCPU();
+  drawCUSUM();
+  drawTier();
+  drawSucc();
+  if (S.phase === 5) drawAblation();
+  if (S.phase === 6) drawNS3();
+}
+
+// === UI UPDATE ===
+function updateUI() {
+  // Cusum state
+  const isAtk = S.cusum_state === 'attack';
+  document.getElementById('p-sn').textContent = fmtSn(S.cusum_sn);
+  document.getElementById('p-state').innerHTML =
+    isAtk ? '<span class="badge badge-a">attack</span>' : '<span class="badge badge-n">normal</span>';
+  document.getElementById('badge-top').innerHTML =
+    isAtk ? '<span class="badge badge-a">attack</span>' : '<span class="badge badge-n">normal</span>';
+  document.getElementById('atk-mark').style.display = isAtk ? '' : 'none';
+
+  // Thresholds
+  if (isAtk) {
+    document.getElementById('p-thr-wl').textContent = '≥ 90*';
+    document.getElementById('p-thr-nm').textContent = '60–89*';
+    document.getElementById('p-thr-sp').textContent = '30–59*';
+  } else {
+    document.getElementById('p-thr-wl').textContent = '≥ 80';
+    document.getElementById('p-thr-nm').textContent = '50–79';
+    document.getElementById('p-thr-sp').textContent = '20–49';
+  }
+
+  // Tier counts
+  const t = countTiers();
+  document.getElementById('p-wl').textContent = t.wl + ' IPs';
+  document.getElementById('p-nm').textContent = t.nm + ' IPs';
+  document.getElementById('p-sp').textContent = t.sp + ' IPs';
+  document.getElementById('p-bl').textContent = t.bl + ' IPs';
+
+  // Traffic stats
+  if (S.ts.length) {
+    const last = S.ts[S.ts.length - 1];
+    document.getElementById('p-total').textContent = fmtPPS(last.total) + ' pps';
+    document.getElementById('p-pass').textContent = fmtPPS(last.pass) + ' pps';
+    document.getElementById('p-cpu').textContent = last.cpu.toFixed(1) + '%';
+    document.getElementById('p-succ').textContent = last.succ.toFixed(1) + '%';
+  }
+
+  // Phase nav highlight
+  document.querySelectorAll('.ph-item').forEach(el => {
+    el.classList.toggle('active', parseInt(el.dataset.ph) === S.phase);
+  });
+}
+
+// === PHASE TRANSITIONS ===
+function setPhase(ph) {
+  S.phase = ph;
+  S.simTime = 0;
+
+  // Views
+  document.getElementById('view-rt').style.display = ph <= 4 ? '' : 'none';
+  document.getElementById('view-abl').classList.toggle('vis', ph === 5);
+  document.getElementById('view-ns3').classList.toggle('vis', ph === 6);
+
+  // Buttons
+  const show = (id, v) => { const el = document.getElementById(id); if (el) el.style.display = v ? '' : 'none'; };
+  show('btn-baseline', ph === 0);
+  document.getElementById('btn-atype').style.display = ph === 2 ? 'flex' : 'none';
+  show('btn-attack', ph === 2);
+  show('btn-defense', ph === 3);
+  show('btn-stopattack', ph === 4);
+  show('btn-ablation', ph >= 4);
+  show('btn-ns3', ph >= 5);
+
+  // Phase info
+  document.getElementById('phase-info').textContent = PHASE_DESC[ph] || '';
+
+  updateUI();
+  if (ph === 5) setTimeout(drawAblation, 60);
+  if (ph === 6) setTimeout(drawNS3, 60);
+}
+
+// === TICK ===
+function tick() {
+  if (S.phase < 0 || S.phase > 4) return;
+
+  generateTick();
+
+  // Auto-advance baseline after 30 ticks
+  if (S.phase === 1 && S.simTime >= 30) {
+    setPhase(2);
+    return;
+  }
+
+  updateUI();
+  renderAll();
+}
+
+// === BUTTON HANDLERS ===
+document.getElementById('btn-baseline').addEventListener('click', () => {
+  resetState();
+  setPhase(1);
+});
+
+document.getElementById('btn-udp').addEventListener('click', () => {
+  S.attackType = 'udp';
+  document.getElementById('btn-udp').classList.add('active-sel');
+  document.getElementById('btn-syn').classList.remove('active-sel');
+  const btn = document.getElementById('btn-attack');
+  btn.disabled = false;
+  btn.textContent = '关闭防御 → 启动 UDP Flood';
+});
+
+document.getElementById('btn-syn').addEventListener('click', () => {
+  S.attackType = 'syn';
+  document.getElementById('btn-syn').classList.add('active-sel');
+  document.getElementById('btn-udp').classList.remove('active-sel');
+  const btn = document.getElementById('btn-attack');
+  btn.disabled = false;
+  btn.textContent = '关闭防御 → 启动 SYN Flood';
+});
+
+document.getElementById('btn-attack').addEventListener('click', () => {
+  if (!S.attackType) return;
+  S.attackActive = true;
+  S.defenseActive = false;
+  S.attackStopped = false;
+  S.attackRamp = 0;
+  S.attackStartT = S.globalTime;
+  setPhase(3);
+});
+
+document.getElementById('btn-defense').addEventListener('click', () => {
+  S.defenseActive = true;
+  S.defenseStartT = S.globalTime;
+  S.cusum_sn = 0;
+  S.cusum_state = 'normal';
+  S.cusum_atk_ticks = 0;
+  S.cusumTriggerT = -1;
+  S.thr_wl = 80; S.thr_nm = 50; S.thr_sp = 20;
+  setPhase(4);
+});
+
+document.getElementById('btn-stopattack').addEventListener('click', () => {
+  S.attackActive = false;
+  S.attackStopped = true;
+  document.getElementById('btn-stopattack').disabled = true;
+  document.getElementById('btn-stopattack').textContent = '攻击已停止，观察 Sₙ 归零…';
+});
+
+document.getElementById('btn-ablation').addEventListener('click', () => setPhase(5));
+document.getElementById('btn-ns3').addEventListener('click', () => setPhase(6));
+
+document.getElementById('btn-reset').addEventListener('click', () => {
+  resetState();
+  setPhase(0);
+});
+
+document.querySelectorAll('.ph-item').forEach(el => {
+  el.addEventListener('click', () => {
+    const ph = parseInt(el.dataset.ph);
+    if (ph === 5) { setPhase(5); return; }
+    if (ph === 6) { setPhase(6); return; }
+    // Jump back to realtime view
+    if (ph <= 4 && S.phase > 4) {
+      document.getElementById('view-rt').style.display = '';
+      document.getElementById('view-abl').classList.remove('vis');
+      document.getElementById('view-ns3').classList.remove('vis');
+      S.phase = ph;
+      document.getElementById('phase-info').textContent = PHASE_DESC[ph] || '';
+      document.querySelectorAll('.ph-item').forEach(e => e.classList.toggle('active', parseInt(e.dataset.ph) === ph));
+    }
+  });
+});
+
+function resetState() {
+  S.attackType = null;
+  S.attackActive = false;
+  S.defenseActive = false;
+  S.attackStopped = false;
+  S.simTime = 0;
+  S.globalTime = 0;
+  S.cusum_sn = 0;
+  S.cusum_state = 'normal';
+  S.cusum_cooldown = 0;
+  S.cusum_atk_ticks = 0;
+  S.thr_wl = 80; S.thr_nm = 50; S.thr_sp = 20;
+  S.rep.fill(50);
+  S.ts = [];
+  S.ar_prev = 0;
+  S.attackRamp = 0;
+  S.attackStartT = -1;
+  S.defenseStartT = -1;
+  S.cusumTriggerT = -1;
+
+  // Re-generate detection delays
+  for (let i = 0; i < 50; i++) S.detDelay[i] = (i / 49) * 28 + Math.random() * 2;
+  for (let i = 49; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [S.detDelay[i], S.detDelay[j]] = [S.detDelay[j], S.detDelay[i]];
+  }
+
+  // Reset stop button
+  const sb = document.getElementById('btn-stopattack');
+  sb.disabled = false;
+  sb.textContent = '停止攻击';
+
+  // Reset attack type buttons
+  document.getElementById('btn-udp').classList.remove('active-sel');
+  document.getElementById('btn-syn').classList.remove('active-sel');
+  document.getElementById('btn-attack').disabled = true;
+  document.getElementById('btn-attack').textContent = '关闭防御 → 启动攻击';
+}
+
+// === INIT ===
+// Seed some idle baseline data for display
+(function seedIdle() {
+  for (let i = 0; i < 15; i++) {
+    const noise = randn() * 30;
+    S.ts.push({
+      t: i + 1, total: clamp(120 + noise, 40, 240), pass: clamp(120 + noise, 40, 240),
+      cpu: clamp(50 + randn() * 2, 44, 58), succ: 100, sn: 0, state: 'normal',
+      wl: 0, nm: 70, sp: 0, bl: 0,
+    });
+  }
+  S.globalTime = 15;
+})();
+
+setPhase(0);
+
+if (S.timerHandle) clearInterval(S.timerHandle);
+S.timerHandle = setInterval(tick, 1000);
+
+setTimeout(renderAll, 80);
+window.addEventListener('resize', renderAll);
+</script>
+</body>
+</html>
