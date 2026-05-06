@@ -10,7 +10,7 @@ export default {
     assetFileNames: "[name][extname]",
   },
   plugins: [
-    styles({ mode: "extract", minimize: true, plugins: [autoprefixer()] }),
+    styles({ mode: "extract", minimize: true, sourceMap: false, plugins: [autoprefixer()] }),
     terser(),
   ],
 };

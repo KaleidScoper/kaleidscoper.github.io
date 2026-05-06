@@ -1,118 +1,197 @@
-// ⚠️ 本文件的编译产物（dist/main.css）已被 source/css/custom.styl 覆盖。
-// custom.styl 使用 CSS 自定义属性（CSS Variables）实现了亮/暗双模式代码块配色。
-// 如需修改代码块样式，请优先编辑 source/css/custom.styl。
-// 本文件仅在通过 Rollup 重新构建主题时生效（npm run build）。
-// ---
-// 以下为 Rollup 构建时使用的后备配色（VS Code Dark+），
-// 确保即使 custom.styl 未加载也能有基本的深色代码块样式。
+// Code block highlight system — VS Code Light+ / Dark+
+// Uses CSS custom properties for runtime light/dark mode switching.
 
-highlight-background = #1E1E1E
-highlight-foreground = #D4D4D4
-highlight-comment = #6A9955
-highlight-magenta = #C586C0
-highlight-yellow = #DCDCAA
-highlight-orange = #CE9178
-highlight-green = #B5CEA8
-highlight-blue = #569CD6
-highlight-cyan = #4EC9B0
-highlight-light-blue = #9CDCFE
-highlight-gray = #858585
+// Light mode (default) — VS Code Light+
+\:root
+  --hl-bg: #f8f8f8
+  --hl-fg: #383a42
+  --hl-comment: #008000
+  --hl-keyword: #af00db
+  --hl-function: #795e26
+  --hl-string: #a31515
+  --hl-number: #098658
+  --hl-boolean: #0000ff
+  --hl-class: #267f99
+  --hl-variable: #001080
+  --hl-operator: #383a42
+  --hl-builtin: #267f99
+  --hl-property: #001080
+  --hl-tag: #800000
+  --hl-attribute: #e50000
+  --hl-gutter: #999999
+  --inline-code-bg: #f0f2f5
+  --inline-code-text: #d63384
+
+// Dark mode — VS Code Dark+
+body.darkmode
+  --hl-bg: #1e1e1e
+  --hl-fg: #d4d4d4
+  --hl-comment: #6a9955
+  --hl-keyword: #c586c0
+  --hl-function: #dcdcaa
+  --hl-string: #ce9178
+  --hl-number: #b5cea8
+  --hl-boolean: #569cd6
+  --hl-class: #4ec9b0
+  --hl-variable: #9cdcfe
+  --hl-operator: #d4d4d4
+  --hl-builtin: #4ec9b0
+  --hl-property: #9cdcfe
+  --hl-tag: #569cd6
+  --hl-attribute: #9cdcfe
+  --hl-gutter: #858585
+  --inline-code-bg: #2e3440
+  --inline-code-text: #ffcc99
 
 figure.highlight
-  background: highlight-background !important
-  border-radius: 5px
-  margin: 20px 0
-  padding: 15px
+  position relative
+  background var(--hl-bg) !important
+  border-radius 5px
+  margin 20px 0
+  transition background-color 0.3s ease
 
 .highlight
-  margin: 0
-  padding: 0
-  border-radius: 3px
-  overflow: auto
-  font-size: 14px
-  color: highlight-foreground
-  background: none
+  color var(--hl-fg)
+  font-size 1.4rem
+  margin 0
+  padding 0
+  overflow auto
+  background none
 
   pre
     font-family font-family-mono
-    border: none
-    margin: 0
-    padding: 0
-    background: none
+    border none
+    margin 0
+    padding 0 1.5rem
+    background none
 
   table
-    margin: 0
-    width: auto
-    border: none
+    margin 0
+    width auto
+    border none
 
   td
-    border: none
-    padding: 0
-
-  .gutter
-    pre
-      color: highlight-gray
-      text-align: right
-      padding-right: 5px
-
-  .code
-    pre
-      padding-left: 5px
+    border none
+    padding 0
 
   .line
-    height: 20px
-    line-height: 20px
+    height auto
+    line-height 1.5
 
-  .keyword
-    color: highlight-magenta
+  .gutter pre
+    color var(--hl-gutter)
+    text-align right
+    padding-right 5px
+    -webkit-user-select none
+    user-select none
 
-  .function
-    color: highlight-yellow
+  // Syntax colors
+  .keyword   { color: var(--hl-keyword) }
+  .function  { color: var(--hl-function) }
+  .string    { color: var(--hl-string) }
+  .number    { color: var(--hl-number) }
+  .boolean   { color: var(--hl-boolean) }
+  .comment   { color: var(--hl-comment) }
+  .class     { color: var(--hl-class) }
+  .variable  { color: var(--hl-variable) }
+  .operator  { color: var(--hl-operator) }
+  .builtin   { color: var(--hl-builtin) }
+  .property  { color: var(--hl-property) }
+  .tag       { color: var(--hl-tag) }
+  .attribute { color: var(--hl-attribute) }
 
-  .string
-    color: highlight-orange
+// Language label — fades on hover to make room for the copy button
+figure.highlight
+  &::before
+    position absolute
+    top 0
+    right 1rem
+    padding 0 0.5rem
+    font-size 1.2rem
+    line-height 2
+    color var(--hl-gutter)
+    text-transform uppercase
+    pointer-events none
+    opacity 0.7
+    transition opacity 0.2s linear
+  &:hover::before
+    opacity 0
 
-  .number
-    color: highlight-green
+figure.highlight.javascript::before,
+figure.highlight.js::before         { content: "js" }
+figure.highlight.typescript::before,
+figure.highlight.ts::before         { content: "ts" }
+figure.highlight.python::before,
+figure.highlight.py::before         { content: "python" }
+figure.highlight.java::before       { content: "java" }
+figure.highlight.c::before          { content: "c" }
+figure.highlight.cpp::before        { content: "c++" }
+figure.highlight.csharp::before,
+figure.highlight.cs::before         { content: "c#" }
+figure.highlight.html::before       { content: "html" }
+figure.highlight.css::before        { content: "css" }
+figure.highlight.bash::before,
+figure.highlight.shell::before,
+figure.highlight.sh::before         { content: "bash" }
+figure.highlight.json::before       { content: "json" }
+figure.highlight.yaml::before,
+figure.highlight.yml::before        { content: "yaml" }
+figure.highlight.xml::before        { content: "xml" }
+figure.highlight.sql::before        { content: "sql" }
+figure.highlight.php::before        { content: "php" }
+figure.highlight.go::before         { content: "go" }
+figure.highlight.rust::before,
+figure.highlight.rs::before         { content: "rust" }
+figure.highlight.ruby::before,
+figure.highlight.rb::before         { content: "ruby" }
+figure.highlight.swift::before      { content: "swift" }
+figure.highlight.kotlin::before,
+figure.highlight.kt::before         { content: "kotlin" }
+figure.highlight.markdown::before,
+figure.highlight.md::before         { content: "md" }
+figure.highlight.diff::before       { content: "diff" }
+figure.highlight.lua::before        { content: "lua" }
+figure.highlight.powershell::before { content: "ps" }
+figure.highlight.plaintext::before,
+figure.highlight.text::before,
+figure.highlight.plain::before      { content: "text" }
+figure.highlight.ini::before        { content: "ini" }
+figure.highlight.toml::before       { content: "toml" }
+figure.highlight.nginx::before      { content: "nginx" }
+figure.highlight.dockerfile::before { content: "dockerfile" }
 
-  .boolean
-    color: highlight-blue
+// Inline code (not inside a fenced block)
+.article-entry :not(pre) > code
+  background var(--inline-code-bg) !important
+  color var(--inline-code-text) !important
+  padding 0.15em 0.4em
+  border-radius 3px
+  font-size 0.9em
+  font-family font-family-mono
+  transition background-color 0.3s ease, color 0.3s ease
 
-  .comment
-    color: highlight-comment
+// Fallback for <pre><code> blocks not processed by Hexo highlighter
+.article-entry pre:not(figure.highlight pre)
+  background var(--hl-bg)
+  border-radius 5px
+  padding 1.5rem
+  margin 2rem 0
+  overflow auto
+  transition background-color 0.3s ease
 
-  .class
-    color: highlight-cyan
+  code
+    color var(--hl-fg)
+    font-family font-family-mono
+    font-size 1.4rem
+    background none !important
+    padding 0
 
-  .variable
-    color: highlight-light-blue
-
-  .operator
-    color: highlight-foreground
-
-  .builtin
-    color: highlight-cyan
-
-  .property
-    color: highlight-light-blue
-
-  .tag
-    color: highlight-blue
-
-  .attribute
-    color: highlight-light-blue
-
-// 更精准地移除 Hexo 生成代码块表格的浅色边框
-// 一般不建议滥用 !important 掩盖结构性问题，这里交代一下故事背景：
-// 1）Hexo 在启用 highlight 行号（line_number: true）时，会把代码块渲染成 <figure.highlight><table><tr><td class="gutter|code">… 的结构；
-// 2）这意味着代码块本质上变成了一张表格，容易受到全局 table/td 样式（尤其是边框）的连带影响；
-// 3）在当前主题中，我们只希望代码块使用 VS Code 风格的无边框卡片，而不希望继承任何表格描边；
-// 4）要从根本上解决，应调整 Hexo 配置（如关闭行号或更换高亮渲染器），但这会彻底改变代码块效果，违背初衷；
-// 5）因此这里使用一个作用域很小、只针对 .article-entry （文章内容区）内代码块的 !important 兜底，避免误伤站点中其它正常表格。
-
+// Remove table borders from Hexo-generated highlight blocks.
+// When line_number: true, highlight output is a <table> inside <figure.highlight>
+// which inherits global table border styles. Scoped to avoid affecting content tables.
 .article-entry figure.highlight,
 .article-entry figure.highlight table,
 .article-entry figure.highlight tr,
 .article-entry figure.highlight td,
 .article-entry figure.highlight th
-  border: none !important
+  border none !important

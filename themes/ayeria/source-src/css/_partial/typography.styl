@@ -1,0 +1,107 @@
+// Typography system
+// Font-family assignments for all themed elements.
+// Variables are defined in _variables.styl:
+//   font-family-serif / font-family-sans / font-family-mono
+
+// Global body (also set in style.styl via font-family-base, kept here as
+// the single source of truth for the typography specification)
+body
+  font-family font-family-serif
+
+// Cover — serif Bold
+.cover-inner
+  h1
+    font-family font-family-serif
+    font-weight 700
+    letter-spacing 0.25em
+    text-indent 0.25em
+  #subtitle-box
+    font-family font-family-serif
+    font-weight 400
+
+// Article title — serif Bold
+.article-header .article-title
+  font-family font-family-serif
+  font-weight 700
+
+// Article body & headings — serif
+.article-entry
+  font-family font-family-serif
+
+.article-entry h1,
+.article-entry h2,
+.article-entry h3,
+.article-entry h4,
+.article-entry h5,
+.article-entry h6
+  font-family font-family-serif
+  font-weight 700
+
+// Navbar — sans-serif
+.navbar
+  font-family font-family-sans
+
+// Meta info — sans-serif Light
+.article-date,
+.article-category
+  font-family font-family-sans
+  font-weight 300
+
+// Tags — sans-serif Light
+.article-tag-list
+  font-family font-family-sans
+  font-weight 300
+
+// Word count — sans-serif Light
+.word_count
+  font-family font-family-sans
+  font-weight 300
+
+// Archive page
+.archive-article-date,
+.archive-year
+  font-family font-family-sans
+  font-weight 300
+
+.archive-article-title
+  font-family font-family-serif
+
+// Pagination — sans-serif
+.page-nav
+  font-family font-family-sans
+
+// Categories page
+.cat-block-name
+  font-family font-family-serif
+  font-weight 700
+
+.cat-block-total,
+.cat-subitem
+  font-family font-family-sans
+  font-weight 300
+
+// Footer — sans-serif
+.footer
+  font-family font-family-sans
+
+// Prev/next navigation — sans-serif
+.article-nav
+  font-family font-family-sans
+
+// Copyright declaration — sans-serif Light
+.declare
+  font-family font-family-sans
+  font-weight 300
+
+// Search input — sans-serif
+.local-search-input
+  font-family font-family-sans
+
+// Random sentence — sans-serif
+.random-sentence
+  font-family font-family-sans
+  font-weight 400
+
+// Sticky/topping badge — sans-serif
+.article-topping
+  font-family font-family-sans

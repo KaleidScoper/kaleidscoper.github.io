@@ -1,81 +1,199 @@
+// Search modal — glass-morphism overlay design
+// Uses CSS custom properties for light/dark mode.
 
+// Light mode variables
+\:root
+  --search-bg: #ffffff
+  --search-border: rgba(0, 0, 0, 0.08)
+  --search-shadow: rgba(0, 0, 0, 0.12)
+  --search-input-bg: #f5f6f8
+  --search-input-text: #333333
+  --search-input-placeholder: #999999
+  --search-title-color: #1a1a1a
+  --search-text-color: #555555
+  --search-divider: #eeeeee
+  --search-overlay: rgba(0, 0, 0, 0.35)
+  --search-close-bg: #e8e8e8
+  --search-close-hover: #d0d0d0
+  --search-close-color: #666666
+
+// Dark mode variables
+body.darkmode
+  --search-bg: #2a2f3a
+  --search-border: rgba(255, 255, 255, 0.06)
+  --search-shadow: rgba(0, 0, 0, 0.4)
+  --search-input-bg: #1c1f26
+  --search-input-text: #d0d0d0
+  --search-input-placeholder: #777777
+  --search-title-color: #e0e0e0
+  --search-text-color: #aaaaaa
+  --search-divider: #3b414c
+  --search-overlay: rgba(0, 0, 0, 0.55)
+  --search-close-bg: #3b414c
+  --search-close-hover: #4a5060
+  --search-close-color: #cccccc
+
+// Overlay backdrop
 .search-form-wrap
-  width 100%
-  position fixed
-  top -100%
-  right aside-width
-  left 0
+  position fixed !important
+  top 0 !important
+  left 0 !important
+  right 0 !important
+  bottom 0 !important
+  width 100% !important
+  height 100%
+  background var(--search-overlay) !important
+  -webkit-backdrop-filter blur(10px)
+  backdrop-filter blur(10px)
+  display flex !important
+  align-items flex-start
+  justify-content center
+  padding-top 12vh
+  z-index 9999
   opacity 0
-  transition(.3s)
-  &.on
-    top 0
-    opacity 1
+  visibility hidden
+  transition opacity 0.25s ease, visibility 0.25s ease !important
 
-//-------------
+  &.on
+    top 0 !important
+    opacity 1 !important
+    visibility visible
+
+// Floating panel
 .local-search
   position relative
+  width 92%
+  max-width 580px
   margin 0 auto
-  padding 1rem 3rem
-  background-color rgba(body-color,.9)
-  box-shadow 0 1rem 3rem rgba(sea, .05)
-  max-height 100vh
-  overflow-y auto
+  padding 0 !important
+  background var(--search-bg) !important
+  border-radius 14px !important
+  box-shadow 0 20px 60px var(--search-shadow), 0 0 0 1px var(--search-border) !important
+  max-height 68vh
+  overflow hidden !important
+  transform translateY(-16px) scale(0.97)
+  opacity 0
+  transition transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease !important
 
+.search-form-wrap.on .local-search
+  transform translateY(0) scale(1)
+  opacity 1
+
+// Search input
 .local-search-input
-  font-size 120%
-  border 0
-  border-radius(.4rem)
-  width 100%
-  padding 1rem 1.5rem
-  outline: none
-  &::-webkit-search-results-decoration
-  &::-webkit-search-cancel-button
-    -webkit-appearance: none
-
-.local-search-close
-  position absolute
-  top 1.85rem
-  right 4.25rem
   display block
-  height 2rem
-  width 2rem
-  padding 0
-  border none
-  border-radius(50%)
-  color white
-  text-align center
-  cursor pointer
-  &::before
-    font-size: 150%
-    content '\eb52'
-    font-family remixicon
+  width 100% !important
+  padding 1.2rem 3.2rem 1.2rem 1.6rem !important
+  margin 0
+  font-size 1.5rem !important
+  color var(--search-input-text) !important
+  background var(--search-input-bg) !important
+  border none !important
+  border-bottom 1px solid var(--search-divider) !important
+  border-radius 14px 14px 0 0 !important
+  outline none !important
+  box-sizing border-box
+  transition background-color 0.3s ease
 
-// 搜索结果
+  &::placeholder
+    color var(--search-input-placeholder)
+
+// Close button
+.local-search-close
+  position absolute !important
+  top 0.9rem !important
+  right 1rem !important
+  width 2.2rem !important
+  height 2.2rem !important
+  padding 0 !important
+  border none !important
+  border-radius 50% !important
+  background var(--search-close-bg) !important
+  color var(--search-close-color) !important
+  cursor pointer
+  display flex
+  align-items center
+  justify-content center
+  transition background-color 0.15s ease
+  z-index 2
+
+  &:hover
+    background var(--search-close-hover) !important
+
+  &::before
+    font-size 130% !important
+
+// Results area
 .local-search-result
+  position relative
+  overflow-y auto
+  max-height calc(68vh - 4.4rem)
+  padding 0 1.6rem
   text-align left
+  overscroll-behavior contain
 
 .search-result-list
-  list-unstyled()
+  list-style none !important
+  margin 0 !important
+  padding 0 !important
+
   li
-    padding 1.5rem 0
-    &:not(:last-child)
-      border-bottom border-width border-color solid
+    padding 1.2rem 0 !important
+    border-bottom 1px solid var(--search-divider) !important
+
+    &:last-child
+      border-bottom none !important
 
     .search-result-title
-      font-size 1.6rem
-      font-weight bold
+      font-size 1.5rem !important
+      font-weight 600 !important
+      color var(--search-title-color) !important
+      text-decoration none
+      display block
+      line-height 1.4
+
+      &:hover
+        color #0681d0 !important
+
     .search-result
-      color white
-      padding-top .5rem
+      color var(--search-text-color) !important
+      font-size 1.3rem
+      line-height 1.6
+      padding-top 0.4rem
       margin 0
-      max-height 12rem
+      max-height 10rem
       overflow hidden
+
     em.search-keyword
       font-style normal
-      color link-color
+      color #e8590c !important
+      font-weight 600
 
+body.darkmode .search-result-list li
+  .search-result-title:hover
+    color #80cfff !important
+
+  em.search-keyword
+    color #ffb347 !important
+
+// Empty state
 .search-result-empty
-  padding 2.6rem 0 0
-  color white
+  padding 2.5rem 1rem !important
+  text-align center
+
   p
-    text-align center
+    color var(--search-text-color) !important
+    font-size 1.4rem
+
+// Mobile
+@media (max-width: 768px)
+  .search-form-wrap
+    padding-top 6vh
+
+  .local-search
+    width 95%
+    max-height 80vh
+    border-radius 12px !important
+
+  .local-search-result
+    max-height calc(80vh - 4.4rem)

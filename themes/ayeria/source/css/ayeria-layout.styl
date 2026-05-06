@@ -1,0 +1,46 @@
+// ----------------------------------------------------------------
+// ayeria-layout.styl
+//
+// 读取主题配置，在运行时覆盖布局静态默认值。
+// 此文件由 Hexo 内置的 Stylus 编译器处理，不经过 Rollup 构建，
+// 因此可以使用 hexo-config() 等 Hexo Stylus 辅助函数。
+//
+// 用户如需修改布局尺寸或鼠标指针，请在 _config.ayeria.yml 的
+// layout / mouse 配置项中调整，无需编辑此文件。
+// ----------------------------------------------------------------
+
+$wrap-width  = convert(hexo-config('layout.article_width'))
+$aside-width = convert(hexo-config('layout.sidebar_width'))
+
+// 自定义鼠标指针
+if hexo-config('mouse.enable')
+  $mouse-url = convert(hexo-config('mouse.path'))
+  body
+    cursor: url($mouse-url), auto
+
+// 侧边栏宽度（覆盖 layout.styl 中的静态默认值）
+.sidebar
+  left: -$aside-width
+  width: $aside-width
+  &.on
+    left: 0
+
+// 导航切换按钮位置
+.navbar-toggle
+  left: 1.5rem + $aside-width
+
+// 文章宽度（桌面端）
+@media (min-width: 768px)
+  .outer, .wrap
+    width: $wrap-width !important
+
+// 移动端：侧边栏从左侧滑入改为从右侧或全屏处理，内容区跟随偏移
+@media (max-width: 768px)
+  .sidebar
+    left: 0
+    &.on
+      left: -$aside-width
+  .content
+    transform: translateX($aside-width)
+    &.on
+      transform: translateX(0)
