@@ -325,28 +325,41 @@ function fmtSn(v) {
 }
 
 // === CUSUM ENGINE ===
+// 冷却窗口逻辑（贴近论文）：
+//   攻击态下，若 xn < μ₀+k（流量低于触发阈值）则计入冷却计数，
+//   同时 Sₙ 按指数因子 0.77/tick 快速衰减（约 18 tick 视觉归零）；
+//   连续 30 tick 均低于阈值后显式归零并恢复正常态。
+//   若攻击流量恢复，立即重置冷却计数，继续正常累积。
 function stepCUSUM(xn) {
   const mu0 = 120, k = 105, h = 175;
-  S.cusum_sn = Math.max(0, S.cusum_sn + xn - mu0 - k);
 
-  if (S.cusum_state === 'normal' && S.cusum_sn > h) {
-    S.cusum_state = 'attack';
-    S.cusum_cooldown = 0;
-    S.cusum_atk_ticks = 0;
-    S.thr_wl = 90; S.thr_nm = 60; S.thr_sp = 30;
-    if (S.cusumTriggerT < 0) S.cusumTriggerT = S.globalTime;
-  } else if (S.cusum_state === 'attack') {
+  if (S.cusum_state === 'normal') {
+    S.cusum_sn = Math.max(0, S.cusum_sn + xn - mu0 - k);
+    if (S.cusum_sn > h) {
+      S.cusum_state = 'attack';
+      S.cusum_cooldown = 0;
+      S.cusum_atk_ticks = 0;
+      S.thr_wl = 90; S.thr_nm = 60; S.thr_sp = 30;
+      if (S.cusumTriggerT < 0) S.cusumTriggerT = S.globalTime;
+    }
+  } else {
+    // 攻击态
     S.cusum_atk_ticks++;
-    if (S.cusum_sn <= 0) {
+    if (xn < mu0 + k) {
+      // 流量低于触发阈值：进入冷却窗口，Sₙ 指数衰减
       S.cusum_cooldown++;
-      if (S.cusum_cooldown >= 30) {
+      S.cusum_sn *= 0.77;
+      if (S.cusum_cooldown >= 30 || S.cusum_sn < 0.5) {
+        S.cusum_sn = 0;
         S.cusum_state = 'normal';
         S.cusum_cooldown = 0;
         S.cusum_atk_ticks = 0;
         S.thr_wl = 80; S.thr_nm = 50; S.thr_sp = 20;
       }
     } else {
+      // 流量仍高：重置冷却，继续累积
       S.cusum_cooldown = 0;
+      S.cusum_sn = Math.max(0, S.cusum_sn + xn - mu0 - k);
     }
   }
 }
@@ -361,25 +374,25 @@ function getIPTier(rep) {
 }
 
 function updateReputation() {
-  // Legitimate IPs: +0.5/tick, cap 100
+  // 合法 IP：+0.5/tick 奖励，上限 100
   for (let i = 0; i < 20; i++) {
     S.rep[i] = clamp(S.rep[i] + 0.5, 0, 100);
   }
-  // Attacker IPs: staggered detection
-  if (S.defenseActive && S.cusum_state === 'attack') {
+
+  if (S.defenseActive && S.attackActive && S.cusum_state === 'attack') {
+    // 攻击进行中且防御激活：按检测延迟逐步施加惩罚
     const basePen = S.attackType === 'syn' ? 12 : 10;
     for (let i = 0; i < 50; i++) {
       if (S.cusum_atk_ticks >= S.detDelay[i]) {
         S.rep[20 + i] = clamp(S.rep[20 + i] - basePen, 0, 100);
       }
     }
-  } else if (!S.attackActive || !S.defenseActive) {
-    // Slow decay toward 50
+  } else {
+    // 攻击已停止或防御未激活：所有攻击者 IP 按半衰期 300s 向 50 回归
+    // Δ = (50 - rep) × (1 - e^{-1/300}) ≈ (50 - rep) / 300
     for (let i = 20; i < 70; i++) {
-      if (!S.attackActive) {
-        const delta = (50 - S.rep[i]) * 0.005;
-        S.rep[i] = clamp(S.rep[i] + delta, 0, 100);
-      }
+      const delta = (50 - S.rep[i]) / 300;
+      S.rep[i] = clamp(S.rep[i] + delta, 0, 100);
     }
   }
 }
