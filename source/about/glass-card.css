@@ -62,6 +62,7 @@ body.darkmode .glass-card {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   z-index: 1;
+  pointer-events: none;
 }
 
 .glass-card > * {

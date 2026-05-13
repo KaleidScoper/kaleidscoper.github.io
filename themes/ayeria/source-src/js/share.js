@@ -8,8 +8,13 @@ function generate(url, opts) {
 }
 
 function showWX() {
-  $('.wx-share-modal').addClass('in ready')
-  $('#share-mask').show()
+  var img = document.querySelector('.wx-qrcode-img');
+  if (img && img.dataset.url && !img.dataset.loaded) {
+    img.src = img.dataset.url;
+    img.dataset.loaded = '1';
+  }
+  $('.wx-share-modal').addClass('in ready');
+  $('#share-mask').show();
 }
 
 function hideWX() {
@@ -59,7 +64,7 @@ const share_init = () => {
     }
   })
 
-  document.querySelector('#mask').onclick = hideWX
+  document.querySelector('#share-mask').onclick = hideWX
   document.querySelector('.modal-close').onclick = hideWX
 }
 
