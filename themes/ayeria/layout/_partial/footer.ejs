@@ -53,8 +53,8 @@
     <% if (theme.random_sentences && theme.random_sentences.enable){ %>
     <ul>
       <li>
-        <div id="random-sentence" class="random-sentence" 
-             data-random-sentences-config='{"use_local_file": <%= theme.random_sentences.use_local_file !== undefined ? theme.random_sentences.use_local_file : true %>}'></div>
+        <div id="random-sentence" class="random-sentence"
+             data-random-sentences-config='{"use_local_file": <%= theme.random_sentences.use_local_file !== undefined ? theme.random_sentences.use_local_file : true %>, "queue_size": <%= theme.random_sentences.queue_size || 5 %>}'>千秋岁月毫端聚 一纸烟霞腕底生</div>
       </li>
     </ul>
     <% } %>
