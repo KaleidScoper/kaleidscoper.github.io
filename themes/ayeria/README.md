@@ -47,7 +47,7 @@ theme: ayeria
 
 ## 配置
 
-主题自带默认配置文件 `themes/ayeria/_config.yml.old`。你**不应直接修改**这个文件，而是在站点根目录创建 `_config.ayeria.yml`，只填写需要覆盖的选项。Hexo 5+ 会自动将其与主题默认配置合并。
+主题自带默认配置文件 `themes/ayeria/_config.yml`。你**不应直接修改**这个文件，而是在站点根目录创建 `_config.ayeria.yml`，只填写需要覆盖的选项。Hexo 5+ 会自动将其与主题默认配置合并。
 
 下文列出所有可配置项。
 
