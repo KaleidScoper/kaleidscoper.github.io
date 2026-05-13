@@ -62,12 +62,12 @@ layout: page
   </div>
 
   <!-- F -->
-  <div class="card" style="--bg:url('img/fanghe.jpg')">
+  <div class="card" style="--bg:url('img/kaleid.jpg')">
     <div class="card-content">
-      <img src="img/fanghe.jpg" loading="lazy" decoding="async" width="100" height="100" alt="方和">
-      <h2>方和</h2>
-      <p class="subname">Fang Ho</p>
-      <p class="intro">地球Online</p>
+      <img src="img/kaleid.jpg" loading="lazy" decoding="async" width="100" height="100" alt="我">
+      <h2>“万花筒”</h2>
+      <p class="subname">Kaleid Scoper</p>
+      <p class="intro">我的自设</p>
       <a href="/about/" target="_blank" rel="noopener noreferrer" class="wiki-btn">关于</a>
     </div>
   </div>
@@ -268,7 +268,7 @@ layout: page
       <img src="img/wulingni.jpg" loading="lazy" decoding="async" width="100" height="100" alt="吴凌旎">
       <h2>吴凌旎</h2>
       <p class="subname">Wu Ling-ni</p>
-      <p class="intro">地球Online</p>
+      <p class="intro">老婆大人的 OC</p>
       <a href="/about/" target="_blank" rel="noopener noreferrer" class="wiki-btn">关于</a>
     </div>
   </div>
