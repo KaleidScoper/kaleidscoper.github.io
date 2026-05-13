@@ -41,11 +41,13 @@
 </div>
 
 <div class="wx-share-modal">
-    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img class="wx-qrcode-img" src="" data-url="<%- 'qrcode' in locals ? qrcode(sUrl) : '//api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(sUrl) %>" alt="微信分享二维码">
-    </div>
+  <div class="wx-modal-close">
+    <i class="ri-close-line"></i>
+  </div>
+  <p class="wx-modal-caption">扫一扫，分享到微信</p>
+  <div class="wx-qrcode-frame">
+    <img class="wx-qrcode-img" src="" data-url="<%- 'qrcode' in locals ? qrcode(sUrl) : '//api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(sUrl) %>" alt="微信分享二维码">
+  </div>
 </div>
 
 <div id="share-mask"></div>

@@ -61,9 +61,11 @@ body.darkmode
     cursor pointer
 
 // ─── Dropdown panel ───────────────────────────────────────────────────────────
+// Visibility controlled by .open class — opacity+pointer-events instead of
+// display:none, enabling CSS transition without jQuery fadeToggle.
 .share-wrap
   min-height 20px
-  display none
+  display block
   position absolute
   top 100%
   right 0
@@ -75,6 +77,15 @@ body.darkmode
   box-shadow var(--share-wrap-shadow)
   -webkit-backdrop-filter blur(8px)
   backdrop-filter blur(8px)
+  opacity 0
+  pointer-events none
+  transform translateY(-4px)
+  transition opacity 0.2s ease, transform 0.2s ease
+
+  &.open
+    opacity 1
+    pointer-events auto
+    transform translateY(0)
 
   // Pseudo-element arrow replaces the inline .arrow element,
   // allowing correct border rendering on the exposed sides.
@@ -143,11 +154,15 @@ body.darkmode
       transform scale(0.95)
 
 // ─── WeChat QR modal ──────────────────────────────────────────────────────────
+// Default state: pointer-events:none prevents the fixed-position element from
+// intercepting clicks on underlying content (e.g. about page social links).
 .wx-share-modal
   position fixed
   top 50%
   left 50%
   z-index 9999
+  width 220px
+  max-width 92vw
   padding 28px 24px 24px
   text-align center
   color var(--share-modal-text)
@@ -162,37 +177,56 @@ body.darkmode
   transform translate(-50%, -50%) scale(0.96)
   transition opacity 0.3s ease, transform 0.3s ease
 
-  p
-    margin-bottom 12px
-    font-size 14px
-    color var(--share-modal-text)
-
-  &.ready
-    display block
-    visibility hidden
-
-  &.in
-    display block
-    visibility visible
+  &.visible
     opacity 1
     pointer-events auto
     transform translate(-50%, -50%) scale(1)
 
-  .modal-close
-    position absolute
-    right 12px
-    top 12px
-    color var(--share-modal-close)
-    transition color 0.2s ease
+// ─── Modal close button (aligned with .reward-close) ─────────────────────────
+.wx-modal-close
+  position absolute
+  right 10px
+  top 10px
+  width 30px
+  height 30px
+  display flex
+  align-items center
+  justify-content center
+  border-radius 50%
+  cursor pointer
+  transition background 0.2s ease
+  color var(--share-modal-close)
 
-    i
-      font-size 22px
+  &:hover
+    background var(--share-icon-bg-hover)
+    color var(--share-modal-close-hover)
 
-    &:hover,
-    &:active
-      color var(--share-modal-close-hover)
+  i
+    font-size 18px
+    color inherit
+
+// ─── Modal caption (aligned with .reward-wording) ────────────────────────────
+.wx-modal-caption
+  margin 4px 0 16px
+  font-size 14px
+  color var(--share-modal-text)
+  line-height 1.5
+
+// ─── QR code frame (aligned with .reward-qrcode-wrap) ────────────────────────
+.wx-qrcode-frame
+  display inline-block
+  line-height 0
+  padding 8px
+  border 1px solid var(--share-modal-border)
+  border-radius 8px
+
+.wx-qrcode-img
+  display block
+  width 150px
+  height 150px
 
 // ─── Overlay ──────────────────────────────────────────────────────────────────
+// Uses visibility+opacity transition instead of display:none for smooth fade.
 #share-mask
   position fixed
   width 100%
@@ -201,4 +235,12 @@ body.darkmode
   top 0
   background var(--share-mask-bg)
   z-index 999
-  display none
+  visibility hidden
+  opacity 0
+  pointer-events none
+  transition opacity 0.25s ease, visibility 0.25s ease
+
+  &.active
+    visibility visible
+    opacity 1
+    pointer-events auto
