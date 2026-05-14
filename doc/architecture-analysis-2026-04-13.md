@@ -1,7 +1,7 @@
 # 博客项目架构分析报告
 
 > **分析日期**: 2026-04-13
-> **最后更新**: 2026-04-24（勘误：主题品牌改名 ayer → ayeria；更新 3.1 修复状态；新增 1.4/1.6/9.2 变动）
+> **最后更新**: 2026-05-14（新增十二、中国大陆用户专项分析；已忽略/已修复问题打删除线）
 > **分析范围**: 项目整体架构、目录结构、配置体系、主题架构、CI/CD、性能、安全、SEO、可维护性
 > **参考基准**: Hexo 官方最佳实践、GitHub Pages 部署惯例、静态站点生成器行业通用规范
 > **前置审查**: 本报告基于 [2026-03-28 审查报告](archive/audit-report-2026-03-28.md) 的修复成果，不重复已关闭问题，仅关注架构层面
@@ -27,7 +27,7 @@
 
 ## 一、目录结构
 
-### 1.1 （已修复）根目录存在非标准目录
+### ~~1.1 （已修复）根目录存在非标准目录~~
 
 **位置**: 项目根目录
 
@@ -37,13 +37,13 @@
 
 **建议**: 将 `source/_drafts/` 中的非 Markdown 文件（特别是 `哲学.py`）移出仓库，或归入 `doc/drafts/`。
 
-### 1.2 （已修复）残留配置文件
+### ~~1.2 （已修复）残留配置文件~~
 
 **位置**: `_config.landscape.yml`
 
 已删除，无需再跟进。
 
-### 1.3 （已忽略）主题目录中的 `.gitkeep`
+### ~~1.3 （已忽略）主题目录中的 `.gitkeep`~~
 
 **位置**: `themes/.gitkeep`
 
@@ -51,7 +51,7 @@
 
 **建议**: 删除该文件。
 
-### 1.4 （已忽略）测试文件残留
+### ~~1.4 （已忽略）测试文件残留~~
 
 **位置**:
 
@@ -144,7 +144,7 @@
 
 ## 三、主题架构
 
-### 3.1 （已修复）`custom.styl` 严重偏离 Stylus 范式
+### ~~3.1 （已修复）`custom.styl` 严重偏离 Stylus 范式~~
 
 **原位置**: `themes/ayeria/source/css/custom.styl`（约 973 行）
 
@@ -178,7 +178,7 @@
 
 ## 四、自定义页面架构
 
-### 4.1 （已忽略）简历页面与 Hexo 模板体系完全脱节
+### ~~4.1 （已忽略）简历页面与 Hexo 模板体系完全脱节~~
 
 **位置**: `source/resume/`、`source/resume-en/`
 
@@ -196,7 +196,7 @@
 - 中期：将简历页面重构为 Hexo layout 模板，融入主站主题
 - 长期：考虑使用现代简历生成方案（如 JSON Resume + 主题模板）
 
-### 4.2 （已忽略）MC 服务器页面架构独立
+### ~~4.2 （已忽略）MC 服务器页面架构独立~~
 
 **位置**: `source/mc-server/`
 
@@ -213,7 +213,7 @@
 - 将 Font Awesome 图标替换为 RemixIcon（与主站一致）
 - 考虑将成员数据迁移至 `source/_data/mc-members.yml`，通过 Hexo 模板渲染
 
-### 4.3 （已忽略）电子手办柜页面使用 `{% raw %}` 嵌入大量 HTML
+### ~~4.3 （已忽略）电子手办柜页面使用 `{% raw %}` 嵌入大量 HTML~~
 
 **位置**: `source/waifu/index.md`
 
@@ -221,7 +221,7 @@
 
 **建议**: 将该页面改为 `index.html`（直接使用 HTML），或使用 Hexo 数据文件 + 模板方案（将角色数据提取到 `source/_data/waifu.yml`，通过 EJS 模板循环渲染）。
 
-### 4.4 （已忽略）关于页面混合 Markdown 与 HTML/CSS
+### ~~4.4 （已忽略）关于页面混合 Markdown 与 HTML/CSS~~
 
 **位置**: `source/about/index.md`
 
@@ -447,7 +447,7 @@ Disallow: /resume-en/
 
 **建议**: 将 `debug.py`、`debug_wsl.py` 统一移入 `scripts/` 目录，并在 `.gitignore` 中注明这些文件的性质，或通过 `CLAUDE.md` / `README.md` 说明调试脚本的维护规范。
 
-### 9.3 （已忽略）Git 提交信息不规范
+### ~~9.3 （已忽略）Git 提交信息不规范~~
 
 **问题**: 此问题在 2026-03-28 审查中被标记为"已忽略"。但从长期可维护性角度，无规范的提交信息使得：
 
@@ -509,7 +509,88 @@ Disallow: /resume-en/
 
 ---
 
-## 十二、问题优先级汇总
+## 十二、中国大陆用户专项分析
+
+> **新增于 2026-05-14**：基于本站主要受众为中国大陆各地用户的假设，补充以下架构与性能专项分析。海外用户体验作为次要约束，不做过度牺牲，但也不引入仅对中国生效的方案。
+
+### 12.1 GitHub Pages 在中国大陆的访问性能
+
+**问题**: GitHub Pages 使用 Fastly CDN，在中国大陆无边缘节点。用户访问 `kaleidscoper.github.io` 时，DNS 解析和 TLS 握手均需经过跨境链路，首字节时间（TTFB）通常在 300-800ms，移动网络或偏远地区可能更高。这直接影响所有页面的首屏渲染速度。
+
+**建议**:
+- **中期方案**: 绑定自定义域名，通过 Cloudflare CDN 代理（Cloudflare 在亚太有多个边缘节点，中国大陆邻近地区如香港、东京、新加坡可提供 50-150ms 的 TLS 终端延迟）。无需备案，对海外用户同样友好。
+- **长期方案**: 如果中国大陆用户体验是核心指标，可考虑国内 OSS + CDN + ICP 备案，但这是需要持续投入的方案。
+- 静态资源的 CDN 加速容易实现，HTML 文档本身的加载速度是关键瓶颈，任何 DNS/边缘节点层面的改进都会全局受益。
+
+### 12.2 第三方 CDN 资源对中国大陆的可用性风险
+
+**现状**: 站点多个功能依赖 `staticfile.org`（360 维护的 CDN）：
+
+| 资源 | 功能 | 当前状态 |
+|------|------|---------|
+| pace.js | 页面顶部进度条 | 已启用 |
+| jquery-modal | 图片画廊弹窗 | 无条件加载 |
+| justifiedGallery | 图片画廊布局 | 无条件加载 |
+| sweetalert2 | 网站加密锁 | 功能已关闭，但代码仍引用 |
+| anime.js | 点击爆炸特效 | 功能已关闭，但代码仍引用 |
+| mermaid | 流程图渲染 | 功能已关闭 |
+
+**问题**: `staticfile.org` 历史上经历过服务调整。一旦不可用，进度条、图片画廊等功能将静默失败。此外，部分已关闭功能（lock、click_effect、mermaid）的 CDN 引用仍保留在模板中，虽不会被加载，但增加了代码债务。
+
+**建议**:
+- 将核心功能依赖（pace.js、jquery-modal、justifiedGallery）自托管至 `themes/ayeria/source/js/`
+- 为自托管不可行的 CDN 资源添加本地 fallback：
+  ```html
+  <script src="https://cdn.staticfile.org/pace/1.2.4/pace.min.js" defer></script>
+  <script>window.Pace||document.write('<script src="/js/pace.min.js"><\/script>')</script>
+  ```
+- 清理已关闭功能的 CDN 引用（sweetalert2、anime.js、mermaid），或将这些引用也包裹在条件判断中
+
+### 12.3 中文字体加载——对中国大陆用户的成本收益分析
+
+**补充分析**（对 5.3 的扩展）:
+
+针对中国大陆用户，`fonts.font.im`（Google Fonts 第三方镜像）引入的 Noto Serif SC + Noto Sans SC 共 4 个字重，存在以下问题：
+- 第三方镜像 `fonts.font.im` 在国内部分地区的可用性和解析速度不明
+- 4 个字重加在一起，在 3G/4G 移动网络下字体下载可能耗时 5-15 秒
+- 中国大陆主流操作系统已内置优质中文字体：Windows（微软雅黑）、macOS/iOS（苹方）、Android（思源黑体/Noto Sans CJK）、Linux 桌面（文泉驿/思源）
+
+**建议**（更新 5.3 的优先级）:
+- **首选方案**: 移除外部字体加载，使用系统字体栈：
+  ```css
+  body {
+    font-family: "PingFang SC", "Noto Serif SC", "Source Han Serif SC", 
+                 "STSong", "SimSun", "Songti SC", "Microsoft YaHei", 
+                 "STHeiti", "Noto Sans SC", "Source Han Sans SC", sans-serif;
+  }
+  ```
+- 系统字体栈对所有地区用户都零开销，海外用户（macOS 苹方 / Windows 微软雅黑 / Linux 思源）同样获得良好体验
+- 如果认为 Web Font 是品牌体验的必要部分，至少减少至 1 个字重，并评估改用 `fonts.googleapis.com` 官方源（中国大陆部分地区可访问）的可行性
+
+### 12.4 缺少面向中国大陆的访问统计分析
+
+**问题**:
+- `google_analytics` 为空 — Google Analytics 在中国大陆被封锁，即使填写也无法收集数据，反而拖慢页面
+- `baidu_analytics` 为空 — 百度统计是中国大陆最常用的站点分析工具
+- `cnzz.enable: false` — 友盟统计也未启用
+- 当前仅不蒜子（busuanzi）提供 PV/UV 计数，不蒜子是个人维护的免费服务，稳定性时有波动，且不提供用户行为分析
+
+**建议**:
+- 如需了解中国大陆用户访问情况，至少启用百度统计（`baidu_analytics` 填入统计 ID）
+- 不蒜子 JS 建议添加 `defer` + 超时 fallback，避免其服务不稳定时阻塞页面渲染
+- 如果出于隐私考量不使用任何分析工具，可在本报告中明确说明决策理由
+
+### 12.5 giscus 评论系统在中国大陆的可用性
+
+**分析**: giscus 依赖 GitHub Discussions API。GitHub 在中国大陆处于间歇性不可用状态（非持续封锁，但访问不稳定）。当 GitHub 不可用时：
+- 评论模块无法加载，但不影响文章正文阅读（可降级功能）
+- 评论加载失败不会阻塞页面渲染
+
+**建议**: 当前方案可接受。建议在前端添加评论加载失败的友好提示（如"评论暂不可用"），并关注 GitHub 在中国大陆的可用性趋势。如果评论功能被证明为高频使用的核心功能，可考虑备选：Waline + Vercel（中国大陆部分地区可用）或 Twikoo + 腾讯云 CloudBase。
+
+---
+
+## 十三、问题优先级汇总
 
 ### 🔴 高优先级（影响用户体验或站点可发现性）
 
@@ -521,6 +602,8 @@ Disallow: /resume-en/
 | 5.1 | jQuery 每页无条件加载                  | 性能    |
 | 8.2 | 主题构建未纳入 CI                      | CI/CD |
 | 8.3 | CI 使用 `npm install` 而非 `npm ci` | CI/CD |
+| 12.2 | 第三方 CDN 资源可用性风险（staticfile.org）     | 性能/架构 |
+| 12.1 | GitHub Pages 中国大陆访问性能              | 架构/性能 |
 
 
 ### 🟡 中优先级（影响可维护性或工程规范）
@@ -531,7 +614,7 @@ Disallow: /resume-en/
 | 4.1  | 简历页面与主站脱节                           | 自定义页面 |
 | 2.4  | RSS 未配置                             | 配置    |
 | 5.2  | jquery-modal/justifiedGallery 无条件加载 | 性能    |
-| 5.3  | Google Fonts 加载策略                   | 性能    |
+| 5.3  | Google Fonts 加载策略（参见 12.3 中国大陆分析）    | 性能    |
 | 6.2  | CDN 资源缺少 SRI                        | 安全    |
 | 7.3  | 缺少 Open Graph / Twitter Card        | SEO   |
 | 9.1  | 缺乏代码规范工具                            | 可维护性  |
@@ -566,6 +649,8 @@ Disallow: /resume-en/
 | 10.2 | 主题 devDependencies 未在 CI 安装 | 依赖管理  |
 | 11.1 | 缺少跳过导航链接                    | 可访问性  |
 | 11.2 | 社交图标缺少可访问文本                 | 可访问性  |
+| 12.4 | 缺少面向中国大陆的访问统计分析             | 可维护性  |
+| 12.5 | giscus 评论系统中国大陆可用性            | 架构    |
 
 
 ---
