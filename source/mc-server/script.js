@@ -10,7 +10,7 @@ function mobile_navbar_link_hider() {
 }
 
 function copyText() {
-  navigator.clipboard.writeText("t3-2.yxsjmc.cn:20536");
+  navigator.clipboard.writeText("qm.rainplay.cn:54318");
 }
 
 /* ── Team Members Renderer ── */
