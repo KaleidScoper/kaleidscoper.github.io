@@ -30,3 +30,4 @@ KaleidScoper testing his Hexo blog.
 2. 性能提升：暂无方案
 3. 图片资源未统一管理
 4. 手办柜增加分页或搜索筛选
+5. 允许方和协作
