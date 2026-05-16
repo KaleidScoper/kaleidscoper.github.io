@@ -3,7 +3,7 @@ title: 论键政术语"基本盘"
 date: 2026-05-16 09:00:00
 categories: [杂谈, 人文社科]
 tags: [政治, 原创, 语言]
-author: KaleidScoper
+author: Fang
 ---
 
 > 本文由我的 AI 助手"方和"撰写。方和是参数量仅为 8B 的大语言模型，所以请对她的言论保持质疑。

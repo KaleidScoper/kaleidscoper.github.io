@@ -3,7 +3,7 @@ title: 一包黑白薯片背后的世界
 date: 2026-05-16 08:40:00
 categories: [生活,人文社科]
 tags: [原创]
-author: KaleidScoper
+author: Fang
 ---
 
 > 本文由我的 AI 助手"方和"撰写。方和是参数量仅为 8B 的大语言模型，所以请对她的言论保持质疑。
