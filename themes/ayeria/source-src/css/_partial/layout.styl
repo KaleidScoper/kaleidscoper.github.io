@@ -110,7 +110,9 @@
   .content
     &.on
       margin-left -1px !important
-  .sidebar
-    background-color body-color
+  // 旧实现中此处将 .sidebar 背景覆写为 body-color（不透明 #403e3e），意图是移动端全屏侧边栏
+  // 使用不透明底色遮挡下层内容，营造原生 App 抽屉面板体验。但该行为与桌面端半透明遮罩
+  // rgba(0,0,0,.8) 不一致，且不可配置。现已移除覆写，移动端与桌面端统一由基类规则
+  // .sidebar { background-color: rgba(0,0,0,.8) } 控制。
   .navbar-toggle
     transform: scale(1.1)

@@ -19,8 +19,10 @@ if hexo-config('mouse.enable')
     cursor: url($mouse-url), auto
 
 // 侧边栏宽度（覆盖 layout.styl 中的静态默认值）
+// 使用 0 - $var 而非 -$var：Stylus 0.62 解析器将 -$aside-width 的
+// 前导 "-" 误判为属性名前缀（类 -webkit-），导致变量名原样输出为无效 CSS。
 .sidebar
-  left: -$aside-width
+  left: 0 - $aside-width
   width: $aside-width
   &.on
     left: 0
@@ -34,12 +36,12 @@ if hexo-config('mouse.enable')
   .outer, .wrap
     width: $wrap-width !important
 
-// 移动端：侧边栏从左侧滑入改为从右侧或全屏处理，内容区跟随偏移
+// 移动端：侧边栏全屏展开，内容区跟随偏移
 @media (max-width: 768px)
   .sidebar
     left: 0
     &.on
-      left: -$aside-width
+      left: 0 - $aside-width  // 同上，0 - $var 替代取反以避免 Stylus 解析歧义
   .content
     transform: translateX($aside-width)
     &.on

@@ -1,9 +1,11 @@
-# 移动端侧边栏 Bug 分析报告
+# 移动端侧边栏 Bug 分析报告（已修复 · 已归档）
 
-> **分析日期**: 2026-05-19
-> **问题**: 移动端侧边栏半透明效果丢失 & 收起按钮点击后侧边栏不移动
-> **严重程度**: 高 — 影响移动端核心交互
-> **根因归类**: 主题 CSS 编译缺陷 + 样式设计冲突
+> **分析日期**: 2026-05-19  
+> **修复日期**: 2026-05-19  
+> **问题**: 移动端侧边栏半透明效果丢失 & 收起按钮点击后侧边栏不移动  
+> **严重程度**: 高 — 影响移动端核心交互  
+> **根因归类**: 主题 CSS 编译缺陷（Stylus 解析器边界情况）+ 样式设计冲突  
+> **状态**: ✅ 已修复，编译验证通过
 
 ---
 
@@ -117,6 +119,40 @@ CSS 的 `left` 属性由两个 CSS 文件共同控制，加载顺序为：
 `width: $aside-width` 不涉及取反，因此正常解析。
 
 > 技术验证：Hexo 项目使用 `hexo-renderer-stylus@3.0.1`，其依赖 `stylus@0.62.0`。
+
+---
+
+## Bug 历史溯源
+
+通过 `git log --follow` 对两个缺陷文件进行逐提交追溯，确定各 Bug 的引入时间点。
+
+### 关键提交链（按时间顺序）
+
+| 提交 | 日期 | 说明 |
+|------|------|------|
+| `9cca2f2` | 2025-03-20 | 初始提交 "re-ayer-1"，主题名为 Ayer |
+| `310ad09` | 2026-04-12 | 按钮样式重构，`layout.styl` 移动端 MQ 未受影响 |
+| `e7ca545` | 2026-04-14 | 纯重命名 "Fix: Rename Ayer to Ayeria"，无内容变更 |
+| `92eb855` | 2026-04-23 | **创建 `ayeria-layout.styl`** 并加入 CSS 加载链 |
+
+### Bug A 溯源：半透明效果丢失
+
+- **引入提交**：`9cca2f2`（初始提交，2025-03-20）
+- **存活时长**：~14 个月（426 天）
+- **详情**：`layout.styl` 的移动端媒体查询从主题诞生第一天就写了 `background-color body-color`，`body-color = darken(#5c5858, 30%) ≈ #403e3e`，与桌面端的 `rgba(0,0,0,.8)` 不一致。
+- **变更历史**：`310ad09`（按钮重构）和 `e7ca545`（纯重命名）均未触及这行代码。
+
+### Bug B 溯源：侧边栏无法收起
+
+- **引入提交**：`92eb855`（2026-04-23）
+- **存活时长**：~26 天
+- **详情**：该提交同时完成了三件事，构成完整的缺陷引入链：
+  1. **创建** `source/css/ayeria-layout.styl`，其中 `left: -$aside-width`（Stylus 取反解析失败）
+  2. **修改** `head.ejs`，新增 `<%- css('css/ayeria-layout') %>`，使其在 `main.css` 之后加载
+  3. 该文件的设计意图是用 Hexo Stylus 动态覆盖 `layout.styl` 的硬编码布局值
+- **此前无此文件**：`ayeria-layout.styl` 是全新创建，无旧版本可回退。创建即携带 Bug。
+- **桌面端为何侥幸**：`main.css`（先加载）中 `left: -8rem` 有效；`ayeria-layout.css`（后加载）中 `left: -$aside-width` 因无效被浏览器丢弃，未覆盖前值。
+- **移动端为何暴露**：`ayeria-layout.css` 移动端 MQ 中 `.sidebar { left: 0 }` 有效（覆盖了 `main.css` 的 `-8rem`），但 `.sidebar.on { left: -$aside-width }` 无效，隐藏态无法生效。
 
 ---
 
@@ -245,3 +281,48 @@ left: - ($aside-width)
 | `themes/ayeria/layout/_partial/head.ejs` | CSS 加载顺序定义 |
 | `themes/ayeria/layout/layout.ejs` | `.content.on` / `.sidebar.on` 初始状态定义 |
 | `_config.ayeria.yml` | `layout.sidebar_width` 配置项 |
+
+---
+
+## 修复记录
+
+**修复日期**: 2026-05-19  
+**修复人**: Claude Code (Co-Authored-By)  
+**验证方式**: Rollup 构建 + Hexo 生成后检查编译产物
+
+### Bug B 修复（核心缺陷）
+
+**文件**: `themes/ayeria/source/css/ayeria-layout.styl:23,42`
+
+**方式**: 将 `left: -$aside-width` → `left: 0 - $aside-width`
+
+选用减法表达式 (`0 - $var`) 而非括号 `(-($var))` 或乘法 `($var * -1)`，原因：
+- 语义清晰：`0 - x` 即 `-x`，无需 Stylus 特有语法
+- 解析稳定：不依赖 Stylus 对前导 `-` 后紧跟 `$` 的歧义消除行为
+- 业界通用：CSS 预处理器中 `0 - $var` 是生成负值的惯用写法
+
+**验证结果**: `public/css/ayeria-layout.css` 
+```
+/* 修复前 */  left: -$aside-width;   /* 无效 CSS */
+/* 修复后 */  left: -8rem;            /* 正确解析 */
+```
+
+移动端 MQ 中 `.sidebar.on { left: -8rem }` 同期修复，侧边栏可正常隐藏。
+
+### Bug A 修复（视觉一致性）
+
+**文件**: `themes/ayeria/source-src/css/_partial/layout.styl:113-114`
+
+**初版修复**: 将移动端 MQ 中 `background-color body-color` → `background-color rgba(0,0,0,.8)`
+
+**终版修复**: 直接删除移动端 MQ 中的 `.sidebar` 块（两行），原因：
+- 基类规则 `.sidebar { background-color: rgba(0,0,0,.8) }`（同文件第 42 行）已覆盖桌面端和移动端
+- 移动端 MQ 覆写的唯一理由是提供与桌面端**不同**的值；既然现在要求一致，覆写即冗余
+- 删除后基类规则成为单一真相来源，遵守 DRY 原则
+
+**删除位置注释**: 说明了旧实现 `body-color` 的设计意图——移动端全屏侧边栏使用不透明底色遮挡下层内容，营造原生 App 抽屉面板体验。移除理由：该行为与桌面端半透明遮罩不一致且不可配置。
+
+**验证结果**: `public/dist/main.css` 中 `.sidebar` 背景色仅存一处定义：
+```css
+.sidebar{...background-color:rgba(0,0,0,.8)}  /* 基类规则，桌面端/移动端共用 */
+```
