@@ -1,9 +1,9 @@
 # 博客项目架构分析报告
 
 > **分析日期**: 2026-04-13
-> **最后更新**: 2026-05-14（新增十二、中国大陆用户专项分析；已忽略/已修复问题打删除线）
-> **分析范围**: 项目整体架构、目录结构、配置体系、主题架构、CI/CD、性能、安全、SEO、可维护性
-> **参考基准**: Hexo 官方最佳实践、GitHub Pages 部署惯例、静态站点生成器行业通用规范
+> **最后更新**: 2026-05-18（新增十四、SOLID 原则审查；更新问题优先级汇总）
+> **分析范围**: 项目整体架构、目录结构、配置体系、主题架构、CI/CD、性能、安全、SEO、可维护性、SOLID 原则
+> **参考基准**: Hexo 官方最佳实践、GitHub Pages 部署惯例、静态站点生成器行业通用规范、SOLID 五原则在非 OOP 场景下的适用标准
 > **前置审查**: 本报告基于 [2026-03-28 审查报告](archive/audit-report-2026-03-28.md) 的修复成果，不重复已关闭问题，仅关注架构层面
 
 ---
@@ -21,6 +21,7 @@
 | 安全    | ★★★★☆ | 已修复 OAuth 泄露，仍有少量风险点                                |
 | SEO   | ★★☆☆☆ | 缺少 Sitemap、RSS、robots.txt 等基础设施                     |
 | 可维护性  | ★★★☆☆ | 根目录调试脚本增多，缺乏自动化质量检查                                  |
+| SOLID 原则 | ★★★☆☆ | 模板/样式体系遵循良好，客户端 JS 和部分模板存在 SRP/DIP 违规 |
 
 
 ---
@@ -604,6 +605,9 @@ Disallow: /resume-en/
 | 8.3 | CI 使用 `npm install` 而非 `npm ci` | CI/CD |
 | 12.2 | 第三方 CDN 资源可用性风险（staticfile.org）     | 性能/架构 |
 | 12.1 | GitHub Pages 中国大陆访问性能              | 架构/性能 |
+| 14.1 | `ayeria.js` 单文件承担 12 种职责       | SOLID/SRP |
+| 14.4 | jquery-modal / justifiedGallery 无条件加载 | SOLID/ISP |
+| 14.5 | 51.la 统计 ID 硬编码在 JS 源码中       | SOLID/DIP |
 
 
 ### 🟡 中优先级（影响可维护性或工程规范）
@@ -619,6 +623,9 @@ Disallow: /resume-en/
 | 7.3  | 缺少 Open Graph / Twitter Card        | SEO   |
 | 9.1  | 缺乏代码规范工具                            | 可维护性  |
 | 10.1 | 渲染器单点依赖                             | 依赖管理  |
+| 14.2 | `click_effect` 魔法数字分支                | SOLID/OCP |
+| 14.3 | 评论系统 partial 参数接口不一致              | SOLID/LSP |
+| 14.6 | 未使用 Hexo `_data/` 目录存储数据           | SOLID/OCP |
 
 
 ### 🟢 低优先级（优化建议，不影响功能）
@@ -651,7 +658,262 @@ Disallow: /resume-en/
 | 11.2 | 社交图标缺少可访问文本                 | 可访问性  |
 | 12.4 | 缺少面向中国大陆的访问统计分析             | 可维护性  |
 | 12.5 | giscus 评论系统中国大陆可用性            | 架构    |
+| 14.7 | `core.js` 保留死代码 / `head.ejs` 内联样式泄漏 | SOLID/SRP |
+| 14.8 | `meta_generator.js` 对 default_config 不必要依赖 | SOLID/DIP |
+| 14.9 | `ayeria.js` 硬编码 `/search.xml` 路径      | SOLID/DIP |
 
+
+---
+
+## 十四、SOLID 原则审查
+
+> **新增于 2026-05-18**：从 SOLID 五原则视角审查 ayeria 自研主题与项目本身的设计质量。由于本项目为 Hexo 博客（模板 + 预处理样式 + 少量 JS），而非 OOP 代码库，各原则的应用方式须调整：SRP 关注模块/文件的职责单一性；OCP 关注是否可通过配置/扩展点新增行为而无需修改现有代码；LSP 关注模板 partial 的可替换性；ISP 关注模块接口的聚焦程度；DIP 关注是否依赖抽象（Hexo 扩展点、配置接口）而非具体实现。
+
+### 14.1 单一职责原则（SRP）
+
+#### 14.1.1 主题模板层
+
+**遵循良好**：
+- 布局 partial 拆分细致：`head.ejs`（元数据）、`sidebar.ejs`（导航）、`footer.ejs`（页脚）、`article.ejs`（文章），各司其职
+- `_partial/post/` 下将文章组件的标题、日期、分类、标签、分享、评论等拆分为 20 个独立 partial，每个只做一件事
+- 样式系统 `source-src/css/_partial/` 有 33 个独立 Stylus partial（`article.styl`、`reward.styl`、`search.styl` 等），每文件只针对一个 UI 区域
+- 主题 scripts 按功能域拆分：`helpers/`（模板辅助函数）、`filters/`（渲染过滤器）、`events/`（生命周期事件）、`utils/`（工具函数）
+
+**违规**：
+
+| 文件 | 问题 |
+|------|------|
+| `source-src/js/ayeria.js` | 单一文件混合 12 种职责：搜索弹窗、移动端检测、图片懒加载、画廊布局、锚点滚动、返回顶部、图片标题、移动端导航、打赏弹窗、暗色模式切换、Console 品牌 Banner、51.la 统计追踪 |
+| `layout/_partial/after-footer.ejs` | 同时负责：jQuery 加载、Tocbot 初始化、画廊库加载、MathJax/Katex 条件注入、不蒜子统计、点击特效、代码复制、Canvas 背景、Mermaid 初始化 |
+| `layout/_partial/head.ejs` | 内联 `<style>` 块（sweetalert2 按钮样式），属于样式职责泄漏到模板 |
+| `scripts/lib/core.js` | 仅含注释掉的死代码，不存在有效功能却保留为独立文件 |
+
+**评分**: ★★☆☆☆ — 局部优秀（partial/样式拆分），但 `ayeria.js` 和 `after-footer.ejs` 的严重违规拉低总分
+
+#### 14.1.2 客户端 JS 层
+
+| 文件 | 职责数 | 评估 |
+|------|--------|------|
+| `ayeria.js` | 12 | 🔴 严重违规 — 建议按功能拆分为 search.js, nav.js, darkmode.js, reward.js 等独立模块 |
+| `share.js` | 1 | 🟢 良好 — 仅处理社交分享 |
+| `random-sentences.js` | 1 | 🟢 良好 — 仅处理随机句子 |
+| `main.js` | 0（仅 import） | 🟢 入口文件，职责为组装模块 |
+
+**建议**: 将 `ayeria.js` 拆分为至少 6-8 个独立模块，通过 `main.js` 的 import 图组装。拆分后每个模块可独立测试、按需加载。
+
+#### 14.1.3 项目层面
+
+**遵循良好**：
+- `_config.yml` 负责 Hexo 核心配置，`_config.ayeria.yml` 负责主题配置 — 关注点分离清晰
+- `.github/workflows/pages.yml` 单一职责：构建部署流水线
+- `.github/dependabot.yml` 单一职责：依赖更新策略
+
+**违规**：
+- `_config.yml` 混合了站点元数据、URL 规则、分类/标签映射（内容分类学）、Markdown 渲染器配置 — 这些是不同变更原因的数据。建议将分类/标签映射抽到 `source/_data/` 下的独立数据文件
+- 根目录 `debug.py`、`debug_wsl.py` 两个调试脚本与项目核心职责无关，属于工具链脚本，应归入 `scripts/`
+
+---
+
+### 14.2 开闭原则（OCP）
+
+> 对扩展开放，对修改封闭。在 Hexo 主题语境下，核心检验标准是：新增功能/内容能否仅通过配置或新增文件完成，而无需修改已有模板或脚本。
+
+#### 14.2.1 主题模板层
+
+**遵循良好**：
+- 菜单系统由 `_config.ayeria.yml` 的 `menu` 字段驱动，新增菜单项仅需追加 YAML 条目，`sidebar.ejs` 通过 `for` 循环渲染
+- 打赏系统采用数据驱动设计：`reward.channels` 数组新增渠道只需追加 YAML 条目（含子选项 `children`），无需修改 `article.ejs` 或 JS
+- 友情链接由 `_config.ayeria.yml` 的 `friends_link` 字段驱动，`friends.ejs` 遍历渲染
+- 功能开关（`toc`、`image_viewer`、`share_enable`、`copy_btn`、`busuanzi` 等）通过 `theme.*` 配置控制，行为扩展通过新增 type 值（如 `reward_type: 0|1|2`）而不需改模板结构
+
+**违规**：
+
+| 位置 | 问题 | 建议 |
+|------|------|------|
+| `share.js:45-62` | 社交平台通过 `if/else if` 硬编码；新增平台需修改函数体 | 改为配置驱动的 URL 模板映射：`const platforms = { weibo: 'http://service.weibo.com/...', ... }` |
+| `layout.ejs:5-10` | `click_effect` 使用魔法数字 1/2/3，各自硬编码 `<canvas>` 元素和脚本加载；新增效果类型需改 layout | 定义效果注册表，通过配置驱动而非硬编码分支 |
+| `after-footer.ejs:54-67` | 点击特效 1/2/3 各占一个独立条件块，加载不同 CDN 脚本；无统一抽象 | 将所有效果整合为统一的条件加载逻辑 |
+| `head.ejs:46-57` | 网站锁（lock）的 sweetalert2 CDN 引用和内联样式硬编码在 `<head>` 中 | 若功能已关闭（当前 enable: false），应删除相关代码或将 CDN 加载包裹在条件内（已包裹但多余） |
+
+#### 14.2.2 主题样式层
+
+**遵循良好**：
+- `_variables.styl` 集中定义设计令牌（颜色、字体、尺寸、断点），换肤只需修改变量值
+- Stylus `_mixins.styl` 提供可复用混入（`center()`、`clearfix()` 等），组件样式通过调用混入扩展
+- 33 个 `_partial/*.styl` 通过 `style.styl` 的 `@import` 列表组织，新增组件样式文件只需追加一行 import
+
+**违规**：
+- 部分样式 partial 内部硬编码颜色值而非引用变量（如 `_partial/reward.styl` 中可能存在），降低了通过 `_variables.styl` 换肤的覆盖力
+
+#### 14.2.3 项目层面
+
+**遵循良好**：
+- Hexo 插件体系：安装新的 generator/renderer 只需 `npm install` + 追加 `_config.yml` 配置
+- `skip_render` 列表支持按需添加独立页面目录
+- `category_map`、`tag_map` 支持无限扩展分类/标签映射
+
+**违规**：
+- 新增独立页面（如 `mc-server`、`resume`）需手动在 `source/` 创建目录并更新 `skip_render`，无脚手架或自动化支持
+- 未使用 Hexo `source/_data/` 数据目录机制；MC 服务器成员数据硬编码在 `source/mc-server/js/members.js` 中，手办柜数据嵌入在 `source/waifu/index.md` 的 HTML 块中 — 修改这些数据需编辑源文件内容而非纯数据文件
+
+**评分**: ★★★☆☆ — 配置驱动的菜单/打赏/友链设计是亮点，但 JS 层的硬编码 `if/else` 链和页面数据的嵌入式管理拖低评分
+
+---
+
+### 14.3 里氏替换原则（LSP）
+
+> 在 OOP 中要求子类型可替换基类型。在 Hexo 模板语境下，LSP 映射为：**模板 partial 是否可被同接口的替代实现替换而不破坏页面**。
+
+#### 14.3.1 评论系统 partial 的可替换性
+
+评论系统 partial（`giscus.ejs`、`gitalk.ejs`、`valine.ejs`、`twikoo.ejs`）在 `article.ejs` 中通过条件判断引用：
+
+```ejs
+<% if (theme.valine && theme.valine.enable && !post.no_valine) { %>
+  <%- partial('post/valine', { key: ..., title: ..., url: ... }) %>
+<% } %>
+<% if (!index) { %>
+  <%- partial('post/giscus') %>
+<% } %>
+```
+
+**问题**: 评论 partial 的参数接口不一致 — `valine` 接收 `{key, title, url}` 参数对象，而 `giscus` 不接收参数（从 `theme.giscus` 直接读取）。切换评论系统时，调用侧的参数传递逻辑需要修改。
+
+**建议**: 统一评论 partial 的调用接口，例如全部通过 `theme` 配置读取参数，使调用侧统一为 `<%- partial('post/comment') %>`，内部再根据配置分发到具体实现。
+
+#### 14.3.2 文章组件 partial
+
+`_partial/post/` 下的组件（`title.ejs`、`date.ejs`、`category.ejs`、`tag.ejs` 等）在 `article.ejs` 中通过统一的 `partial()` 调用，接口一致（接收 `{class_name}` 等可选参数），可替换性良好。
+
+**评分**: ★★★☆☆ — 文章组件 partial 遵循良好，评论系统 partial 接口不一致是主要问题
+
+---
+
+### 14.4 接口隔离原则（ISP）
+
+> 要求模块不应被迫依赖它不需要的接口。在 Hexo/前端语境下，映射为：客户端不应加载不需要的 JS/CSS，模板不应被迫包含无关逻辑。
+
+#### 14.4.1 客户端 JS 资源加载
+
+**严重违规**：
+
+| 资源 | 加载位置 | 实际需求 | 浪费 |
+|------|---------|---------|------|
+| `jquery-3.6.0.min.js` (90KB) | `after-footer.ejs:1` — 无条件加载 | 仅 modal、justifiedGallery、lazyload 等少数功能使用 | 所有页面均加载 |
+| `jquery.modal.min.js` + CSS | `after-footer.ejs:22-23` — 无条件加载 | 仅图片画廊文章页使用 | 首页、归档页、分类页等均加载 |
+| `jquery.justifiedGallery.min.js` | `after-footer.ejs:24` — 无条件加载 | 仅含画廊标记的文章页使用 | 同上 |
+| `pace.min.js` | `head.ejs:43` — 由 progressBar 配置控制 | 有条件判断（`theme.progressBar`） | ✅ 已有条件 |
+| `sweetalert2` JS + CSS | `head.ejs:46-57` — 由 lock.enable 控制 | lock 功能已关闭 | ✅ 已包裹条件 |
+
+**建议**: 将 jquery-modal 和 justifiedGallery 加载包裹在页面类型条件中（仅文章详情页且有画廊标记时加载）。
+
+#### 14.4.2 客户端 JS 模块
+
+- `ayeria.js` 是典型的"胖接口"问题 — 每个页面只需其中 2-3 个功能（如首页只需搜索+暗色模式），却被迫加载全部 12 个功能模块
+- `share.js` 和 `random-sentences.js` 通过独立文件加载是好的 ISP 实践，但它们通过 `main.js` 汇总，仍然是全量打包。当前的 Rollup 配置将所有模块打包为一个 `main.js`，按需加载需要代码分割（code splitting）
+
+**评分**: ★★☆☆☆ — JS 和第三方库的全量加载是本站性能最大的可改进空间，也是 ISP 最明显的违规
+
+#### 14.4.3 Hexo 脚本 helpers
+
+`scripts/helpers/` 下的 helper 函数通过 `hexo.extend.helper.register()` 注册，各 helper 独立注册，模板按需调用。这是良好的 ISP 实践：
+- `wordcount.js` 注册 `min2read`、`wordcount`、`totalcount` 三个聚焦 helper
+- `category-tree.js` 仅注册 `category_tree` 一个 helper
+- `ayeria-plus-vendors.js` 仅注册 `ayeria_plus_vendors` 一个 helper
+
+---
+
+### 14.5 依赖反转原则（DIP）
+
+> 高层模块不应依赖低层模块，二者都应依赖抽象。在 Hexo 主题语境下，核心检验标准是：主题代码是否依赖 Hexo 提供的抽象接口，而非直接耦合具体实现或全局变量。
+
+#### 14.5.1 主题服务端（scripts/）
+
+**遵循良好**：
+- Helper 通过 `hexo.extend.helper.register()` 注册 — 依赖 Hexo 扩展 API 而非直接操作文件系统
+- Filter 通过 `hexo.extend.filter.register()` 注册 — 依赖 Hexo 渲染管线抽象
+- Event handler 通过 `hexo.on()` 绑定 — 依赖 Hexo 生命周期事件
+- `merge-configs.js` 依赖 `object.js` 的 `merge()` 工具函数 — 工具函数是纯函数抽象，不依赖外部状态
+
+**违规**：
+- `meta_generator.js` 依赖 `default_config.js` 的具体模块（硬编码 `require('../default_config')`），而非通过 Hexo 的 `hexo.theme.config` 接口读取配置。`default_config.js` 仅有一个 `meta_generator: true` 属性，此依赖不仅冗余且造成不必要的耦合
+- `core.js` 的 `hexo.on('new', ...)` 和 `before_post_render` 过滤器为无操作的死代码，但对 Hexo 事件总线的注册仍在执行
+
+#### 14.5.2 客户端 JS（source-src/js/）
+
+**严重违规**：
+
+| 违规项 | 详情 |
+|--------|------|
+| `ayeria.js` 全模块依赖 jQuery | 整个模块包裹在 `(function($){...})(jQuery)` 中，与 jQuery 紧耦合。无法在无 jQuery 环境下运行，单元测试需要 jQuery DOM 模拟 |
+| `ayeria.js:245-269` 硬编码 51.la 统计 ID | `{ id: "JGjrOr2rebvP6q2a", ck: "JGjrOr2rebvP6q2a" }` 直接写在源码中，应通过 HTML `data-*` 属性或 `theme` 配置传入 |
+| `ayeria.js:37` 硬编码搜索文件路径 | `/search.xml`、`/js/search.js` 路径硬编码，若配置修改 `search.path` 则搜索功能静默失败 |
+| `share.js` 依赖全局 DOM | 直接访问 `window.location.href`、`document.querySelector` 等全局对象，无抽象层。这使得模块无法脱离浏览器环境测试 |
+
+**特别值得关注**：`ayeria.js` 中的 51.la 追踪 ID 与 `footer.ejs` 中 cnzz 统计的配置驱动模式形成对比 — cnzz 通过 `theme.cnzz.url` 配置，51.la 却硬编码在 JS 中，风格不一致。
+
+#### 14.5.3 模板与 CDN 依赖
+
+- 所有 CDN URL（staticfile.org、fonts.font.im）硬编码在 EJS 模板中，未通过配置变量引用
+- 主题的 Rollup 构建管线（`rollup.config.js` 或等效的 rollup -c）正确处理了 `source-src/` → `source/dist/` 的抽象：源码与构建产物分离，模板引用构建后的抽象路径 `dist/main`
+
+**评分**: ★★★☆☆ — scripts/ 服务端遵循良好，客户端 JS 的 jQuery 耦合和硬编码配置是核心问题
+
+---
+
+### 14.6 SOLID 审查总结
+
+#### 主题评分
+
+| 原则 | 评分 | 关键依据 |
+|------|------|---------|
+| SRP | ★★☆☆☆ | 模板/样式拆分优秀，但 `ayeria.js` (12 职责) 和 `after-footer.ejs` (10+ 职责) 严重违规 |
+| OCP | ★★★☆☆ | 菜单/打赏/友链数据驱动是亮点，但 JS 的 `if/else` 链和点击特效的硬编码分支破坏扩展性 |
+| LSP | ★★★☆☆ | 文章组件 partial 可替换性好，评论系统 partial 接口不一致 |
+| ISP | ★★☆☆☆ | 第三方库全量加载、`ayeria.js` 胖接口、Rollup 全量打包是主要问题 |
+| DIP | ★★★☆☆ | 服务端 helpers/filters 依赖 Hexo 抽象正确；客户端 JS 紧耦合 jQuery 且硬编码外部依赖 |
+
+**主题 SOLID 总评**: ★★★☆☆
+
+#### 项目评分
+
+| 原则 | 评分 | 关键依据 |
+|------|------|---------|
+| SRP | ★★★★☆ | `_config.yml` / `_config.ayeria.yml` 关注点分离清晰，CI 文件职责单一 |
+| OCP | ★★★☆☆ | Hexo 插件体系提供良好扩展性，但 `_data/` 目录缺失导致数据耦合在页面文件中 |
+| LSP | N/A | 项目层不涉及模板/组件的替换场景，此原则不适用 |
+| ISP | ★★★☆☆ | Dependabot、GitHub Actions 各司其职；配置文件的分类/标签映射与核心配置混合 |
+| DIP | ★★★★☆ | CI 依赖版本化 Action 抽象，`package.json` 依赖 npm 包接口，架构层面依赖倒置良好 |
+
+**项目 SOLID 总评**: ★★★☆☆
+
+#### 问题优先级（SOLID 相关）
+
+##### 🔴 高优先级
+
+| # | 问题 | 原则 | 影响 |
+|---|------|------|------|
+| 14.1 | `ayeria.js` 单一文件承担 12 种职责 | SRP | 维护困难、无法按需加载、无法独立测试 |
+| 14.4 | `after-footer.ejs` 无条件加载 jquery-modal + justifiedGallery | ISP | 所有页面浪费带宽 |
+| 14.5 | 51.la 统计 ID 硬编码在 JS 源码中 | DIP | 更换 ID 需修改源码并重新构建 |
+| 14.5 | `share.js` 硬编码 `if/else` 平台链 | OCP | 新增社交平台需修改函数体 |
+
+##### 🟡 中优先级
+
+| # | 问题 | 原则 | 影响 |
+|---|------|------|------|
+| 14.2 | `click_effect` 魔法数字分支 | OCP | 新增效果需改 layout |
+| 14.3 | 评论系统 partial 参数接口不一致 | LSP | 切换评论系统需修改调用侧代码 |
+| 14.3 | `head.ejs` 内联 sweetalert2 样式 | SRP | 样式泄漏到模板 |
+| 14.6 | 未使用 Hexo `_data/` 目录 | OCP/DIP | 数据修改需接触源文件 |
+
+##### 🟢 低优先级
+
+| # | 问题 | 原则 | 影响 |
+|---|------|------|------|
+| 14.7 | `core.js` 保留死代码 | SRP | 增加认知负担 |
+| 14.8 | `meta_generator.js` 对 `default_config.js` 的不必要依赖 | DIP | 轻微耦合 |
+| 14.9 | ayeria.js 硬编码 `/search.xml` 路径 | DIP | 与 `_config.yml` 的解耦缺失 |
 
 ---
 
@@ -668,3 +930,6 @@ Disallow: /resume-en/
 7. **Dependabot 配置**：已调整为每周检查、最多 5 个 PR，减少噪音同时保持依赖更新。
 8. **搜索弹窗重设计**：使用 CSS 自定义属性实现亮/暗模式自动跟随，交互体验良好。
 9. **代码块样式系统**：通过 CSS 自定义属性实现 VS Code 风格的亮/暗双模式代码高亮，支持语言标签显示。
+10. **SRP — 模板/样式/Helper 细粒度拆分**：20+ 个 post partial、33 个 Stylus partial、独立的 helpers/filters/events 目录，职责分离在模板层的落实程度是主题工程化的基石。
+11. **OCP — 数据驱动的配置体系**：菜单、友情链接、打赏渠道（含多级子选项）均由 YAML 配置数组驱动，新增条目无需修改模板代码，这是 SOLID 在主题中最成功的落地。
+12. **DIP — 服务端依赖 Hexo 抽象接口**：scripts 下所有 helper、filter、event handler 通过 `hexo.extend.*` 和 `hexo.on` 注册，未直接操作文件系统或 Hexo 内部实现。
