@@ -225,11 +225,7 @@ friends_link:
     #网站地址
     url: https://github.com/KaleidScoper/hexo-theme-ayeria
     #网站图片(可忽略不写)
-    img: /images/ayeria.png
-  
-  Hexo 官网:
-    url: https://hexo.io
-    img: /images/hexo.png
+    img: /images/ayeria.svg
 
   安徽大学 Minecraft 社区:
     url: http://mc.ahumc.top/
