@@ -6,9 +6,24 @@
   </div>
   <% } %>
   <ul class="nav nav-main">
-    <% for (var i in theme.menu){ %>
+    <% for (var key in theme.menu) {
+       var item = theme.menu[key];
+       var isObj = typeof item === 'object';
+       var url = isObj ? item.url : item;
+       var target = isObj ? (item.target || 'current') : 'current';
+    %>
     <li class="nav-item">
-      <a class="nav-item-link" href="<%- url_for(theme.menu[i]) %>"><%= i %></a>
+      <a class="nav-item-link"
+         href="<%- url_for(url) %>"
+         <% if (target === 'blank') { %>
+         target="_blank" rel="noopener noreferrer"
+         <% } else if (target === 'popup') { %>
+         data-target="popup"
+         data-popup-name="popup-<%= key %>"
+         data-popup-width="<%= item.popup_width || 380 %>"
+         data-popup-height="<%= item.popup_height || 620 %>"
+         <% } %>
+      ><%= key %></a>
     </li>
     <% } %>
   </ul>

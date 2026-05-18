@@ -138,6 +138,17 @@
     $sidebar.toggleClass("on");
   });
 
+  // Popup menu items
+  $(".nav-main").on("click", '.nav-item-link[data-target="popup"]', function (e) {
+    e.preventDefault();
+    var $this = $(this);
+    window.open(
+      $this.attr("href"),
+      $this.data("popup-name"),
+      "width=" + $this.data("popup-width") + ",height=" + $this.data("popup-height")
+    );
+  });
+
   // Reward Modal
   $(document).on("click", ".reward-trigger, #reward-btn", function () {
     var $modal = $("#reward");
