@@ -674,7 +674,8 @@ body {
 .main3_join_div {
     display: flex;
     flex-direction: column;
-    width: min(24rem, 100%);
+    width: fit-content;
+    max-width: 100%;
     min-width: min(18rem, 100%);
     background-color: var(--background2);
     border-radius: var(--roundness);
@@ -695,13 +696,14 @@ body {
 
 .main3_join_content_div {
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto auto;
     background-color: var(--background1);
     border-radius: var(--roundness);
     align-items: center;
     column-gap: 1.25rem;
     row-gap: 0.5rem;
     padding: 0.75rem 1rem;
+    width: fit-content;
 }
 
 .main3_join_categories {
@@ -710,6 +712,7 @@ body {
     text-align: right;
     font-size: clamp(1.05rem, 1.25vw + 0.6rem, 1.35rem);
     line-height: 1.4;
+    white-space: nowrap;
 }
 .main3_join_values {
     display: grid;
@@ -717,9 +720,7 @@ body {
     text-align: left;
     font-size: clamp(1.05rem, 1.25vw + 0.6rem, 1.35rem);
     line-height: 1.4;
-}
-.main3_join_values a {
-    word-break: break-word;
+    white-space: nowrap;
 }
 
 
@@ -796,6 +797,7 @@ body {
     }
     .main3_join_content_div {
         grid-template-columns: 1fr;
+        width: auto;
         row-gap: 0.75rem;
         padding: 0.75rem;
         text-align: center;
@@ -804,6 +806,7 @@ body {
     .main3_join_values {
         text-align: center;
         font-size: 1.1rem;
+        white-space: normal;
     }
 }
 @media only screen and (max-width: 360px) {
