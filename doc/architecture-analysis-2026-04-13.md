@@ -123,6 +123,8 @@
 
 **建议**: 考虑使用 `:year/:title/` 或 `:title/` 等更简洁的格式。修改后需设置重定向以避免旧链接 404。
 
+> **⚑ 与 §7.4 协调**：§2.3（permalink 层级）与 §7.4（trailing_index/html URL 后缀）共同决定站点最终 URL 形态。若计划同时处理，应统一规划重定向规则；若分步处理，建议先完成本节（permalink 结构）再处理 §7.4（后缀），以避免两次变更产生冲突。
+
 ### 2.4 RSS 订阅未配置
 
 **位置**: `_config.yml` — `rss:` 为空；`_config.ayeria.yml` — `rss:` 为空
@@ -197,6 +199,8 @@ JS 切换逻辑（`ayeria.js`）：
 
 **修复**：三处 `sessionStorage.getItem/setItem` 替换为 `localStorage.getItem/setItem`，一行一行改，无副作用。
 
+> **⚑ 顺序约束**：必须先于 Bug 2 修复。Bug 1 完成后，`localStorage` 持久化偏好的用户数量将持续累积，Bug 2（亮色用户 FOUC）影响范围随即扩大，届时应立即跟进 Bug 2。
+
 #### Bug 2：亮色模式用户的 FOUC 🟡
 
 **问题**：页面 HTML 携带 `class="darkmode"` 送达浏览器，CSS 即刻渲染为暗色背景。若用户偏好为亮色（`sessionStorage/localStorage = 0`），需等 JS bundle 加载、解析、执行后才移除该 class，期间有一帧暗色闪烁（FOUC）。暗色用户不受影响。
@@ -214,6 +218,8 @@ JS 切换逻辑（`ayeria.js`）：
 ```
 
 注意：需在 `<link rel="stylesheet">` 之后、`</head>` 之前执行，使浏览器在首次绘制前即确定正确状态。
+
+> **⚑ 前置依赖**：Bug 1（`sessionStorage` → `localStorage`）。Bug 1 未完成前，每次新标签页都会重置偏好，实际受影响用户极少，本修复价值有限；Bug 1 完成后优先级上升，应立即跟进。
 
 #### 双层暗色系统（已知架构债务）
 
@@ -313,6 +319,8 @@ JS 切换逻辑（`ayeria.js`）：
 - 中期：评估是否可用原生 JS 替代 jQuery 依赖
 - 长期：移除 jQuery，使用原生 DOM API 或轻量级替代库
 
+> **⚑ 顺序约束**：中/长期"移除 jQuery"方向，建议在 §15（`ayeria.js` 模块化重构）完成后再推进。模块化后各功能块相互隔离，可逐模块替换 jQuery 调用，成本显著低于在单体文件中整体替换。短期 `defer` 改造无此约束，可提前独立执行。
+
 ### 5.2 jquery-modal 和 justifiedGallery 无条件加载
 
 **位置**: `themes/ayeria/layout/_partial/after-footer.ejs` — 第 22-24 行
@@ -328,6 +336,8 @@ JS 切换逻辑（`ayeria.js`）：
   <script src="...jquery.justifiedGallery.min.js"></script>
 <% } %>
 ```
+
+> **⚑ 与 §14.4 重复；覆盖于 §15**：本条目与 §14.4（ISP 违规审查）描述同一问题。§15.2 的 `ayeria.js` 模块化重构方案已统一规划 justifiedGallery 初始化的迁移（移入 `after-footer.ejs` 并添加页面类型条件判断）。建议以 §15 方案为主入口实施，不单独修复本条目。
 
 ### 5.3 Google Fonts 加载策略欠佳
 
@@ -346,6 +356,8 @@ JS 切换逻辑（`ayeria.js`）：
 - 评估是否真的需要两个字体家族四个字重——考虑减少至 1-2 个字重
 - 考虑使用 `fonts.googleapis.com` 官方源（配合 `fonts.gstatic.com`），或完全自托管字体子集
 - 对于中文内容，评估系统字体栈是否已足够美观（macOS 的苹方、Windows 的微软雅黑）
+
+> **⚑ 与 §12.3 合并**：§12.3 是本节的扩展分析，针对中国大陆用户场景提供了更完整的系统字体栈方案及第三方镜像可用性评估。修复时应以 §12.3 的方案为基准实施，而非仅参考本节。
 
 ### 5.4 缺少图片优化管线
 
@@ -384,6 +396,8 @@ JS 切换逻辑（`ayeria.js`）：
         crossorigin="anonymous"></script>
 ```
 
+> **⚑ 前置影响**：§12.2（核心 CDN 资源自托管）落地后，本条目对已自托管资源的 SRI 要求自动消除。建议在 §12.2 落地范围确定后再处理本条目，可避免为即将自托管的资源做无效 SRI 配置。
+
 ### 6.3 网站加密功能安全性不足
 
 **位置**: `_config.ayeria.yml` — `lock` 配置
@@ -416,6 +430,8 @@ sitemap:
 
 并在 Google Search Console 和 Bing Webmaster Tools 中提交。
 
+> **⚑ 顺序约束**：应先于 §7.2（robots.txt）完成。robots.txt 中的 `Sitemap:` 字段需填入已生效的 sitemap.xml URL，Sitemap 路径确认后 robots.txt 方可正确填写。
+
 ### 7.2 缺少 robots.txt
 
 **问题**: `source/` 目录下没有 `robots.txt` 文件，搜索引擎爬虫将默认抓取所有页面。
@@ -430,6 +446,8 @@ Sitemap: https://kaleidscoper.github.io/sitemap.xml
 Disallow: /resume/
 Disallow: /resume-en/
 ```
+
+> **⚑ 前置依赖**：§7.1（Sitemap）。robots.txt 中的 `Sitemap: https://kaleidscoper.github.io/sitemap.xml` 字段依赖 §7.1 中已生成并确认的 sitemap.xml 路径，两者应按序完成。
 
 ### 7.3 缺少 Open Graph 和 Twitter Card 元数据
 
@@ -446,6 +464,8 @@ Disallow: /resume-en/
 **问题**: 生成的 URL 包含 `index.html` 或 `.html` 后缀，不够简洁。此问题在 2026-03-28 审查中被标记为"已忽略"。
 
 **补充说明**: 从 SEO 角度，干净的 URL（如 `/about/` 而非 `/about/index.html`）更受搜索引擎青睐。GitHub Pages 会自动处理目录的 `index.html` 回退，因此关闭这两个选项不会导致 404。建议重新评估此决定。
+
+> **⚑ 与 §2.3 协调**：§7.4（URL 后缀）与 §2.3（permalink 层级）共同影响最终 URL 结构。两者建议一次规划、同步实施，统一设置重定向规则，避免分步处理引入冲突。
 
 ---
 
@@ -481,6 +501,8 @@ Disallow: /resume-en/
 - name: Build theme
   run: cd themes/ayeria && npm install && npm run build
 ```
+
+> **⚑ 与 §10.2 合并处理**：本节的 CI 步骤（`cd themes/ayeria && npm install && npm run build`）已涵盖 §10.2（主题 devDependencies 未在 CI 安装）所描述的问题。两者应合并为一次 CI 变更，优先推进本节即可同步关闭 §10.2。
 
 ### 8.3 缺少部署环境锁定
 
@@ -544,6 +566,8 @@ Disallow: /resume-en/
 **问题**: 主题的 `devDependencies`（rollup、autoprefixer 等）在 CI 中不会被安装（根目录 `npm install` 不会处理子目录的 `package.json`）。这意味着 CI 无法执行主题构建。
 
 **建议**: 参见 8.2，在 CI 中显式安装主题依赖并构建。
+
+> **⚑ 与 §8.2 合并处理**：本条目是 §8.2 的子任务，§8.2 的 CI 步骤中显式执行 `cd themes/ayeria && npm install` 即可同步解决。优先推进 §8.2，本条目将随之自动关闭，无需单独处理。
 
 ---
 
@@ -610,6 +634,8 @@ Disallow: /resume-en/
   ```
 - 清理已关闭功能的 CDN 引用（sweetalert2、anime.js、mermaid），或将这些引用也包裹在条件判断中
 
+> **⚑ 顺序约束（影响 §6.2）**：核心资源（pace.js、jquery-modal、justifiedGallery）自托管完成后，§6.2（CDN 资源缺少 SRI）对这些资源的 SRI 覆盖需求自动消除。建议先实施本节，再评估 §6.2 剩余 CDN 引用的范围，可避免为即将自托管的资源做无效配置。
+
 ### 12.3 中文字体加载——对中国大陆用户的成本收益分析
 
 **补充分析**（对 5.3 的扩展）:
@@ -655,6 +681,8 @@ Disallow: /resume-en/
 ---
 
 ## 十三、问题优先级汇总
+
+> **注**：部分问题之间存在实施顺序约束，已在各问题详情节中以 **⚑ 顺序约束** / **⚑ 前置依赖** / **⚑ 与 X.X 合并** 等方式标注。汇总表不重复展示，实施前请参阅对应详情节。
 
 ### 🔴 高优先级（影响用户体验或站点可发现性）
 
@@ -764,6 +792,8 @@ Disallow: /resume-en/
 
 **建议**: 将 `ayeria.js` 拆分为至少 6-8 个独立模块，通过 `main.js` 的 import 图组装。拆分后每个模块可独立测试、按需加载。
 
+> **⚑ 统一方案见 §15**：§15 已提供完整的模块化拆分规划（拆分粒度、迁移策略、伴随修复项、提交顺序建议）。本条目、§14.4（justifiedGallery 无条件加载）、§14.5（51.la ID 硬编码）、§14.9（搜索路径硬编码）将在 §15 实施过程中统一解决，不应逐条单独修复。
+
 #### 14.1.3 项目层面
 
 **遵循良好**：
@@ -870,6 +900,8 @@ Disallow: /resume-en/
 
 **建议**: 将 jquery-modal 和 justifiedGallery 加载包裹在页面类型条件中（仅文章详情页且有画廊标记时加载）。
 
+> **⚑ 与 §5.2 重复；覆盖于 §15**：本条目与 §5.2 描述同一问题。§15.2 的模块化重构方案已统一规划（justifiedGallery 初始化移入 `after-footer.ejs` 并添加页面条件），应在 §15 实施时一并完成，不单独修复。
+
 #### 14.4.2 客户端 JS 模块
 
 - `ayeria.js` 是典型的"胖接口"问题 — 每个页面只需其中 2-3 个功能（如首页只需搜索+暗色模式），却被迫加载全部 12 个功能模块
@@ -914,6 +946,8 @@ Disallow: /resume-en/
 | `share.js` 依赖全局 DOM | 直接访问 `window.location.href`、`document.querySelector` 等全局对象，无抽象层。这使得模块无法脱离浏览器环境测试 |
 
 **特别值得关注**：`ayeria.js` 中的 51.la 追踪 ID 与 `footer.ejs` 中 cnzz 统计的配置驱动模式形成对比 — cnzz 通过 `theme.cnzz.url` 配置，51.la 却硬编码在 JS 中，风格不一致。
+
+> **⚑ 覆盖于 §15**：51.la 硬编码 ID（14.5 条目）和搜索路径硬编码（14.9 条目）均在 §15.3 第 3–4 点规划了具体迁移方案，应作为 §15 模块化重构的组成部分统一实施，不单独修复。
 
 #### 14.5.3 模板与 CDN 依赖
 
