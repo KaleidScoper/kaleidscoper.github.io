@@ -1,7 +1,7 @@
 # 博客项目架构分析报告
 
 > **分析日期**: 2026-04-13
-> **最后更新**: 2026-05-18（新增十四、SOLID 原则审查；更新问题优先级汇总）
+> **最后更新**: 2026-05-20（新增十五、ayeria.js 模块化重构方案；新增 3.4 暗色模式实现架构）
 > **分析范围**: 项目整体架构、目录结构、配置体系、主题架构、CI/CD、性能、安全、SEO、可维护性、SOLID 原则
 > **参考基准**: Hexo 官方最佳实践、GitHub Pages 部署惯例、静态站点生成器行业通用规范、SOLID 五原则在非 OOP 场景下的适用标准
 > **前置审查**: 本报告基于 [2026-03-28 审查报告](archive/audit-report-2026-03-28.md) 的修复成果，不重复已关闭问题，仅关注架构层面
@@ -166,6 +166,69 @@
 - 可能出现源码更新但忘记重新构建的情况
 
 **建议**: 短期维持现状（Hexo 生态的普遍做法）。长期可考虑在 GitHub Actions 中增加主题构建步骤，使 `source/dist/` 不再需要提交。
+
+### 3.4 暗色模式实现架构
+
+> **新增于 2026-05-20**
+
+#### 现状描述
+
+暗色模式由三个机制共同构成：
+
+1. `layout.ejs` 第 3 行：`<body class="darkmode">` — 暗色 class 硬编码在 HTML 源码中（暗色为默认）
+2. `style.styl` 第 33–34 行：`body.darkmode { darkmode() }` — Stylus mixin 覆盖旧版组件样式
+3. 新组件（`reward.styl`、`share.styl` 等）：`:root` 定义亮色 CSS 自定义属性，`body.darkmode` 定义暗色覆盖值
+
+JS 切换逻辑（`ayeria.js`）：
+- `sessionStorage.getItem("darkmode") == 0` → 移除 `darkmode` class（切换到亮色）
+- 其他情况（默认/1）→ 保留 `darkmode` class（暗色）
+
+#### `:root` = 亮色 + `body.darkmode` = 暗色的语义问题
+
+**此模式本身符合业界惯例**：Tailwind CSS 用 `html.dark`，Bootstrap 5.3 用 `data-bs-theme="dark"` on `<html>`。用 `body` 代替 `html` 是轻微的偏离，但由于 `class="darkmode"` 硬编码在 HTML（而非 JS 动态添加），实际上没有暗色用户的 FOUC。
+
+**语义异味（低优先级，无需立即修复）**：`:root` 在 CSS 中语义上代表"默认基准状态"，目前 `:root` = 亮色配置，而运行时默认是暗色。这是从上游 Ayer 主题（亮色默认）演化而来的痕迹，功能正确，但 CSS 语义与网站的实际默认状态相反。若要消除，需将暗色变量移至 `:root`，亮色变量改写在 `body.lightmode` 下，成本较高，收益有限。
+
+#### Bug 1：`sessionStorage` 应改为 `localStorage` 🟡
+
+**位置**：`source-src/js/ayeria.js` 第 210、222、228 行（迁移后为 `darkmode.js`）
+
+**问题**：`sessionStorage` 的作用域是单个标签页/会话，关闭标签页或新开标签页后偏好丢失，用户每次都须重新切换亮色。业界标准是 `localStorage`（持久化到用户主动清除）。
+
+**修复**：三处 `sessionStorage.getItem/setItem` 替换为 `localStorage.getItem/setItem`，一行一行改，无副作用。
+
+#### Bug 2：亮色模式用户的 FOUC 🟡
+
+**问题**：页面 HTML 携带 `class="darkmode"` 送达浏览器，CSS 即刻渲染为暗色背景。若用户偏好为亮色（`sessionStorage/localStorage = 0`），需等 JS bundle 加载、解析、执行后才移除该 class，期间有一帧暗色闪烁（FOUC）。暗色用户不受影响。
+
+**影响范围**：仅影响主动切换过亮色的用户。当前用 `sessionStorage`，每次新标签都重置偏好，实际受影响的人极少；若改为 `localStorage` 后，受影响比例会上升，届时此 bug 优先级应同步提高。
+
+**修复**：在 `head.ejs` 的 `<head>` 末尾（CSS 链接之后、body 渲染之前）插入内联脚本：
+
+```html
+<script>
+  if (localStorage.getItem('darkmode') === '0') {
+    document.body.classList.remove('darkmode');
+  }
+</script>
+```
+
+注意：需在 `<link rel="stylesheet">` 之后、`</head>` 之前执行，使浏览器在首次绘制前即确定正确状态。
+
+#### 双层暗色系统（已知架构债务）
+
+`_darkmode.styl` 中的 `darkmode()` mixin（旧系统：Stylus 变量 + `!important` 覆盖）与新组件的 CSS 自定义属性系统（`--reward-*`、`--share-*` 等）并存。`_darkmode.styl` 第 31 行注释已承认部分规则被自定义属性方案覆盖。此问题属于 §3.1 已描述的样式迁移进行中状态，随新组件持续接入自定义属性，旧 mixin 中的规则会逐步被替代直至可以删除。
+
+#### 优先级汇总
+
+| 问题 | 优先级 | 修复成本 |
+|------|--------|---------|
+| `sessionStorage` → `localStorage` | 🟡 中 | 极低（三行改动） |
+| 亮色用户 FOUC | 🟡 中（改 localStorage 后升高） | 低（一段内联 script） |
+| `:root` 语义倒置 | 🟢 低 | 高（全局 selector 重写） |
+| 双层暗色系统收敛 | 🟢 低（进行中） | 随新组件自然消化 |
+
+---
 
 ### 3.3 主题 `index.js` 为空壳
 
@@ -914,6 +977,174 @@ Disallow: /resume-en/
 | 14.7 | `core.js` 保留死代码 | SRP | 增加认知负担 |
 | 14.8 | `meta_generator.js` 对 `default_config.js` 的不必要依赖 | DIP | 轻微耦合 |
 | 14.9 | ayeria.js 硬编码 `/search.xml` 路径 | DIP | 与 `_config.yml` 的解耦缺失 |
+
+---
+
+## 十五、`ayeria.js` 模块化重构方案
+
+> **新增于 2026-05-20**：本节为 §14.1 / §14.4 / §14.5 所描述客户端 JS 问题的专项拆分方案，是近期重构的主要方向。
+
+### 15.1 问题归纳
+
+`ayeria.js` 是一个包裹在 `(function($){...})(jQuery)` 内的单体 IIFE，共 280 行，包含 13 个功能块：
+
+| # | 功能块 | 行范围 | 附带问题 |
+|---|--------|--------|----------|
+| 1 | 搜索弹窗（open/close 动画 + 懒加载 search.js）| 1–39 | 硬编码 `/search.xml`、`/js/search.js` 路径（§14.9） |
+| 2 | 移动端检测（`isMobile` 对象）| 42–67 | **死代码**：文件内从未调用 |
+| 3 | 图片懒加载初始化 | 69–72 | — |
+| 4 | JustifiedGallery 初始化 | 74–78 | 每页执行，仅画廊文章需要；库在 after-footer.ejs 中加载（§14.4） |
+| 5 | 封面 Anchor 滚动 | 80–86 | — |
+| 6 | 返回顶部按钮 | 88–116 | — |
+| 7 | 图片 alt → caption | 118–129 | — |
+| 8 | 移动端侧边栏切换 | 131–139 | — |
+| 9 | Popup 弹出窗口菜单项 | 141–150 | — |
+| 10 | 打赏弹窗（open/close/tab/sub-tab/Escape）| 152–196 | SKILL.md 已标注"待后续重构" |
+| 11 | 暗色模式切换（含 giscus 同步）| 198–231 | — |
+| 12 | Console 品牌 Banner | 233–252 | — |
+| 13 | 51.la 统计追踪（IIFE 外部）| 255–280 | ID 硬编码在 JS 源码中（§14.5） |
+
+所有功能块均紧耦合 jQuery（`$(...)`），无法脱离 jQuery + 浏览器环境独立运行。
+
+---
+
+### 15.2 拆分方案
+
+将 `source-src/js/ayeria.js` 按功能域拆分为 6 个独立模块，并对 4 项附带问题做伴随修复：
+
+| 新文件 | 迁入功能块 | 备注 |
+|--------|-----------|------|
+| `search-modal.js` | #1 | 同步修复 §14.9：搜索路径改从 `<meta>` 或 `data-*` 属性读取，不再硬编码 |
+| `nav.js` | #8、#9 | 移动端 Nav + Popup 菜单，同一关注点合并 |
+| `scroll.js` | #5、#6 | Anchor 滚动 + 返回顶部，均属页面滚动行为 |
+| `article.js` | #3、#7 | 懒加载初始化 + alt→caption，均属文章内容增强 |
+| `reward.js` | #10 | 完成 SKILL.md 中已预告的拆分 |
+| `darkmode.js` | #11 | — |
+
+**不迁入新文件的功能块：**
+
+| 功能块 | 处置方式 |
+|--------|---------|
+| #2 `isMobile` | 直接删除（死代码） |
+| #4 JustifiedGallery 初始化 | 移入 `after-footer.ejs`，与库加载代码合并并添加页面条件，不作为独立 JS 模块 |
+| #12 Console Banner | 保留在 `main.js` 入口顶层作为一次性副作用 |
+| #13 51.la 追踪 | 从 JS bundle 中完全移除；改为新增 `_partial/tracking.ejs`，ID 写入 `_config.ayeria.yml` 配置项，参照 `google-analytics.ejs` / `baidu-analytics.ejs` 模式 |
+
+重构后 `main.js` 结构：
+
+```js
+import "./css/style.styl";
+import "./js/search-modal";
+import "./js/nav";
+import "./js/scroll";
+import "./js/article";
+import "./js/reward";
+import "./js/darkmode";
+import "./js/share";
+import "./js/random-sentences";
+// Console banner 作为入口副作用内联于此
+```
+
+---
+
+### 15.3 实施要点
+
+**1. jQuery 依赖处理**
+
+拆分阶段保留各模块内的 jQuery 调用，不同步去 jQuery 化（工程量翻倍且目标不同）。去掉外层 `(function($){...})(jQuery)` IIFE 包裹即可；各模块直接引用全局 `$`，Rollup 打包为 IIFE 格式时与现行行为等价。后续若推进 §5.1（移除 jQuery），针对每个独立模块逐一替换为原生 DOM API，成本更低。
+
+**2. JustifiedGallery 迁移到模板**
+
+删除 `ayeria.js` 中的 `$("#gallery").justifiedGallery(...)` 调用，在 `after-footer.ejs` 的 justifiedGallery CDN 引用后追加初始化，并将整段包裹在条件中（同步解决 §14.4）：
+
+```ejs
+<% if (!index && (page.photos || page.gallery)) { %>
+  <script src="https://cdn.staticfile.org/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js"></script>
+  <script>$("#gallery").justifiedGallery({ rowHeight: 200, margins: 5 });</script>
+<% } %>
+```
+
+**3. 51.la 迁移**
+
+在 `_config.ayeria.yml` 增加 `tracking.la51_id` 配置项；新增 `_partial/tracking.ejs`，由 `after-footer.ejs` 在配置非空时条件引用。原 `ayeria.js` 末尾的整段 IIFE（第 255–280 行）删除。
+
+**4. 搜索路径去硬编码**
+
+`search-modal.js` 中的 `/search.xml` 和 `/js/search.js` 改从 EJS 模板注入的 `data-*` 属性读取：
+
+```ejs
+<%# 在 search.ejs partial 中 %>
+<div class="local-search" data-xml="<%= config.search.path || '/search.xml' %>" data-script="/js/search.js">
+```
+
+---
+
+### 15.4 善后操作清单
+
+重构完成后，按序执行以下文档和配置更新：
+
+#### A. 更新 `doc/SKILL.md`
+
+将「五、交互行为规范 → JS 文件职责」小节替换为以下内容（反映新模块列表，删除"待后续重构"备注）：
+
+```
+- `search-modal.js`：搜索弹窗开关动画
+- `nav.js`：移动端侧边栏切换、Popup 弹出菜单
+- `scroll.js`：封面 Anchor 滚动、返回顶部
+- `article.js`：文章内容增强（图片懒加载初始化、alt→caption）
+- `reward.js`：打赏弹窗（open/close/tab/sub-tab/Escape）
+- `darkmode.js`：暗色模式切换，含 giscus 主题同步
+- `share.js`：分享组件（下拉气泡 + 微信二维码弹窗）
+- `random-sentences.js`：随机句子组件
+- `main.js`：模块组装入口 + Console 品牌 Banner
+```
+
+#### B. 更新本文档
+
+- §14.1.1、§14.1.2 中 `ayeria.js` 的 SRP 违规条目标记为 **已修复**，注明新模块结构
+- §14.4（jquery-modal/justifiedGallery 无条件加载）中 justifiedGallery 部分标记为 **已修复**
+- §14.5 中 51.la 硬编码 ID 的条目标记为 **已修复**
+- §14.9 中 `/search.xml` 硬编码路径的条目标记为 **已修复**
+- §14.6 SOLID 评分表：客户端 JS SRP 违规消除，整体 SRP 评分由 ★★☆☆☆ → ★★★★☆
+- §13 优先级汇总：将 14.1、14.5 相关条目从 🔴 移除（或标注已解决）
+- 文档顶部总评表：「SOLID 原则」★★★☆☆ → ★★★★☆
+
+#### C. 构建与功能验证
+
+```bash
+cd themes/ayeria
+npm run build
+# 验证 source/dist/main.js 正常输出且体积无异常增大
+```
+
+本地 `hexo server` 逐项验证：
+
+- [ ] 搜索弹窗开关、搜索结果正常
+- [ ] 移动端侧边栏切换正常
+- [ ] 返回顶部按钮正常
+- [ ] 文章页图片 caption 正常
+- [ ] 打赏弹窗 open/close/tab 切换正常
+- [ ] 暗色模式切换正常，刷新后状态保持
+- [ ] 画廊页面 JustifiedGallery 正常，非画廊页无加载
+- [ ] 分享组件正常
+- [ ] 随机句子正常
+
+#### D. 提交规范
+
+建议按模块逐次提交，便于日后 `git bisect`：
+
+```
+refactor(js): extract reward.js from ayeria.js
+refactor(js): extract darkmode.js from ayeria.js
+refactor(js): extract nav.js from ayeria.js
+refactor(js): extract scroll.js from ayeria.js
+refactor(js): extract article.js from ayeria.js
+refactor(js): extract search-modal.js from ayeria.js
+refactor(js): remove isMobile dead code
+refactor(template): move justifiedGallery init to after-footer.ejs
+feat(tracking): migrate 51.la to EJS template with config-driven ID
+docs: update SKILL.md JS file responsibilities
+```
 
 ---
 
