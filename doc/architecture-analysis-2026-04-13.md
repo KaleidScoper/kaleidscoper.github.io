@@ -34,9 +34,9 @@
 
 **原问题**: `文章模板暂存处/` 目录位于项目根目录，内含未发布的 Markdown 草稿和无关文件（如 `哲学.py`、`编剧.md`、`生产资料.md`）。
 
-**修复情况**: `文章模板暂存处/` 目录已从根目录移除，相关内容迁移至 `source/_drafts/`，符合 Hexo 草稿约定。但 `source/_drafts/` 中仍残留非 Markdown 文件（`哲学.py`、`生产资料.md`、`编剧.md`、`丝路创意文档.md`、`漂海录创意文档.md` 等），这些文件虽不会被 Hexo 构建，但增加了仓库的认知负担，不符合 `_drafts/` 目录作为文章草稿区的语义。
+**修复情况**: `文章模板暂存处/` 目录已从根目录移除，相关内容迁移至 `source/_drafts/`，符合 Hexo 草稿约定。但 `source/_drafts/` 中仍残留不符合 Hexo 草稿规范的文件：其中 `哲学.py` 为非 Markdown 文件，`生产资料.md`、`编剧.md`、`丝路创意文档.md`、`漂海录创意文档.md` 等虽为 Markdown 但缺少 Hexo 前置信息（front-matter），不会被 Hexo 构建。这些文件增加了仓库的认知负担，不符合 `_drafts/` 目录作为文章草稿区的语义。
 
-**建议**: 将 `source/_drafts/` 中的非 Markdown 文件（特别是 `哲学.py`）移出仓库，或归入 `doc/drafts/`。
+**建议**: 将 `哲学.py` 等非 Markdown 文件移出 `_drafts/`，缺少 front-matter 的 `.md` 文件若无需发布则归入 `doc/drafts/`。
 
 ### ~~1.2 （已修复）残留配置文件~~
 
@@ -57,12 +57,12 @@
 **位置**:
 
 - ~~`source/images/test.png`~~（已删除 ✓）
-- `themes/ayeria/source/test-random-sentences.html`（仍存在）
+- ~~`themes/ayeria/source/test-random-sentences.html`~~（已删除 ✓）
 - `source/test/`（新增：视差滚动效果演示页面，含 `index.md` 和 `img/` 图片）
 
-**问题**: `test-random-sentences.html` 是随机句子功能的测试页，通过站点可直接访问。`source/test/index.md` 是视差滚动演示页，也会被 Hexo 构建并部署到生产站点（当前未在 `skip_render` 中排除）。
+**问题**: `source/test/index.md` 是视差滚动演示页，会被 Hexo 构建并部署到生产站点（当前未在 `skip_render` 中排除）。
 
-**建议**: 删除或将 `source/test/` 加入 `_config.yml` 的 `skip_render`，`test-random-sentences.html` 同理。
+**建议**: 将 `source/test/` 加入 `_config.yml` 的 `skip_render`。
 
 ### 1.5 图片文件名使用中文
 
@@ -696,7 +696,7 @@ Disallow: /resume-en/
 | 8.3 | CI 使用 `npm install` 而非 `npm ci` | CI/CD |
 | 12.2 | 第三方 CDN 资源可用性风险（staticfile.org）     | 性能/架构 |
 | 12.1 | GitHub Pages 中国大陆访问性能              | 架构/性能 |
-| 14.1 | `ayeria.js` 单文件承担 12 种职责       | SOLID/SRP |
+| 14.1 | `ayeria.js` 单文件承担 13 种职责       | SOLID/SRP |
 | 14.4 | jquery-modal / justifiedGallery 无条件加载 | SOLID/ISP |
 | 14.5 | 51.la 统计 ID 硬编码在 JS 源码中       | SOLID/DIP |
 
@@ -767,14 +767,14 @@ Disallow: /resume-en/
 **遵循良好**：
 - 布局 partial 拆分细致：`head.ejs`（元数据）、`sidebar.ejs`（导航）、`footer.ejs`（页脚）、`article.ejs`（文章），各司其职
 - `_partial/post/` 下将文章组件的标题、日期、分类、标签、分享、评论等拆分为 20 个独立 partial，每个只做一件事
-- 样式系统 `source-src/css/_partial/` 有 33 个独立 Stylus partial（`article.styl`、`reward.styl`、`search.styl` 等），每文件只针对一个 UI 区域
+- 样式系统 `source-src/css/_partial/` 有 29 个独立 Stylus partial（`article.styl`、`reward.styl`、`search.styl` 等），每文件只针对一个 UI 区域
 - 主题 scripts 按功能域拆分：`helpers/`（模板辅助函数）、`filters/`（渲染过滤器）、`events/`（生命周期事件）、`utils/`（工具函数）
 
 **违规**：
 
 | 文件 | 问题 |
 |------|------|
-| `source-src/js/ayeria.js` | 单一文件混合 12 种职责：搜索弹窗、移动端检测、图片懒加载、画廊布局、锚点滚动、返回顶部、图片标题、移动端导航、打赏弹窗、暗色模式切换、Console 品牌 Banner、51.la 统计追踪 |
+| `source-src/js/ayeria.js` | 单一文件混合 13 种职责：搜索弹窗、移动端检测、图片懒加载、画廊布局、锚点滚动、返回顶部、图片标题、移动端导航、打赏弹窗、暗色模式切换、Console 品牌 Banner、51.la 统计追踪 |
 | `layout/_partial/after-footer.ejs` | 同时负责：jQuery 加载、Tocbot 初始化、画廊库加载、MathJax/Katex 条件注入、不蒜子统计、点击特效、代码复制、Canvas 背景、Mermaid 初始化 |
 | `layout/_partial/head.ejs` | 内联 `<style>` 块（sweetalert2 按钮样式），属于样式职责泄漏到模板 |
 | `scripts/lib/core.js` | 仅含注释掉的死代码，不存在有效功能却保留为独立文件 |
@@ -785,7 +785,7 @@ Disallow: /resume-en/
 
 | 文件 | 职责数 | 评估 |
 |------|--------|------|
-| `ayeria.js` | 12 | 🔴 严重违规 — 建议按功能拆分为 search.js, nav.js, darkmode.js, reward.js 等独立模块 |
+| `ayeria.js` | 13 | 🔴 严重违规 — 建议按功能拆分为 search.js, nav.js, darkmode.js, reward.js 等独立模块 |
 | `share.js` | 1 | 🟢 良好 — 仅处理社交分享 |
 | `random-sentences.js` | 1 | 🟢 良好 — 仅处理随机句子 |
 | `main.js` | 0（仅 import） | 🟢 入口文件，职责为组装模块 |
@@ -833,7 +833,7 @@ Disallow: /resume-en/
 **遵循良好**：
 - `_variables.styl` 集中定义设计令牌（颜色、字体、尺寸、断点），换肤只需修改变量值
 - Stylus `_mixins.styl` 提供可复用混入（`center()`、`clearfix()` 等），组件样式通过调用混入扩展
-- 33 个 `_partial/*.styl` 通过 `style.styl` 的 `@import` 列表组织，新增组件样式文件只需追加一行 import
+- 29 个 `_partial/*.styl` 通过 `style.styl` 的 `@import` 列表组织，新增组件样式文件只需追加一行 import
 
 **违规**：
 - 部分样式 partial 内部硬编码颜色值而非引用变量（如 `_partial/reward.styl` 中可能存在），降低了通过 `_variables.styl` 换肤的覆盖力
@@ -904,7 +904,7 @@ Disallow: /resume-en/
 
 #### 14.4.2 客户端 JS 模块
 
-- `ayeria.js` 是典型的"胖接口"问题 — 每个页面只需其中 2-3 个功能（如首页只需搜索+暗色模式），却被迫加载全部 12 个功能模块
+- `ayeria.js` 是典型的"胖接口"问题 — 每个页面只需其中 2-3 个功能（如首页只需搜索+暗色模式），却被迫加载全部 13 个功能模块
 - `share.js` 和 `random-sentences.js` 通过独立文件加载是好的 ISP 实践，但它们通过 `main.js` 汇总，仍然是全量打包。当前的 Rollup 配置将所有模块打包为一个 `main.js`，按需加载需要代码分割（code splitting）
 
 **评分**: ★★☆☆☆ — JS 和第三方库的全量加载是本站性能最大的可改进空间，也是 ISP 最明显的违规
@@ -964,7 +964,7 @@ Disallow: /resume-en/
 
 | 原则 | 评分 | 关键依据 |
 |------|------|---------|
-| SRP | ★★☆☆☆ | 模板/样式拆分优秀，但 `ayeria.js` (12 职责) 和 `after-footer.ejs` (10+ 职责) 严重违规 |
+| SRP | ★★☆☆☆ | 模板/样式拆分优秀，但 `ayeria.js` (13 职责) 和 `after-footer.ejs` (10+ 职责) 严重违规 |
 | OCP | ★★★☆☆ | 菜单/打赏/友链数据驱动是亮点，但 JS 的 `if/else` 链和点击特效的硬编码分支破坏扩展性 |
 | LSP | ★★★☆☆ | 文章组件 partial 可替换性好，评论系统 partial 接口不一致 |
 | ISP | ★★☆☆☆ | 第三方库全量加载、`ayeria.js` 胖接口、Rollup 全量打包是主要问题 |
@@ -990,7 +990,7 @@ Disallow: /resume-en/
 
 | # | 问题 | 原则 | 影响 |
 |---|------|------|------|
-| 14.1 | `ayeria.js` 单一文件承担 12 种职责 | SRP | 维护困难、无法按需加载、无法独立测试 |
+| 14.1 | `ayeria.js` 单一文件承担 13 种职责 | SRP | 维护困难、无法按需加载、无法独立测试 |
 | 14.4 | `after-footer.ejs` 无条件加载 jquery-modal + justifiedGallery | ISP | 所有页面浪费带宽 |
 | 14.5 | 51.la 统计 ID 硬编码在 JS 源码中 | DIP | 更换 ID 需修改源码并重新构建 |
 | 14.5 | `share.js` 硬编码 `if/else` 平台链 | OCP | 新增社交平台需修改函数体 |
@@ -1195,6 +1195,6 @@ docs: update SKILL.md JS file responsibilities
 7. **Dependabot 配置**：已调整为每周检查、最多 5 个 PR，减少噪音同时保持依赖更新。
 8. **搜索弹窗重设计**：使用 CSS 自定义属性实现亮/暗模式自动跟随，交互体验良好。
 9. **代码块样式系统**：通过 CSS 自定义属性实现 VS Code 风格的亮/暗双模式代码高亮，支持语言标签显示。
-10. **SRP — 模板/样式/Helper 细粒度拆分**：20+ 个 post partial、33 个 Stylus partial、独立的 helpers/filters/events 目录，职责分离在模板层的落实程度是主题工程化的基石。
+10. **SRP — 模板/样式/Helper 细粒度拆分**：20+ 个 post partial、29 个 Stylus partial、独立的 helpers/filters/events 目录，职责分离在模板层的落实程度是主题工程化的基石。
 11. **OCP — 数据驱动的配置体系**：菜单、友情链接、打赏渠道（含多级子选项）均由 YAML 配置数组驱动，新增条目无需修改模板代码，这是 SOLID 在主题中最成功的落地。
 12. **DIP — 服务端依赖 Hexo 抽象接口**：scripts 下所有 helper、filter、event handler 通过 `hexo.extend.*` 和 `hexo.on` 注册，未直接操作文件系统或 Hexo 内部实现。
