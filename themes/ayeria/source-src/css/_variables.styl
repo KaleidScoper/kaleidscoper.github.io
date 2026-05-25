@@ -81,3 +81,45 @@ transition-fast          = all .1s ease-in-out 0s
 transition-base          = all .3s ease-in-out
 transition-fade          = opacity .15s linear
 transition-collapse      = height .35s ease
+
+
+// ─── CSS 运行时变量（亮/暗主题切换） ────────────────────────────────────────────
+// 改配色只需修改此区域
+
+:root
+  --color-bg               body-background
+  --color-text             body-color
+  --color-text-secondary   froth
+  --color-link             link-color
+  --color-link-hover       link-hover-color
+  --color-border           border-color
+  --color-surface          froth-light
+  --color-code-bg          #f0f2f5
+  --color-code-text        #d63384
+  --color-warning          red
+  --color-tag-bg           tag-color
+  --color-tag-text         white
+  --image-brightness       brightness(1)
+  --blockquote-border      #3d85c6
+  --blockquote-text        #2c3e50
+  --blockquote-bg          rgba(61, 133, 198, 0.06)
+  --input-placeholder      #ccc
+
+body.darkmode
+  --color-bg               #1c1f26
+  --color-text             #d0d0d0
+  --color-text-secondary   #aaaaaa
+  --color-link             #80cfff
+  --color-link-hover       #a8daff
+  --color-border           #3b414c
+  --color-surface          #2a2f3a
+  --color-code-bg          #2e3440
+  --color-code-text        #ffcc99
+  --color-warning          #ffb347
+  --color-tag-bg           #3a3f4a
+  --color-tag-text         #cccccc
+  --image-brightness       brightness(.8)
+  --blockquote-border      #4a9eff
+  --blockquote-text        #c8d3dc
+  --blockquote-bg          rgba(74, 158, 255, 0.08)
+  --input-placeholder      #888

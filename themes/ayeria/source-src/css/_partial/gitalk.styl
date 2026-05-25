@@ -1,8 +1,25 @@
 // [已停用] Gitalk 评论系统样式
 // 停用时间: 2026-03 | 迁移至 giscus（iframe 渲染，无需宿主样式）
 // 详情参见: doc/audit-report.md #1 #9
-//
-// --- 以下为原始样式，保留供参考 ---
+
+// --- Valine / Waline 评论暗色模式样式（从 _darkmode.styl 迁移） ---
+body.darkmode
+  .v *
+    color var(--color-text-secondary) !important
+
+  #vcomments-box #vcomments
+    background-color rgba(255, 255, 255, 0.05) !important
+    *
+      color var(--color-text) !important
+
+  .v .vbtn
+    background-color transparent !important
+
+  .v .vlist .vcard .vhead .vsys
+    border 1px solid var(--color-border) !important
+    background-color transparent !important
+
+// --- 以下为原始 Gitalk 样式，保留供参考 ---
 // .gitalk,.markdown-body
 //   font-size font-size-base!important
 //

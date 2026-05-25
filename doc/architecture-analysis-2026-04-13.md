@@ -1,7 +1,7 @@
 # 博客项目架构分析报告
 
 > **分析日期**: 2026-04-13
-> **最后更新**: 2026-05-25（#8.2 #3.2 #3.3 #2.1 已修复、#10.2 同步关闭、#1.5 #1.6 已忽略）
+> **最后更新**: 2026-05-25（#3.4 已修复、#8.2 #3.2 #3.3 #2.1 已修复、#10.2 同步关闭、#1.5 #1.6 已忽略）
 > **分析范围**: 项目整体架构、目录结构、配置体系、主题架构、CI/CD、性能、安全、SEO、可维护性、SOLID 原则
 > **参考基准**: Hexo 官方最佳实践、GitHub Pages 部署惯例、静态站点生成器行业通用规范、SOLID 五原则在非 OOP 场景下的适用标准
 > **前置审查**: 本报告基于 [2026-03-28 审查报告](archive/audit-report-2026-03-28.md) 的修复成果，不重复已关闭问题，仅关注架构层面
@@ -183,9 +183,9 @@
 
 > **⚑ 前置依赖 §8.2**：本修复以 CI 主题构建就位为前提。§8.2 未完成前不可移除 Git 中的构建产物。
 
-### 3.4 暗色模式实现架构
+### ~~3.4 （已修复）暗色模式实现架构~~
 
-> **新增于 2026-05-20**
+> **新增于 2026-05-20** | **修复于 2026-05-25**
 
 #### 现状描述
 
@@ -205,7 +205,7 @@ JS 切换逻辑（`ayeria.js`）：
 
 **语义异味（低优先级，无需立即修复）**：`:root` 在 CSS 中语义上代表"默认基准状态"，目前 `:root` = 亮色配置，而运行时默认是暗色。这是从上游 Ayer 主题（亮色默认）演化而来的痕迹，功能正确，但 CSS 语义与网站的实际默认状态相反。若要消除，需将暗色变量移至 `:root`，亮色变量改写在 `body.lightmode` 下，成本较高，收益有限。
 
-#### Bug 1：`sessionStorage` 应改为 `localStorage` 🟡
+#### Bug 1：`sessionStorage` 应改为 `localStorage` 🟡（已修复，见下方修复情况）
 
 **位置**：`source-src/js/ayeria.js` 第 210、222、228 行（迁移后为 `darkmode.js`）
 
@@ -215,7 +215,7 @@ JS 切换逻辑（`ayeria.js`）：
 
 > **⚑ 顺序约束**：必须先于 Bug 2 修复。Bug 1 完成后，`localStorage` 持久化偏好的用户数量将持续累积，Bug 2（亮色用户 FOUC）影响范围随即扩大，届时应立即跟进 Bug 2。
 
-#### Bug 2：亮色模式用户的 FOUC 🟡
+#### Bug 2：亮色模式用户的 FOUC 🟡（已修复，见下方修复情况）
 
 **问题**：页面 HTML 携带 `class="darkmode"` 送达浏览器，CSS 即刻渲染为暗色背景。若用户偏好为亮色（`sessionStorage/localStorage = 0`），需等 JS bundle 加载、解析、执行后才移除该 class，期间有一帧暗色闪烁（FOUC）。暗色用户不受影响。
 
@@ -235,7 +235,7 @@ JS 切换逻辑（`ayeria.js`）：
 
 > **⚑ 前置依赖**：Bug 1（`sessionStorage` → `localStorage`）。Bug 1 未完成前，每次新标签页都会重置偏好，实际受影响用户极少，本修复价值有限；Bug 1 完成后优先级上升，应立即跟进。
 
-#### 双层暗色系统（已知架构债务）
+#### 双层暗色系统（已知架构债务，已修复，见下方修复情况）
 
 `_darkmode.styl` 中的 `darkmode()` mixin（旧系统：Stylus 变量 + `!important` 覆盖）与新组件的 CSS 自定义属性系统（`--reward-*`、`--share-*` 等）并存。`_darkmode.styl` 第 31 行注释已承认部分规则被自定义属性方案覆盖。此问题属于 §3.1 已描述的样式迁移进行中状态，随新组件持续接入自定义属性，旧 mixin 中的规则会逐步被替代直至可以删除。
 
@@ -247,6 +247,42 @@ JS 切换逻辑（`ayeria.js`）：
 | 亮色用户 FOUC | 🟡 中（改 localStorage 后升高） | 低（一段内联 script） |
 | `:root` 语义倒置 | 🟢 低 | 高（全局 selector 重写） |
 | 双层暗色系统收敛 | 🟢 低（进行中） | 随新组件自然消化 |
+
+#### 修复情况（2026-05-25）
+
+以上问题中，Bug 1（`sessionStorage`）、Bug 2（亮色 FOUC）和双层暗色系统（`_darkmode.styl`）三项已一次性修复，`:root` 语义倒置因成本/收益比不佳而保留。详见下文。
+
+##### 1. `sessionStorage` → `localStorage`
+
+将 `ayeria.js` 中三处 `sessionStorage.getItem/setItem` 替换为 `localStorage.getItem/setItem`。Git 历史证实 `sessionStorage` 是上游 Ayer 主题在"亮色默认、用户手动切暗色"语境下的原始设计——暗色偏好仅需持续一个 session。默认值翻转为暗色后，`sessionStorage` 的语义不再匹配：亮色用户的偏好理应持久化。
+
+##### 2. 亮色用户 FOUC
+
+在 `layout.ejs` 的 `<body class="darkmode">` 后立即插入内联脚本（`<head>` 中无法访问 `document.body`，因为 body 尚未解析）：
+
+```html
+<body class="darkmode">
+  <script>
+    if (localStorage.getItem('darkmode') === '0') {
+      document.body.classList.remove('darkmode');
+    }
+  </script>
+```
+
+该脚本在 body 首个可见子元素之前执行，浏览器在首次布局前即确定正确的主题 class，消除闪烁。使用 `=== '0'` 严格匹配以避免 `localStorage` 为空时的歧义。
+
+##### 3. 双层暗色系统收敛——`_darkmode.styl` 拆分
+
+这是本次修复的核心工程，实现了"旧 mixin 集中式覆盖 → CSS 自定义属性联邦自治"的架构迁移：
+
+- **新建全局设计令牌层**：在 `_variables.styl` 末尾新增 `:root` / `body.darkmode` 块，定义 17 个 CSS 自定义属性（`--color-bg`、`--color-text`、`--color-link`、`--color-border` 等），亮/暗配色统一管理于此。改站点配色只需修改此区域。
+- **全局规则迁移**（`style.styl`）：`body`、`a`、`img` 等全局选择器改用 `var()` 引用令牌，替换原有的 Stylus 编译时变量，删除 `body.darkmode { darkmode() }` 调用。
+- **组件规则分散迁移**：将 `darkmode()` mixin 中 100 行的组件选择器规则逐一拆入对应的 `_partial/*.styl` 文件（`article.styl`、`archive.styl`、`tocbot.styl`、`friends.styl`、`_extend.styl` 等），各组件使用 `var()` 引用全局令牌或定义局部变量。Valine/Waline 暗色规则移至 `_partial/gitalk.styl`。
+- **删除 `_darkmode.styl`**：移除 import 和 mixin 调用后删除该文件（100 行）。
+
+迁移后，新增或修改组件无需再"散弹式修改"——暗色适配代码与组件亮色样式共址存放，组件通过 `var()` 引用令牌，不感知当前主题。全局配色修改只需编辑 `_variables.styl` 末尾的令牌块。
+
+> **`⚠️` `:root` 语义倒置未修复**：`:root` = 亮色 / `body.darkmode` = 暗色 的约定与网站实际默认（暗色）语义相反，但此模式符合 Tailwind CSS、Bootstrap 5.3 等业界标准。将其翻转（`:root` = 暗色、`body.lightmode` = 亮色）需全局重写选择器，成本高且收益有限，保留现状。
 
 ---
 

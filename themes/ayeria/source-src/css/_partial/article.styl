@@ -4,7 +4,7 @@
   font-size 110%
   .sea-center
     text-align center
-    color black
+    color var(--color-text)
     &::after
       border-bottom: 2px dashed water;
       content: '';
@@ -61,7 +61,7 @@
   line-height 1.6
   clearfix()
   @extend $base-style
-  color body-color
+  color var(--color-text)
   .pullquote
     text-align left
     width 45%
@@ -73,7 +73,7 @@
       margin-right 0.5em
       margin-left 1em
   .caption
-    color froth
+    color var(--color-text-secondary)
     display block
     font-size 0.9em
     margin-top 0.5em
@@ -103,15 +103,15 @@
     font-weight bold
     margin-bottom 3rem
     text-decoration none
-    color body-color
+    color var(--color-text)
     padding-left 2rem
-    border-left 4px solid body-color 
+    border-left 4px solid var(--color-text) 
   .article-author
     display block
     font-size 20px
     margin-bottom 3rem
     text-decoration none
-    color body-color
+    color var(--color-text)
     padding-left 2rem
 
 .article-footer
@@ -120,8 +120,8 @@
 .declare
   margin 0 0 1rem
   padding-bottom 1rem
-  color #999
-  border-bottom 1px solid #f6f6f6
+  color var(--color-text-secondary)
+  border-bottom 1px solid var(--color-border)
   ul
     list-style none
     li
@@ -132,7 +132,7 @@
   list-unstyled()
   margin 0
   &:before
-    color: tag-color
+    color var(--color-text-secondary)
     content "\eec3"
     font-family remixicon
     margin-right .5rem
@@ -143,14 +143,14 @@
     font-size: 11px
     text-decoration: none
     display: block;
-    color: white;
+    color var(--color-tag-text);
     float: left;
     height 18px
     line-height 18px
     padding 0px 8px;
     position: relative;
     border-radius: 9px;
-    background-color tag-color
+    background-color var(--color-tag-bg)
 
 .article-comment-link
   float right
@@ -174,7 +174,7 @@
   position relative
   padding-top 1.5rem
   margin 1rem 0 2rem
-  border-top border-width solid #eee
+  border-top border-width solid var(--color-border)
 
 .article-nav-link
   display block
@@ -186,7 +186,7 @@
     text-align right
 
 .article-nav-caption
-  color sea-lighter
+  color var(--color-text-secondary)
 
 .article-nav-title
   font-size inherit
@@ -212,7 +212,7 @@
   padding 0 1.5rem
   outline none
   border none
-  border-bottom border-width border-color solid
+  border-bottom border-width var(--color-border) solid
   height 3.6rem
   line-height 3.6rem
 
@@ -225,7 +225,7 @@ $article-share-link
   float left
   width 5rem
   height 3.6rem
-  color body-color
+  color var(--color-text)
   text-align center
   text-decoration none
   &:before
