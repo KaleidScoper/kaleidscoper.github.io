@@ -1,7 +1,7 @@
 # 博客项目架构分析报告
 
 > **分析日期**: 2026-04-13
-> **最后更新**: 2026-05-20（新增十五、ayeria.js 模块化重构方案；新增 3.4 暗色模式实现架构）
+> **最后更新**: 2026-05-25（#8.2 #3.2 #2.1 已修复、#10.2 同步关闭、#1.5 #1.6 已忽略）
 > **分析范围**: 项目整体架构、目录结构、配置体系、主题架构、CI/CD、性能、安全、SEO、可维护性、SOLID 原则
 > **参考基准**: Hexo 官方最佳实践、GitHub Pages 部署惯例、静态站点生成器行业通用规范、SOLID 五原则在非 OOP 场景下的适用标准
 > **前置审查**: 本报告基于 [2026-03-28 审查报告](archive/audit-report-2026-03-28.md) 的修复成果，不重复已关闭问题，仅关注架构层面
@@ -64,7 +64,7 @@
 
 **建议**: 将 `source/test/` 加入 `_config.yml` 的 `skip_render`。
 
-### 1.5 图片文件名使用中文
+### ~~1.5 （已忽略）图片文件名使用中文~~
 
 **位置**: `source/images/` 下多个文件，如 `丹凤门.jpg`、`京都八坂神社西门.webp`、`伪史论.jpeg` 等
 
@@ -76,7 +76,9 @@
 
 **建议**: 将图片文件名统一为英文或拼音，在 Markdown 中更新引用路径。
 
-### 1.6 主题目录内遗留备份文件
+> **已忽略（2026-05-25）**：当前图片文件数量有限，中文文件名暂未造成实际问题。如未来图片数量增长或出现兼容性问题时再重新评估。
+
+### ~~1.6 （已忽略）主题目录内遗留备份文件~~
 
 **位置**:
 
@@ -88,17 +90,21 @@
 
 **建议**: 删除上述文件；`_config.yml.old` 中的历史配置如需留存，提交至 Git 历史即可，无需作为文件保留在仓库中。
 
+> **已忽略（2026-05-25）**：这些备份文件体积微小，不影响构建结果的功能正确性。如需清理可随时删除，但非紧急事项。
+
 ---
 
 ## 二、配置体系
 
-### 2.1 `future: true` 允许未来日期文章发布
+### ~~2.1 （已修复）`future: true` 允许未来日期文章发布~~
 
 **位置**: `_config.yml` — `future: true`
 
 **问题**: 此配置允许发布日期在未来的文章。这在生产环境中是不寻常的——通常仅用于本地预览草稿。如果误设文章日期为未来时间，文章会直接上线。
 
 **建议**: 将 `future` 设为 `false`。本地预览时使用 `hexo server --future` 参数。
+
+> **已修复（2026-05-25）**：`_config.yml` 中 `future` 已设为 `false`。
 
 ### 2.2 `post_asset_folder: false` 导致图片管理分散
 
@@ -157,7 +163,7 @@
 
 **遗留事项**: `source/css/` 下仍有 `ayeria-layout.styl` 和 `clipboard.styl` 两个独立 Stylus 文件直接被 `head.ejs` 引用，未纳入 Rollup 构建管线（作为独立 CSS 输出）。这是有意的架构选择（避免与 `dist/main.css` 合并），但需在主题文档中说明。
 
-### 3.2 主题构建产物提交到仓库
+### ~~3.2 （已修复）主题构建产物提交到仓库~~
 
 **位置**: `themes/ayeria/source/dist/`（`main.css`、`main.js`）
 
@@ -167,7 +173,15 @@
 - 构建产物与源码混在同一仓库，增加仓库体积和 diff 噪音
 - 可能出现源码更新但忘记重新构建的情况
 
-**建议**: 短期维持现状（Hexo 生态的普遍做法）。长期可考虑在 GitHub Actions 中增加主题构建步骤，使 `source/dist/` 不再需要提交。
+**修复情况（2026-05-25）**: 依赖 §8.2（CI 主题构建已就位），不再需要将构建产物提交至仓库：
+
+1. `themes/ayeria/.gitignore` 新增 `source/dist/`，忽略构建产物
+2. `git rm --cached` 移除已跟踪的 `main.css`、`main.js`
+3. CI 的 `Build theme` 步骤在每次部署前从 `source-src/` 源码生成最新的 `source/dist/` 文件
+
+本地开发时，修改 `source-src/` 后仍需手动执行 `cd themes/ayeria && npm run build`。后续可考虑为 `hexo server` 添加主题 watch 自动构建的脚本。
+
+> **⚑ 前置依赖 §8.2**：本修复以 CI 主题构建就位为前提。§8.2 未完成前不可移除 Git 中的构建产物。
 
 ### 3.4 暗色模式实现架构
 
@@ -491,18 +505,18 @@ Disallow: /resume-en/
   run: npx linkinator public/ --recurse --skip "^(?!https://kaleidscoper)" || true
 ```
 
-### 8.2 主题构建未纳入 CI
+### ~~8.2 （已修复）主题构建未纳入 CI~~
 
 **问题**: 主题的 Rollup 构建（`npm run build` 在 `themes/ayeria/` 下）需在本地手动执行。如果忘记构建，部署的将是旧的 `source/dist/` 文件。
 
-**建议**: 在 CI 的 `npm run build` 之前添加主题构建步骤：
+**修复情况（2026-05-25）**: 在 `.github/workflows/pages.yml` 的 `npm run build`（Hexo 生成）之前新增两步：
 
-```yaml
-- name: Build theme
-  run: cd themes/ayeria && npm install && npm run build
-```
+1. `Cache theme NPM dependencies` — 缓存 `themes/ayeria/node_modules`，以 `themes/ayeria/package-lock.json` 为 key
+2. `Build theme` — `cd themes/ayeria && npm install && npm run build`
 
-> **⚑ 与 §10.2 合并处理**：本节的 CI 步骤（`cd themes/ayeria && npm install && npm run build`）已涵盖 §10.2（主题 devDependencies 未在 CI 安装）所描述的问题。两者应合并为一次 CI 变更，优先推进本节即可同步关闭 §10.2。
+构建顺序现为：`npm install（根）→ 缓存主题 node_modules → Build theme（Rollup）→ Build（Hexo）→ Deploy`。CI 每次构建均从 `source-src/` 最新源码生成 `source/dist/`，不再依赖本地手动构建。
+
+> **⚑ §10.2 同步关闭**：`Build theme` 步骤中的 `npm install` 已安装主题的 `devDependencies`（rollup、autoprefixer 等），§10.2 随之自动修复。
 
 ### 8.3 缺少部署环境锁定
 
@@ -559,7 +573,7 @@ Disallow: /resume-en/
 - 监控该包的维护状态
 - 准备备选方案：官方 `hexo-renderer-markdown-it` + 独立 KaTeX 插件
 
-### 10.2 主题 devDependencies 未在 CI 中安装
+### ~~10.2 （已修复，随 §8.2）主题 devDependencies 未在 CI 中安装~~
 
 **位置**: `themes/ayeria/package.json` — `devDependencies`
 
@@ -567,7 +581,7 @@ Disallow: /resume-en/
 
 **建议**: 参见 8.2，在 CI 中显式安装主题依赖并构建。
 
-> **⚑ 与 §8.2 合并处理**：本条目是 §8.2 的子任务，§8.2 的 CI 步骤中显式执行 `cd themes/ayeria && npm install` 即可同步解决。优先推进 §8.2，本条目将随之自动关闭，无需单独处理。
+> **已修复（2026-05-25）**：随 §8.2 同步关闭。CI 中 `Build theme` 步骤已包含 `cd themes/ayeria && npm install`，主题 devDependencies 现已在每次 CI 构建中安装。
 
 ---
 
@@ -692,7 +706,6 @@ Disallow: /resume-en/
 | 7.1 | 缺少 Sitemap                      | SEO   |
 | 7.2 | 缺少 robots.txt                   | SEO   |
 | 5.1 | jQuery 每页无条件加载                  | 性能    |
-| 8.2 | 主题构建未纳入 CI                      | CI/CD |
 | 8.3 | CI 使用 `npm install` 而非 `npm ci` | CI/CD |
 | 12.2 | 第三方 CDN 资源可用性风险（staticfile.org）     | 性能/架构 |
 | 12.1 | GitHub Pages 中国大陆访问性能              | 架构/性能 |
@@ -727,12 +740,12 @@ Disallow: /resume-en/
 | 1.1  | `source/_drafts/` 混有非 Markdown 文件 | 目录结构  |
 | 1.3  | 无用的 `.gitkeep`              | 目录结构  |
 | 1.4  | 测试文件/页面残留                   | 目录结构  |
-| 1.5  | 图片文件名使用中文                   | 目录结构  |
-| 1.6  | 主题目录内遗留 `.old` 备份文件         | 目录结构  |
-| 2.1  | `future: true`              | 配置    |
+| ~~1.5~~  | ~~图片文件名使用中文~~（已忽略）                   | 目录结构  |
+| ~~1.6~~  | ~~主题目录内遗留 `.old` 备份文件~~（已忽略）         | 目录结构  |
+| ~~2.1~~  | ~~`future: true`~~（已修复）              | 配置    |
 | 2.2  | `post_asset_folder: false`  | 配置    |
 | 2.3  | 日期型永久链接层级过深                 | 配置    |
-| 3.2  | 主题构建产物提交仓库                  | 主题架构  |
+| ~~3.2~~  | ~~主题构建产物提交仓库~~（已修复）                  | 主题架构  |
 | 3.3  | `index.js` 为空壳              | 主题架构  |
 | 4.2  | MC 页面架构独立                   | 自定义页面 |
 | 4.3  | 手办柜页面 raw HTML              | 自定义页面 |
@@ -744,7 +757,6 @@ Disallow: /resume-en/
 | 8.1  | 缺少质量门禁                      | CI/CD |
 | 9.2  | 根目录调试脚本积累（debug.py + debug_wsl.py） | 可维护性  |
 | 9.3  | Git 提交信息不规范                 | 可维护性  |
-| 10.2 | 主题 devDependencies 未在 CI 安装 | 依赖管理  |
 | 11.1 | 缺少跳过导航链接                    | 可访问性  |
 | 11.2 | 社交图标缺少可访问文本                 | 可访问性  |
 | 12.4 | 缺少面向中国大陆的访问统计分析             | 可维护性  |

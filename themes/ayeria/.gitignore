@@ -9,3 +9,4 @@ node_modules/
 .cache
 .history
 _bak.yml
+source/dist/

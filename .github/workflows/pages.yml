@@ -27,6 +27,15 @@ jobs:
             ${{ runner.OS }}-npm-
       - name: Install Dependencies
         run: npm install
+      - name: Cache theme NPM dependencies
+        uses: actions/cache@v4
+        with:
+          path: themes/ayeria/node_modules
+          key: ${{ runner.OS }}-npm-theme-${{ hashFiles('themes/ayeria/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-npm-theme-
+      - name: Build theme
+        run: cd themes/ayeria && npm install && npm run build
       - name: Build
         run: npm run build
       - name: Upload Pages artifact
