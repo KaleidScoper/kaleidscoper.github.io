@@ -1,7 +1,7 @@
 # 博客项目架构分析报告
 
 > **分析日期**: 2026-04-13
-> **最后更新**: 2026-05-25（#3.4 已修复、#8.2 #3.2 #3.3 #2.1 已修复、#10.2 同步关闭、#1.5 #1.6 已忽略）
+> **最后更新**: 2026-05-25（#3.4 已修复、#8.2 #3.2 #3.3 #2.1 已修复、#10.2 同步关闭、#1.5 #1.6 已忽略、#3.5 新增亮暗系统遗留问题、§3.4 勘误：`_variables.styl` → `_variables.styl` + `_tokens.styl` 拆分）
 > **分析范围**: 项目整体架构、目录结构、配置体系、主题架构、CI/CD、性能、安全、SEO、可维护性、SOLID 原则
 > **参考基准**: Hexo 官方最佳实践、GitHub Pages 部署惯例、静态站点生成器行业通用规范、SOLID 五原则在非 OOP 场景下的适用标准
 > **前置审查**: 本报告基于 [2026-03-28 审查报告](archive/audit-report-2026-03-28.md) 的修复成果，不重复已关闭问题，仅关注架构层面
@@ -30,35 +30,36 @@
 
 ### ~~1.1 （已修复）根目录存在非标准目录~~
 
-**位置**: 项目根目录
+~~**位置**: 项目根目录~~
 
-**原问题**: `文章模板暂存处/` 目录位于项目根目录，内含未发布的 Markdown 草稿和无关文件（如 `哲学.py`、`编剧.md`、`生产资料.md`）。
+~~**原问题**: `文章模板暂存处/` 目录位于项目根目录，内含未发布的 Markdown 草稿和无关文件（如 `哲学.py`、`编剧.md`、`生产资料.md`）。~~
 
-**修复情况**: `文章模板暂存处/` 目录已从根目录移除，相关内容迁移至 `source/_drafts/`，符合 Hexo 草稿约定。但 `source/_drafts/` 中仍残留不符合 Hexo 草稿规范的文件：其中 `哲学.py` 为非 Markdown 文件，`生产资料.md`、`编剧.md`、`丝路创意文档.md`、`漂海录创意文档.md` 等虽为 Markdown 但缺少 Hexo 前置信息（front-matter），不会被 Hexo 构建。这些文件增加了仓库的认知负担，不符合 `_drafts/` 目录作为文章草稿区的语义。
+~~**修复情况**: `文章模板暂存处/` 目录已从根目录移除，相关内容迁移至 `source/_drafts/`，符合 Hexo 草稿约定。~~ 但 `source/_drafts/` 中仍残留不符合 Hexo 草稿规范的文件：其中 `哲学.py` 为非 Markdown 文件，`生产资料.md`、`编剧.md`、`丝路创意文档.md`、`漂海录创意文档.md` 等虽为 Markdown 但缺少 Hexo 前置信息（front-matter），不会被 Hexo 构建。这些文件增加了仓库的认知负担，不符合 `_drafts/` 目录作为文章草稿区的语义。
 
 **建议**: 将 `哲学.py` 等非 Markdown 文件移出 `_drafts/`，缺少 front-matter 的 `.md` 文件若无需发布则归入 `doc/drafts/`。
 
 ### ~~1.2 （已修复）残留配置文件~~
 
-**位置**: `_config.landscape.yml`
+~~**位置**: `_config.landscape.yml`~~
 
-已删除，无需再跟进。
+~~已删除，无需再跟进。~~
 
 ### ~~1.3 （已忽略）主题目录中的 `.gitkeep`~~
 
-**位置**: `themes/.gitkeep`
+~~**位置**: `themes/.gitkeep`~~
 
-**问题**: 该文件用于在 Git 中保留空的 `themes/` 目录。由于 `themes/ayeria/` 已有内容，此文件已无必要。
+~~**问题**: 该文件用于在 Git 中保留空的 `themes/` 目录。由于 `themes/ayeria/` 已有内容，此文件已无必要。~~
 
-**建议**: 删除该文件。
+~~**建议**: 删除该文件。~~
 
-### ~~1.4 （已忽略）测试文件残留~~
+### 1.4 测试文件残留
 
-**位置**:
+~~**位置**:~~
 
-- ~~`source/images/test.png`~~（已删除 ✓）
-- ~~`themes/ayeria/source/test-random-sentences.html`~~（已删除 ✓）
-- `source/test/`（新增：视差滚动效果演示页面，含 `index.md` 和 `img/` 图片）
+~~- `source/images/test.png`（已删除 ✓）~~
+~~- `themes/ayeria/source/test-random-sentences.html`（已删除 ✓）~~
+
+**位置**: `source/test/`（视差滚动效果演示页面，含 `index.md` 和 `img/` 图片）
 
 **问题**: `source/test/index.md` 是视差滚动演示页，会被 Hexo 构建并部署到生产站点（当前未在 `skip_render` 中排除）。
 
@@ -66,31 +67,31 @@
 
 ### ~~1.5 （已忽略）图片文件名使用中文~~
 
-**位置**: `source/images/` 下多个文件，如 `丹凤门.jpg`、`京都八坂神社西门.webp`、`伪史论.jpeg` 等
+~~**位置**: `source/images/` 下多个文件，如 `丹凤门.jpg`、`京都八坂神社西门.webp`、`伪史论.jpeg` 等~~
 
-**问题**: 中文文件名在 URL 编码后会变成长串百分号字符（如 `%E4%B8%B9%E5%87%A4%E9%97%A8.jpg`），影响：
+~~**问题**: 中文文件名在 URL 编码后会变成长串百分号字符（如 `%E4%B8%B9%E5%87%A4%E9%97%A8.jpg`），影响：~~
 
-- URL 可读性和可分享性
-- 部分旧版服务器/CDN 的兼容性
-- 终端操作体验
+~~- URL 可读性和可分享性~~
+~~- 部分旧版服务器/CDN 的兼容性~~
+~~- 终端操作体验~~
 
-**建议**: 将图片文件名统一为英文或拼音，在 Markdown 中更新引用路径。
+~~**建议**: 将图片文件名统一为英文或拼音，在 Markdown 中更新引用路径。~~
 
-> **已忽略（2026-05-25）**：当前图片文件数量有限，中文文件名暂未造成实际问题。如未来图片数量增长或出现兼容性问题时再重新评估。
+~~> **已忽略（2026-05-25）**：当前图片文件数量有限，中文文件名暂未造成实际问题。如未来图片数量增长或出现兼容性问题时再重新评估。~~
 
 ### ~~1.6 （已忽略）主题目录内遗留备份文件~~
 
-**位置**:
+~~**位置**:~~
 
-- `themes/ayeria/_config.yml.old`
-- `themes/ayeria/source/favicon.ico.old`
-- `themes/ayeria/source/favicon.svg.old`
+~~- `themes/ayeria/_config.yml.old`~~
+~~- `themes/ayeria/source/favicon.ico.old`~~
+~~- `themes/ayeria/source/favicon.svg.old`~~
 
-**问题**: 这些 `.old` 后缀文件是开发过程中遗留的备份，无实际功能，会被 Hexo 原样复制至 `public/`（已确认 `public/favicon.ico.old` 和 `public/favicon.svg.old` 出现在构建产物中）。
+~~**问题**: 这些 `.old` 后缀文件是开发过程中遗留的备份，无实际功能，会被 Hexo 原样复制至 `public/`（已确认 `public/favicon.ico.old` 和 `public/favicon.svg.old` 出现在构建产物中）。~~
 
-**建议**: 删除上述文件；`_config.yml.old` 中的历史配置如需留存，提交至 Git 历史即可，无需作为文件保留在仓库中。
+~~**建议**: 删除上述文件；`_config.yml.old` 中的历史配置如需留存，提交至 Git 历史即可，无需作为文件保留在仓库中。~~
 
-> **已忽略（2026-05-25）**：这些备份文件体积微小，不影响构建结果的功能正确性。如需清理可随时删除，但非紧急事项。
+~~> **已忽略（2026-05-25）**：这些备份文件体积微小，不影响构建结果的功能正确性。如需清理可随时删除，但非紧急事项。~~
 
 ---
 
@@ -98,13 +99,13 @@
 
 ### ~~2.1 （已修复）`future: true` 允许未来日期文章发布~~
 
-**位置**: `_config.yml` — `future: true`
+~~**位置**: `_config.yml` — `future: true`~~
 
-**问题**: 此配置允许发布日期在未来的文章。这在生产环境中是不寻常的——通常仅用于本地预览草稿。如果误设文章日期为未来时间，文章会直接上线。
+~~**问题**: 此配置允许发布日期在未来的文章。这在生产环境中是不寻常的——通常仅用于本地预览草稿。如果误设文章日期为未来时间，文章会直接上线。~~
 
-**建议**: 将 `future` 设为 `false`。本地预览时使用 `hexo server --future` 参数。
+~~**建议**: 将 `future` 设为 `false`。本地预览时使用 `hexo server --future` 参数。~~
 
-> **已修复（2026-05-25）**：`_config.yml` 中 `future` 已设为 `false`。
+~~> **已修复（2026-05-25）**：`_config.yml` 中 `future` 已设为 `false`。~~
 
 ### 2.2 `post_asset_folder: false` 导致图片管理分散
 
@@ -155,49 +156,49 @@
 
 ### ~~3.1 （已修复）`custom.styl` 严重偏离 Stylus 范式~~
 
-**原位置**: `themes/ayeria/source/css/custom.styl`（约 973 行）
+~~**原位置**: `themes/ayeria/source/css/custom.styl`（约 973 行）~~
 
-**原问题**: 大量使用 `@css {}` 块（原始 CSS 注入），绕过 Stylus 预处理器，无法使用 Stylus 变量、嵌套、混入等特性。
+~~**原问题**: 大量使用 `@css {}` 块（原始 CSS 注入），绕过 Stylus 预处理器，无法使用 Stylus 变量、嵌套、混入等特性。~~
 
-**修复情况**: 已于 commit `92eb855` 完成全面重构。`custom.styl` 现仅 17 行，作为面向站点用户的覆盖样式入口（空白模板，附使用示例注释）。原有的全部样式逻辑已按功能拆分至 `source-src/css/_partial/` 下的 29 个独立 Stylus partial 文件（`article.styl`、`reward.styl`、`search.styl`、`highlight.styl` 等），通过 `style.styl` 统一 import，经 Rollup 构建输出。
+~~**修复情况**: 已于 commit `92eb855` 完成全面重构。`custom.styl` 现仅 17 行，作为面向站点用户的覆盖样式入口（空白模板，附使用示例注释）。原有的全部样式逻辑已按功能拆分至 `source-src/css/_partial/` 下的 29 个独立 Stylus partial 文件（`article.styl`、`reward.styl`、`search.styl`、`highlight.styl` 等），通过 `style.styl` 统一 import，经 Rollup 构建输出。~~
 
 **遗留事项**: `source/css/` 下仍有 `ayeria-layout.styl` 和 `clipboard.styl` 两个独立 Stylus 文件直接被 `head.ejs` 引用，未纳入 Rollup 构建管线（作为独立 CSS 输出）。这是有意的架构选择（避免与 `dist/main.css` 合并），但需在主题文档中说明。
 
 ### ~~3.2 （已修复）主题构建产物提交到仓库~~
 
-**位置**: `themes/ayeria/source/dist/`（`main.css`、`main.js`）
+~~**位置**: `themes/ayeria/source/dist/`（`main.css`、`main.js`）~~
 
-**问题**: Rollup 构建的产物（`source/dist/main.css` 和 `source/dist/main.js`）被直接提交到 Git 仓库。这是 Hexo 主题的常见做法（因为 Hexo 直接使用 `source/` 下的文件），但从工程角度看：
+~~**问题**: Rollup 构建的产物（`source/dist/main.css` 和 `source/dist/main.js`）被直接提交到 Git 仓库。这是 Hexo 主题的常见做法（因为 Hexo 直接使用 `source/` 下的文件），但从工程角度看：~~
 
-- 每次 `npm run build` 后需手动检查 diff 并提交
-- 构建产物与源码混在同一仓库，增加仓库体积和 diff 噪音
-- 可能出现源码更新但忘记重新构建的情况
+~~- 每次 `npm run build` 后需手动检查 diff 并提交~~
+~~- 构建产物与源码混在同一仓库，增加仓库体积和 diff 噪音~~
+~~- 可能出现源码更新但忘记重新构建的情况~~
 
-**修复情况（2026-05-25）**: 依赖 §8.2（CI 主题构建已就位），不再需要将构建产物提交至仓库：
+~~**修复情况（2026-05-25）**: 依赖 §8.2（CI 主题构建已就位），不再需要将构建产物提交至仓库：~~
 
-1. `themes/ayeria/.gitignore` 新增 `source/dist/`，忽略构建产物
-2. `git rm --cached` 移除已跟踪的 `main.css`、`main.js`
-3. CI 的 `Build theme` 步骤在每次部署前从 `source-src/` 源码生成最新的 `source/dist/` 文件
+~~1. `themes/ayeria/.gitignore` 新增 `source/dist/`，忽略构建产物~~
+~~2. `git rm --cached` 移除已跟踪的 `main.css`、`main.js`~~
+~~3. CI 的 `Build theme` 步骤在每次部署前从 `source-src/` 源码生成最新的 `source/dist/` 文件~~
 
 本地开发时，修改 `source-src/` 后仍需手动执行 `cd themes/ayeria && npm run build`。后续可考虑为 `hexo server` 添加主题 watch 自动构建的脚本。
 
-> **⚑ 前置依赖 §8.2**：本修复以 CI 主题构建就位为前提。§8.2 未完成前不可移除 Git 中的构建产物。
+~~> **⚑ 前置依赖 §8.2**：本修复以 CI 主题构建就位为前提。§8.2 未完成前不可移除 Git 中的构建产物。~~
 
 ### ~~3.4 （已修复）暗色模式实现架构~~
 
 > **新增于 2026-05-20** | **修复于 2026-05-25**
 
-#### 现状描述
+#### ~~现状描述（修复前）~~
 
-暗色模式由三个机制共同构成：
+~~暗色模式由三个机制共同构成：~~
 
-1. `layout.ejs` 第 3 行：`<body class="darkmode">` — 暗色 class 硬编码在 HTML 源码中（暗色为默认）
-2. `style.styl` 第 33–34 行：`body.darkmode { darkmode() }` — Stylus mixin 覆盖旧版组件样式
-3. 新组件（`reward.styl`、`share.styl` 等）：`:root` 定义亮色 CSS 自定义属性，`body.darkmode` 定义暗色覆盖值
+~~1. `layout.ejs` 第 3 行：`<body class="darkmode">` — 暗色 class 硬编码在 HTML 源码中（暗色为默认）~~
+~~2. `style.styl` 第 33–34 行：`body.darkmode { darkmode() }` — Stylus mixin 覆盖旧版组件样式~~
+~~3. 新组件（`reward.styl`、`share.styl` 等）：`:root` 定义亮色 CSS 自定义属性，`body.darkmode` 定义暗色覆盖值~~
 
-JS 切换逻辑（`ayeria.js`）：
-- `sessionStorage.getItem("darkmode") == 0` → 移除 `darkmode` class（切换到亮色）
-- 其他情况（默认/1）→ 保留 `darkmode` class（暗色）
+~~JS 切换逻辑（`ayeria.js`）：~~
+~~- `sessionStorage.getItem("darkmode") == 0` → 移除 `darkmode` class（切换到亮色）~~
+~~- 其他情况（默认/1）→ 保留 `darkmode` class（暗色）~~
 
 #### `:root` = 亮色 + `body.darkmode` = 暗色的语义问题
 
@@ -205,48 +206,48 @@ JS 切换逻辑（`ayeria.js`）：
 
 **语义异味（低优先级，无需立即修复）**：`:root` 在 CSS 中语义上代表"默认基准状态"，目前 `:root` = 亮色配置，而运行时默认是暗色。这是从上游 Ayer 主题（亮色默认）演化而来的痕迹，功能正确，但 CSS 语义与网站的实际默认状态相反。若要消除，需将暗色变量移至 `:root`，亮色变量改写在 `body.lightmode` 下，成本较高，收益有限。
 
-#### Bug 1：`sessionStorage` 应改为 `localStorage` 🟡（已修复，见下方修复情况）
+#### ~~Bug 1：`sessionStorage` 应改为 `localStorage` 🟡（已修复）~~
 
-**位置**：`source-src/js/ayeria.js` 第 210、222、228 行（迁移后为 `darkmode.js`）
+~~**位置**：`source-src/js/ayeria.js` 第 210、222、228 行（迁移后为 `darkmode.js`）~~
 
-**问题**：`sessionStorage` 的作用域是单个标签页/会话，关闭标签页或新开标签页后偏好丢失，用户每次都须重新切换亮色。业界标准是 `localStorage`（持久化到用户主动清除）。
+~~**问题**：`sessionStorage` 的作用域是单个标签页/会话，关闭标签页或新开标签页后偏好丢失，用户每次都须重新切换亮色。业界标准是 `localStorage`（持久化到用户主动清除）。~~
 
-**修复**：三处 `sessionStorage.getItem/setItem` 替换为 `localStorage.getItem/setItem`，一行一行改，无副作用。
+~~**修复**：三处 `sessionStorage.getItem/setItem` 替换为 `localStorage.getItem/setItem`，一行一行改，无副作用。~~
 
-> **⚑ 顺序约束**：必须先于 Bug 2 修复。Bug 1 完成后，`localStorage` 持久化偏好的用户数量将持续累积，Bug 2（亮色用户 FOUC）影响范围随即扩大，届时应立即跟进 Bug 2。
+~~> **⚑ 顺序约束**：必须先于 Bug 2 修复。Bug 1 完成后，`localStorage` 持久化偏好的用户数量将持续累积，Bug 2（亮色用户 FOUC）影响范围随即扩大，届时应立即跟进 Bug 2。~~
 
-#### Bug 2：亮色模式用户的 FOUC 🟡（已修复，见下方修复情况）
+#### ~~Bug 2：亮色模式用户的 FOUC 🟡（已修复）~~
 
-**问题**：页面 HTML 携带 `class="darkmode"` 送达浏览器，CSS 即刻渲染为暗色背景。若用户偏好为亮色（`sessionStorage/localStorage = 0`），需等 JS bundle 加载、解析、执行后才移除该 class，期间有一帧暗色闪烁（FOUC）。暗色用户不受影响。
+~~**问题**：页面 HTML 携带 `class="darkmode"` 送达浏览器，CSS 即刻渲染为暗色背景。若用户偏好为亮色（`sessionStorage/localStorage = 0`），需等 JS bundle 加载、解析、执行后才移除该 class，期间有一帧暗色闪烁（FOUC）。暗色用户不受影响。~~
 
-**影响范围**：仅影响主动切换过亮色的用户。当前用 `sessionStorage`，每次新标签都重置偏好，实际受影响的人极少；若改为 `localStorage` 后，受影响比例会上升，届时此 bug 优先级应同步提高。
+~~**影响范围**：仅影响主动切换过亮色的用户。当前用 `sessionStorage`，每次新标签都重置偏好，实际受影响的人极少；若改为 `localStorage` 后，受影响比例会上升，届时此 bug 优先级应同步提高。~~
 
-**修复**：在 `head.ejs` 的 `<head>` 末尾（CSS 链接之后、body 渲染之前）插入内联脚本：
+~~**修复**：在 `head.ejs` 的 `<head>` 末尾（CSS 链接之后、body 渲染之前）插入内联脚本：~~
 
-```html
-<script>
-  if (localStorage.getItem('darkmode') === '0') {
-    document.body.classList.remove('darkmode');
-  }
-</script>
-```
+~~```html~~
+~~<script>~~
+~~  if (localStorage.getItem('darkmode') === '0') {~~
+~~    document.body.classList.remove('darkmode');~~
+~~  }~~
+~~</script>~~
+~~```~~
 
-注意：需在 `<link rel="stylesheet">` 之后、`</head>` 之前执行，使浏览器在首次绘制前即确定正确状态。
+~~注意：需在 `<link rel="stylesheet">` 之后、`</head>` 之前执行，使浏览器在首次绘制前即确定正确状态。~~
 
-> **⚑ 前置依赖**：Bug 1（`sessionStorage` → `localStorage`）。Bug 1 未完成前，每次新标签页都会重置偏好，实际受影响用户极少，本修复价值有限；Bug 1 完成后优先级上升，应立即跟进。
+~~> **⚑ 前置依赖**：Bug 1（`sessionStorage` → `localStorage`）。Bug 1 未完成前，每次新标签页都会重置偏好，实际受影响用户极少，本修复价值有限；Bug 1 完成后优先级上升，应立即跟进。~~
 
-#### 双层暗色系统（已知架构债务，已修复，见下方修复情况）
+#### ~~双层暗色系统（已知架构债务，已修复）~~
 
-`_darkmode.styl` 中的 `darkmode()` mixin（旧系统：Stylus 变量 + `!important` 覆盖）与新组件的 CSS 自定义属性系统（`--reward-*`、`--share-*` 等）并存。`_darkmode.styl` 第 31 行注释已承认部分规则被自定义属性方案覆盖。此问题属于 §3.1 已描述的样式迁移进行中状态，随新组件持续接入自定义属性，旧 mixin 中的规则会逐步被替代直至可以删除。
+~~`_darkmode.styl` 中的 `darkmode()` mixin（旧系统：Stylus 变量 + `!important` 覆盖）与新组件的 CSS 自定义属性系统（`--reward-*`、`--share-*` 等）并存。`_darkmode.styl` 第 31 行注释已承认部分规则被自定义属性方案覆盖。此问题属于 §3.1 已描述的样式迁移进行中状态，随新组件持续接入自定义属性，旧 mixin 中的规则会逐步被替代直至可以删除。~~
 
-#### 优先级汇总
+#### ~~优先级汇总~~
 
-| 问题 | 优先级 | 修复成本 |
-|------|--------|---------|
-| `sessionStorage` → `localStorage` | 🟡 中 | 极低（三行改动） |
-| 亮色用户 FOUC | 🟡 中（改 localStorage 后升高） | 低（一段内联 script） |
-| `:root` 语义倒置 | 🟢 低 | 高（全局 selector 重写） |
-| 双层暗色系统收敛 | 🟢 低（进行中） | 随新组件自然消化 |
+~~| 问题 | 优先级 | 修复成本 |~~
+~~|------|--------|---------|~~
+~~| `sessionStorage` → `localStorage` | 🟡 中 | 极低（三行改动） |~~
+~~| 亮色用户 FOUC | 🟡 中（改 localStorage 后升高） | 低（一段内联 script） |~~
+~~| `:root` 语义倒置 | 🟢 低 | 高（全局 selector 重写） |~~
+~~| 双层暗色系统收敛 | 🟢 低（进行中） | 随新组件自然消化 |~~
 
 #### 修复情况（2026-05-25）
 
@@ -275,24 +276,76 @@ JS 切换逻辑（`ayeria.js`）：
 
 这是本次修复的核心工程，实现了"旧 mixin 集中式覆盖 → CSS 自定义属性联邦自治"的架构迁移：
 
-- **新建全局设计令牌层**：在 `_variables.styl` 末尾新增 `:root` / `body.darkmode` 块，定义 17 个 CSS 自定义属性（`--color-bg`、`--color-text`、`--color-link`、`--color-border` 等），亮/暗配色统一管理于此。改站点配色只需修改此区域。
+- **新建全局设计令牌层**：在 `_tokens.styl`（自 `_variables.styl` 拆分出的独立 CSS 自定义属性文件）中定义 `:root` / `body.darkmode` 块，含 17 个全局 CSS 自定义属性（`--color-bg`、`--color-text`、`--color-link`、`--color-border` 等），亮/暗配色统一管理于此。改站点配色只需修改 `_tokens.styl`。
+- **文件职责分离**：`_variables.styl` 回归纯 Stylus 变量定义（字体、颜色、布局、断点），零 CSS 输出；`_tokens.styl` 通过 `@import "_variables"` 引用这些变量并映射为 CSS 自定义属性。暗色模式色值也使用 Stylus 变量定义（`dark-bg`、`dark-text` 等），消除裸 hex 值。
 - **全局规则迁移**（`style.styl`）：`body`、`a`、`img` 等全局选择器改用 `var()` 引用令牌，替换原有的 Stylus 编译时变量，删除 `body.darkmode { darkmode() }` 调用。
 - **组件规则分散迁移**：将 `darkmode()` mixin 中 100 行的组件选择器规则逐一拆入对应的 `_partial/*.styl` 文件（`article.styl`、`archive.styl`、`tocbot.styl`、`friends.styl`、`_extend.styl` 等），各组件使用 `var()` 引用全局令牌或定义局部变量。Valine/Waline 暗色规则移至 `_partial/gitalk.styl`。
 - **删除 `_darkmode.styl`**：移除 import 和 mixin 调用后删除该文件（100 行）。
 
-迁移后，新增或修改组件无需再"散弹式修改"——暗色适配代码与组件亮色样式共址存放，组件通过 `var()` 引用令牌，不感知当前主题。全局配色修改只需编辑 `_variables.styl` 末尾的令牌块。
+迁移后，新增或修改组件无需再"散弹式修改"——暗色适配代码与组件亮色样式共址存放，组件通过 `var()` 引用令牌，不感知当前主题。全局配色修改只需编辑 `_tokens.styl`。
 
 > **`⚠️` `:root` 语义倒置未修复**：`:root` = 亮色 / `body.darkmode` = 暗色 的约定与网站实际默认（暗色）语义相反，但此模式符合 Tailwind CSS、Bootstrap 5.3 等业界标准。将其翻转（`:root` = 暗色、`body.lightmode` = 亮色）需全局重写选择器，成本高且收益有限，保留现状。
+
+### 3.5 亮暗系统当前遗留问题
+
+> **新增于 2026-05-25**：§3.4 修复完成后，亮暗系统的核心架构（CSS 自定义属性 + 默认暗色防 FOUC + 全局/组件双层 token）已基本合理。以下为剩余的优化空间，优先级均为中低。
+
+#### 3.5.1 组件级 `body.darkmode` 块中仍使用裸 hex 值
+
+**位置**：`search.styl`、`reward.styl`、`share.styl`、`friends.styl`、`broadcast.styl`、`highlight.styl`、`gitalk.styl` 共 7 个文件
+
+**问题**：`_tokens.styl` 已建立"暗色值 = Stylus 变量"的规范（`dark-bg`、`dark-text` 等），但上述组件文件中各自的 `body.darkmode { --component-*: #xxx }` 块仍使用裸 hex 值，与全局令牌文件风格不一致。这些值是组件私有的（如 `--search-bg`、`--reward-border`），不属于全局 token，是否抽成 Stylus 变量取决于是否在多处引用。
+
+**建议**：若某个组件级暗色值在两处以上使用，抽为 Stylus 变量；单次使用的裸 hex 可保留现状，避免为抽象而抽象。
+
+#### 3.5.2 缺少 `prefers-color-scheme` 系统偏好跟随
+
+**位置**：`layout.ejs` 第 4-7 行
+
+**问题**：当前仅在 `localStorage` 中存储显式选择（`0` = 亮色，其他 = 暗色），未检测操作系统的 `prefers-color-scheme` 媒体查询。对于首次访问且 OS 使用亮色模式的用户，默认暗色可能与系统偏好冲突——虽然暗色是本站有意为之的设计默认（非疏忽），但提供"跟随系统"选项仍是业界最佳实践。
+
+**建议**：在内联 FOUC 防护脚本中增加 `prefers-color-scheme` 检测：
+
+```html
+<script>
+  const stored = localStorage.getItem('darkmode');
+  if (stored === '0') {
+    document.body.classList.remove('darkmode');
+  } else if (stored === null && window.matchMedia('(prefers-color-scheme: light)').matches) {
+    document.body.classList.remove('darkmode');
+  }
+</script>
+```
+
+此修改成本极低（两行），可消除"OS 亮色 + 首次访问 → 暗色博客"的体验断裂。
+
+#### 3.5.3 仅支持二态切换，无"跟随系统"选项
+
+**问题**：`localStorage` 中仅存储 `0`（亮色）或 `1`/空（暗色），无法表达"跟随系统"这一第三态。如未来增加 `auto` 模式，需：
+
+- 存储三态（`'light'` / `'dark'` / `'auto'`）
+- 监听 `matchMedia('(prefers-color-scheme: dark)')` 的 `change` 事件
+- 在切换按钮上提供三个图标状态（太阳/月亮/自动）
+
+此为锦上添花，当前二态已满足绝大部分用户需求，建议在用户反馈有需求时再实施。
+
+#### 优先级汇总
+
+| 问题 | 优先级 | 修复成本 |
+|------|--------|---------|
+| 组件裸 hex 值 | 🟢 低（风格一致性问题） | 低（仅涉及 7 个文件） |
+| `prefers-color-scheme` 检测 | 🟡 中 | 极低（两行内联脚本） |
+| "跟随系统"第三态 | 🟢 低 | 中（需 JS 重构 + UI 变更） |
 
 ---
 
 ### ~~3.3 （已修复）主题 `index.js` 为空壳~~
 
-**位置**: `themes/ayeria/index.js`
+~~**位置**: `themes/ayeria/index.js`~~
 
-**问题**: 该文件仅包含一行注释，用于防止 `hexo clean` 报错。这是 Hexo 5.0+ 的已知问题，但空壳文件增加了认知负担。
+~~**问题**: 该文件仅包含一行注释，用于防止 `hexo clean` 报错。这是 Hexo 5.0+ 的已知问题，但空壳文件增加了认知负担。~~
 
-**建议**: 维持现状（Hexo 框架限制），但可在文件中添加更详细的说明注释。
+~~**建议**: 维持现状（Hexo 框架限制），但可在文件中添加更详细的说明注释。~~
 
 > **已修复（2026-05-25）**：`index.js` 已添加详细注释，说明该文件为何作为空壳存在（Hexo 5.0+ `hexo clean` 要求主题根目录存在 `index.js`）、实际扩展逻辑的所在位置（`scripts/` 目录）及 Hexo 自动加载机制。
 
@@ -302,58 +355,58 @@ JS 切换逻辑（`ayeria.js`）：
 
 ### ~~4.1 （已忽略）简历页面与 Hexo 模板体系完全脱节~~
 
-**位置**: `source/resume/`、`source/resume-en/`
+~~**位置**: `source/resume/`、`source/resume-en/`~~
 
-**问题**: 这两个目录是完整的独立 HTML 站点（含自己的 CSS、JS、字体文件），通过 `skip_render` 跳过 Hexo 渲染。问题包括：
+~~**问题**: 这两个目录是完整的独立 HTML 站点（含自己的 CSS、JS、字体文件），通过 `skip_render` 跳过 Hexo 渲染。问题包括：~~
 
-- 与主站主题风格完全不同（无暗色模式、无导航栏、无页脚）
-- 两个目录间 CSS/JS/字体文件大量重复（约 500KB+）
-- 使用 Font Awesome 4.7（2017 年版本），主站使用 RemixIcon
-- 使用 jQuery 2.1.3（2014 年版本），主站使用 jQuery 3.6.0
-- `baiduanalysis.js` 和 `gtag.js` 中的分析脚本可能包含过时的追踪 ID
+~~- 与主站主题风格完全不同（无暗色模式、无导航栏、无页脚）~~
+~~- 两个目录间 CSS/JS/字体文件大量重复（约 500KB+）~~
+~~- 使用 Font Awesome 4.7（2017 年版本），主站使用 RemixIcon~~
+~~- 使用 jQuery 2.1.3（2014 年版本），主站使用 jQuery 3.6.0~~
+~~- `baiduanalysis.js` 和 `gtag.js` 中的分析脚本可能包含过时的追踪 ID~~
 
-**建议**:
+~~**建议**:~~
 
-- 短期：将共享资源提取到 `source/resume-assets/`，两个页面共用
-- 中期：将简历页面重构为 Hexo layout 模板，融入主站主题
-- 长期：考虑使用现代简历生成方案（如 JSON Resume + 主题模板）
+~~- 短期：将共享资源提取到 `source/resume-assets/`，两个页面共用~~
+~~- 中期：将简历页面重构为 Hexo layout 模板，融入主站主题~~
+~~- 长期：考虑使用现代简历生成方案（如 JSON Resume + 主题模板）~~
 
 ### ~~4.2 （已忽略）MC 服务器页面架构独立~~
 
-**位置**: `source/mc-server/`
+~~**位置**: `source/mc-server/`~~
 
-**问题**: 该页面是完全独立的 HTML/CSS/JS 应用，通过 `skip_render` 跳过 Hexo 渲染。虽然功能上合理（该页面有独特的交互需求），但存在以下问题：
+~~**问题**: 该页面是完全独立的 HTML/CSS/JS 应用，通过 `skip_render` 跳过 Hexo 渲染。虽然功能上合理（该页面有独特的交互需求），但存在以下问题：~~
 
-- 与主站无导航关联（用户无法从 MC 页面返回主站，除了左上角 logo）
-- 使用 Font Awesome 4.7 CDN，与主站 RemixIcon 不一致
-- `members.js` 中的数据硬编码在 JS 文件中，而非使用 Hexo 数据文件机制
-- 第三方头像 API `mc-heads.net` 无错误重试机制
+~~- 与主站无导航关联（用户无法从 MC 页面返回主站，除了左上角 logo）~~
+~~- 使用 Font Awesome 4.7 CDN，与主站 RemixIcon 不一致~~
+~~- `members.js` 中的数据硬编码在 JS 文件中，而非使用 Hexo 数据文件机制~~
+~~- 第三方头像 API `mc-heads.net` 无错误重试机制~~
 
-**建议**:
+~~**建议**:~~
 
-- 添加返回主站的导航链接
-- 将 Font Awesome 图标替换为 RemixIcon（与主站一致）
-- 考虑将成员数据迁移至 `source/_data/mc-members.yml`，通过 Hexo 模板渲染
+~~- 添加返回主站的导航链接~~
+~~- 将 Font Awesome 图标替换为 RemixIcon（与主站一致）~~
+~~- 考虑将成员数据迁移至 `source/_data/mc-members.yml`，通过 Hexo 模板渲染~~
 
 ### ~~4.3 （已忽略）电子手办柜页面使用 `{% raw %}` 嵌入大量 HTML~~
 
-**位置**: `source/waifu/index.md`
+~~**位置**: `source/waifu/index.md`~~
 
-**问题**: 该页面通过 `{% raw %}` 标签在 Markdown 文件中嵌入了约 280 行原始 HTML。这实质上是将 Markdown 文件当作 HTML 文件使用，失去了 Markdown 的简洁性优势。
+~~**问题**: 该页面通过 `{% raw %}` 标签在 Markdown 文件中嵌入了约 280 行原始 HTML。这实质上是将 Markdown 文件当作 HTML 文件使用，失去了 Markdown 的简洁性优势。~~
 
-**建议**: 将该页面改为 `index.html`（直接使用 HTML），或使用 Hexo 数据文件 + 模板方案（将角色数据提取到 `source/_data/waifu.yml`，通过 EJS 模板循环渲染）。
+~~**建议**: 将该页面改为 `index.html`（直接使用 HTML），或使用 Hexo 数据文件 + 模板方案（将角色数据提取到 `source/_data/waifu.yml`，通过 EJS 模板循环渲染）。~~
 
 ### ~~4.4 （已忽略）关于页面混合 Markdown 与 HTML/CSS~~
 
-**位置**: `source/about/index.md`
+~~**位置**: `source/about/index.md`~~
 
-**问题**: 该文件在 Markdown 中通过 `<link>` 引入外部 CSS、使用大量原始 HTML 标签。虽然 Hexo markdown-it 配置了 `html: true` 允许内联 HTML，但这种混合方式：
+~~**问题**: 该文件在 Markdown 中通过 `<link>` 引入外部 CSS、使用大量原始 HTML 标签。虽然 Hexo markdown-it 配置了 `html: true` 允许内联 HTML，但这种混合方式：~~
 
-- 增加维护复杂度
-- CSS 文件 `glass-card.css` 独立于主题样式体系
-- 无法通过主题的暗色模式切换自动适配（需手动编写 `body.darkmode` 选择器）
+~~- 增加维护复杂度~~
+~~- CSS 文件 `glass-card.css` 独立于主题样式体系~~
+~~- 无法通过主题的暗色模式切换自动适配（需手动编写 `body.darkmode` 选择器）~~
 
-**建议**: 将 `glass-card.css` 的样式纳入主题的 Stylus 构建管线，通过 CSS 自定义属性实现暗色模式自动跟随。
+~~**建议**: 将 `glass-card.css` 的样式纳入主题的 Stylus 构建管线，通过 CSS 自定义属性实现暗色模式自动跟随。~~
 
 ---
 
@@ -545,16 +598,16 @@ Disallow: /resume-en/
 
 ### ~~8.2 （已修复）主题构建未纳入 CI~~
 
-**问题**: 主题的 Rollup 构建（`npm run build` 在 `themes/ayeria/` 下）需在本地手动执行。如果忘记构建，部署的将是旧的 `source/dist/` 文件。
+~~**问题**: 主题的 Rollup 构建（`npm run build` 在 `themes/ayeria/` 下）需在本地手动执行。如果忘记构建，部署的将是旧的 `source/dist/` 文件。~~
 
-**修复情况（2026-05-25）**: 在 `.github/workflows/pages.yml` 的 `npm run build`（Hexo 生成）之前新增两步：
+~~**修复情况（2026-05-25）**: 在 `.github/workflows/pages.yml` 的 `npm run build`（Hexo 生成）之前新增两步：~~
 
-1. `Cache theme NPM dependencies` — 缓存 `themes/ayeria/node_modules`，以 `themes/ayeria/package-lock.json` 为 key
-2. `Build theme` — `cd themes/ayeria && npm install && npm run build`
+~~1. `Cache theme NPM dependencies` — 缓存 `themes/ayeria/node_modules`，以 `themes/ayeria/package-lock.json` 为 key~~
+~~2. `Build theme` — `cd themes/ayeria && npm install && npm run build`~~
 
-构建顺序现为：`npm install（根）→ 缓存主题 node_modules → Build theme（Rollup）→ Build（Hexo）→ Deploy`。CI 每次构建均从 `source-src/` 最新源码生成 `source/dist/`，不再依赖本地手动构建。
+~~构建顺序现为：`npm install（根）→ 缓存主题 node_modules → Build theme（Rollup）→ Build（Hexo）→ Deploy`。CI 每次构建均从 `source-src/` 最新源码生成 `source/dist/`，不再依赖本地手动构建。~~
 
-> **⚑ §10.2 同步关闭**：`Build theme` 步骤中的 `npm install` 已安装主题的 `devDependencies`（rollup、autoprefixer 等），§10.2 随之自动修复。
+~~> **⚑ §10.2 同步关闭**：`Build theme` 步骤中的 `npm install` 已安装主题的 `devDependencies`（rollup、autoprefixer 等），§10.2 随之自动修复。~~
 
 ### 8.3 缺少部署环境锁定
 
@@ -587,13 +640,13 @@ Disallow: /resume-en/
 
 ### ~~9.3 （已忽略）Git 提交信息不规范~~
 
-**问题**: 此问题在 2026-03-28 审查中被标记为"已忽略"。但从长期可维护性角度，无规范的提交信息使得：
+~~**问题**: 此问题在 2026-03-28 审查中被标记为"已忽略"。但从长期可维护性角度，无规范的提交信息使得：~~
 
-- 无法通过 `git log` 快速定位变更
-- 无法自动生成 CHANGELOG
-- `git bisect` 定位问题效率极低
+~~- 无法通过 `git log` 快速定位变更~~
+~~- 无法自动生成 CHANGELOG~~
+~~- `git bisect` 定位问题效率极低~~
 
-**补充建议**: 最低成本方案是在 `package.json` 中添加 `commitlint` + `husky`，强制提交信息以 `feat:`/`fix:`/`chore:` 等前缀开头。
+~~**补充建议**: 最低成本方案是在 `package.json` 中添加 `commitlint` + `husky`，强制提交信息以 `feat:`/`fix:`/`chore:` 等前缀开头。~~
 
 ---
 
@@ -613,13 +666,13 @@ Disallow: /resume-en/
 
 ### ~~10.2 （已修复，随 §8.2）主题 devDependencies 未在 CI 中安装~~
 
-**位置**: `themes/ayeria/package.json` — `devDependencies`
+~~**位置**: `themes/ayeria/package.json` — `devDependencies`~~
 
-**问题**: 主题的 `devDependencies`（rollup、autoprefixer 等）在 CI 中不会被安装（根目录 `npm install` 不会处理子目录的 `package.json`）。这意味着 CI 无法执行主题构建。
+~~**问题**: 主题的 `devDependencies`（rollup、autoprefixer 等）在 CI 中不会被安装（根目录 `npm install` 不会处理子目录的 `package.json`）。这意味着 CI 无法执行主题构建。~~
 
-**建议**: 参见 8.2，在 CI 中显式安装主题依赖并构建。
+~~**建议**: 参见 8.2，在 CI 中显式安装主题依赖并构建。~~
 
-> **已修复（2026-05-25）**：随 §8.2 同步关闭。CI 中 `Build theme` 步骤已包含 `cd themes/ayeria && npm install`，主题 devDependencies 现已在每次 CI 构建中安装。
+~~> **已修复（2026-05-25）**：随 §8.2 同步关闭。CI 中 `Build theme` 步骤已包含 `cd themes/ayeria && npm install`，主题 devDependencies 现已在每次 CI 构建中安装。~~
 
 ---
 
@@ -757,7 +810,7 @@ Disallow: /resume-en/
 
 | #    | 问题                                  | 类别    |
 | ---- | ----------------------------------- | ----- |
-| 4.1  | 简历页面与主站脱节                           | 自定义页面 |
+| ~~4.1~~  | ~~简历页面与主站脱节~~（已忽略）                           | 自定义页面 |
 | 2.4  | RSS 未配置                             | 配置    |
 | 5.2  | jquery-modal/justifiedGallery 无条件加载 | 性能    |
 | 5.3  | Google Fonts 加载策略（参见 12.3 中国大陆分析）    | 性能    |
@@ -768,6 +821,7 @@ Disallow: /resume-en/
 | 14.2 | `click_effect` 魔法数字分支                | SOLID/OCP |
 | 14.3 | 评论系统 partial 参数接口不一致              | SOLID/LSP |
 | 14.6 | 未使用 Hexo `_data/` 目录存储数据           | SOLID/OCP |
+| 3.5.2 | 缺少 `prefers-color-scheme` 系统偏好检测 | 亮暗系统 |
 
 
 ### 🟢 低优先级（优化建议，不影响功能）
@@ -776,7 +830,7 @@ Disallow: /resume-en/
 | #    | 问题                          | 类别    |
 | ---- | --------------------------- | ----- |
 | 1.1  | `source/_drafts/` 混有非 Markdown 文件 | 目录结构  |
-| 1.3  | 无用的 `.gitkeep`              | 目录结构  |
+| ~~1.3~~  | ~~无用的 `.gitkeep`~~（已忽略）              | 目录结构  |
 | 1.4  | 测试文件/页面残留                   | 目录结构  |
 | ~~1.5~~  | ~~图片文件名使用中文~~（已忽略）                   | 目录结构  |
 | ~~1.6~~  | ~~主题目录内遗留 `.old` 备份文件~~（已忽略）         | 目录结构  |
@@ -785,20 +839,23 @@ Disallow: /resume-en/
 | 2.3  | 日期型永久链接层级过深                 | 配置    |
 | ~~3.2~~  | ~~主题构建产物提交仓库~~（已修复）                  | 主题架构  |
 | ~~3.3~~  | ~~`index.js` 为空壳~~（已修复）              | 主题架构  |
-| 4.2  | MC 页面架构独立                   | 自定义页面 |
-| 4.3  | 手办柜页面 raw HTML              | 自定义页面 |
-| 4.4  | 关于页面混合 Markdown/HTML        | 自定义页面 |
+| ~~3.4~~  | ~~暗色模式实现架构（sessionStorage/FOUC/双层系统）~~（已修复） | 主题架构  |
+| ~~4.2~~  | ~~MC 页面架构独立~~（已忽略）                   | 自定义页面 |
+| ~~4.3~~  | ~~手办柜页面 raw HTML~~（已忽略）              | 自定义页面 |
+| ~~4.4~~  | ~~关于页面混合 Markdown/HTML~~（已忽略）        | 自定义页面 |
 | 5.4  | 缺少图片优化管线                    | 性能    |
 | 6.1  | 简历分析脚本可能过时                  | 安全    |
 | 6.3  | 网站加密功能安全性不足                 | 安全    |
 | 7.4  | URL 保留冗余后缀                  | SEO   |
 | 8.1  | 缺少质量门禁                      | CI/CD |
 | 9.2  | 根目录调试脚本积累（debug.py + debug_wsl.py） | 可维护性  |
-| 9.3  | Git 提交信息不规范                 | 可维护性  |
+| ~~9.3~~  | ~~Git 提交信息不规范~~（已忽略）                 | 可维护性  |
 | 11.1 | 缺少跳过导航链接                    | 可访问性  |
 | 11.2 | 社交图标缺少可访问文本                 | 可访问性  |
 | 12.4 | 缺少面向中国大陆的访问统计分析             | 可维护性  |
 | 12.5 | giscus 评论系统中国大陆可用性            | 架构    |
+| 3.5.1 | 组件级 `body.darkmode` 块裸 hex 值 | 亮暗系统 |
+| 3.5.3 | 仅支持二态切换，无"跟随系统"选项 | 亮暗系统 |
 | 14.7 | `core.js` 保留死代码 / `head.ejs` 内联样式泄漏 | SOLID/SRP |
 | 14.8 | `meta_generator.js` 对 default_config 不必要依赖 | SOLID/DIP |
 | 14.9 | `ayeria.js` 硬编码 `/search.xml` 路径      | SOLID/DIP |
@@ -881,12 +938,12 @@ Disallow: /resume-en/
 #### 14.2.2 主题样式层
 
 **遵循良好**：
-- `_variables.styl` 集中定义设计令牌（颜色、字体、尺寸、断点），换肤只需修改变量值
+- `_variables.styl` 集中定义 Stylus 编译时设计令牌（字体、颜色值、尺寸、断点）；`_tokens.styl` 将其映射为 CSS 自定义属性并定义亮/暗双套配色，换肤只需修改 `_tokens.styl`
 - Stylus `_mixins.styl` 提供可复用混入（`center()`、`clearfix()` 等），组件样式通过调用混入扩展
 - 29 个 `_partial/*.styl` 通过 `style.styl` 的 `@import` 列表组织，新增组件样式文件只需追加一行 import
 
 **违规**：
-- 部分样式 partial 内部硬编码颜色值而非引用变量（如 `_partial/reward.styl` 中可能存在），降低了通过 `_variables.styl` 换肤的覆盖力
+- 部分组件文件（`search.styl`、`reward.styl`、`share.styl` 等 7 个文件）的 `body.darkmode` 块中仍使用裸 hex 值定义组件级 CSS 自定义属性，未抽为 Stylus 变量，降低了通过统一变量体系管理暗色配色的覆盖力（详见 §3.5.1）
 
 #### 14.2.3 项目层面
 

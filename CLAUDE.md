@@ -48,7 +48,7 @@ themes/ayeria/      自研主题源码（直接修改此处）
 
 ## 主题开发
 
-`themes/ayeria/` 是自研主题 hexo-theme-ayeria 的工作副本，需要修改主题外观或功能时**直接修改 `themes/ayeria/` 下的代码**。`_config.ayeria.yml` 仅用于配置项覆盖（颜色、菜单、插件开关等），不能替代代码层面的改动。
+`themes/ayeria/` 是自研主题 hexo-theme-ayeria 的工作副本，需要修改主题外观或功能时**直接修改 `themes/ayeria/` 下的代码**。`_config.ayeria.yml` 仅用于配置项覆盖（菜单、插件开关、布局尺寸等），不能替代代码层面的改动。
 
 主题的独立仓库位于 `../hexo-theme-ayeria`，两处保持同步。发布新版主题时在那边打 npm 包。
 
