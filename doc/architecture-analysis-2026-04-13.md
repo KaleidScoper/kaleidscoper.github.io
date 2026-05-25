@@ -1,7 +1,7 @@
 # 博客项目架构分析报告
 
 > **分析日期**: 2026-04-13
-> **最后更新**: 2026-05-25（#3.4 已修复、#8.2 #3.2 #3.3 #2.1 已修复、#10.2 同步关闭、#1.5 #1.6 已忽略、#3.5 新增亮暗系统遗留问题、§3.4 勘误：`_variables.styl` → `_variables.styl` + `_tokens.styl` 拆分）
+> **最后更新**: 2026-05-25（#3.4 已修复、#8.2 #3.2 #3.3 #2.1 已修复、#10.2 同步关闭、#1.5 #1.6 已忽略、#3.5 新增亮暗系统遗留问题、§3.4 勘误：`_variables.styl` → `_variables.styl` + `_tokens.styl` 拆分、#3.5.1 已修复）
 > **分析范围**: 项目整体架构、目录结构、配置体系、主题架构、CI/CD、性能、安全、SEO、可维护性、SOLID 原则
 > **参考基准**: Hexo 官方最佳实践、GitHub Pages 部署惯例、静态站点生成器行业通用规范、SOLID 五原则在非 OOP 场景下的适用标准
 > **前置审查**: 本报告基于 [2026-03-28 审查报告](archive/audit-report-2026-03-28.md) 的修复成果，不重复已关闭问题，仅关注架构层面
@@ -290,13 +290,25 @@
 
 > **新增于 2026-05-25**：§3.4 修复完成后，亮暗系统的核心架构（CSS 自定义属性 + 默认暗色防 FOUC + 全局/组件双层 token）已基本合理。以下为剩余的优化空间，优先级均为中低。
 
-#### 3.5.1 组件级 `body.darkmode` 块中仍使用裸 hex 值
+#### ~~3.5.1 （已修复）组件级 `body.darkmode` 块中仍使用裸 hex 值~~
 
-**位置**：`search.styl`、`reward.styl`、`share.styl`、`friends.styl`、`broadcast.styl`、`highlight.styl`、`gitalk.styl` 共 7 个文件
+~~**位置**：`search.styl`、`reward.styl`、`share.styl`、`friends.styl`、`broadcast.styl`、`highlight.styl`、`gitalk.styl` 共 7 个文件~~
 
-**问题**：`_tokens.styl` 已建立"暗色值 = Stylus 变量"的规范（`dark-bg`、`dark-text` 等），但上述组件文件中各自的 `body.darkmode { --component-*: #xxx }` 块仍使用裸 hex 值，与全局令牌文件风格不一致。这些值是组件私有的（如 `--search-bg`、`--reward-border`），不属于全局 token，是否抽成 Stylus 变量取决于是否在多处引用。
+~~**问题**：`_tokens.styl` 已建立"暗色值 = Stylus 变量"的规范（`dark-bg`、`dark-text` 等），但上述组件文件中各自的 `body.darkmode { --component-*: #xxx }` 块仍使用裸 hex 值，与全局令牌文件风格不一致。这些值是组件私有的（如 `--search-bg`、`--reward-border`），不属于全局 token，是否抽成 Stylus 变量取决于是否在多处引用。~~
 
-**建议**：若某个组件级暗色值在两处以上使用，抽为 Stylus 变量；单次使用的裸 hex 可保留现状，避免为抽象而抽象。
+~~**建议**：若某个组件级暗色值在两处以上使用，抽为 Stylus 变量；单次使用的裸 hex 可保留现状，避免为抽象而抽象。~~
+
+**修复情况（2026-05-25）**：逐文件分析各裸 hex 值的语义归属，凡与 `_tokens.styl` 中已有 Stylus 变量服务于同一设计意图的颜色，替换为变量引用；确属组件私有的（如 `friends.styl` 的 `rgba` 透明度值、`broadcast.styl` 的 `#ff9fb0` 粉色强调色、`highlight.styl` 的 VS Code 主题色板）保留原样。具体变更：
+
+| 文件 | 替换项 | 保留项（及原因） |
+|------|--------|-----------------|
+| `search.styl` | `#2a2f3a` → `dark-surface`、`#1c1f26` → `dark-bg`、`#d0d0d0` → `dark-text`、`#aaaaaa` → `dark-text-secondary`、`#3b414c` → `dark-border`（2 处）、`#cccccc` → `dark-tag-text` | `#777777`（与 `dark-input-placeholder` 不同，搜索框有意偏暗）、`#e0e0e0`（标题专用亮色）、`#4a5060`（hover 状态独有色） |
+| `reward.styl` | `#d0d0d0` → `dark-text`（2 处）、`#aaaaaa` → `dark-text-secondary`、`#cccccc` → `dark-tag-text` | 全部 rgba 透明度值（半透明叠加效果，属组件私有视觉设计） |
+| `share.styl` | `#80cfff` → `dark-link`、`rgba(128,207,255,0.5)` → `rgba(dark-link,0.5)`、`#d0d0d0` → `dark-text` | 其余 rgba 值同理保留 |
+| `highlight.styl` | `#2e3440` → `dark-code-bg`、`#ffcc99` → `dark-code-text` | 所有 VS Code Dark+ 语法高亮色（属代码高亮独立色板，非全局语义 token） |
+| `friends.styl` | 无需修改（`--friend-link-text` 早已引用 `var(--color-text)`） | — |
+| `broadcast.styl` | 无需修改 | 全部 4 个值为组件独有：白色半透明背景/边框、`#f0f0f0`（比 `dark-text` 亮）、`#ff9fb0`（粉色强调） |
+| `gitalk.styl` | 无需修改（已全面使用 `var()` 引用全局 token） | — |
 
 #### 3.5.2 缺少 `prefers-color-scheme` 系统偏好跟随
 
@@ -333,7 +345,7 @@
 
 | 问题 | 优先级 | 修复成本 |
 |------|--------|---------|
-| 组件裸 hex 值 | 🟢 低（风格一致性问题） | 低（仅涉及 7 个文件） |
+| ~~组件裸 hex 值~~ | ~~🟢 低（风格一致性问题）~~ | ~~低（仅涉及 7 个文件）~~（已修复） |
 | `prefers-color-scheme` 检测 | 🟡 中 | 极低（两行内联脚本） |
 | "跟随系统"第三态 | 🟢 低 | 中（需 JS 重构 + UI 变更） |
 
@@ -854,7 +866,7 @@ Disallow: /resume-en/
 | 11.2 | 社交图标缺少可访问文本                 | 可访问性  |
 | 12.4 | 缺少面向中国大陆的访问统计分析             | 可维护性  |
 | 12.5 | giscus 评论系统中国大陆可用性            | 架构    |
-| 3.5.1 | 组件级 `body.darkmode` 块裸 hex 值 | 亮暗系统 |
+| ~~3.5.1~~ | ~~组件级 `body.darkmode` 块裸 hex 值~~（已修复） | 亮暗系统 |
 | 3.5.3 | 仅支持二态切换，无"跟随系统"选项 | 亮暗系统 |
 | 14.7 | `core.js` 保留死代码 / `head.ejs` 内联样式泄漏 | SOLID/SRP |
 | 14.8 | `meta_generator.js` 对 default_config 不必要依赖 | SOLID/DIP |
@@ -943,7 +955,7 @@ Disallow: /resume-en/
 - 29 个 `_partial/*.styl` 通过 `style.styl` 的 `@import` 列表组织，新增组件样式文件只需追加一行 import
 
 **违规**：
-- 部分组件文件（`search.styl`、`reward.styl`、`share.styl` 等 7 个文件）的 `body.darkmode` 块中仍使用裸 hex 值定义组件级 CSS 自定义属性，未抽为 Stylus 变量，降低了通过统一变量体系管理暗色配色的覆盖力（详见 §3.5.1）
+- ~~部分组件文件（`search.styl`、`reward.styl`、`share.styl` 等 7 个文件）的 `body.darkmode` 块中仍使用裸 hex 值定义组件级 CSS 自定义属性，未抽为 Stylus 变量，降低了通过统一变量体系管理暗色配色的覆盖力（详见 §3.5.1）~~（已修复）
 
 #### 14.2.3 项目层面
 
