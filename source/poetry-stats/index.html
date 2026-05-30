@@ -130,19 +130,6 @@
     overflow-y: auto;
   }
 
-  .chart-wrap.wordcloud {
-    min-height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  #wordcloud {
-    display: block;
-    width: 100%;
-  }
-
-  /* Poet bar scrollbar */
   .chart-wrap.bar::-webkit-scrollbar { width: 4px; }
   .chart-wrap.bar::-webkit-scrollbar-track { background: transparent; }
   .chart-wrap.bar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
@@ -201,13 +188,6 @@
       <div class="chart-wrap bar">
         <canvas id="poetChart"></canvas>
       </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>字频词云</h2>
-    <div class="chart-wrap wordcloud">
-      <canvas id="wordcloud"></canvas>
     </div>
   </div>
 
@@ -379,96 +359,7 @@
   // Set bar chart height dynamically
   document.getElementById('poetChart').parentElement.style.height = (topPoets.length * 32 + 20) + 'px';
 
-  // ── Word cloud ──
-  drawWordCloud(data.charFrequencies);
 })();
-
-function drawWordCloud(words) {
-  const canvas = document.getElementById('wordcloud');
-  const ctx = canvas.getContext('2d');
-
-  const container = canvas.parentElement;
-  const W = container.clientWidth;
-  const H = 440;
-  const dpr = window.devicePixelRatio || 1;
-
-  canvas.width = W * dpr;
-  canvas.height = H * dpr;
-  canvas.style.width = W + 'px';
-  canvas.style.height = H + 'px';
-  ctx.scale(dpr, dpr);
-
-  // Normalize weights to font sizes
-  const maxCount = words[0].count;
-  const minCount = words[words.length - 1].count;
-
-  const sized = words.map(w => ({
-    text: w.word,
-    size: Math.round(14 + (w.count - minCount) / (maxCount - minCount) * 40),
-    weight: w.count,
-  }));
-
-  // Colors
-  const colors = [
-    '#5aa8d8','#7eb896','#e8735a','#c8a0e0','#f0c060',
-    '#84c8f0','#9cc8b0','#f08c78','#d8b8f0','#f4d480',
-    '#a0d0f0','#b8d8c8','#f5a596','#e0c8f8','#f8e0a0',
-  ];
-
-  // Spiral placement
-  const placed = [];
-  const cx = W / 2;
-  const cy = H / 2;
-
-  for (let i = 0; i < sized.length; i++) {
-    const item = sized[i];
-    ctx.font = `${item.size}px "Noto Sans SC","Source Han Sans SC","PingFang SC","Microsoft YaHei",sans-serif`;
-    const metrics = ctx.measureText(item.text);
-    const tw = metrics.width;
-    const th = item.size;
-
-    let x = cx, y = cy;
-    let angle = 0;
-    let radius = 0;
-    let placed_ok = false;
-
-    // Spiral outward
-    const maxIter = 2000;
-    for (let j = 0; j < maxIter; j++) {
-      angle = j * 0.35;
-      radius = Math.sqrt(j) * 2.2;
-      x = cx + radius * Math.cos(angle) - tw / 2;
-      y = cy + radius * Math.sin(angle) + th / 3;
-
-      // Bounds check
-      if (x < 4 || y < 4 || x + tw > W - 4 || y + th > H - 4) {
-        continue;
-      }
-
-      // Collision check
-      let collides = false;
-      for (const p of placed) {
-        if (x < p.x + p.w + 2 && x + tw + 2 > p.x &&
-            y - th < p.y + 2 && y + 2 > p.y - p.h) {
-          collides = true;
-          break;
-        }
-      }
-      if (!collides) {
-        placed_ok = true;
-        break;
-      }
-    }
-
-    if (!placed_ok) continue;
-
-    placed.push({ x, y, w: tw, h: th });
-
-    ctx.fillStyle = colors[i % colors.length];
-    ctx.globalAlpha = 0.88;
-    ctx.fillText(item.text, x, y);
-  }
-}
 </script>
 
 </body>
