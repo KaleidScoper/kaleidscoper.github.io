@@ -36,6 +36,7 @@ skip_render:
   - 404.html
   - mc-server/**
   - DDoS-Test-Lab/**
+  - poetry-stats/**
 
 
 # Writing

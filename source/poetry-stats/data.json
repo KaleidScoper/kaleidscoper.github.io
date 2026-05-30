@@ -1,0 +1,742 @@
+{
+  "totalLines": 132,
+  "dynasties": [
+    {
+      "dynasty": "南朝宋",
+      "count": 1,
+      "percentage": 0.8
+    },
+    {
+      "dynasty": "南朝梁",
+      "count": 1,
+      "percentage": 0.8
+    },
+    {
+      "dynasty": "东晋",
+      "count": 1,
+      "percentage": 0.8
+    },
+    {
+      "dynasty": "春秋",
+      "count": 1,
+      "percentage": 0.8
+    },
+    {
+      "dynasty": "唐代",
+      "count": 47,
+      "percentage": 35.6
+    },
+    {
+      "dynasty": "宋代",
+      "count": 43,
+      "percentage": 32.6
+    },
+    {
+      "dynasty": "金代",
+      "count": 4,
+      "percentage": 3.0
+    },
+    {
+      "dynasty": "元代",
+      "count": 9,
+      "percentage": 6.8
+    },
+    {
+      "dynasty": "明代",
+      "count": 4,
+      "percentage": 3.0
+    },
+    {
+      "dynasty": "清代",
+      "count": 11,
+      "percentage": 8.3
+    },
+    {
+      "dynasty": "近代",
+      "count": 2,
+      "percentage": 1.5
+    },
+    {
+      "dynasty": "自拟",
+      "count": 2,
+      "percentage": 1.5
+    },
+    {
+      "dynasty": "互联网",
+      "count": 6,
+      "percentage": 4.5
+    }
+  ],
+  "poets": [
+    {
+      "poet": "李白",
+      "count": 12
+    },
+    {
+      "poet": "互联网",
+      "count": 6
+    },
+    {
+      "poet": "王维",
+      "count": 5
+    },
+    {
+      "poet": "白居易",
+      "count": 5
+    },
+    {
+      "poet": "曹雪芹",
+      "count": 5
+    },
+    {
+      "poet": "周行己",
+      "count": 4
+    },
+    {
+      "poet": "陆游",
+      "count": 4
+    },
+    {
+      "poet": "元好问",
+      "count": 4
+    },
+    {
+      "poet": "晏殊",
+      "count": 4
+    },
+    {
+      "poet": "叶梦得",
+      "count": 3
+    },
+    {
+      "poet": "黄庭坚",
+      "count": 3
+    },
+    {
+      "poet": "唐寅",
+      "count": 3
+    },
+    {
+      "poet": "自拟",
+      "count": 2
+    },
+    {
+      "poet": "吕岩",
+      "count": 2
+    },
+    {
+      "poet": "李清照",
+      "count": 2
+    },
+    {
+      "poet": "张泌",
+      "count": 2
+    },
+    {
+      "poet": "刘希夷",
+      "count": 2
+    },
+    {
+      "poet": "吴敬梓",
+      "count": 2
+    },
+    {
+      "poet": "张可久",
+      "count": 2
+    },
+    {
+      "poet": "刘长卿",
+      "count": 2
+    },
+    {
+      "poet": "王实甫",
+      "count": 2
+    },
+    {
+      "poet": "杜甫",
+      "count": 2
+    },
+    {
+      "poet": "李商隐",
+      "count": 2
+    },
+    {
+      "poet": "王国维",
+      "count": 2
+    },
+    {
+      "poet": "辛弃疾",
+      "count": 2
+    },
+    {
+      "poet": "顾贞观",
+      "count": 2
+    },
+    {
+      "poet": "马致远",
+      "count": 2
+    },
+    {
+      "poet": "韦庄",
+      "count": 2
+    },
+    {
+      "poet": "文天祥",
+      "count": 2
+    },
+    {
+      "poet": "陈师道",
+      "count": 2
+    },
+    {
+      "poet": "张孝祥",
+      "count": 2
+    },
+    {
+      "poet": "苏轼",
+      "count": 1
+    },
+    {
+      "poet": "刘眘虚",
+      "count": 1
+    },
+    {
+      "poet": "牟融",
+      "count": 1
+    },
+    {
+      "poet": "陈与义",
+      "count": 1
+    },
+    {
+      "poet": "范晔",
+      "count": 1
+    },
+    {
+      "poet": "刘过",
+      "count": 1
+    },
+    {
+      "poet": "温庭筠",
+      "count": 1
+    },
+    {
+      "poet": "刘克庄",
+      "count": 1
+    },
+    {
+      "poet": "白朴",
+      "count": 1
+    },
+    {
+      "poet": "范仲淹",
+      "count": 1
+    },
+    {
+      "poet": "郑谷",
+      "count": 1
+    },
+    {
+      "poet": "王守仁",
+      "count": 1
+    },
+    {
+      "poet": "韦应物",
+      "count": 1
+    },
+    {
+      "poet": "杜牧",
+      "count": 1
+    },
+    {
+      "poet": "朱熹",
+      "count": 1
+    },
+    {
+      "poet": "贺铸",
+      "count": 1
+    },
+    {
+      "poet": "吴均",
+      "count": 1
+    },
+    {
+      "poet": "钱起",
+      "count": 1
+    },
+    {
+      "poet": "米芾",
+      "count": 1
+    },
+    {
+      "poet": "唐温如",
+      "count": 1
+    },
+    {
+      "poet": "蒋捷",
+      "count": 1
+    },
+    {
+      "poet": "辛文房",
+      "count": 1
+    },
+    {
+      "poet": "徐君宝妻",
+      "count": 1
+    },
+    {
+      "poet": "欧阳修",
+      "count": 1
+    },
+    {
+      "poet": "唐婉",
+      "count": 1
+    },
+    {
+      "poet": "黄巢",
+      "count": 1
+    },
+    {
+      "poet": "赵令畤",
+      "count": 1
+    },
+    {
+      "poet": "孙武",
+      "count": 1
+    },
+    {
+      "poet": "晏几道",
+      "count": 1
+    },
+    {
+      "poet": "黄景仁",
+      "count": 1
+    },
+    {
+      "poet": "王羲之",
+      "count": 1
+    },
+    {
+      "poet": "窦庠",
+      "count": 1
+    },
+    {
+      "poet": "王士祯",
+      "count": 1
+    },
+    {
+      "poet": "岳飞",
+      "count": 1
+    },
+    {
+      "poet": "王建",
+      "count": 1
+    },
+    {
+      "poet": "贯休",
+      "count": 1
+    }
+  ],
+  "charFrequencies": [
+    {
+      "word": "人",
+      "count": 27
+    },
+    {
+      "word": "一",
+      "count": 23
+    },
+    {
+      "word": "花",
+      "count": 23
+    },
+    {
+      "word": "不",
+      "count": 20
+    },
+    {
+      "word": "风",
+      "count": 18
+    },
+    {
+      "word": "天",
+      "count": 18
+    },
+    {
+      "word": "明",
+      "count": 16
+    },
+    {
+      "word": "山",
+      "count": 15
+    },
+    {
+      "word": "如",
+      "count": 14
+    },
+    {
+      "word": "月",
+      "count": 13
+    },
+    {
+      "word": "水",
+      "count": 13
+    },
+    {
+      "word": "落",
+      "count": 13
+    },
+    {
+      "word": "春",
+      "count": 13
+    },
+    {
+      "word": "我",
+      "count": 13
+    },
+    {
+      "word": "年",
+      "count": 13
+    },
+    {
+      "word": "有",
+      "count": 13
+    },
+    {
+      "word": "梦",
+      "count": 12
+    },
+    {
+      "word": "无",
+      "count": 12
+    },
+    {
+      "word": "夜",
+      "count": 12
+    },
+    {
+      "word": "何",
+      "count": 11
+    },
+    {
+      "word": "来",
+      "count": 11
+    },
+    {
+      "word": "里",
+      "count": 11
+    },
+    {
+      "word": "千",
+      "count": 10
+    },
+    {
+      "word": "在",
+      "count": 10
+    },
+    {
+      "word": "酒",
+      "count": 10
+    },
+    {
+      "word": "万",
+      "count": 9
+    },
+    {
+      "word": "路",
+      "count": 9
+    },
+    {
+      "word": "尽",
+      "count": 9
+    },
+    {
+      "word": "日",
+      "count": 9
+    },
+    {
+      "word": "间",
+      "count": 9
+    },
+    {
+      "word": "中",
+      "count": 9
+    },
+    {
+      "word": "醉",
+      "count": 9
+    },
+    {
+      "word": "生",
+      "count": 9
+    },
+    {
+      "word": "寒",
+      "count": 8
+    },
+    {
+      "word": "相",
+      "count": 8
+    },
+    {
+      "word": "归",
+      "count": 8
+    },
+    {
+      "word": "知",
+      "count": 8
+    },
+    {
+      "word": "去",
+      "count": 8
+    },
+    {
+      "word": "青",
+      "count": 8
+    },
+    {
+      "word": "云",
+      "count": 7
+    },
+    {
+      "word": "远",
+      "count": 7
+    },
+    {
+      "word": "是",
+      "count": 7
+    },
+    {
+      "word": "流",
+      "count": 7
+    },
+    {
+      "word": "向",
+      "count": 7
+    },
+    {
+      "word": "意",
+      "count": 7
+    },
+    {
+      "word": "今",
+      "count": 7
+    },
+    {
+      "word": "同",
+      "count": 7
+    },
+    {
+      "word": "回",
+      "count": 7
+    },
+    {
+      "word": "朝",
+      "count": 7
+    },
+    {
+      "word": "秋",
+      "count": 6
+    },
+    {
+      "word": "非",
+      "count": 6
+    },
+    {
+      "word": "深",
+      "count": 6
+    },
+    {
+      "word": "时",
+      "count": 6
+    },
+    {
+      "word": "草",
+      "count": 6
+    },
+    {
+      "word": "后",
+      "count": 6
+    },
+    {
+      "word": "红",
+      "count": 6
+    },
+    {
+      "word": "身",
+      "count": 6
+    },
+    {
+      "word": "高",
+      "count": 6
+    },
+    {
+      "word": "君",
+      "count": 6
+    },
+    {
+      "word": "为",
+      "count": 6
+    },
+    {
+      "word": "头",
+      "count": 6
+    },
+    {
+      "word": "泪",
+      "count": 6
+    },
+    {
+      "word": "处",
+      "count": 6
+    },
+    {
+      "word": "雪",
+      "count": 6
+    },
+    {
+      "word": "谁",
+      "count": 6
+    },
+    {
+      "word": "白",
+      "count": 6
+    },
+    {
+      "word": "满",
+      "count": 6
+    },
+    {
+      "word": "雨",
+      "count": 5
+    },
+    {
+      "word": "道",
+      "count": 5
+    },
+    {
+      "word": "北",
+      "count": 5
+    },
+    {
+      "word": "思",
+      "count": 5
+    },
+    {
+      "word": "下",
+      "count": 5
+    },
+    {
+      "word": "烟",
+      "count": 5
+    },
+    {
+      "word": "望",
+      "count": 5
+    },
+    {
+      "word": "子",
+      "count": 5
+    },
+    {
+      "word": "城",
+      "count": 5
+    },
+    {
+      "word": "与",
+      "count": 5
+    },
+    {
+      "word": "斜",
+      "count": 5
+    },
+    {
+      "word": "乐",
+      "count": 5
+    },
+    {
+      "word": "见",
+      "count": 5
+    },
+    {
+      "word": "暮",
+      "count": 5
+    },
+    {
+      "word": "楼",
+      "count": 5
+    },
+    {
+      "word": "杯",
+      "count": 5
+    },
+    {
+      "word": "前",
+      "count": 5
+    },
+    {
+      "word": "欲",
+      "count": 5
+    },
+    {
+      "word": "江",
+      "count": 5
+    },
+    {
+      "word": "事",
+      "count": 5
+    },
+    {
+      "word": "长",
+      "count": 4
+    },
+    {
+      "word": "香",
+      "count": 4
+    },
+    {
+      "word": "莫",
+      "count": 4
+    },
+    {
+      "word": "海",
+      "count": 4
+    },
+    {
+      "word": "心",
+      "count": 4
+    },
+    {
+      "word": "饮",
+      "count": 4
+    },
+    {
+      "word": "之",
+      "count": 4
+    },
+    {
+      "word": "者",
+      "count": 4
+    },
+    {
+      "word": "三",
+      "count": 4
+    },
+    {
+      "word": "黄",
+      "count": 4
+    },
+    {
+      "word": "卧",
+      "count": 4
+    },
+    {
+      "word": "色",
+      "count": 4
+    },
+    {
+      "word": "到",
+      "count": 4
+    }
+  ]
+}
