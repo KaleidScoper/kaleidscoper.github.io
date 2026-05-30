@@ -4,10 +4,11 @@
 <meta charset="utf-8">
 <title>诗词统计 - 栖云散录</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4/fonts/remixicon.css">
 <style>
   /* ═══════════════════════════════════════════
      CSS Custom Properties
-     Follows Ayeria naming convention: --ps-*
+     Follows Ayeria naming convention
      ═══════════════════════════════════════════ */
   :root {
     --ps-bg: #1c1f26;
@@ -19,8 +20,14 @@
     --ps-text-bright: #e8ecf2;
     --ps-accent: #5aa8d8;
     --ps-accent-dim: rgba(90, 168, 216, 0.1);
-    --ps-accent-glow: rgba(90, 168, 216, 0.06);
     --ps-divider: rgba(255, 255, 255, 0.06);
+
+    /* Sidebar */
+    --sb-width: 11rem;
+    --sb-bg: rgba(28, 31, 38, 0.94);
+    --sb-nav-color: #bbb;
+    --sb-nav-hover-bg: rgba(255, 255, 255, 0.04);
+    --sb-transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   /* ── Reset & Base ── */
@@ -36,6 +43,155 @@
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ═══════════════════════════════════════════
+     Sidebar Toggle Button
+     Mirrors .navbar-toggle in Ayeria theme
+     ═══════════════════════════════════════════ */
+  .sidebar-toggle {
+    position: fixed;
+    z-index: 100;
+    top: 1.2rem;
+    left: 1.2rem;
+    height: 3.6rem;
+    width: 3.6rem;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0.55;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .sidebar-toggle:hover { opacity: 0.9; }
+  .sidebar-toggle:active { transform: scale(0.94); }
+
+  .sidebar-toggle i {
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+
+  /* ═══════════════════════════════════════════
+     Sidebar
+     ═══════════════════════════════════════════ */
+  .sidebar {
+    position: fixed;
+    z-index: 90;
+    left: calc(-1 * var(--sb-width));
+    top: 0;
+    bottom: 0;
+    width: var(--sb-width);
+    background: var(--sb-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: left var(--sb-transition);
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .sidebar::-webkit-scrollbar { width: 0; height: 0; }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  /* Logo */
+  .sidebar-logo {
+    margin-top: 5rem;
+    margin-bottom: 2.4rem;
+    text-align: center;
+  }
+
+  .sidebar-logo img {
+    width: 42px;
+    height: 42px;
+    display: block;
+    opacity: 0.85;
+    transition: opacity 0.2s ease;
+  }
+
+  .sidebar-logo a:hover img { opacity: 1; }
+
+  /* Navigation */
+  .sidebar-nav {
+    flex: 1;
+    width: 100%;
+    text-align: center;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .sidebar-nav::-webkit-scrollbar { width: 0; height: 0; }
+
+  .sidebar-nav-link {
+    display: block;
+    padding: 0.85rem 0.6rem;
+    color: var(--sb-nav-color);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+    cursor: pointer;
+  }
+
+  .sidebar-nav-link:hover {
+    opacity: 0.8;
+    background: var(--sb-nav-hover-bg);
+  }
+
+  .sidebar-nav-link.active {
+    color: var(--ps-accent);
+    font-weight: 500;
+  }
+
+  /* Bottom area */
+  .sidebar-bottom {
+    width: 100%;
+    text-align: center;
+    padding: 1.2rem 0 2rem;
+  }
+
+  .sidebar-icon-link {
+    display: inline-block;
+    color: var(--sb-nav-color);
+    text-decoration: none;
+    font-size: 1.5rem;
+    padding: 0.6rem;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+  }
+
+  .sidebar-icon-link:hover { opacity: 0.9; }
+
+  /* ═══════════════════════════════════════════
+     Sidebar Overlay (mobile)
+     ═══════════════════════════════════════════ */
+  .sidebar-overlay {
+    position: fixed;
+    z-index: 85;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--sb-transition);
+  }
+
+  .sidebar-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   /* ═══════════════════════════════════════════
@@ -107,9 +263,7 @@
     transition: opacity 0.5s ease;
   }
 
-  .random-sentence.loading {
-    opacity: 0.25;
-  }
+  .random-sentence.loading { opacity: 0.25; }
 
   .hero-note {
     margin-top: 24px;
@@ -212,9 +366,7 @@
     margin: 0 auto;
   }
 
-  .chart-wrap.bar {
-    overflow-y: auto;
-  }
+  .chart-wrap.bar { overflow-y: auto; }
 
   .chart-wrap.bar::-webkit-scrollbar { width: 4px; }
   .chart-wrap.bar::-webkit-scrollbar-track { background: transparent; }
@@ -246,8 +398,6 @@
 
   /* ═══════════════════════════════════════════
      Scroll Reveal Animations
-     Subtle opacity + translateY, gated by
-     IntersectionObserver in JS.
      ═══════════════════════════════════════════ */
   .reveal {
     opacity: 0;
@@ -262,7 +412,6 @@
     transform: translateY(0);
   }
 
-  /* Stagger delays for chart cards */
   .reveal-stagger-1 { transition-delay: 0.08s; }
   .reveal-stagger-2 { transition-delay: 0.16s; }
 
@@ -276,7 +425,20 @@
       transition: none;
     }
     .random-sentence { transition: none; }
+    .sidebar, .sidebar-toggle, .sidebar-overlay { transition: none; }
     html { scroll-behavior: auto; }
+  }
+
+  /* ═══════════════════════════════════════════
+     Desktop: sidebar open pushes toggle button right
+     ═══════════════════════════════════════════ */
+  @media (min-width: 769px) {
+    .sidebar-toggle {
+      transition: left var(--sb-transition), opacity 0.25s ease, transform 0.25s ease;
+    }
+    body.sidebar-open .sidebar-toggle {
+      left: calc(var(--sb-width) + 1.2rem);
+    }
   }
 
   /* ═══════════════════════════════════════════
@@ -288,13 +450,8 @@
       padding: 72px 20px 60px;
     }
 
-    .random-sentence {
-      font-size: 20px;
-    }
-
-    .hero-title {
-      margin-bottom: 20px;
-    }
+    .random-sentence { font-size: 20px; }
+    .hero-title { margin-bottom: 20px; }
 
     .stats-bar {
       gap: 44px;
@@ -314,12 +471,26 @@
       gap: 22px;
     }
 
-    .card {
-      padding: 26px 22px;
+    .card { padding: 26px 22px; }
+    .container { padding: 0 20px 60px; }
+
+    /* Sidebar: full-width overlay on mobile */
+    .sidebar {
+      width: 75vw;
+      left: -75vw;
     }
 
-    .container {
-      padding: 0 20px 60px;
+    .sidebar.open {
+      left: 0;
+    }
+
+    .sidebar-toggle {
+      top: 1rem;
+      left: 1rem;
+    }
+
+    body.sidebar-open .sidebar-toggle {
+      left: calc(75vw - 3.6rem - 0.6rem);
     }
   }
 
@@ -351,22 +522,56 @@
     .stat-num { font-size: 28px; }
     .stat-label { font-size: 12px; }
 
-    .card {
-      padding: 22px 16px;
-    }
+    .card { padding: 22px 16px; }
+    .card h2 { font-size: 15px; margin-bottom: 18px; }
+    .container { padding: 0 14px 48px; }
 
-    .card h2 {
-      font-size: 15px;
-      margin-bottom: 18px;
-    }
-
-    .container {
-      padding: 0 14px 48px;
+    .sidebar {
+      width: 80vw;
+      left: -80vw;
     }
   }
 </style>
 </head>
 <body>
+
+<!-- ═══════════════════════════════
+     Sidebar Toggle Button
+     ═══════════════════════════════ -->
+<button class="sidebar-toggle" aria-label="菜单">
+  <i class="ri-menu-line"></i>
+</button>
+
+<!-- ═══════════════════════════════
+     Sidebar
+     ═══════════════════════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <a href="/"><img src="/favicon.svg" alt="栖云散录"></a>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-link" href="/">主页</a>
+    <a class="sidebar-nav-link" href="/archives">全部文章</a>
+    <a class="sidebar-nav-link" href="/categories">文章分类</a>
+    <a class="sidebar-nav-link" href="/tags">全部标签</a>
+    <a class="sidebar-nav-link" href="http://171.80.11.217:6280" target="_blank" rel="noopener noreferrer">我的歌单</a>
+    <a class="sidebar-nav-link active" href="/poetry-stats">诗词摘录</a>
+    <a class="sidebar-nav-link" href="/waifu">电子手办</a>
+    <a class="sidebar-nav-link" href="/mc-server" target="_blank" rel="noopener noreferrer">MC 私服</a>
+    <a class="sidebar-nav-link" href="/friends">友情链接</a>
+    <a class="sidebar-nav-link" href="/about">关于本站</a>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <a class="sidebar-icon-link" href="/" title="搜索">
+      <i class="ri-search-line"></i>
+    </a>
+  </div>
+</aside>
+
+<!-- Sidebar overlay (mobile backdrop) -->
+<div class="sidebar-overlay"></div>
 
 <!-- ═══════════════════════════════
      Hero: Random Sentence as focal point
@@ -412,42 +617,115 @@
 </div>
 
 <!-- ═══════════════════════════════
+     Sidebar Toggle Script
+     ═══════════════════════════════ -->
+<script>
+(function() {
+  var sidebar = document.querySelector('.sidebar');
+  var toggle = document.querySelector('.sidebar-toggle');
+  var overlay = document.querySelector('.sidebar-overlay');
+  var navLinks = document.querySelectorAll('.sidebar-nav-link');
+  var body = document.body;
+
+  if (!sidebar || !toggle) return;
+
+  function open() {
+    sidebar.classList.add('open');
+    body.classList.add('sidebar-open');
+    if (window.innerWidth <= 768) {
+      overlay.classList.add('visible');
+    }
+  }
+
+  function close() {
+    sidebar.classList.remove('open');
+    body.classList.remove('sidebar-open');
+    overlay.classList.remove('visible');
+  }
+
+  function isOpen() {
+    return sidebar.classList.contains('open');
+  }
+
+  toggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (isOpen()) { close(); } else { open(); }
+  });
+
+  overlay.addEventListener('click', close);
+
+  /* Light dismiss: click outside sidebar closes it */
+  document.addEventListener('click', function(e) {
+    if (!isOpen()) return;
+    if (!e.target.closest('.sidebar') && !e.target.closest('.sidebar-toggle')) {
+      close();
+    }
+  });
+
+  /* Close on Escape */
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && isOpen()) {
+      close();
+    }
+  });
+
+  /* Close sidebar after nav link click (mobile) */
+  navLinks.forEach(function(link) {
+    link.addEventListener('click', function() {
+      if (window.innerWidth <= 768) {
+        close();
+      }
+    });
+  });
+
+  /* Adjust overlay visibility on resize */
+  window.addEventListener('resize', function() {
+    if (window.innerWidth > 768) {
+      overlay.classList.remove('visible');
+    } else if (isOpen()) {
+      overlay.classList.add('visible');
+    }
+  });
+})();
+</script>
+
+<!-- ═══════════════════════════════
      Random Sentence Script
      ═══════════════════════════════ -->
 <script>
 (function() {
-  const el = document.getElementById('random-sentence');
+  var el = document.getElementById('random-sentence');
   if (!el) return;
 
-  const DEFAULT = '千秋岁月毫端聚 一纸烟霞腕底生';
-  let sentences = [];
-  const QUEUE = 5;
-  let recent = [];
+  var DEFAULT = '千秋岁月毫端聚 一纸烟霞腕底生';
+  var sentences = [];
+  var QUEUE = 5;
+  var recent = [];
 
   async function load() {
     try {
-      const resp = await fetch('/data/random-sentences.txt');
+      var resp = await fetch('/data/random-sentences.txt');
       if (!resp.ok) throw new Error('fetch failed');
-      const text = await resp.text();
+      var text = await resp.text();
       sentences = text.split('\n')
-        .map(l => l.trim())
-        .filter(l => l && !l.startsWith('#'));
+        .map(function(l) { return l.trim(); })
+        .filter(function(l) { return l && !l.startsWith('#'); });
       if (!sentences.length) throw new Error('empty');
-    } catch {
+    } catch (e) {
       sentences = [DEFAULT];
     }
   }
 
   function pick() {
     if (!sentences.length) return DEFAULT;
-    const pool = sentences.filter(s => !recent.includes(s));
+    var pool = sentences.filter(function(s) { return !recent.includes(s); });
     if (!pool.length) { recent = []; }
-    const source = pool.length ? pool : sentences;
+    var source = pool.length ? pool : sentences;
     return source[Math.floor(Math.random() * source.length)];
   }
 
   function show() {
-    const line = pick();
+    var line = pick();
     el.innerHTML = line.replace(/  +/g, '<br>');
     el.classList.remove('loading');
   }
@@ -471,35 +749,35 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4/dist/chart.umd.min.js"></script>
 <script>
 (async function() {
-  const resp = await fetch('data.json');
-  const data = await resp.json();
+  var resp = await fetch('data.json');
+  var data = await resp.json();
 
-  /* ── Stats bar ── */
+  /* Stats bar */
   document.getElementById('statsBar').innerHTML = [
     { num: data.totalLines, label: '活跃句子' },
-    { num: data.dynasties.filter(d => !['自拟','互联网','其他'].includes(d.dynasty)).length, label: '历史朝代' },
-    { num: data.poets.filter(p => !['互联网','自拟'].includes(p.poet)).length, label: '诗人词人' },
-  ].map(s =>
-    '<div class="stat-item">' +
+    { num: data.dynasties.filter(function(d) { return ['自拟','互联网','其他'].indexOf(d.dynasty) === -1; }).length, label: '历史朝代' },
+    { num: data.poets.filter(function(p) { return ['互联网','自拟'].indexOf(p.poet) === -1; }).length, label: '诗人词人' },
+  ].map(function(s) {
+    return '<div class="stat-item">' +
       '<div class="stat-num">' + s.num + '</div>' +
       '<div class="stat-label">' + s.label + '</div>' +
-    '</div>'
-  ).join('');
+    '</div>';
+  }).join('');
 
-  /* ── Color palette ── */
-  const dynastyColors = [
+  /* Color palette */
+  var dynastyColors = [
     '#5aa8d8', '#72bce4', '#8bcaf0', '#4e98c0', '#3d80a8', '#2f6a8e',
     '#c49a6c', '#d4ae80', '#b88650', '#a07048',
     '#7eb898', '#64a382', '#8cbc9e',
   ];
 
-  /* ── Dynasty doughnut chart ── */
+  /* Dynasty doughnut chart */
   new Chart(document.getElementById('dynastyChart'), {
     type: 'doughnut',
     data: {
-      labels: data.dynasties.map(d => d.dynasty),
+      labels: data.dynasties.map(function(d) { return d.dynasty; }),
       datasets: [{
-        data: data.dynasties.map(d => d.count),
+        data: data.dynasties.map(function(d) { return d.count; }),
         backgroundColor: dynastyColors,
         borderColor: '#1c1f26',
         borderWidth: 2.5,
@@ -556,7 +834,7 @@
     }
   });
 
-  /* ── Poet horizontal bar chart (top 25) ── */
+  /* Poet horizontal bar chart (top 25) */
   var topPoets = data.poets.slice(0, 25);
 
   new Chart(document.getElementById('poetChart'), {
