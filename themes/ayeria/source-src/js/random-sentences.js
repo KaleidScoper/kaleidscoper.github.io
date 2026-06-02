@@ -127,15 +127,21 @@
         return sentence;
     }
 
-    function applyLineBreaks(sentence) {
-        return sentence.replace(/  +/g, '<br>');
+    function formatSentence(sentence) {
+        // 去掉行末空格，避免视觉不居中
+        let formatted = sentence.trimEnd();
+        // 双空格及以上 → 换行
+        formatted = formatted.replace(/ {2,}/g, '<br>');
+        // 剩余的单空格 → 双空格宽度，拉大句段间距
+        formatted = formatted.replace(/ /g, '&nbsp;&nbsp;');
+        return formatted;
     }
 
     function displayRandomSentence() {
         const sentenceElement = document.getElementById('random-sentence');
         if (!sentenceElement) return;
 
-        sentenceElement.innerHTML = applyLineBreaks(getRandomSentence());
+        sentenceElement.innerHTML = formatSentence(getRandomSentence());
     }
 
     async function initialize() {
