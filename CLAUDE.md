@@ -52,5 +52,7 @@ themes/ayeria/      自研主题源码（直接修改此处）
 
 主题的独立仓库位于 `../hexo-theme-ayeria`，两处保持同步。发布新版主题时在那边打 npm 包。
 
-设计语言规范见 [doc/SKILL.md](doc/SKILL.md)（双层美学体系、配色、组件、交互行为等硬约束）。涉及博客前端视觉或交互的任务时，必须以该文档为基准。
+设计语言规范见 `.claude/skills/ayeria-aesthetic/SKILL.md`（双层美学体系、配色、组件、交互行为等硬约束）。涉及博客前端视觉或交互的任务时，必须以该文档为基准。
+
+工程思维规范见 `.claude/skills/engineering-mindset/SKILL.md`。涉及任何非平凡实现任务时，启用 `/engineering-mindset` 以注入 Google 级 code review 标准、意图推断和"知道不做什么"的判断力。
 
