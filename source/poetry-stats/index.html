@@ -691,42 +691,88 @@
 
 <!-- ═══════════════════════════════
      Random Sentence Script
+     Fisher-Yates shuffle + localStorage persistence
+     Shares deck key with blog pages (same localStorage)
      ═══════════════════════════════ -->
 <script>
 (function() {
+  var STORAGE_KEY = 'ayeria-random-deck';
   var el = document.getElementById('random-sentence');
   if (!el) return;
 
   var DEFAULT = '千秋岁月毫端聚 一纸烟霞腕底生';
-  var sentences = [];
-  var QUEUE = 5;
-  var recent = [];
+  var sentences = [DEFAULT];
+  var deck = null; // { fingerprint: number, indices: number[], pointer: number }
 
   async function load() {
     try {
       var resp = await fetch('/data/random-sentences.txt');
       if (!resp.ok) throw new Error('fetch failed');
       var text = await resp.text();
-      sentences = text.split('\n')
-        .map(function(l) { return l.trim(); })
-        .filter(function(l) { return l && !l.startsWith('#'); });
-      if (!sentences.length) throw new Error('empty');
-    } catch (e) {
-      sentences = [DEFAULT];
+      var lines = text.split('\n').filter(function(l) {
+        var t = l.trim();
+        return t && !t.startsWith('#');
+      });
+      if (lines.length) sentences = lines;
+    } catch (e) {}
+  }
+
+  function loadDeck() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      var d = JSON.parse(raw);
+      if (d && d.fingerprint === sentences.length && Array.isArray(d.indices)) return d;
+    } catch (e) {}
+    return null;
+  }
+
+  function saveDeck() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(deck)); } catch (e) {}
+  }
+
+  function shuffle(arr) {
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
     }
   }
 
+  function createDeck(prevLastIndex) {
+    var indices = [];
+    for (var i = 0; i < sentences.length; i++) indices.push(i);
+    shuffle(indices);
+    if (prevLastIndex !== undefined && indices[0] === prevLastIndex && indices.length > 1) {
+      var swap = 1 + Math.floor(Math.random() * (indices.length - 1));
+      var tmp = indices[0]; indices[0] = indices[swap]; indices[swap] = tmp;
+    }
+    return { fingerprint: sentences.length, indices: indices, pointer: 0 };
+  }
+
   function pick() {
-    if (!sentences.length) return DEFAULT;
-    var pool = sentences.filter(function(s) { return !recent.includes(s); });
-    if (!pool.length) { recent = []; }
-    var source = pool.length ? pool : sentences;
-    return source[Math.floor(Math.random() * source.length)];
+    if (!deck) deck = loadDeck();
+    if (!deck) deck = createDeck();
+
+    var idx = deck.indices[deck.pointer];
+    var sentence = sentences[idx];
+    deck.pointer++;
+
+    if (deck.pointer >= deck.indices.length) {
+      deck = createDeck(deck.indices[deck.indices.length - 1]);
+    }
+    saveDeck();
+    return sentence;
+  }
+
+  function formatSentence(s) {
+    var t = s.trimEnd();
+    t = t.replace(/ {2,}/g, '<br>');
+    t = t.replace(/ /g, '&nbsp;&nbsp;');
+    return t;
   }
 
   function show() {
-    var line = pick();
-    el.innerHTML = line.replace(/  +/g, '<br>');
+    el.innerHTML = formatSentence(pick());
     el.classList.remove('loading');
   }
 
