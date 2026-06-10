@@ -270,7 +270,11 @@
     font-size: 13px;
     color: var(--ps-text-dim);
     opacity: 0.6;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.2s ease;
   }
+  .hero-note:hover { opacity: 0.85; }
 
   /* ═══════════════════════════════════════════
      Main Container
@@ -786,6 +790,11 @@
   document.addEventListener('visibilitychange', function() {
     if (!document.hidden) show();
   });
+
+		var note = document.querySelector('.hero-note');
+		if (note) {
+			note.addEventListener('click', function() { show(); });
+		}
 })();
 </script>
 
