@@ -7,12 +7,12 @@ menu:
   我的歌单:
    url: http://171.80.11.217:6280
    target: popup
-  诗词摘录: /poetry-stats
+  # 诗词摘录: /poetry-stats
   电子手办: /waifu
   MC 私服: 
    url: /mc-server
    target: blank
-#  个人简历: /resume
+  # 个人简历: /resume
   友情链接: /friends
   关于本站: /about
 
