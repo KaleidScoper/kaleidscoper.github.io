@@ -46,7 +46,7 @@ themes/ayeria/      自研主题源码（直接修改此处）
 
 **注意**：`public/` 目录（本地生成的静态文件）不提交到 git，由 CI 构建。
 
-## 主题开发
+## 主题和网站开发
 
 `themes/ayeria/` 是自研主题 hexo-theme-ayeria 的工作副本，需要修改主题外观或功能时**直接修改 `themes/ayeria/` 下的代码**。`_config.ayeria.yml` 仅用于配置项覆盖（菜单、插件开关、布局尺寸等），不能替代代码层面的改动。
 
@@ -55,6 +55,8 @@ themes/ayeria/      自研主题源码（直接修改此处）
 设计语言规范见 `.claude/skills/ayeria-aesthetic/SKILL.md`（双层美学体系、配色、组件、交互行为等硬约束）。涉及博客前端视觉或交互的任务时，必须以该文档为基准。
 
 工程思维规范见 `.claude/skills/engineering-mindset/SKILL.md`。涉及任何非平凡实现任务时，启用 `/engineering-mindset` 以注入 Google 级 code review 标准、意图推断和"知道不做什么"的判断力。
+
+在用户未主动要求的情况下，不进行任何修改 Git 树的操作，比如 commit 或 push。
 
 ## 回答质量约束
 
