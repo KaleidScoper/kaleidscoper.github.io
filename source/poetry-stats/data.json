@@ -1,394 +1,657 @@
 {
-  "totalLines": 178,
+  "totalWorks": 160,
+  "totalLibraryWorks": 217,
+  "totalLines": 243,
   "dynasties": [
     {
-      "dynasty": "春秋",
-      "count": 2,
-      "percentage": 1.1
+      "dynasty": "先秦",
+      "works": 2,
+      "lines": 2,
+      "libraryWorks": 3
     },
     {
-      "dynasty": "东晋",
-      "count": 1,
-      "percentage": 0.6
+      "dynasty": "汉",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
     },
     {
-      "dynasty": "南朝宋",
-      "count": 1,
-      "percentage": 0.6
+      "dynasty": "三国",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 2
     },
     {
-      "dynasty": "南朝梁",
-      "count": 1,
-      "percentage": 0.6
+      "dynasty": "晋",
+      "works": 3,
+      "lines": 6,
+      "libraryWorks": 3
     },
     {
       "dynasty": "南北朝",
-      "count": 2,
-      "percentage": 1.1
+      "works": 5,
+      "lines": 7,
+      "libraryWorks": 5
     },
     {
-      "dynasty": "唐代",
-      "count": 60,
-      "percentage": 33.7
+      "dynasty": "唐",
+      "works": 64,
+      "lines": 86,
+      "libraryWorks": 74
     },
     {
-      "dynasty": "宋代",
-      "count": 57,
-      "percentage": 32.0
+      "dynasty": "五代十国",
+      "works": 2,
+      "lines": 2,
+      "libraryWorks": 2
     },
     {
-      "dynasty": "金代",
-      "count": 4,
-      "percentage": 2.2
+      "dynasty": "宋",
+      "works": 55,
+      "lines": 90,
+      "libraryWorks": 68
     },
     {
-      "dynasty": "元代",
-      "count": 11,
-      "percentage": 6.2
+      "dynasty": "金",
+      "works": 1,
+      "lines": 4,
+      "libraryWorks": 1
     },
     {
-      "dynasty": "明代",
-      "count": 7,
-      "percentage": 3.9
+      "dynasty": "元",
+      "works": 5,
+      "lines": 6,
+      "libraryWorks": 8
     },
     {
-      "dynasty": "清代",
-      "count": 14,
-      "percentage": 7.9
+      "dynasty": "明",
+      "works": 4,
+      "lines": 7,
+      "libraryWorks": 8
+    },
+    {
+      "dynasty": "清",
+      "works": 10,
+      "lines": 15,
+      "libraryWorks": 16
     },
     {
       "dynasty": "近代",
-      "count": 2,
-      "percentage": 1.1
+      "works": 1,
+      "lines": 4,
+      "libraryWorks": 1
     },
     {
       "dynasty": "现代",
-      "count": 5,
-      "percentage": 2.8
-    },
-    {
-      "dynasty": "自拟",
-      "count": 4,
-      "percentage": 2.2
-    },
-    {
-      "dynasty": "互联网",
-      "count": 7,
-      "percentage": 3.9
+      "works": 6,
+      "lines": 12,
+      "libraryWorks": 11
     }
   ],
   "poets": [
     {
       "poet": "李白",
-      "count": 15
-    },
-    {
-      "poet": "互联网",
-      "count": 7
+      "works": 14,
+      "lines": 23,
+      "libraryWorks": 16
     },
     {
       "poet": "杜甫",
-      "count": 7
-    },
-    {
-      "poet": "蒋捷",
-      "count": 6
-    },
-    {
-      "poet": "曹雪芹",
-      "count": 5
-    },
-    {
-      "poet": "沈梦核",
-      "count": 5
-    },
-    {
-      "poet": "王维",
-      "count": 5
-    },
-    {
-      "poet": "白居易",
-      "count": 5
-    },
-    {
-      "poet": "元好问",
-      "count": 4
-    },
-    {
-      "poet": "周行己",
-      "count": 4
-    },
-    {
-      "poet": "晏几道",
-      "count": 4
-    },
-    {
-      "poet": "晏殊",
-      "count": 4
-    },
-    {
-      "poet": "李商隐",
-      "count": 4
-    },
-    {
-      "poet": "自拟",
-      "count": 4
-    },
-    {
-      "poet": "陆游",
-      "count": 4
-    },
-    {
-      "poet": "马致远",
-      "count": 4
-    },
-    {
-      "poet": "黄庭坚",
-      "count": 4
-    },
-    {
-      "poet": "佚名",
-      "count": 3
-    },
-    {
-      "poet": "叶梦得",
-      "count": 3
-    },
-    {
-      "poet": "唐寅",
-      "count": 3
-    },
-    {
-      "poet": "张孝祥",
-      "count": 3
-    },
-    {
-      "poet": "顾贞观",
-      "count": 3
-    },
-    {
-      "poet": "刘希夷",
-      "count": 2
-    },
-    {
-      "poet": "刘长卿",
-      "count": 2
-    },
-    {
-      "poet": "吕岩",
-      "count": 2
-    },
-    {
-      "poet": "吴敬梓",
-      "count": 2
-    },
-    {
-      "poet": "张可久",
-      "count": 2
-    },
-    {
-      "poet": "张岱",
-      "count": 2
-    },
-    {
-      "poet": "张泌",
-      "count": 2
-    },
-    {
-      "poet": "文天祥",
-      "count": 2
-    },
-    {
-      "poet": "李清照",
-      "count": 2
-    },
-    {
-      "poet": "王国维",
-      "count": 2
-    },
-    {
-      "poet": "米芾",
-      "count": 2
+      "works": 8,
+      "lines": 11,
+      "libraryWorks": 8
     },
     {
       "poet": "苏轼",
-      "count": 2
+      "works": 4,
+      "lines": 9,
+      "libraryWorks": 8
     },
     {
       "poet": "辛弃疾",
-      "count": 2
+      "works": 4,
+      "lines": 9,
+      "libraryWorks": 5
     },
     {
-      "poet": "陈师道",
-      "count": 2
+      "poet": "陆游",
+      "works": 5,
+      "lines": 8,
+      "libraryWorks": 5
     },
     {
-      "poet": "韦庄",
-      "count": 2
+      "poet": "蒋捷",
+      "works": 3,
+      "lines": 7,
+      "libraryWorks": 3
     },
     {
-      "poet": "黄景仁",
-      "count": 2
+      "poet": "白居易",
+      "works": 5,
+      "lines": 6,
+      "libraryWorks": 5
     },
     {
-      "poet": "刘克庄",
-      "count": 1
+      "poet": "沈梦核",
+      "works": 5,
+      "lines": 6,
+      "libraryWorks": 9
     },
     {
-      "poet": "刘眘虚",
-      "count": 1
+      "poet": "B站UP主安德-罗波夫",
+      "works": 1,
+      "lines": 6,
+      "libraryWorks": 1
     },
     {
-      "poet": "刘过",
-      "count": 1
+      "poet": "王维",
+      "works": 2,
+      "lines": 5,
+      "libraryWorks": 2
     },
     {
-      "poet": "吴均",
-      "count": 1
+      "poet": "李商隐",
+      "works": 4,
+      "lines": 5,
+      "libraryWorks": 4
     },
     {
-      "poet": "唐婉",
-      "count": 1
+      "poet": "晏几道",
+      "works": 2,
+      "lines": 5,
+      "libraryWorks": 2
     },
     {
-      "poet": "唐温如",
-      "count": 1
+      "poet": "陶渊明",
+      "works": 2,
+      "lines": 4,
+      "libraryWorks": 2
     },
     {
-      "poet": "孙武",
-      "count": 1
+      "poet": "晏殊",
+      "works": 2,
+      "lines": 4,
+      "libraryWorks": 2
     },
     {
-      "poet": "岳飞",
-      "count": 1
+      "poet": "黄庭坚",
+      "works": 2,
+      "lines": 4,
+      "libraryWorks": 3
     },
     {
-      "poet": "徐君宝妻",
-      "count": 1
+      "poet": "周行己",
+      "works": 1,
+      "lines": 4,
+      "libraryWorks": 1
     },
     {
-      "poet": "朱熹",
-      "count": 1
+      "poet": "元好问",
+      "works": 1,
+      "lines": 4,
+      "libraryWorks": 1
     },
     {
-      "poet": "李益",
-      "count": 1
+      "poet": "王国维",
+      "works": 1,
+      "lines": 4,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "鲍照",
+      "works": 2,
+      "lines": 3,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "佚名",
+      "works": 2,
+      "lines": 3,
+      "libraryWorks": 3
+    },
+    {
+      "poet": "刘长卿",
+      "works": 2,
+      "lines": 3,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "刘禹锡",
+      "works": 3,
+      "lines": 3,
+      "libraryWorks": 3
     },
     {
       "poet": "杜牧",
-      "count": 1
+      "works": 3,
+      "lines": 3,
+      "libraryWorks": 3
     },
     {
-      "poet": "杜荀鹤",
-      "count": 1
+      "poet": "叶梦得",
+      "works": 3,
+      "lines": 3,
+      "libraryWorks": 3
     },
     {
-      "poet": "柳宗元",
-      "count": 1
+      "poet": "张孝祥",
+      "works": 1,
+      "lines": 3,
+      "libraryWorks": 1
     },
     {
-      "poet": "欧阳修",
-      "count": 1
+      "poet": "姜夔",
+      "works": 1,
+      "lines": 3,
+      "libraryWorks": 1
     },
     {
-      "poet": "温庭筠",
-      "count": 1
+      "poet": "唐寅",
+      "works": 1,
+      "lines": 3,
+      "libraryWorks": 1
     },
     {
-      "poet": "牟融",
-      "count": 1
+      "poet": "曹雪芹",
+      "works": 2,
+      "lines": 3,
+      "libraryWorks": 2
     },
     {
-      "poet": "王士祯",
-      "count": 1
-    },
-    {
-      "poet": "王守仁",
-      "count": 1
-    },
-    {
-      "poet": "王实甫",
-      "count": 1
-    },
-    {
-      "poet": "王建",
-      "count": 1
+      "poet": "顾贞观",
+      "works": 2,
+      "lines": 3,
+      "libraryWorks": 2
     },
     {
       "poet": "王羲之",
-      "count": 1
+      "works": 1,
+      "lines": 2,
+      "libraryWorks": 1
     },
     {
-      "poet": "白朴",
-      "count": 1
+      "poet": "刘希夷",
+      "works": 1,
+      "lines": 2,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "王昌龄",
+      "works": 1,
+      "lines": 2,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "李益",
+      "works": 2,
+      "lines": 2,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "韦庄",
+      "works": 2,
+      "lines": 2,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "张泌",
+      "works": 1,
+      "lines": 2,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "吕岩",
+      "works": 1,
+      "lines": 2,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "李煜",
+      "works": 2,
+      "lines": 2,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "宋祁",
+      "works": 1,
+      "lines": 2,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "米芾",
+      "works": 1,
+      "lines": 2,
+      "libraryWorks": 1
     },
     {
       "poet": "秦观",
-      "count": 1
-    },
-    {
-      "poet": "窦庠",
-      "count": 1
-    },
-    {
-      "poet": "纳兰性德",
-      "count": 1
-    },
-    {
-      "poet": "老子",
-      "count": 1
-    },
-    {
-      "poet": "范仲淹",
-      "count": 1
-    },
-    {
-      "poet": "范晔",
-      "count": 1
-    },
-    {
-      "poet": "贯休",
-      "count": 1
+      "works": 2,
+      "lines": 2,
+      "libraryWorks": 2
     },
     {
       "poet": "贺铸",
-      "count": 1
+      "works": 2,
+      "lines": 2,
+      "libraryWorks": 2
     },
     {
-      "poet": "赵令畤",
-      "count": 1
+      "poet": "陈师道",
+      "works": 1,
+      "lines": 2,
+      "libraryWorks": 1
     },
     {
-      "poet": "辛文房",
-      "count": 1
+      "poet": "李纲",
+      "works": 2,
+      "lines": 2,
+      "libraryWorks": 3
     },
     {
-      "poet": "郑谷",
-      "count": 1
+      "poet": "李清照",
+      "works": 2,
+      "lines": 2,
+      "libraryWorks": 3
     },
     {
-      "poet": "钱起",
-      "count": 1
+      "poet": "文天祥",
+      "works": 1,
+      "lines": 2,
+      "libraryWorks": 1
     },
     {
-      "poet": "陈与义",
-      "count": 1
+      "poet": "张可久",
+      "works": 1,
+      "lines": 2,
+      "libraryWorks": 1
     },
     {
-      "poet": "陈镒",
-      "count": 1
+      "poet": "张岱",
+      "works": 1,
+      "lines": 2,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "林黛玉",
+      "works": 1,
+      "lines": 2,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "吴敬梓",
+      "works": 1,
+      "lines": 2,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "黄景仁",
+      "works": 1,
+      "lines": 2,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "老子",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "孙武",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "刘彻",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "嵇康",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "范晔",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "吴均",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "刘眘虚",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "孟浩然",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
     },
     {
       "poet": "韦应物",
-      "count": 1
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
     },
     {
-      "poet": "韩疁",
-      "count": 1
+      "poet": "钱起",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "韩愈",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "柳宗元",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 3
+    },
+    {
+      "poet": "窦庠",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "牟融",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "王建",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "温庭筠",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "贯休",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
     },
     {
       "poet": "黄巢",
-      "count": 1
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "韩偓",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "郑谷",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "杜荀鹤",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "范仲淹",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "欧阳修",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "侯蒙",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "赵令畤",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "向子諲",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "陈与义",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "岳飞",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "唐婉",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "范成大",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "杨万里",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "朱熹",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "刘过",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "刘克庄",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "韩疁",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "郑思肖",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "王实甫",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "马致远",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "辛文房",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "陈镒",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "王守仁",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "王士祯",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "纳兰性德",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "杨朗溪",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
     }
   ]
 }

@@ -287,8 +287,10 @@
      ═══════════════════════════════════════════ */
   .stats-bar {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     gap: 72px;
+    row-gap: 28px;
     margin-top: -28px;
     margin-bottom: 60px;
     position: relative;
@@ -353,6 +355,43 @@
     color: var(--ps-text-bright);
     margin-bottom: 24px;
     letter-spacing: 0.04em;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .card-header h2 { margin-bottom: 0; }
+
+  .toggle-btn {
+    font-family: "Noto Sans SC", sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ps-text-dim);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px;
+    padding: 5px 12px;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    transition: all 0.2s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .toggle-btn:hover {
+    color: var(--ps-accent);
+    border-color: rgba(90,168,216,0.3);
+    background: rgba(90,168,216,0.08);
+  }
+
+  .toggle-btn.active {
+    color: var(--ps-accent);
+    border-color: rgba(90,168,216,0.4);
+    background: rgba(90,168,216,0.12);
   }
 
   .chart-wrap {
@@ -596,23 +635,33 @@
   <!-- Charts -->
   <div class="charts-row">
     <div class="card reveal reveal-stagger-1">
-      <h2>朝代分布</h2>
+      <div class="card-header">
+        <h2>朝代 · 作品数</h2>
+        <button class="toggle-btn" id="dynastyToggle" data-mode="displayed">展示</button>
+      </div>
       <div class="chart-wrap doughnut">
-        <canvas id="dynastyChart"></canvas>
+        <canvas id="dynastyWorksChart"></canvas>
       </div>
     </div>
     <div class="card reveal reveal-stagger-2">
-      <h2>诗人句数</h2>
-      <div class="chart-wrap bar">
-        <canvas id="poetChart"></canvas>
+      <h2>朝代 · 展示行数</h2>
+      <div class="chart-wrap doughnut">
+        <canvas id="dynastyLinesChart"></canvas>
       </div>
+    </div>
+  </div>
+
+  <div class="card reveal" style="margin-bottom: 32px;">
+    <h2>诗人 · 展示行数（前 25）</h2>
+    <div class="chart-wrap bar">
+      <canvas id="poetChart"></canvas>
     </div>
   </div>
 
   <footer>
     <a href="/">栖云散录</a>
     <span class="footer-sep">·</span>
-    诗词句频统计
+    诗词摘录统计
     <span class="footer-sep">·</span>
     静态数据
   </footer>
@@ -806,11 +855,16 @@
   var resp = await fetch('data.json');
   var data = await resp.json();
 
+  var dormant = data.totalLibraryWorks - data.totalWorks;
+
   /* Stats bar */
   document.getElementById('statsBar').innerHTML = [
-    { num: data.totalLines, label: '活跃句子' },
-    { num: data.dynasties.filter(function(d) { return ['自拟','互联网','其他'].indexOf(d.dynasty) === -1; }).length, label: '历史朝代' },
-    { num: data.poets.filter(function(p) { return ['互联网','自拟'].indexOf(p.poet) === -1; }).length, label: '诗人词人' },
+    { num: data.totalLibraryWorks, label: '库藏作品' },
+    { num: data.totalWorks, label: '展示作品' },
+    { num: data.totalLines, label: '展示行数' },
+    { num: data.poets.length, label: '诗人词人' },
+    { num: data.dynasties.length, label: '跨越朝代' },
+    { num: dormant, label: '休眠作品' },
   ].map(function(s) {
     return '<div class="stat-item">' +
       '<div class="stat-num">' + s.num + '</div>' +
@@ -818,77 +872,103 @@
     '</div>';
   }).join('');
 
-  /* Color palette */
-  var dynastyColors = [
-    '#5aa8d8', '#72bce4', '#8bcaf0', '#4e98c0', '#3d80a8', '#2f6a8e',
+  /* ── Shared color palette for dynasties ── */
+  var palette = [
+    '#5aa8d8', '#72bce4', '#4e98c0', '#8bcaf0', '#3d80a8',
     '#c49a6c', '#d4ae80', '#b88650', '#a07048',
     '#7eb898', '#64a382', '#8cbc9e', '#4a8c6e', '#9ec4a8',
   ];
 
-  /* Dynasty doughnut chart */
-  new Chart(document.getElementById('dynastyChart'), {
-    type: 'doughnut',
-    data: {
-      labels: data.dynasties.map(function(d) { return d.dynasty; }),
-      datasets: [{
-        data: data.dynasties.map(function(d) { return d.count; }),
-        backgroundColor: dynastyColors,
-        borderColor: '#1c1f26',
-        borderWidth: 2.5,
-        hoverBorderColor: '#1c1f26',
-        hoverBorderWidth: 3,
-      }]
-    },
-    options: {
-      responsive: true,
-      cutout: '58%',
-      plugins: {
-        legend: {
-          position: 'bottom',
-          labels: {
-            color: '#c8ccd4',
-            padding: 14,
-            font: { size: 11, family: '"Noto Sans SC", sans-serif' },
-            usePointStyle: true,
-            pointStyleWidth: 8,
-            generateLabels: function(chart) {
-              var ds = chart.data.datasets[0];
-              return chart.data.labels.map(function(label, i) {
-                return {
-                  text: label + '  ' + ds.data[i],
-                  fillStyle: ds.backgroundColor[i],
-                  strokeStyle: ds.backgroundColor[i],
-                  lineWidth: 0,
-                  hidden: false,
-                  index: i,
-                  fontColor: '#c8ccd4',
-                  pointStyle: 'circle',
-                  pointStyleWidth: 8,
-                };
-              });
+  /* ── Helper: create/update doughnut chart ── */
+  function makeDynastyDoughnut(canvasId, metricKey) {
+    var total = data.dynasties.reduce(function(s, d) { return s + d[metricKey]; }, 0);
+    return new Chart(document.getElementById(canvasId), {
+      type: 'doughnut',
+      data: {
+        labels: data.dynasties.map(function(d) { return d.dynasty; }),
+        datasets: [{
+          data: data.dynasties.map(function(d) { return d[metricKey]; }),
+          backgroundColor: palette,
+          borderColor: '#1c1f26',
+          borderWidth: 2.5,
+          hoverBorderColor: '#1c1f26',
+          hoverBorderWidth: 3,
+        }]
+      },
+      options: {
+        responsive: true,
+        cutout: '58%',
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: '#c8ccd4',
+              padding: 14,
+              font: { size: 11, family: '"Noto Sans SC", sans-serif' },
+              usePointStyle: true,
+              pointStyleWidth: 8,
+              generateLabels: function(chart) {
+                var ds = chart.data.datasets[0];
+                return chart.data.labels.map(function(label, i) {
+                  return {
+                    text: label + '  ' + ds.data[i],
+                    fillStyle: ds.backgroundColor[i],
+                    strokeStyle: ds.backgroundColor[i],
+                    lineWidth: 0,
+                    hidden: false,
+                    index: i,
+                    fontColor: '#c8ccd4',
+                    pointStyle: 'circle',
+                    pointStyleWidth: 8,
+                  };
+                });
+              }
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(28, 31, 38, 0.94)',
+            titleColor: '#e8ecf2',
+            bodyColor: '#c8ccd4',
+            borderColor: 'rgba(255,255,255,0.08)',
+            borderWidth: 1,
+            padding: 12,
+            cornerRadius: 8,
+            callbacks: {
+              label: function(ctx) {
+                var pct = total ? (ctx.raw / total * 100).toFixed(1) : '0.0';
+                return ctx.label + ': ' + ctx.raw + ' (' + pct + '%)';
+              }
             }
           }
         },
-        tooltip: {
-          backgroundColor: 'rgba(28, 31, 38, 0.94)',
-          titleColor: '#e8ecf2',
-          bodyColor: '#c8ccd4',
-          borderColor: 'rgba(255,255,255,0.08)',
-          borderWidth: 1,
-          padding: 12,
-          cornerRadius: 8,
-          callbacks: {
-            label: function(ctx) {
-              var d = data.dynasties[ctx.dataIndex];
-              return ctx.label + ': ' + ctx.raw + ' 句 (' + d.percentage + '%)';
-            }
-          }
-        }
-      },
+      }
+    });
+  }
+
+  /* ── Dynasty: togglable works doughnut + static lines doughnut ── */
+  var dynWorksChart = makeDynastyDoughnut('dynastyWorksChart', 'works');
+  makeDynastyDoughnut('dynastyLinesChart', 'lines');
+
+  var toggleBtn = document.getElementById('dynastyToggle');
+  toggleBtn.addEventListener('click', function() {
+    var mode = toggleBtn.getAttribute('data-mode');
+    var nextMode = mode === 'displayed' ? 'library' : 'displayed';
+    var metricKey = nextMode === 'library' ? 'libraryWorks' : 'works';
+    var total = data.dynasties.reduce(function(s, d) { return s + d[metricKey]; }, 0);
+
+    dynWorksChart.data.datasets[0].data = data.dynasties.map(function(d) { return d[metricKey]; });
+    dynWorksChart.update();
+
+    toggleBtn.setAttribute('data-mode', nextMode);
+    toggleBtn.textContent = nextMode === 'library' ? '库藏' : '展示';
+    if (nextMode === 'library') {
+      toggleBtn.classList.add('active');
+    } else {
+      toggleBtn.classList.remove('active');
     }
   });
 
-  /* Poet horizontal bar chart (top 25) */
+  /* ── Poet horizontal bar chart (top 25 by lines) ── */
   var topPoets = data.poets.slice(0, 25);
 
   new Chart(document.getElementById('poetChart'), {
@@ -896,7 +976,7 @@
     data: {
       labels: topPoets.map(function(p) { return p.poet; }),
       datasets: [{
-        data: topPoets.map(function(p) { return p.count; }),
+        data: topPoets.map(function(p) { return p.lines; }),
         backgroundColor: topPoets.map(function(_, i) {
           var alpha = 0.92 - (i / topPoets.length) * 0.5;
           return 'rgba(90,168,216,' + alpha.toFixed(2) + ')';
@@ -922,7 +1002,10 @@
           padding: 12,
           cornerRadius: 8,
           callbacks: {
-            label: function(ctx) { return ctx.raw + ' 句'; }
+            label: function(ctx) {
+              var p = topPoets[ctx.dataIndex];
+              return p.lines + ' 行，来自 ' + p.works + ' 首展示作品，共 ' + p.libraryWorks + ' 首作品';
+            }
           }
         }
       },
