@@ -1,7 +1,7 @@
 {
-  "totalWorks": 160,
-  "totalLibraryWorks": 217,
-  "totalLines": 243,
+  "totalWorks": 167,
+  "totalLibraryWorks": 228,
+  "totalLines": 259,
   "dynasties": [
     {
       "dynasty": "先秦",
@@ -83,9 +83,9 @@
     },
     {
       "dynasty": "现代",
-      "works": 6,
-      "lines": 12,
-      "libraryWorks": 11
+      "works": 13,
+      "lines": 28,
+      "libraryWorks": 22
     }
   ],
   "poets": [
@@ -94,6 +94,12 @@
       "works": 14,
       "lines": 23,
       "libraryWorks": 16
+    },
+    {
+      "poet": "我",
+      "works": 7,
+      "lines": 16,
+      "libraryWorks": 11
     },
     {
       "poet": "杜甫",
