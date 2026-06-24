@@ -1,13 +1,13 @@
 {
-  "totalWorks": 167,
-  "totalLibraryWorks": 228,
-  "totalLines": 259,
+  "totalWorks": 213,
+  "totalLibraryWorks": 260,
+  "totalLines": 353,
   "dynasties": [
     {
       "dynasty": "先秦",
-      "works": 2,
-      "lines": 2,
-      "libraryWorks": 3
+      "works": 3,
+      "lines": 4,
+      "libraryWorks": 4
     },
     {
       "dynasty": "汉",
@@ -25,31 +25,31 @@
       "dynasty": "晋",
       "works": 3,
       "lines": 6,
-      "libraryWorks": 3
+      "libraryWorks": 4
     },
     {
       "dynasty": "南北朝",
-      "works": 5,
-      "lines": 7,
-      "libraryWorks": 5
+      "works": 6,
+      "lines": 8,
+      "libraryWorks": 6
     },
     {
       "dynasty": "唐",
-      "works": 64,
-      "lines": 86,
-      "libraryWorks": 74
+      "works": 82,
+      "lines": 121,
+      "libraryWorks": 94
     },
     {
       "dynasty": "五代十国",
-      "works": 2,
-      "lines": 2,
-      "libraryWorks": 2
+      "works": 5,
+      "lines": 10,
+      "libraryWorks": 6
     },
     {
       "dynasty": "宋",
-      "works": 55,
-      "lines": 90,
-      "libraryWorks": 68
+      "works": 74,
+      "lines": 128,
+      "libraryWorks": 85
     },
     {
       "dynasty": "金",
@@ -59,21 +59,21 @@
     },
     {
       "dynasty": "元",
-      "works": 5,
-      "lines": 6,
+      "works": 7,
+      "lines": 11,
       "libraryWorks": 8
     },
     {
       "dynasty": "明",
-      "works": 4,
-      "lines": 7,
-      "libraryWorks": 8
+      "works": 5,
+      "lines": 10,
+      "libraryWorks": 9
     },
     {
       "dynasty": "清",
-      "works": 10,
-      "lines": 15,
-      "libraryWorks": 16
+      "works": 12,
+      "lines": 17,
+      "libraryWorks": 17
     },
     {
       "dynasty": "近代",
@@ -83,59 +83,59 @@
     },
     {
       "dynasty": "现代",
-      "works": 13,
-      "lines": 28,
+      "works": 12,
+      "lines": 20,
       "libraryWorks": 22
     }
   ],
   "poets": [
     {
       "poet": "李白",
-      "works": 14,
-      "lines": 23,
-      "libraryWorks": 16
-    },
-    {
-      "poet": "我",
-      "works": 7,
-      "lines": 16,
-      "libraryWorks": 11
+      "works": 17,
+      "lines": 28,
+      "libraryWorks": 19
     },
     {
       "poet": "杜甫",
-      "works": 8,
-      "lines": 11,
-      "libraryWorks": 8
+      "works": 12,
+      "lines": 18,
+      "libraryWorks": 13
     },
     {
       "poet": "苏轼",
-      "works": 4,
-      "lines": 9,
-      "libraryWorks": 8
-    },
-    {
-      "poet": "辛弃疾",
-      "works": 4,
-      "lines": 9,
-      "libraryWorks": 5
-    },
-    {
-      "poet": "陆游",
-      "works": 5,
-      "lines": 8,
-      "libraryWorks": 5
-    },
-    {
-      "poet": "蒋捷",
-      "works": 3,
-      "lines": 7,
-      "libraryWorks": 3
+      "works": 9,
+      "lines": 17,
+      "libraryWorks": 11
     },
     {
       "poet": "白居易",
+      "works": 7,
+      "lines": 14,
+      "libraryWorks": 8
+    },
+    {
+      "poet": "陆游",
+      "works": 7,
+      "lines": 11,
+      "libraryWorks": 7
+    },
+    {
+      "poet": "KaleidScoper",
+      "works": 6,
+      "lines": 8,
+      "libraryWorks": 11
+    },
+    {
+      "poet": "李煜",
       "works": 5,
-      "lines": 6,
-      "libraryWorks": 5
+      "lines": 10,
+      "libraryWorks": 6
+    },
+    {
+      "poet": "李商隐",
+      "works": 5,
+      "lines": 7,
+      "libraryWorks": 6
     },
     {
       "poet": "沈梦核",
@@ -144,28 +144,82 @@
       "libraryWorks": 9
     },
     {
-      "poet": "B站UP主安德-罗波夫",
-      "works": 1,
-      "lines": 6,
-      "libraryWorks": 1
+      "poet": "辛弃疾",
+      "works": 4,
+      "lines": 9,
+      "libraryWorks": 5
+    },
+    {
+      "poet": "杜牧",
+      "works": 4,
+      "lines": 4,
+      "libraryWorks": 4
+    },
+    {
+      "poet": "柳永",
+      "works": 3,
+      "lines": 8,
+      "libraryWorks": 3
     },
     {
       "poet": "王维",
-      "works": 2,
-      "lines": 5,
-      "libraryWorks": 2
+      "works": 3,
+      "lines": 7,
+      "libraryWorks": 3
     },
     {
-      "poet": "李商隐",
-      "works": 4,
-      "lines": 5,
+      "poet": "蒋捷",
+      "works": 3,
+      "lines": 7,
+      "libraryWorks": 3
+    },
+    {
+      "poet": "李清照",
+      "works": 3,
+      "lines": 6,
       "libraryWorks": 4
+    },
+    {
+      "poet": "鲍照",
+      "works": 3,
+      "lines": 4,
+      "libraryWorks": 3
+    },
+    {
+      "poet": "刘禹锡",
+      "works": 3,
+      "lines": 3,
+      "libraryWorks": 3
+    },
+    {
+      "poet": "叶梦得",
+      "works": 3,
+      "lines": 3,
+      "libraryWorks": 3
+    },
+    {
+      "poet": "唐寅",
+      "works": 2,
+      "lines": 6,
+      "libraryWorks": 2
     },
     {
       "poet": "晏几道",
       "works": 2,
       "lines": 5,
       "libraryWorks": 2
+    },
+    {
+      "poet": "陈与义",
+      "works": 2,
+      "lines": 5,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "黄庭坚",
+      "works": 2,
+      "lines": 4,
+      "libraryWorks": 3
     },
     {
       "poet": "陶渊明",
@@ -180,33 +234,9 @@
       "libraryWorks": 2
     },
     {
-      "poet": "黄庭坚",
+      "poet": "陈师道",
       "works": 2,
       "lines": 4,
-      "libraryWorks": 3
-    },
-    {
-      "poet": "周行己",
-      "works": 1,
-      "lines": 4,
-      "libraryWorks": 1
-    },
-    {
-      "poet": "元好问",
-      "works": 1,
-      "lines": 4,
-      "libraryWorks": 1
-    },
-    {
-      "poet": "王国维",
-      "works": 1,
-      "lines": 4,
-      "libraryWorks": 1
-    },
-    {
-      "poet": "鲍照",
-      "works": 2,
-      "lines": 3,
       "libraryWorks": 2
     },
     {
@@ -222,22 +252,112 @@
       "libraryWorks": 2
     },
     {
-      "poet": "刘禹锡",
-      "works": 3,
+      "poet": "曹雪芹",
+      "works": 2,
       "lines": 3,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "顾贞观",
+      "works": 2,
+      "lines": 3,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "李纲",
+      "works": 2,
+      "lines": 2,
       "libraryWorks": 3
     },
     {
-      "poet": "杜牧",
-      "works": 3,
-      "lines": 3,
-      "libraryWorks": 3
+      "poet": "韦应物",
+      "works": 2,
+      "lines": 2,
+      "libraryWorks": 2
     },
     {
-      "poet": "叶梦得",
-      "works": 3,
-      "lines": 3,
-      "libraryWorks": 3
+      "poet": "李益",
+      "works": 2,
+      "lines": 2,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "韩愈",
+      "works": 2,
+      "lines": 2,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "韦庄",
+      "works": 2,
+      "lines": 2,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "秦观",
+      "works": 2,
+      "lines": 2,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "贺铸",
+      "works": 2,
+      "lines": 2,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "范成大",
+      "works": 2,
+      "lines": 2,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "纳兰性德",
+      "works": 2,
+      "lines": 2,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "B站UP主安德-罗波夫",
+      "works": 1,
+      "lines": 6,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "张若虚",
+      "works": 1,
+      "lines": 4,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "王安石",
+      "works": 1,
+      "lines": 4,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "周行己",
+      "works": 1,
+      "lines": 4,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "元好问",
+      "works": 1,
+      "lines": 4,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "马致远",
+      "works": 1,
+      "lines": 4,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "王国维",
+      "works": 1,
+      "lines": 4,
+      "libraryWorks": 1
     },
     {
       "poet": "张孝祥",
@@ -252,22 +372,16 @@
       "libraryWorks": 1
     },
     {
-      "poet": "唐寅",
+      "poet": "张岱",
       "works": 1,
-      "lines": 3,
+      "lines": 2,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "屈原",
+      "works": 1,
+      "lines": 2,
       "libraryWorks": 1
-    },
-    {
-      "poet": "曹雪芹",
-      "works": 2,
-      "lines": 3,
-      "libraryWorks": 2
-    },
-    {
-      "poet": "顾贞观",
-      "works": 2,
-      "lines": 3,
-      "libraryWorks": 2
     },
     {
       "poet": "王羲之",
@@ -288,16 +402,10 @@
       "libraryWorks": 1
     },
     {
-      "poet": "李益",
-      "works": 2,
+      "poet": "高适",
+      "works": 1,
       "lines": 2,
-      "libraryWorks": 2
-    },
-    {
-      "poet": "韦庄",
-      "works": 2,
-      "lines": 2,
-      "libraryWorks": 2
+      "libraryWorks": 1
     },
     {
       "poet": "张泌",
@@ -312,12 +420,6 @@
       "libraryWorks": 1
     },
     {
-      "poet": "李煜",
-      "works": 2,
-      "lines": 2,
-      "libraryWorks": 2
-    },
-    {
       "poet": "宋祁",
       "works": 1,
       "lines": 2,
@@ -330,36 +432,6 @@
       "libraryWorks": 1
     },
     {
-      "poet": "秦观",
-      "works": 2,
-      "lines": 2,
-      "libraryWorks": 2
-    },
-    {
-      "poet": "贺铸",
-      "works": 2,
-      "lines": 2,
-      "libraryWorks": 2
-    },
-    {
-      "poet": "陈师道",
-      "works": 1,
-      "lines": 2,
-      "libraryWorks": 1
-    },
-    {
-      "poet": "李纲",
-      "works": 2,
-      "lines": 2,
-      "libraryWorks": 3
-    },
-    {
-      "poet": "李清照",
-      "works": 2,
-      "lines": 2,
-      "libraryWorks": 3
-    },
-    {
       "poet": "文天祥",
       "works": 1,
       "lines": 2,
@@ -370,12 +442,6 @@
       "works": 1,
       "lines": 2,
       "libraryWorks": 1
-    },
-    {
-      "poet": "张岱",
-      "works": 1,
-      "lines": 2,
-      "libraryWorks": 2
     },
     {
       "poet": "林黛玉",
@@ -394,6 +460,36 @@
       "works": 1,
       "lines": 2,
       "libraryWorks": 1
+    },
+    {
+      "poet": "柳宗元",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 3
+    },
+    {
+      "poet": "温庭筠",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "韩偓",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "杨万里",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 2
+    },
+    {
+      "poet": "刘克庄",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 2
     },
     {
       "poet": "老子",
@@ -444,28 +540,16 @@
       "libraryWorks": 1
     },
     {
-      "poet": "韦应物",
-      "works": 1,
-      "lines": 1,
-      "libraryWorks": 1
-    },
-    {
       "poet": "钱起",
       "works": 1,
       "lines": 1,
       "libraryWorks": 1
     },
     {
-      "poet": "韩愈",
+      "poet": "元稹",
       "works": 1,
       "lines": 1,
       "libraryWorks": 1
-    },
-    {
-      "poet": "柳宗元",
-      "works": 1,
-      "lines": 1,
-      "libraryWorks": 3
     },
     {
       "poet": "窦庠",
@@ -486,12 +570,6 @@
       "libraryWorks": 1
     },
     {
-      "poet": "温庭筠",
-      "works": 1,
-      "lines": 1,
-      "libraryWorks": 2
-    },
-    {
       "poet": "贯休",
       "works": 1,
       "lines": 1,
@@ -504,12 +582,6 @@
       "libraryWorks": 1
     },
     {
-      "poet": "韩偓",
-      "works": 1,
-      "lines": 1,
-      "libraryWorks": 2
-    },
-    {
       "poet": "郑谷",
       "works": 1,
       "lines": 1,
@@ -517,6 +589,12 @@
     },
     {
       "poet": "杜荀鹤",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "罗隐",
       "works": 1,
       "lines": 1,
       "libraryWorks": 1
@@ -546,13 +624,19 @@
       "libraryWorks": 1
     },
     {
-      "poet": "向子諲",
+      "poet": "李重元",
       "works": 1,
       "lines": 1,
       "libraryWorks": 1
     },
     {
-      "poet": "陈与义",
+      "poet": "张元干",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "向子諲",
       "works": 1,
       "lines": 1,
       "libraryWorks": 1
@@ -570,16 +654,10 @@
       "libraryWorks": 1
     },
     {
-      "poet": "范成大",
+      "poet": "周必大",
       "works": 1,
       "lines": 1,
       "libraryWorks": 1
-    },
-    {
-      "poet": "杨万里",
-      "works": 1,
-      "lines": 1,
-      "libraryWorks": 2
     },
     {
       "poet": "朱熹",
@@ -594,13 +672,13 @@
       "libraryWorks": 1
     },
     {
-      "poet": "刘克庄",
+      "poet": "韩疁",
       "works": 1,
       "lines": 1,
-      "libraryWorks": 2
+      "libraryWorks": 1
     },
     {
-      "poet": "韩疁",
+      "poet": "徐君宝妻",
       "works": 1,
       "lines": 1,
       "libraryWorks": 1
@@ -612,13 +690,19 @@
       "libraryWorks": 1
     },
     {
+      "poet": "白朴",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
       "poet": "王实甫",
       "works": 1,
       "lines": 1,
       "libraryWorks": 1
     },
     {
-      "poet": "马致远",
+      "poet": "唐温如",
       "works": 1,
       "lines": 1,
       "libraryWorks": 1
@@ -648,15 +732,123 @@
       "libraryWorks": 1
     },
     {
-      "poet": "纳兰性德",
+      "poet": "王士禛",
       "works": 1,
       "lines": 1,
-      "libraryWorks": 2
+      "libraryWorks": 1
     },
     {
       "poet": "杨朗溪",
       "works": 1,
       "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "曹植",
+      "works": 0,
+      "lines": 0,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "向秀",
+      "works": 0,
+      "lines": 0,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "韩翃",
+      "works": 0,
+      "lines": 0,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "韩琮",
+      "works": 0,
+      "lines": 0,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "孙氏",
+      "works": 0,
+      "lines": 0,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "梅尧臣",
+      "works": 0,
+      "lines": 0,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "周邦彦",
+      "works": 0,
+      "lines": 0,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "朱敦儒",
+      "works": 0,
+      "lines": 0,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "阿鲁威",
+      "works": 0,
+      "lines": 0,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "金銮",
+      "works": 0,
+      "lines": 0,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "日本国使者",
+      "works": 0,
+      "lines": 0,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "归有光",
+      "works": 0,
+      "lines": 0,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "阮元",
+      "works": 0,
+      "lines": 0,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "史湘云",
+      "works": 0,
+      "lines": 0,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "薛宝钗",
+      "works": 0,
+      "lines": 0,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "王熙凤 李纨 香菱 贾探春 李绮 李纹 邢岫烟 史湘云 薛宝琴 林黛玉 贾宝玉 薛宝钗",
+      "works": 0,
+      "lines": 0,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "赵翼",
+      "works": 0,
+      "lines": 0,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "莫非",
+      "works": 0,
+      "lines": 0,
       "libraryWorks": 1
     }
   ]
