@@ -1,8 +1,8 @@
 $block-caption
   text-decoration none
-  color sea-lighter
+  color var(--color-text-secondary)
   &:hover
-    color sea-lighter
+    color var(--color-text)
 
 $block
   border-radius 4px
@@ -12,7 +12,7 @@ $base-style
     margin 2.5rem 0 1.5rem
   hr
     height border-width
-    background-color border-color
+    background-color var(--color-border)
     border none
     padding 0
     margin 1.5rem 0
@@ -32,7 +32,7 @@ $base-style
   small
     font-size 85%
   acronym, abbr
-    border-bottom border-width border-color dotted
+    border-bottom border-width var(--color-border) dotted
   ul, ol, dl
     margin 1.5rem 0 1.5rem 2rem
 
@@ -69,9 +69,9 @@ $base-style
     padding 0 1.5rem
     width 100%
     overflow auto
-    border-left .3rem solid #3d85c6
-    color #2c3e50
-    background-color rgba(61, 133, 198, 0.06)
+    border-left .3rem solid var(--blockquote-border)
+    color var(--blockquote-text)
+    background-color var(--blockquote-bg)
     border-radius 4px
     > :first-child
       margin-top 0;

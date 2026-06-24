@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>诗词统计 - 栖云散录</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4/fonts/remixicon.css">
+<style>
+  /* ═══════════════════════════════════════════
+     CSS Custom Properties
+     Follows Ayeria naming convention
+     ═══════════════════════════════════════════ */
+  :root {
+    --ps-bg: #1c1f26;
+    --ps-card-bg: rgba(35, 39, 51, 0.55);
+    --ps-card-border: rgba(255, 255, 255, 0.07);
+    --ps-card-shadow: 0 4px 28px rgba(0, 0, 0, 0.2);
+    --ps-text: #c8ccd4;
+    --ps-text-dim: #7a8090;
+    --ps-text-bright: #e8ecf2;
+    --ps-accent: #5aa8d8;
+    --ps-accent-dim: rgba(90, 168, 216, 0.1);
+    --ps-divider: rgba(255, 255, 255, 0.06);
+
+    /* Sidebar */
+    --sb-width: 5.6rem;
+    --sb-bg: rgba(0,0,0,.8);
+    --sb-nav-color: #bbb;
+    --sb-nav-hover-bg: #403e3e;
+    --sb-transition: all .3s ease-in-out;
+  }
+
+  /* ── Reset & Base ── */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ps-bg);
+    color: var(--ps-text);
+    font-family: "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ═══════════════════════════════════════════
+     Sidebar Toggle Button
+     Mirrors .navbar-toggle in Ayeria theme
+     ═══════════════════════════════════════════ */
+  .sidebar-toggle {
+    position: fixed;
+    z-index: 100;
+    top: 1rem;
+    left: 1rem;
+    height: 2.8rem;
+    width: 2.8rem;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0,0,0,.5);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: .5;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .sidebar-toggle:hover { opacity: 1; }
+  .sidebar-toggle:active { transform: scale(0.94); }
+
+  .sidebar-toggle i {
+    font-size: 1.2rem;
+    line-height: 1;
+  }
+
+  /* ═══════════════════════════════════════════
+     Sidebar
+     ═══════════════════════════════════════════ */
+  .sidebar {
+    position: fixed;
+    z-index: 90;
+    left: calc(-1 * var(--sb-width));
+    top: 0;
+    bottom: 0;
+    width: var(--sb-width);
+    background: var(--sb-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: left var(--sb-transition);
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .sidebar::-webkit-scrollbar { width: 0; height: 0; }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  /* Logo */
+  .sidebar-logo {
+    margin-top: 3.5rem;
+    margin-bottom: 1.7rem;
+    text-align: center;
+  }
+
+  .sidebar-logo img {
+    width: 42px;
+    height: 42px;
+    display: block;
+    opacity: 0.85;
+    transition: opacity 0.2s ease;
+  }
+
+  .sidebar-logo a:hover img { opacity: 1; }
+
+  /* Navigation */
+  .sidebar-nav {
+    flex: 1;
+    width: 100%;
+    text-align: center;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .sidebar-nav::-webkit-scrollbar { width: 0; height: 0; }
+
+  .sidebar-nav-link {
+    display: block;
+    padding: 0.7rem;
+    color: var(--sb-nav-color);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+    cursor: pointer;
+  }
+
+  .sidebar-nav-link:hover {
+    opacity: 0.8;
+    background: var(--sb-nav-hover-bg);
+  }
+
+  .sidebar-nav-link.active {
+    color: var(--ps-accent);
+    font-weight: 500;
+  }
+
+  /* Bottom area */
+  .sidebar-bottom {
+    width: 100%;
+    text-align: center;
+    padding: 0.8rem 0 1.4rem;
+  }
+
+  .sidebar-icon-link {
+    display: inline-block;
+    color: var(--sb-nav-color);
+    text-decoration: none;
+    font-size: 1.4rem;
+    padding: 0.4rem;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+  }
+
+  .sidebar-icon-link:hover { opacity: 0.9; }
+
+  /* ═══════════════════════════════════════════
+     Sidebar Overlay (mobile)
+     ═══════════════════════════════════════════ */
+  .sidebar-overlay {
+    position: fixed;
+    z-index: 85;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--sb-transition);
+  }
+
+  .sidebar-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ═══════════════════════════════════════════
+     Hero Section
+     ═══════════════════════════════════════════ */
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 58vh;
+    padding: 96px 24px 80px;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .hero-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('images/poetry-hero-bg.webp');
+    background-size: cover;
+    background-position: center 40%;
+    filter: brightness(0.3) saturate(0.5);
+  }
+
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(28, 31, 38, 0.35) 0%,
+      rgba(28, 31, 38, 0.7) 60%,
+      var(--ps-bg) 100%
+    );
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 680px;
+  }
+
+  .hero-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ps-accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 28px;
+    opacity: 0.85;
+  }
+
+  .random-sentence {
+    font-family: "Noto Serif SC", "Source Han Serif SC", "SimSun", "STSong", serif;
+    font-size: clamp(22px, 3.8vw, 34px);
+    font-weight: 400;
+    color: var(--ps-text-bright);
+    line-height: 1.9;
+    letter-spacing: 0.06em;
+    min-height: 64px;
+    transition: opacity 0.5s ease;
+  }
+
+  .random-sentence.loading { opacity: 0.25; }
+
+  .hero-note {
+    margin-top: 24px;
+    font-size: 13px;
+    color: var(--ps-text-dim);
+    opacity: 0.6;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.2s ease;
+  }
+  .hero-note:hover { opacity: 0.85; }
+
+  /* ═══════════════════════════════════════════
+     Main Container
+     ═══════════════════════════════════════════ */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 28px 80px;
+  }
+
+  /* ═══════════════════════════════════════════
+     Stats Overview Bar
+     ═══════════════════════════════════════════ */
+  .stats-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 72px;
+    row-gap: 28px;
+    margin-top: -28px;
+    margin-bottom: 60px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .stat-item {
+    text-align: center;
+    position: relative;
+  }
+
+  .stat-item + .stat-item::before {
+    content: '';
+    position: absolute;
+    left: -36px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 40px;
+    background: var(--ps-divider);
+  }
+
+  .stat-num {
+    font-family: "Noto Serif SC", "Source Han Serif SC", serif;
+    font-size: 44px;
+    font-weight: 600;
+    color: var(--ps-text-bright);
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    color: var(--ps-text-dim);
+    margin-top: 8px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ═══════════════════════════════════════════
+     Chart Cards
+     Follows Ayeria Functional Layer spec:
+     backdrop-filter + thin border + 12px radius
+     ═══════════════════════════════════════════ */
+  .charts-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin-bottom: 32px;
+  }
+
+  .card {
+    background: var(--ps-card-bg);
+    border: 1px solid var(--ps-card-border);
+    border-radius: 12px;
+    padding: 32px 28px;
+    box-shadow: var(--ps-card-shadow);
+  }
+
+  .card h2 {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ps-text-bright);
+    margin-bottom: 24px;
+    letter-spacing: 0.04em;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .card-header h2 { margin-bottom: 0; }
+
+  .toggle-btn {
+    font-family: "Noto Sans SC", sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ps-text-dim);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px;
+    padding: 5px 12px;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    transition: all 0.2s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .toggle-btn:hover {
+    color: var(--ps-accent);
+    border-color: rgba(90,168,216,0.3);
+    background: rgba(90,168,216,0.08);
+  }
+
+  .toggle-btn.active {
+    color: var(--ps-accent);
+    border-color: rgba(90,168,216,0.4);
+    background: rgba(90,168,216,0.12);
+  }
+
+  .chart-wrap {
+    position: relative;
+    width: 100%;
+  }
+
+  .chart-wrap.doughnut {
+    max-width: 340px;
+    margin: 0 auto;
+  }
+
+  .chart-wrap.bar { overflow-y: auto; }
+
+  .chart-wrap.bar::-webkit-scrollbar { width: 4px; }
+  .chart-wrap.bar::-webkit-scrollbar-track { background: transparent; }
+  .chart-wrap.bar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.06); border-radius: 2px; }
+
+  /* ═══════════════════════════════════════════
+     Footer
+     ═══════════════════════════════════════════ */
+  footer {
+    text-align: center;
+    padding: 44px 0 20px;
+    font-size: 12px;
+    color: var(--ps-text-dim);
+  }
+
+  footer a {
+    color: var(--ps-accent);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  footer a:hover { opacity: 0.75; }
+
+  footer .footer-sep {
+    display: inline-block;
+    margin: 0 8px;
+    opacity: 0.35;
+  }
+
+  /* ═══════════════════════════════════════════
+     Scroll Reveal Animations
+     ═══════════════════════════════════════════ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition:
+      opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-stagger-1 { transition-delay: 0.08s; }
+  .reveal-stagger-2 { transition-delay: 0.16s; }
+
+  /* ═══════════════════════════════════════════
+     Reduced Motion
+     ═══════════════════════════════════════════ */
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .random-sentence { transition: none; }
+    .sidebar, .sidebar-toggle, .sidebar-overlay { transition: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  /* ═══════════════════════════════════════════
+     Desktop: sidebar open pushes toggle button right
+     ═══════════════════════════════════════════ */
+  @media (min-width: 769px) {
+    .sidebar-toggle {
+      transition: left var(--sb-transition), opacity 0.25s ease, transform 0.25s ease;
+    }
+    body.sidebar-open .sidebar-toggle {
+      left: calc(var(--sb-width) + 1rem);
+    }
+  }
+
+  /* ═══════════════════════════════════════════
+     Responsive - Tablet
+     ═══════════════════════════════════════════ */
+  @media (max-width: 768px) {
+    .hero {
+      min-height: 48vh;
+      padding: 72px 20px 60px;
+    }
+
+    .random-sentence { font-size: 20px; }
+    .hero-title { margin-bottom: 20px; }
+
+    .stats-bar {
+      gap: 44px;
+      margin-top: -22px;
+      margin-bottom: 44px;
+    }
+
+    .stat-item + .stat-item::before {
+      left: -22px;
+      height: 32px;
+    }
+
+    .stat-num { font-size: 34px; }
+
+    .charts-row {
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+
+    .card { padding: 26px 22px; }
+    .container { padding: 0 20px 60px; }
+
+    /* Sidebar: full-width overlay on mobile */
+    .sidebar {
+      width: 75vw;
+      left: -75vw;
+    }
+
+    .sidebar.open {
+      left: 0;
+    }
+
+    .sidebar-toggle {
+      top: 1rem;
+      left: 1rem;
+    transform: scale(1.1);
+    }
+
+    body.sidebar-open .sidebar-toggle {
+      left: calc(75vw - 2.8rem - 0.6rem);
+    }
+  }
+
+  /* ═══════════════════════════════════════════
+     Responsive - Mobile
+     ═══════════════════════════════════════════ */
+  @media (max-width: 480px) {
+    .hero {
+      min-height: 42vh;
+      padding: 56px 16px 48px;
+    }
+
+    .random-sentence {
+      font-size: 18px;
+      line-height: 1.85;
+    }
+
+    .stats-bar {
+      gap: 32px;
+      margin-top: -18px;
+      margin-bottom: 36px;
+    }
+
+    .stat-item + .stat-item::before {
+      left: -16px;
+      height: 24px;
+    }
+
+    .stat-num { font-size: 28px; }
+    .stat-label { font-size: 12px; }
+
+    .card { padding: 22px 16px; }
+    .card h2 { font-size: 15px; margin-bottom: 18px; }
+    .container { padding: 0 14px 48px; }
+    .sidebar {
+      width: 80vw;
+      left: -80vw;
+    }
+
+    body.sidebar-open .sidebar-toggle {
+      left: calc(80vw - 2.8rem - 0.6rem);
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════
+     Sidebar Toggle Button
+     ═══════════════════════════════ -->
+<button class="sidebar-toggle" aria-label="菜单">
+  <i class="ri-menu-line"></i>
+</button>
+
+<!-- ═══════════════════════════════
+     Sidebar
+     ═══════════════════════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <a href="/"><img src="/favicon.svg" alt="栖云散录"></a>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-link" href="/">主页</a>
+    <a class="sidebar-nav-link" href="/archives">全部文章</a>
+    <a class="sidebar-nav-link" href="/categories">文章分类</a>
+    <a class="sidebar-nav-link" href="/tags">全部标签</a>
+    <a class="sidebar-nav-link" href="http://171.80.11.217:6280" target="_blank" rel="noopener noreferrer">我的歌单</a>
+    <a class="sidebar-nav-link active" href="/poetry-stats">诗词摘录</a>
+    <a class="sidebar-nav-link" href="/waifu">电子手办</a>
+    <a class="sidebar-nav-link" href="/mc-server" target="_blank" rel="noopener noreferrer">MC 私服</a>
+    <a class="sidebar-nav-link" href="/friends">友情链接</a>
+    <a class="sidebar-nav-link" href="/about">关于本站</a>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <a class="sidebar-icon-link" href="/" title="搜索">
+      <i class="ri-search-line"></i>
+    </a>
+  </div>
+</aside>
+
+<!-- Sidebar overlay (mobile backdrop) -->
+<div class="sidebar-overlay"></div>
+
+<!-- ═══════════════════════════════
+     Hero: Random Sentence as focal point
+     ═══════════════════════════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <p class="hero-title">诗词统计</p>
+    <div id="random-sentence" class="random-sentence loading"></div>
+    <p class="hero-note">每次刷新随机展示一句</p>
+  </div>
+</section>
+
+<div class="container">
+
+  <!-- Stats overview -->
+  <div class="stats-bar reveal" id="statsBar"></div>
+
+  <!-- Charts -->
+  <div class="charts-row">
+    <div class="card reveal reveal-stagger-1">
+      <div class="card-header">
+        <h2>朝代 · 作品数</h2>
+        <button class="toggle-btn" id="dynastyToggle" data-mode="displayed">展示</button>
+      </div>
+      <div class="chart-wrap doughnut">
+        <canvas id="dynastyWorksChart"></canvas>
+      </div>
+    </div>
+    <div class="card reveal reveal-stagger-2">
+      <h2>朝代 · 展示行数</h2>
+      <div class="chart-wrap doughnut">
+        <canvas id="dynastyLinesChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card reveal" style="margin-bottom: 32px;">
+    <h2>诗人 · 展示行数（前 25）</h2>
+    <div class="chart-wrap bar">
+      <canvas id="poetChart"></canvas>
+    </div>
+  </div>
+
+  <footer>
+    <a href="/">栖云散录</a>
+    <span class="footer-sep">·</span>
+    诗词摘录统计
+    <span class="footer-sep">·</span>
+    静态数据
+  </footer>
+
+</div>
+
+<!-- ═══════════════════════════════
+     Sidebar Toggle Script
+     ═══════════════════════════════ -->
+<script>
+(function() {
+  var sidebar = document.querySelector('.sidebar');
+  var toggle = document.querySelector('.sidebar-toggle');
+  var overlay = document.querySelector('.sidebar-overlay');
+  var navLinks = document.querySelectorAll('.sidebar-nav-link');
+  var body = document.body;
+
+  if (!sidebar || !toggle) return;
+
+  function open() {
+    sidebar.classList.add('open');
+    body.classList.add('sidebar-open');
+    if (window.innerWidth <= 768) {
+      overlay.classList.add('visible');
+    }
+  }
+
+  function close() {
+    sidebar.classList.remove('open');
+    body.classList.remove('sidebar-open');
+    overlay.classList.remove('visible');
+  }
+
+  function isOpen() {
+    return sidebar.classList.contains('open');
+  }
+
+  toggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (isOpen()) { close(); } else { open(); }
+  });
+
+  overlay.addEventListener('click', close);
+
+  /* Light dismiss: click outside sidebar closes it */
+  document.addEventListener('click', function(e) {
+    if (!isOpen()) return;
+    if (!e.target.closest('.sidebar') && !e.target.closest('.sidebar-toggle')) {
+      close();
+    }
+  });
+
+  /* Close on Escape */
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && isOpen()) {
+      close();
+    }
+  });
+
+  /* Close sidebar after nav link click (mobile) */
+  navLinks.forEach(function(link) {
+    link.addEventListener('click', function() {
+      if (window.innerWidth <= 768) {
+        close();
+      }
+    });
+  });
+
+  /* Adjust overlay visibility on resize */
+  window.addEventListener('resize', function() {
+    if (window.innerWidth > 768) {
+      overlay.classList.remove('visible');
+    } else if (isOpen()) {
+      overlay.classList.add('visible');
+    }
+  });
+})();
+</script>
+
+<!-- ═══════════════════════════════
+     Random Sentence Script
+     Fisher-Yates shuffle + localStorage persistence
+     Shares deck key with blog pages (same localStorage)
+     ═══════════════════════════════ -->
+<script>
+(function() {
+  var STORAGE_KEY = 'ayeria-random-deck';
+  var el = document.getElementById('random-sentence');
+  if (!el) return;
+
+  var DEFAULT = '千秋岁月毫端聚 一纸烟霞腕底生';
+  var sentences = [DEFAULT];
+  var deck = null; // { fingerprint: number, indices: number[], pointer: number }
+
+  async function load() {
+    try {
+      var resp = await fetch('/data/random-sentences.txt');
+      if (!resp.ok) throw new Error('fetch failed');
+      var text = await resp.text();
+      var lines = text.split('\n').filter(function(l) {
+        var t = l.trim();
+        return t && !t.startsWith('#');
+      });
+      if (lines.length) sentences = lines;
+    } catch (e) {}
+  }
+
+  function loadDeck() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      var d = JSON.parse(raw);
+      if (d && d.fingerprint === sentences.length && Array.isArray(d.indices)) return d;
+    } catch (e) {}
+    return null;
+  }
+
+  function saveDeck() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(deck)); } catch (e) {}
+  }
+
+  function shuffle(arr) {
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+  }
+
+  function createDeck(prevLastIndex) {
+    var indices = [];
+    for (var i = 0; i < sentences.length; i++) indices.push(i);
+    shuffle(indices);
+    if (prevLastIndex !== undefined && indices[0] === prevLastIndex && indices.length > 1) {
+      var swap = 1 + Math.floor(Math.random() * (indices.length - 1));
+      var tmp = indices[0]; indices[0] = indices[swap]; indices[swap] = tmp;
+    }
+    return { fingerprint: sentences.length, indices: indices, pointer: 0 };
+  }
+
+  function pick() {
+    if (!deck) deck = loadDeck();
+    if (!deck) deck = createDeck();
+
+    var idx = deck.indices[deck.pointer];
+    var sentence = sentences[idx];
+    deck.pointer++;
+
+    if (deck.pointer >= deck.indices.length) {
+      deck = createDeck(deck.indices[deck.indices.length - 1]);
+    }
+    saveDeck();
+    return sentence;
+  }
+
+  function formatSentence(s) {
+    var t = s.trimEnd();
+    t = t.replace(/ {2,}/g, '<br>');
+    t = t.replace(/ /g, '&nbsp;&nbsp;');
+    return t;
+  }
+
+  function show() {
+    el.innerHTML = formatSentence(pick());
+    el.classList.remove('loading');
+  }
+
+  async function init() {
+    await load();
+    show();
+  }
+
+  init();
+
+  document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) show();
+  });
+
+		var note = document.querySelector('.hero-note');
+		if (note) {
+			note.addEventListener('click', function() { show(); });
+		}
+})();
+</script>
+
+<!-- ═══════════════════════════════
+     Chart.js + Statistics Script
+     ═══════════════════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4/dist/chart.umd.min.js"></script>
+<script>
+(async function() {
+  var resp = await fetch('data.json');
+  var data = await resp.json();
+
+  var dormant = data.totalLibraryWorks - data.totalWorks;
+
+  /* Stats bar */
+  document.getElementById('statsBar').innerHTML = [
+    { num: data.totalLibraryWorks, label: '库藏作品' },
+    { num: data.totalWorks, label: '展示作品' },
+    { num: data.totalLines, label: '展示行数' },
+    { num: data.poets.length, label: '诗人词人' },
+    { num: data.dynasties.length, label: '跨越朝代' },
+    { num: dormant, label: '休眠作品' },
+  ].map(function(s) {
+    return '<div class="stat-item">' +
+      '<div class="stat-num">' + s.num + '</div>' +
+      '<div class="stat-label">' + s.label + '</div>' +
+    '</div>';
+  }).join('');
+
+  /* ── Shared color palette for dynasties ── */
+  var palette = [
+    '#5aa8d8', '#72bce4', '#4e98c0', '#8bcaf0', '#3d80a8',
+    '#c49a6c', '#d4ae80', '#b88650', '#a07048',
+    '#7eb898', '#64a382', '#8cbc9e', '#4a8c6e', '#9ec4a8',
+  ];
+
+  /* ── Helper: create/update doughnut chart ── */
+  function makeDynastyDoughnut(canvasId, metricKey) {
+    var total = data.dynasties.reduce(function(s, d) { return s + d[metricKey]; }, 0);
+    return new Chart(document.getElementById(canvasId), {
+      type: 'doughnut',
+      data: {
+        labels: data.dynasties.map(function(d) { return d.dynasty; }),
+        datasets: [{
+          data: data.dynasties.map(function(d) { return d[metricKey]; }),
+          backgroundColor: palette,
+          borderColor: '#1c1f26',
+          borderWidth: 2.5,
+          hoverBorderColor: '#1c1f26',
+          hoverBorderWidth: 3,
+        }]
+      },
+      options: {
+        responsive: true,
+        cutout: '58%',
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: '#c8ccd4',
+              padding: 14,
+              font: { size: 11, family: '"Noto Sans SC", sans-serif' },
+              usePointStyle: true,
+              pointStyleWidth: 8,
+              generateLabels: function(chart) {
+                var ds = chart.data.datasets[0];
+                return chart.data.labels.map(function(label, i) {
+                  return {
+                    text: label + '  ' + ds.data[i],
+                    fillStyle: ds.backgroundColor[i],
+                    strokeStyle: ds.backgroundColor[i],
+                    lineWidth: 0,
+                    hidden: false,
+                    index: i,
+                    fontColor: '#c8ccd4',
+                    pointStyle: 'circle',
+                    pointStyleWidth: 8,
+                  };
+                });
+              }
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(28, 31, 38, 0.94)',
+            titleColor: '#e8ecf2',
+            bodyColor: '#c8ccd4',
+            borderColor: 'rgba(255,255,255,0.08)',
+            borderWidth: 1,
+            padding: 12,
+            cornerRadius: 8,
+            callbacks: {
+              label: function(ctx) {
+                var pct = total ? (ctx.raw / total * 100).toFixed(1) : '0.0';
+                return ctx.label + ': ' + ctx.raw + ' (' + pct + '%)';
+              }
+            }
+          }
+        },
+      }
+    });
+  }
+
+  /* ── Dynasty: togglable works doughnut + static lines doughnut ── */
+  var dynWorksChart = makeDynastyDoughnut('dynastyWorksChart', 'works');
+  makeDynastyDoughnut('dynastyLinesChart', 'lines');
+
+  var toggleBtn = document.getElementById('dynastyToggle');
+  toggleBtn.addEventListener('click', function() {
+    var mode = toggleBtn.getAttribute('data-mode');
+    var nextMode = mode === 'displayed' ? 'library' : 'displayed';
+    var metricKey = nextMode === 'library' ? 'libraryWorks' : 'works';
+    var total = data.dynasties.reduce(function(s, d) { return s + d[metricKey]; }, 0);
+
+    dynWorksChart.data.datasets[0].data = data.dynasties.map(function(d) { return d[metricKey]; });
+    dynWorksChart.update();
+
+    toggleBtn.setAttribute('data-mode', nextMode);
+    toggleBtn.textContent = nextMode === 'library' ? '库藏' : '展示';
+    if (nextMode === 'library') {
+      toggleBtn.classList.add('active');
+    } else {
+      toggleBtn.classList.remove('active');
+    }
+  });
+
+  /* ── Poet horizontal bar chart (top 25 by lines) ── */
+  var topPoets = data.poets.slice(0, 25);
+
+  new Chart(document.getElementById('poetChart'), {
+    type: 'bar',
+    data: {
+      labels: topPoets.map(function(p) { return p.poet; }),
+      datasets: [{
+        data: topPoets.map(function(p) { return p.lines; }),
+        backgroundColor: topPoets.map(function(_, i) {
+          var alpha = 0.92 - (i / topPoets.length) * 0.5;
+          return 'rgba(90,168,216,' + alpha.toFixed(2) + ')';
+        }),
+        borderColor: 'transparent',
+        borderRadius: 3,
+        borderSkipped: false,
+        hoverBackgroundColor: 'rgba(90,168,216,0.95)',
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(28, 31, 38, 0.94)',
+          titleColor: '#e8ecf2',
+          bodyColor: '#c8ccd4',
+          borderColor: 'rgba(255,255,255,0.08)',
+          borderWidth: 1,
+          padding: 12,
+          cornerRadius: 8,
+          callbacks: {
+            label: function(ctx) {
+              var p = topPoets[ctx.dataIndex];
+              return p.lines + ' 行，来自 ' + p.works + ' 首展示作品，共 ' + p.libraryWorks + ' 首作品';
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: {
+            color: '#7a8090',
+            font: { size: 11, family: '"Noto Sans SC", sans-serif' },
+            stepSize: 1,
+            padding: 6,
+          },
+        },
+        y: {
+          grid: { display: false },
+          ticks: {
+            color: '#c8ccd4',
+            font: { size: 12, family: '"Noto Sans SC", sans-serif' },
+            autoSkip: false,
+            padding: 4,
+          },
+        }
+      },
+    }
+  });
+
+  /* Set bar chart wrapper height dynamically */
+  document.getElementById('poetChart').parentElement.style.height =
+    (topPoets.length * 32 + 16) + 'px';
+
+})();
+</script>
+
+<!-- ═══════════════════════════════
+     Scroll Reveal Observer
+     ═══════════════════════════════ -->
+<script>
+(function() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {
+    threshold: 0.15,
+    rootMargin: '0px 0px -30px 0px',
+  });
+
+  document.querySelectorAll('.reveal').forEach(function(el) {
+    observer.observe(el);
+  });
+})();
+</script>
+
+</body>
+</html>

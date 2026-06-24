@@ -1,6 +1,11 @@
 <%- partial('_partial/head') %>
 
 <body class="darkmode">
+  <script>
+    if (localStorage.getItem('darkmode') === '0') {
+      document.body.classList.remove('darkmode');
+    }
+  </script>
   <div id="app">
     <% if (theme.click_effect === 2) { %>
       <canvas class="click-effect-canvas"></canvas>

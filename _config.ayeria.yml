@@ -7,11 +7,12 @@ menu:
   我的歌单:
    url: http://171.80.11.217:6280
    target: popup
+  诗词摘录: /poetry-stats
   电子手办: /waifu
   MC 私服: 
    url: /mc-server
    target: blank
-#  个人简历: /resume
+  # 个人简历: /resume
   友情链接: /friends
   关于本站: /about
 
@@ -19,7 +20,7 @@ menu:
 # https://github.com/mattboldt/typed.js
 subtitle:
   enable: false # 是否开启动效
-  text: 千秋岁月毫端聚  一纸烟霞腕底生 # 显示的文字
+  text: 云封石径无人扫 月满松庭有鹤眠 # 显示的文字
   text2: 一抹斜阳 # 滚动播放，如果不需要可以留空
   text3: 数点寒鸦 # 最多支持三段文字
   startDelay: 1000 # 延迟时间
@@ -180,7 +181,7 @@ music:
 
 # 访问量统计(不蒜子)
 busuanzi:
-  enable: true
+  enable: false
 
 # 友盟cnzz统计(url填js代码src链接)
 cnzz:

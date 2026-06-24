@@ -1,5 +1,7 @@
-// 随机句子功能
+// 随机句子功能 —— Fisher-Yates 洗牌 + localStorage 持久化牌库
 (function() {
+    const STORAGE_KEY = 'ayeria-random-deck';
+
     // 后备句子库：random-sentences.txt 前 20 条非注释句
     const defaultSentences = [
         "月映松梢鹤影长 风摇竹叶露凝香",
@@ -26,8 +28,8 @@
 
     let sentences = [...defaultSentences];
     let useLocalFile = true;
-    let queueSize = 5;
-    let recentSentences = [];
+    // deck: { fingerprint: number, indices: number[], pointer: number }
+    let deck = null;
 
     function checkConfig() {
         const configElement = document.querySelector('[data-random-sentences-config]');
@@ -38,12 +40,7 @@
             if (config.hasOwnProperty('use_local_file')) {
                 useLocalFile = config.use_local_file;
             }
-            if (config.hasOwnProperty('queue_size') && config.queue_size > 0) {
-                queueSize = config.queue_size;
-            }
-        } catch (e) {
-            // 配置解析失败，使用默认值
-        }
+        } catch (e) {}
     }
 
     async function loadSentencesFromFile() {
@@ -64,55 +61,91 @@
         }
     }
 
+    function loadDeck() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return null;
+            const parsed = JSON.parse(raw);
+            if (parsed && parsed.fingerprint === sentences.length && Array.isArray(parsed.indices)) {
+                return parsed;
+            }
+        } catch (e) {}
+        return null;
+    }
+
+    function saveDeck() {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(deck));
+        } catch (e) {}
+    }
+
+    function shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            const tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
+        }
+    }
+
+    function createDeck(prevLastIndex) {
+        const indices = [];
+        for (let i = 0; i < sentences.length; i++) {
+            indices.push(i);
+        }
+        shuffle(indices);
+
+        // 新周期首句不能是旧周期末句
+        if (prevLastIndex !== undefined && indices[0] === prevLastIndex && indices.length > 1) {
+            const swap = 1 + Math.floor(Math.random() * (indices.length - 1));
+            const tmp = indices[0];
+            indices[0] = indices[swap];
+            indices[swap] = tmp;
+        }
+
+        return { fingerprint: sentences.length, indices: indices, pointer: 0 };
+    }
+
     function getRandomSentence() {
-        if (sentences.length <= queueSize) {
-            const randomIndex = Math.floor(Math.random() * sentences.length);
-            const selectedSentence = sentences[randomIndex];
-            updateRecentQueue(selectedSentence);
-            return selectedSentence;
+        if (!deck) {
+            deck = loadDeck();
+        }
+        if (!deck) {
+            deck = createDeck();
         }
 
-        const availableSentences = sentences.filter(sentence => !recentSentences.includes(sentence));
+        const index = deck.indices[deck.pointer];
+        const sentence = sentences[index];
+        deck.pointer++;
 
-        if (availableSentences.length === 0) {
-            recentSentences = [];
-            const randomIndex = Math.floor(Math.random() * sentences.length);
-            const selectedSentence = sentences[randomIndex];
-            updateRecentQueue(selectedSentence);
-            return selectedSentence;
+        if (deck.pointer >= deck.indices.length) {
+            const lastIndex = deck.indices[deck.indices.length - 1];
+            deck = createDeck(lastIndex);
         }
 
-        const randomIndex = Math.floor(Math.random() * availableSentences.length);
-        const selectedSentence = availableSentences[randomIndex];
-        updateRecentQueue(selectedSentence);
-        return selectedSentence;
+        saveDeck();
+        return sentence;
     }
 
-    function updateRecentQueue(sentence) {
-        const index = recentSentences.indexOf(sentence);
-        if (index > -1) {
-            recentSentences.splice(index, 1);
-        }
-        recentSentences.push(sentence);
-        if (recentSentences.length > queueSize) {
-            recentSentences.shift();
-        }
-    }
-
-    function applyLineBreaks(sentence) {
-        return sentence.replace(/  +/g, '<br>');
+    function formatSentence(sentence) {
+        // 去掉行末空格，避免视觉不居中
+        let formatted = sentence.trimEnd();
+        // 双空格及以上 → 换行
+        formatted = formatted.replace(/ {2,}/g, '<br>');
+        // 剩余的单空格 → 双空格宽度，拉大句段间距
+        formatted = formatted.replace(/ /g, '&nbsp;&nbsp;');
+        return formatted;
     }
 
     function displayRandomSentence() {
         const sentenceElement = document.getElementById('random-sentence');
         if (!sentenceElement) return;
 
-        const randomSentence = getRandomSentence();
-        sentenceElement.innerHTML = applyLineBreaks(randomSentence);
+        sentenceElement.innerHTML = formatSentence(getRandomSentence());
     }
 
     async function initialize() {
-        var el = document.getElementById('random-sentence');
+        const el = document.getElementById('random-sentence');
         if (!el) return;
 
         checkConfig();

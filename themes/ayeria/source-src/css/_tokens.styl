@@ -1,0 +1,60 @@
+@import "_variables"
+
+// ─── 暗色模式色值 ────────────────────────────────────────────────────────────────
+dark-bg               = #1c1f26
+dark-text             = #d0d0d0
+dark-text-secondary   = #aaaaaa
+dark-link             = #80cfff
+dark-link-hover       = #a8daff
+dark-border           = #3b414c
+dark-surface          = #2a2f3a
+dark-code-bg          = #2e3440
+dark-code-text        = #ffcc99
+dark-warning          = #ffb347
+dark-tag-bg           = #3a3f4a
+dark-tag-text         = #cccccc
+dark-blockquote-border = #4a9eff
+dark-blockquote-text  = #c8d3dc
+dark-blockquote-bg    = rgba(74, 158, 255, 0.08)
+dark-input-placeholder = #888
+
+// ─── CSS 自定义属性（亮/暗主题切换） ─────────────────────────────────────────────
+// 改配色只需修改此文件
+
+:root
+  --color-bg               body-background
+  --color-text             body-color
+  --color-text-secondary   froth
+  --color-link             link-color
+  --color-link-hover       link-hover-color
+  --color-border           border-color
+  --color-surface          froth-light
+  --color-code-bg          #f0f2f5
+  --color-code-text        #d63384
+  --color-warning          red
+  --color-tag-bg           tag-color
+  --color-tag-text         white
+  --image-brightness       brightness(1)
+  --blockquote-border      #3d85c6
+  --blockquote-text        #2c3e50
+  --blockquote-bg          rgba(61, 133, 198, 0.06)
+  --input-placeholder      #ccc
+
+body.darkmode
+  --color-bg               dark-bg
+  --color-text             dark-text
+  --color-text-secondary   dark-text-secondary
+  --color-link             dark-link
+  --color-link-hover       dark-link-hover
+  --color-border           dark-border
+  --color-surface          dark-surface
+  --color-code-bg          dark-code-bg
+  --color-code-text        dark-code-text
+  --color-warning          dark-warning
+  --color-tag-bg           dark-tag-bg
+  --color-tag-text         dark-tag-text
+  --image-brightness       brightness(.8)
+  --blockquote-border      dark-blockquote-border
+  --blockquote-text        dark-blockquote-text
+  --blockquote-bg          dark-blockquote-bg
+  --input-placeholder      dark-input-placeholder

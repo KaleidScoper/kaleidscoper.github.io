@@ -207,7 +207,7 @@
     }
   }
 
-  if (sessionStorage.getItem("darkmode") == 0) {
+  if (localStorage.getItem("darkmode") == 0) {
     $("body").removeClass("darkmode");
     $("#todark i").removeClass("ri-sun-line").addClass("ri-moon-line");
     setGiscusTheme("light");
@@ -217,15 +217,15 @@
     setGiscusTheme("dark");
   }
   $("#todark").on("click", () => {
-    if (sessionStorage.getItem("darkmode") == 0) {
+    if (localStorage.getItem("darkmode") == 0) {
       $("body").addClass("darkmode");
       $("#todark i").removeClass("ri-moon-line").addClass("ri-sun-line");
-      sessionStorage.setItem("darkmode", 1);
+      localStorage.setItem("darkmode", 1);
       setGiscusTheme("dark");
     } else {
       $("body").removeClass("darkmode");
       $("#todark i").removeClass("ri-sun-line").addClass("ri-moon-line");
-      sessionStorage.setItem("darkmode", 0);
+      localStorage.setItem("darkmode", 0);
       setGiscusTheme("light");
     }
   });
