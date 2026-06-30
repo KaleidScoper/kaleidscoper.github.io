@@ -1,6 +1,6 @@
 ---
 title: 读冯友兰《中国哲学简史》
-date: 2022-02-25 21:22:00
+date: 2025-11-17 21:22:00
 categories: [杂谈, 书刊诗文]
 tags: [原创, 哲学, 文学]
 author: KaleidScoper
