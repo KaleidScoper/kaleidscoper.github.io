@@ -1,7 +1,7 @@
 {
-  "totalWorks": 213,
-  "totalLibraryWorks": 260,
-  "totalLines": 353,
+  "totalWorks": 225,
+  "totalLibraryWorks": 272,
+  "totalLines": 379,
   "dynasties": [
     {
       "dynasty": "先秦",
@@ -35,9 +35,9 @@
     },
     {
       "dynasty": "唐",
-      "works": 82,
-      "lines": 121,
-      "libraryWorks": 94
+      "works": 85,
+      "lines": 128,
+      "libraryWorks": 97
     },
     {
       "dynasty": "五代十国",
@@ -47,9 +47,9 @@
     },
     {
       "dynasty": "宋",
-      "works": 74,
-      "lines": 128,
-      "libraryWorks": 85
+      "works": 76,
+      "lines": 131,
+      "libraryWorks": 88
     },
     {
       "dynasty": "金",
@@ -71,9 +71,9 @@
     },
     {
       "dynasty": "清",
-      "works": 12,
-      "lines": 17,
-      "libraryWorks": 17
+      "works": 15,
+      "lines": 22,
+      "libraryWorks": 20
     },
     {
       "dynasty": "近代",
@@ -83,17 +83,17 @@
     },
     {
       "dynasty": "现代",
-      "works": 12,
-      "lines": 20,
-      "libraryWorks": 22
+      "works": 16,
+      "lines": 31,
+      "libraryWorks": 25
     }
   ],
   "poets": [
     {
       "poet": "李白",
-      "works": 17,
-      "lines": 28,
-      "libraryWorks": 19
+      "works": 18,
+      "lines": 30,
+      "libraryWorks": 20
     },
     {
       "poet": "杜甫",
@@ -108,6 +108,12 @@
       "libraryWorks": 11
     },
     {
+      "poet": "KaleidScoper",
+      "works": 8,
+      "lines": 14,
+      "libraryWorks": 12
+    },
+    {
       "poet": "白居易",
       "works": 7,
       "lines": 14,
@@ -118,12 +124,6 @@
       "works": 7,
       "lines": 11,
       "libraryWorks": 7
-    },
-    {
-      "poet": "KaleidScoper",
-      "works": 6,
-      "lines": 8,
-      "libraryWorks": 11
     },
     {
       "poet": "李煜",
@@ -148,6 +148,12 @@
       "works": 4,
       "lines": 9,
       "libraryWorks": 5
+    },
+    {
+      "poet": "纳兰性德",
+      "works": 4,
+      "lines": 6,
+      "libraryWorks": 4
     },
     {
       "poet": "杜牧",
@@ -177,7 +183,7 @@
       "poet": "李清照",
       "works": 3,
       "lines": 6,
-      "libraryWorks": 4
+      "libraryWorks": 5
     },
     {
       "poet": "鲍照",
@@ -294,6 +300,12 @@
       "libraryWorks": 2
     },
     {
+      "poet": "欧阳修",
+      "works": 2,
+      "lines": 2,
+      "libraryWorks": 2
+    },
+    {
       "poet": "秦观",
       "works": 2,
       "lines": 2,
@@ -312,12 +324,6 @@
       "libraryWorks": 2
     },
     {
-      "poet": "纳兰性德",
-      "works": 2,
-      "lines": 2,
-      "libraryWorks": 2
-    },
-    {
       "poet": "B站UP主安德-罗波夫",
       "works": 1,
       "lines": 6,
@@ -325,6 +331,12 @@
     },
     {
       "poet": "张若虚",
+      "works": 1,
+      "lines": 4,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "许浑",
       "works": 1,
       "lines": 4,
       "libraryWorks": 1
@@ -355,6 +367,12 @@
     },
     {
       "poet": "王国维",
+      "works": 1,
+      "lines": 4,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "B站UP主庭前雪hl",
       "works": 1,
       "lines": 4,
       "libraryWorks": 1
@@ -438,6 +456,12 @@
       "libraryWorks": 1
     },
     {
+      "poet": "戴复古",
+      "works": 1,
+      "lines": 2,
+      "libraryWorks": 1
+    },
+    {
       "poet": "张可久",
       "works": 1,
       "lines": 2,
@@ -466,6 +490,12 @@
       "works": 1,
       "lines": 1,
       "libraryWorks": 3
+    },
+    {
+      "poet": "韩翃",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 2
     },
     {
       "poet": "温庭筠",
@@ -606,12 +636,6 @@
       "libraryWorks": 1
     },
     {
-      "poet": "欧阳修",
-      "works": 1,
-      "lines": 1,
-      "libraryWorks": 1
-    },
-    {
       "poet": "侯蒙",
       "works": 1,
       "lines": 1,
@@ -744,6 +768,18 @@
       "libraryWorks": 1
     },
     {
+      "poet": "杜采秋",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "韩寒",
+      "works": 1,
+      "lines": 1,
+      "libraryWorks": 1
+    },
+    {
       "poet": "曹植",
       "works": 0,
       "lines": 0,
@@ -751,12 +787,6 @@
     },
     {
       "poet": "向秀",
-      "works": 0,
-      "lines": 0,
-      "libraryWorks": 1
-    },
-    {
-      "poet": "韩翃",
       "works": 0,
       "lines": 0,
       "libraryWorks": 1
