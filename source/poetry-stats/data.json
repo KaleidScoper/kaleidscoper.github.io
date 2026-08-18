@@ -1,7 +1,7 @@
 {
-  "totalWorks": 225,
-  "totalLibraryWorks": 272,
-  "totalLines": 379,
+  "totalWorks": 226,
+  "totalLibraryWorks": 274,
+  "totalLines": 382,
   "dynasties": [
     {
       "dynasty": "先秦",
@@ -47,9 +47,9 @@
     },
     {
       "dynasty": "宋",
-      "works": 76,
-      "lines": 131,
-      "libraryWorks": 88
+      "works": 77,
+      "lines": 135,
+      "libraryWorks": 90
     },
     {
       "dynasty": "金",
@@ -84,7 +84,7 @@
     {
       "dynasty": "现代",
       "works": 16,
-      "lines": 31,
+      "lines": 30,
       "libraryWorks": 25
     }
   ],
@@ -270,6 +270,12 @@
       "libraryWorks": 2
     },
     {
+      "poet": "欧阳修",
+      "works": 2,
+      "lines": 2,
+      "libraryWorks": 3
+    },
+    {
       "poet": "李纲",
       "works": 2,
       "lines": 2,
@@ -300,12 +306,6 @@
       "libraryWorks": 2
     },
     {
-      "poet": "欧阳修",
-      "works": 2,
-      "lines": 2,
-      "libraryWorks": 2
-    },
-    {
       "poet": "秦观",
       "works": 2,
       "lines": 2,
@@ -328,6 +328,12 @@
       "works": 1,
       "lines": 6,
       "libraryWorks": 1
+    },
+    {
+      "poet": "朱敦儒",
+      "works": 1,
+      "lines": 4,
+      "libraryWorks": 2
     },
     {
       "poet": "张若虚",
@@ -372,12 +378,6 @@
       "libraryWorks": 1
     },
     {
-      "poet": "B站UP主庭前雪hl",
-      "works": 1,
-      "lines": 4,
-      "libraryWorks": 1
-    },
-    {
       "poet": "张孝祥",
       "works": 1,
       "lines": 3,
@@ -385,6 +385,12 @@
     },
     {
       "poet": "姜夔",
+      "works": 1,
+      "lines": 3,
+      "libraryWorks": 1
+    },
+    {
+      "poet": "B站UP主庭前雪hl",
       "works": 1,
       "lines": 3,
       "libraryWorks": 1
@@ -811,12 +817,6 @@
     },
     {
       "poet": "周邦彦",
-      "works": 0,
-      "lines": 0,
-      "libraryWorks": 1
-    },
-    {
-      "poet": "朱敦儒",
       "works": 0,
       "lines": 0,
       "libraryWorks": 1
