@@ -14,7 +14,7 @@ layout: page
     <h2 class="profile-name">Kaleid Scoper</h2>
     <p class="profile-title">漢人 | 安徽大学 | INTP</p>
     <p class="profile-desc">
-      欢迎来到我的博客！我是Kale，一名信息安全专业的本科生。此博客将作为我的电子日记本，用于堆放我本人写的一些没用的内容。祝你度过美好的一天。
+      欢迎来到我的博客！我是 Kale，毕业于信息安全专业。此网站作为我的电子日记本，主要用于堆放我本人写的一些没用的内容。祝你度过美好的一天。
     </p>
   </div>
 </div>
