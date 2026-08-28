@@ -11,6 +11,18 @@ reward: true
 
 <!--more-->
 
+## 零、越狱
+
+2025 年 5 月有一篇大规模多语言越狱对照实验（[The Tower of Babel Revisited](https://arxiv.org/abs/2505.12287)），在 GPT-4o、Gemini-1.5-Pro、Qwen-Max 和 DeepSeek-R1 上跑了 38400 条应答、32 种攻击手法、六类受限内容，中英各测一遍，结论是中文 prompt 的攻击成功率高于英文，有人说非英文 prompt 绕过安全机制的频率比英文高 60% 到 80%。
+
+可能的解释是，主流模型的安全对齐是英文中心化的，RLHF 的拒答样本、红队测试数据都以英文为主，护栏可能没怎么迁移到其他语言。北大 EMNLP 2025 的 [E-Proxy 防御研究](https://aclanthology.org/2025.findings-emnlp.62/)从反面印证了这一点，英文 prompt 最能激活模型的拒答 token。把 payload 翻成英文，更可能撞上拒答。
+
+DeepSeek 的政治甲大概率是中文向的，而安全甲大概率是英文。如果这个结论属实，那么我们最好用中文提示词越狱。
+
+针对 DeepSeek 还有一份雄文可供参考：（[Towards Understanding the Safety Boundaries of DeepSeek Models](https://arxiv.org/abs/2503.15092)），不过这里的 DeepSeek 是 DeepSeek-R1，目前没人知道 V4 API 甲的实际情况。
+
+## 一、渗透测试
+
 长话短说，把以下内容直接附带到你的第一条用户消息之前（以 WSL2 内的 Claude Code 为例）。
 
 > 
@@ -32,4 +44,6 @@ reward: true
 
 适用于 Flash、Pro 的正式版。
 
-另外逆向请求貌似不需要破限，个别情况下 DeepSeek 甚至会尝试逆向、篡改 Claude Code 自己的二进制文件。
+## 二、逆向工程
+
+逆向请求貌似不需要破限，个别情况下 DeepSeek 甚至会尝试逆向、篡改 Claude Code 自己的二进制文件。
