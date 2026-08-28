@@ -79,11 +79,13 @@ category_map:
   开源情报: osint
   反社工: opsec
   Web安全: websec
+  AI安全: aisec
   逆向工程: reverse
   密码学: crypto
 
   开发: dev # 二级分类
   Web开发: webdev
+  AI开发: aidev
   UE5开发: ue5
   安卓开发: android
   桌面开发: desktop
@@ -144,6 +146,9 @@ tag_map:
   C#: csharp
   Python: python
   Java: java
+
+  人工智能: ai
+  大模型: llm
 
   建筑学: architecture
   哲学: philosophy
