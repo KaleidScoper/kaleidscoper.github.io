@@ -1,7 +1,7 @@
 {
-  "totalWorks": 226,
-  "totalLibraryWorks": 274,
-  "totalLines": 382,
+  "totalWorks": 227,
+  "totalLibraryWorks": 275,
+  "totalLines": 384,
   "dynasties": [
     {
       "dynasty": "先秦",
@@ -47,9 +47,9 @@
     },
     {
       "dynasty": "宋",
-      "works": 77,
-      "lines": 135,
-      "libraryWorks": 90
+      "works": 78,
+      "lines": 137,
+      "libraryWorks": 91
     },
     {
       "dynasty": "金",
@@ -204,6 +204,12 @@
       "libraryWorks": 3
     },
     {
+      "poet": "王安石",
+      "works": 2,
+      "lines": 8,
+      "libraryWorks": 2
+    },
+    {
       "poet": "唐寅",
       "works": 2,
       "lines": 6,
@@ -330,12 +336,6 @@
       "libraryWorks": 1
     },
     {
-      "poet": "朱敦儒",
-      "works": 1,
-      "lines": 4,
-      "libraryWorks": 2
-    },
-    {
       "poet": "张若虚",
       "works": 1,
       "lines": 4,
@@ -343,12 +343,6 @@
     },
     {
       "poet": "许浑",
-      "works": 1,
-      "lines": 4,
-      "libraryWorks": 1
-    },
-    {
-      "poet": "王安石",
       "works": 1,
       "lines": 4,
       "libraryWorks": 1
@@ -394,6 +388,12 @@
       "works": 1,
       "lines": 3,
       "libraryWorks": 1
+    },
+    {
+      "poet": "朱敦儒",
+      "works": 1,
+      "lines": 2,
+      "libraryWorks": 2
     },
     {
       "poet": "张岱",
