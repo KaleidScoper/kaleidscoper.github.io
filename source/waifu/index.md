@@ -6,6 +6,7 @@ layout: page
 {% raw %}
 
 <link rel="stylesheet" href="/waifu/style.css">
+<p style="text-align: center; opacity: 0.8;">Do I want to be her, or be with her?</p>
 <div class="grid">
 
   <!-- A -->
