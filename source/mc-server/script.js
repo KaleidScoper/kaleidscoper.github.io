@@ -55,7 +55,7 @@ function renderTeamMembers() {
       : '<span class="team-card__name">' + escapeHtml(m.id) + "</span>";
 
     card.innerHTML =
-      '<img src="https://mc-heads.net/body/' + encodeURIComponent(m.id) + '/128"' +
+      '<img src="https://minotar.net/helm/' + encodeURIComponent(m.id) + '/128"' +
       fallbackAttr +
       ' alt="' + escapeHtml(m.id) + '"' +
       ' class="team-card__avatar"' +

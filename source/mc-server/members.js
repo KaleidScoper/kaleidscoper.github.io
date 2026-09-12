@@ -8,7 +8,7 @@
  *
  * 字段说明
  * ────────────────────────────────────────────────
- *   id          — (必填) MC 用户名。作为卡片标题显示，同时用于拉取 mc-heads 头像
+ *   id          — (必填) MC 用户名。作为卡片标题显示，同时用于拉取 minotar 头像
  *   role        — (必填) 服务器管理身份，如"服主""管理员""成员"
  *   tag         — (必填) 游戏内角色头衔，如"出生点建筑师""工业领主"
  *   color       — (必填) 卡片主题色，十六进制色值，如 "#f1c40f"
@@ -25,7 +25,7 @@
  *     color: "#80cfff",
  *     description: "第一行描述\n第二行描述",
  *     link: "https://example.com",
- *     fallback: "img/placeholder.png",
+ *     fallback: "img/member_placeholder.webp",
  *   },
  */
 
@@ -69,6 +69,7 @@ const TEAM_MEMBERS = [
     tag: "探险家",
     color: "#80cfff",
     description: "精通 PVP/VE 战斗，单人率先击败了本服的末影龙\n据说他直接住在试炼要塞中",
+    fallback: "img/member_placeholder.webp",
   },
   {
     id: "InRedBaglu",
@@ -76,6 +77,7 @@ const TEAM_MEMBERS = [
     tag: "吉祥物",
     color: "#80cfff",
     description: "非常可爱，除此之外我们对他一无所知",
+    fallback: "img/member_placeholder.webp",
   },
   {
     id: "yxjygcty123",
@@ -83,6 +85,7 @@ const TEAM_MEMBERS = [
     tag: "探险家",
     color: "#80cfff",
     description: "执着于踹开别人的门。祝他早日成功",
+    fallback: "img/member_placeholder.webp",
   },
   {
     id: "Zn_0817",
@@ -90,5 +93,6 @@ const TEAM_MEMBERS = [
     tag: "建筑师",
     color: "#80cfff",
     description: "在出生点附近建造了“令人印象深刻”的“建筑物”。我们宁愿他没建造它们",
+    fallback: "img/member_placeholder.webp",
   },
 ];
