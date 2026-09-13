@@ -55,7 +55,7 @@ function renderTeamMembers() {
       : '<span class="team-card__name">' + escapeHtml(m.id) + "</span>";
 
     card.innerHTML =
-      '<img src="https://crafatar.com/avatars/' + encodeURIComponent(m.uuid) + '?size=128&overlay"' +
+      '<img src="https://api.mcheads.org/head/' + encodeURIComponent(m.uuid) + '/128"' +
       fallbackAttr +
       ' alt="' + escapeHtml(m.id) + '"' +
       ' class="team-card__avatar"' +
