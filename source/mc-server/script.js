@@ -55,7 +55,7 @@ function renderTeamMembers() {
       : '<span class="team-card__name">' + escapeHtml(m.id) + "</span>";
 
     card.innerHTML =
-      '<img src="https://api.mcheads.org/ioshead/' + encodeURIComponent(m.uuid) + '/right/128"' +
+      '<img src="https://api.mcheads.org/avatar/' + encodeURIComponent(m.uuid) + '/right/128"' +
       fallbackAttr +
       ' alt="' + escapeHtml(m.id) + '"' +
       ' class="team-card__avatar"' +

@@ -39,7 +39,7 @@ const TEAM_MEMBERS = [
     role: "服主",
     tag: "艺术家",
     color: "#f1c40f",
-    description: "服务器的创建者与维护者，负责日常运维和版本更新\n住在出生点奢靡的宅院中",
+    description: "服务器的创建者与维护者，负责日常运维和版本更新",
     link: "https://kaleidscoper.github.io",
     fallback: "img/kale.png",
   },
@@ -49,7 +49,7 @@ const TEAM_MEMBERS = [
     role: "成员",
     tag: "工程师",
     color: "#80cfff",
-    description: "在出生点附近建立了最大的工业体系，是服内最活跃的资源生产者\n有传闻称他住在其中一部机器里",
+    description: "服内最活跃的资源生产者",
     fallback: "img/cs.png",
   },
   {
@@ -57,8 +57,8 @@ const TEAM_MEMBERS = [
     uuid: "904280edf7e54343884fa6e10f59219f",
     role: "成员",
     tag: "农学家",
-    color: "#80cfff",
-    description: "运营着位于出生点的农牧场\n据说她的农场是全服最好看的",
+    color: "#c74005",
+    description: "杨柳依依",
     fallback: "img/tomato.png",
   },
   {
@@ -67,7 +67,7 @@ const TEAM_MEMBERS = [
     role: "成员",
     tag: "地质学家",
     color: "#80cfff",
-    description: "痴迷于地底探险与矿脉开采，是服务器矿产资源的重要供给者\n据说她从未在地表被目击到过",
+    description: "从未在地表被目击到过",
     fallback: "img/member_placeholder.webp",
   },
   {
@@ -76,7 +76,7 @@ const TEAM_MEMBERS = [
     role: "成员",
     tag: "探险家",
     color: "#80cfff",
-    description: "精通 PVP/VE 战斗，单人率先击败了本服的末影龙\n据说他直接住在试炼要塞中",
+    description: "率先抵达末地",
     fallback: "img/member_placeholder.webp",
   },
   {
@@ -85,7 +85,7 @@ const TEAM_MEMBERS = [
     role: "成员",
     tag: "吉祥物",
     color: "#80cfff",
-    description: "非常可爱，除此之外我们对他一无所知",
+    description: "非常可爱\n除此之外我们对他一无所知",
     fallback: "img/member_placeholder.webp",
   },
   {
@@ -94,7 +94,7 @@ const TEAM_MEMBERS = [
     role: "成员",
     tag: "探险家",
     color: "#80cfff",
-    description: "执着于踹开别人的门。祝他早日成功",
+    description: "执着于踹开别人的门",
     fallback: "img/member_placeholder.webp",
   },
   {
@@ -103,7 +103,7 @@ const TEAM_MEMBERS = [
     role: "成员",
     tag: "建筑师",
     color: "#80cfff",
-    description: "在出生点附近建造了“令人印象深刻”的“建筑物”。我们宁愿他没建造它们",
+    description: "在出生点附近建造了“令人印象深刻”的“建筑物”",
     fallback: "img/member_placeholder.webp",
   },
 ];
