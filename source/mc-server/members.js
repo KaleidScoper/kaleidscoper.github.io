@@ -49,7 +49,7 @@ const TEAM_MEMBERS = [
     role: "成员",
     tag: "工程师",
     color: "#80cfff",
-    description: "服内最活跃的资源生产者",
+    description: "服内最活跃的资源生产者\n生产力不来自逆天 ID",
     fallback: "img/cs.png",
   },
   {
