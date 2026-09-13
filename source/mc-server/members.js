@@ -8,7 +8,9 @@
  *
  * 字段说明
  * ────────────────────────────────────────────────
- *   id          — (必填) MC 用户名。作为卡片标题显示，同时用于拉取 minotar 头像
+ *   id          — (必填) MC 用户名。作为卡片标题显示
+ *   uuid        — (必填) 玩家的 Mojang UUID（无连字符）。用于拉取 crafatar 头像，
+ *                 避免运行时用户名解析（minotar/mc-heads 的用户名解析均已失效）
  *   role        — (必填) 服务器管理身份，如"服主""管理员""成员"
  *   tag         — (必填) 游戏内角色头衔，如"出生点建筑师""工业领主"
  *   color       — (必填) 卡片主题色，十六进制色值，如 "#f1c40f"
@@ -20,6 +22,7 @@
  * ────────────────────────────────────────────────
  *   {
  *     id: "Steve",
+ *     uuid: "8667ba71b85a4004af54457a9734eed7",
  *     role: "成员",
  *     tag: "红石工程师",
  *     color: "#80cfff",
@@ -32,6 +35,7 @@
 const TEAM_MEMBERS = [
   {
     id: "KaleidScoper",
+    uuid: "a86d98df724b4e7a98a67a71345386d6",
     role: "服主",
     tag: "艺术家",
     color: "#f1c40f",
@@ -41,6 +45,7 @@ const TEAM_MEMBERS = [
   },
   {
     id: "b1ack_51av3",
+    uuid: "5aa7b312fcc24bacb9aae3775c1077a2",
     role: "成员",
     tag: "工程师",
     color: "#80cfff",
@@ -49,6 +54,7 @@ const TEAM_MEMBERS = [
   },
   {
     id: "404tomato",
+    uuid: "904280edf7e54343884fa6e10f59219f",
     role: "成员",
     tag: "农学家",
     color: "#80cfff",
@@ -57,6 +63,7 @@ const TEAM_MEMBERS = [
   },
   {
     id: "syr2004",
+    uuid: "29dc4bb35820418a89b3213040d332cc",
     role: "成员",
     tag: "地质学家",
     color: "#80cfff",
@@ -65,6 +72,7 @@ const TEAM_MEMBERS = [
   },
   {
     id: "eeee567",
+    uuid: "51cbfe94e0454cd2a5dfc80131ed0a23",
     role: "成员",
     tag: "探险家",
     color: "#80cfff",
@@ -73,6 +81,7 @@ const TEAM_MEMBERS = [
   },
   {
     id: "InRedBaglu",
+    uuid: "da1b3123711540c8b1f3ba17557bdf2b",
     role: "成员",
     tag: "吉祥物",
     color: "#80cfff",
@@ -81,6 +90,7 @@ const TEAM_MEMBERS = [
   },
   {
     id: "yxjygcty123",
+    uuid: "ff9b0fb67ff24f939512c918b9d13ad6",
     role: "成员",
     tag: "探险家",
     color: "#80cfff",
@@ -89,6 +99,7 @@ const TEAM_MEMBERS = [
   },
   {
     id: "Zn_0817",
+    uuid: "2dceb3a5f54f4d49a3a02ca80cf9b74b",
     role: "成员",
     tag: "建筑师",
     color: "#80cfff",
