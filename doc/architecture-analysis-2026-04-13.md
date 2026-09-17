@@ -1,7 +1,10 @@
 # 博客项目架构分析报告
 
 > **分析日期**: 2026-04-13
-> **最后更新**: 2026-05-25（#3.4 已修复、#8.2 #3.2 #3.3 #2.1 已修复、#10.2 同步关闭、#1.5 #1.6 已忽略、#3.5 新增亮暗系统遗留问题、§3.4 勘误：`_variables.styl` → `_variables.styl` + `_tokens.styl` 拆分、#3.5.1 已修复）
+> **最后更新**: 2026-09-17（全面复核：新增 §5.5、重排 §13、补充 §16；更正 §1.1/§1.5/§5.1/§5.2/§5.4/§8.3/§9.1/§12.2/§12.4/§14.1.3/§14.4.1 等过期结论）
+> **复核基线**: 工作区 `2410a83`（2026-09-11）。本地分支落后 `origin/main` 13 个提交，差异仅为文章/静态页数据与 `pages.yml` 手动触发按钮，主题与站点架构代码未变，本文结论对两者均适用。
+> **历史更新**: 2026-05-25（#3.4、#8.2、#3.2、#3.3、#2.1 已修复；#10.2 同步关闭；#1.5、#1.6 已忽略；#3.5 新增亮暗系统遗留问题；§3.4 勘误：`_variables.styl` → `_variables.styl` + `_tokens.styl` 拆分；#3.5.1 已修复）
+> **本次复核摘要**: 见 §16，优先级重排见 §13。核心结论：图片体积、搜索索引 eager load、KaTeX `allpost`、外部字体与死依赖是当前最值得处理的性能问题；permalink 扁平化、`category_map` 数据化、`ayeria.js` 六模块大拆分经复核后不建议/降级。
 > **分析范围**: 项目整体架构、目录结构、配置体系、主题架构、CI/CD、性能、安全、SEO、可维护性、SOLID 原则
 > **参考基准**: Hexo 官方最佳实践、GitHub Pages 部署惯例、静态站点生成器行业通用规范、SOLID 五原则在非 OOP 场景下的适用标准
 > **前置审查**: 本报告基于 [2026-03-28 审查报告](archive/audit-report-2026-03-28.md) 的修复成果，不重复已关闭问题，仅关注架构层面
@@ -11,32 +14,31 @@
 ## 总评
 
 
-| 维度    | 评分    | 说明                                                  |
+| 维度    | 评分    | 说明（2026-09-17 复核） |
 | ----- | ----- | --------------------------------------------------- |
-| 目录结构  | ★★★☆☆ | Hexo 标准骨架完整，但根目录存在非标准文件，`source/_drafts/` 仍混有非 Markdown 文件 |
-| 配置体系  | ★★★★☆ | 分层配置清晰（`_config.yml` + `_config.ayeria.yml`），少数配置项可优化 |
-| 主题架构  | ★★★★☆ | 样式系统已全面重构为模块化 Stylus partials，主要遗留问题为构建产物仍提交仓库 |
-| CI/CD | ★★★★☆ | GitHub Actions 流程规范，缺少质量门禁                          |
-| 性能    | ★★★☆☆ | 存在无条件加载资源、字体加载策略欠佳等问题                               |
-| 安全    | ★★★★☆ | 已修复 OAuth 泄露，仍有少量风险点                                |
-| SEO   | ★★☆☆☆ | 缺少 Sitemap、RSS、robots.txt 等基础设施                     |
-| 可维护性  | ★★★☆☆ | 根目录调试脚本增多，缺乏自动化质量检查                                  |
-| SOLID 原则 | ★★★☆☆ | 模板/样式体系遵循良好，客户端 JS 和部分模板存在 SRP/DIP 违规 |
-
+| 目录结构  | ★★★☆☆ | Hexo 骨架完整；根目录仍有调试脚本与 `themes/.gitkeep`，`source/_drafts/` 混有 42 个非标准文件，`source/test/` 仍会进入生产输出 |
+| 配置体系  | ★★★★☆ | 分层配置清晰；`skip_render` 已扩充但漏掉 `test/**`；主题默认配置缺失（只剩 `_config.yml.old`），对主题独立复用/升级有影响 |
+| 主题架构  | ★★★☆☆ | 样式模块化与构建产物忽略已完成；主要问题变为：`ayeria.js` 单体、主题无锁文件/默认配置、页面资源加载未按需化 |
+| CI/CD | ★★★☆☆ | 部署流程规范且包含主题构建；但依赖安装不可复现、缓存 key 实际为常量、Dependabot 未覆盖主题（§8.3/§10.3） |
+| 性能    | ★★☆☆☆ | 图片未优化（目录 29.7MB、单篇文章 22MB）、全文搜索索引 eager load、KaTeX/PhotoSwipe/clipboard/字体等每页加载；详见 §5.4/§5.5 |
+| 安全    | ★★★★☆ | OAuth 泄露已修复；仍有 lock 默认密码、51.la 默认追踪、剩余 CDN 资源无 SRI |
+| SEO   | ★★☆☆☆ | 仍缺 Sitemap、robots.txt、Open Graph/Twitter Card；旧版 URL 扁平化建议已撤回（§2.3） |
+| 可维护性  | ★★★☆☆ | 主题文档/构建工具链陈旧、主题默认配置缺失、根目录调试脚本未归置；改进点已明确 |
+| SOLID 原则 | ★★★☆☆ | 模板/样式拆分良好；`ayeria.js` 单体仍是主要问题，但完整拆分收益以维护性为主，优先级已下调（§15/16） |
 
 ---
 
 ## 一、目录结构
 
-### ~~1.1 （已修复）根目录存在非标准目录~~
+### 1.1 根目录非标准目录已移除，但 `source/_drafts/` 语义仍不纯（部分遗留）
 
-~~**位置**: 项目根目录~~
+**位置**: `source/_drafts/`
 
-~~**原问题**: `文章模板暂存处/` 目录位于项目根目录，内含未发布的 Markdown 草稿和无关文件（如 `哲学.py`、`编剧.md`、`生产资料.md`）。~~
+**原问题**: `文章模板暂存处/` 目录位于项目根目录，内含未发布的 Markdown 草稿和无关文件（如 `哲学.py`、`编剧.md`、`生产资料.md`）。
 
-~~**修复情况**: `文章模板暂存处/` 目录已从根目录移除，相关内容迁移至 `source/_drafts/`，符合 Hexo 草稿约定。~~ 但 `source/_drafts/` 中仍残留不符合 Hexo 草稿规范的文件：其中 `哲学.py` 为非 Markdown 文件，`生产资料.md`、`编剧.md`、`丝路创意文档.md`、`漂海录创意文档.md` 等虽为 Markdown 但缺少 Hexo 前置信息（front-matter），不会被 Hexo 构建。这些文件增加了仓库的认知负担，不符合 `_drafts/` 目录作为文章草稿区的语义。
+**当前状态（2026-09-17 复核）**: 根目录的 `文章模板暂存处/` 已移除，相关内容迁入 `source/_drafts/` 。但 `source/_drafts/` 仍有 42 个文件（约 326KB），其中 `哲学.py` 为非 Markdown 文件，另有 16 个 Markdown 文件（`ideas.md`、`生产资料.md`、`编剧.md`、`丝路创意文档.md` 等）缺少 Hexo front-matter，不会被构建。它们占用仓库篇幅，并稀释 `_drafts/` 作为文章草稿区的语义。
 
-**建议**: 将 `哲学.py` 等非 Markdown 文件移出 `_drafts/`，缺少 front-matter 的 `.md` 文件若无需发布则归入 `doc/drafts/`。
+**建议**: 将 `哲学.py` 等非文章文件移出 `source/_drafts/`（例如 `doc/drafts/` 或 `tools/notes/`）；没有发布计划的 Markdown 归入 `doc/drafts/` 或补齐 front-matter。优先级低，可在下次批量整理草稿时顺手完成。
 
 ### ~~1.2 （已修复）残留配置文件~~
 
@@ -65,6 +67,8 @@
 
 **建议**: 将 `source/test/` 加入 `_config.yml` 的 `skip_render`。
 
+> **2026-09-17 复核**：`source/test/` 仍未加入 `skip_render`，问题依然存在。此后 `skip_render` 新增了 `DDoS-Test-Lab/**` 与 `poetry-stats/**`，但仍未包含 `test/**`；`source/water/water.html` 也未列入。建议统一审查所有独立页面目录（至少 `test/**`），避免演示页进入生产输出与搜索引擎抓取范围。
+
 ### ~~1.5 （已忽略）图片文件名使用中文~~
 
 ~~**位置**: `source/images/` 下多个文件，如 `丹凤门.jpg`、`京都八坂神社西门.webp`、`伪史论.jpeg` 等~~
@@ -77,7 +81,7 @@
 
 ~~**建议**: 将图片文件名统一为英文或拼音，在 Markdown 中更新引用路径。~~
 
-~~> **已忽略（2026-05-25）**：当前图片文件数量有限，中文文件名暂未造成实际问题。如未来图片数量增长或出现兼容性问题时再重新评估。~~
+> **2026-09-17 复核更正**：原判据图片数量有限已不成立`source/images/` 现有 50 个文件、约 29.7MB，其中约 21 个中文文件名。中文文件名仍不构成功能性阻塞，维持低优先级；但如果执行 5.4 的图片批量优化，建议顺带改为 ASCII/拼音命名，以改善 URL 可读性、分享和命令行/构建工具兼容性。
 
 ### ~~1.6 （已忽略）主题目录内遗留备份文件~~
 
@@ -119,18 +123,15 @@
 
 **建议**: 启用 `post_asset_folder: true`，Hexo 会在创建文章时自动生成同名文件夹，使用 `![img](image.png)` 相对路径引用。对于已有文章，可逐步迁移。
 
-### 2.3 日期型永久链接层级过深
+> **2026-09-17 复核**：维持可选、不紧急判断。`post_asset_folder: true` 对已有 50 个全局图片没有帮助，反而增加迁移与相对路径风险；`source/_drafts/2026-09-07-pure-latex-post-support-options.md` 也明确建议不应仅为了 LaTeX 文章全局开启。只有文章专属图片数量显著增长时再评估。
 
-**位置**: `_config.yml` — `permalink: :year/:month/:day/:title/`
+### 2.3 日期型永久链接层级过深（2026-09-17 复核：不建议修改）
 
-**问题**: 生成类似 `/2025/10/02/how-to-use-hexo/` 的 URL，层级达 4 层。行业趋势是更扁平的 URL 结构：
+**位置**: `_config.yml`  `permalink: :year/:month/:day/:title/`
 
-- 不利于 SEO（搜索引擎偏好浅层 URL）
-- URL 过长，不利于分享
+**问题**: 生成类似 `/2025/10/02/how-to-use-hexo/` 的 URL，层级达 4 层。旧报告认为行业趋势是更扁平的 URL，不利于 SEO 和分享。
 
-**建议**: 考虑使用 `:year/:title/` 或 `:title/` 等更简洁的格式。修改后需设置重定向以避免旧链接 404。
-
-> **⚑ 与 §7.4 协调**：§2.3（permalink 层级）与 §7.4（trailing_index/html URL 后缀）共同决定站点最终 URL 形态。若计划同时处理，应统一规划重定向规则；若分步处理，建议先完成本节（permalink 结构）再处理 §7.4（后缀），以避免两次变更产生冲突。
+**复核结论（2026-09-17）**: **不建议实施**。GitHub Pages 是纯静态托管，没有服务端重定向；更换 permalink 结构会让现有全部文章 URL 404，需要为每篇旧链接生成 HTML meta refresh 跳转页或保留旧路径副本，改造成本与风险都很高。日期型 URL 对博客是常见且稳定的结构，旧报告所称搜索引擎偏好更浅 URL缺乏足以支撑全站迁移风险的证据。保留现状；如果未来确实要做，必须先产出完整重定向方案并一次性执行。
 
 ### 2.4 RSS 订阅未配置
 
@@ -162,7 +163,7 @@
 
 ~~**修复情况**: 已于 commit `92eb855` 完成全面重构。`custom.styl` 现仅 17 行，作为面向站点用户的覆盖样式入口（空白模板，附使用示例注释）。原有的全部样式逻辑已按功能拆分至 `source-src/css/_partial/` 下的 29 个独立 Stylus partial 文件（`article.styl`、`reward.styl`、`search.styl`、`highlight.styl` 等），通过 `style.styl` 统一 import，经 Rollup 构建输出。~~
 
-**遗留事项**: `source/css/` 下仍有 `ayeria-layout.styl` 和 `clipboard.styl` 两个独立 Stylus 文件直接被 `head.ejs` 引用，未纳入 Rollup 构建管线（作为独立 CSS 输出）。这是有意的架构选择（避免与 `dist/main.css` 合并），但需在主题文档中说明。
+**遗留事项（2026-09-17 复核更正）**: `source/css/` 下仍有 `ayeria-layout.styl`（由 `head.ejs` 引用）和 `clipboard.styl`（由 `after-footer.ejs` 在 `copy_btn` 开启时引用）两个独立 Stylus 文件未纳入 Rollup 管线。这是有意的分离（避免与 `dist/main.css` 合并），当前功能正常；建议在主题 README/维护文档中说明，不需要为统一管线重构。`custom.styl` 仍为 17 行，`source-src/css/_partial/` 仍为 29 个文件。
 
 ### ~~3.2 （已修复）主题构建产物提交到仓库~~
 
@@ -183,6 +184,8 @@
 本地开发时，修改 `source-src/` 后仍需手动执行 `cd themes/ayeria && npm run build`。后续可考虑为 `hexo server` 添加主题 watch 自动构建的脚本。
 
 ~~> **⚑ 前置依赖 §8.2**：本修复以 CI 主题构建就位为前提。§8.2 未完成前不可移除 Git 中的构建产物。~~
+
+> **2026-09-17 复核**：结论仍成立。`source/dist/` 未跟踪且 CI 会构建主题；补充：新克隆仓库中没有 `source/dist/`，本地 `hexo server/generate` 前必须先构建主题。这不是缺陷，但应在 README 或根 `package.json` 脚本中说明。主题无锁文件导致的构建不可复现问题见 §8.3/§10.3。
 
 ### ~~3.4 （已修复）暗色模式实现架构~~
 
@@ -296,6 +299,8 @@
 
 ~~**问题**：`_tokens.styl` 已建立"暗色值 = Stylus 变量"的规范（`dark-bg`、`dark-text` 等），但上述组件文件中各自的 `body.darkmode { --component-*: #xxx }` 块仍使用裸 hex 值，与全局令牌文件风格不一致。这些值是组件私有的（如 `--search-bg`、`--reward-border`），不属于全局 token，是否抽成 Stylus 变量取决于是否在多处引用。~~
 
+> **2026-09-17 复核**：问题比旧报告更严重。Google Analytics、百度统计、CNZZ、不蒜子当前全部关闭，51.la 却是无条件加载且无法通过配置关闭，因此它是本站唯一实际在线的第三方统计；这既是 DIP 违规，也是默认追踪行为（5.5.5/12.4）。应优先配置化或删除，而不是仅更换 ID。
+
 ~~**建议**：若某个组件级暗色值在两处以上使用，抽为 Stylus 变量；单次使用的裸 hex 可保留现状，避免为抽象而抽象。~~
 
 **修复情况（2026-05-25）**：逐文件分析各裸 hex 值的语义归属，凡与 `_tokens.styl` 中已有 Stylus 变量服务于同一设计意图的颜色，替换为变量引用；确属组件私有的（如 `friends.styl` 的 `rgba` 透明度值、`broadcast.styl` 的 `#ff9fb0` 粉色强调色、`highlight.styl` 的 VS Code 主题色板）保留原样。具体变更：
@@ -330,6 +335,8 @@
 ```
 
 此修改成本极低（两行），可消除"OS 亮色 + 首次访问 → 暗色博客"的体验断裂。
+
+> **2026-09-17 复核**：仍未实现；当前 `layout.ejs` 第 4-8 行只处理 `localStorage === '0'`。建议保留本节方案（成本两行），优先级中低：本站若以中国大陆用户为主，系统亮色偏好用户首次访问会看到暗色站点，属于体验不一致而非功能错误。
 
 #### 3.5.3 仅支持二态切换，无"跟随系统"选项
 
@@ -426,35 +433,31 @@
 
 ### 5.1 jQuery 在每个页面无条件加载
 
-**位置**: `themes/ayeria/layout/_partial/after-footer.ejs` — 第 1 行
+**位置**: `themes/ayeria/layout/_partial/after-footer.ejs`  第 1 行
 
-**问题**: `jquery-3.6.0.min.js`（约 90KB minified）在每个页面无条件加载。jQuery 在现代前端中已非必需，且该主题中 jQuery 的实际使用场景有限（modal、justifiedGallery 等插件依赖）。
+**问题**: `jquery-3.6.0.min.js`（主题本地自托管，89,503 字节，约 30KB gzip）在每个页面无条件加载。旧报告称实际使用场景有限（modal、justifiedGallery 等插件依赖），此表述不准确：`source-src/js/ayeria.js` 整个 IIFE 以 `jQuery` 为运行前提，搜索、返回顶部、移动端导航、打赏弹窗、暗色模式、懒加载初始化等 13 项功能全部依赖 `$`，clipboard 内联代码也依赖 `$`。jQuery 不是少数插件的依赖，而是当前前端架构的运行时基础。
 
-**建议**:
+**建议（2026-09-17 复核后修订）**:
 
-- 短期：为 jQuery 及其依赖插件添加 `defer` 属性
-- 中期：评估是否可用原生 JS 替代 jQuery 依赖
-- 长期：移除 jQuery，使用原生 DOM API 或轻量级替代库
+- `defer`：收益有限。脚本本就在 `</body>` 前，解析阻塞窗口很小；给 jQuery 和 `dist/main.js` 都加 `defer` 只能略微提前 `DOMContentLoaded`，不减少下载量。不建议把它当作主要优化。
+- 更有价值的是先做 5.2/5.5 的按需资源裁剪（删除死依赖、搜索索引延迟加载、KaTeX 按页加载），这些不需要触碰 jQuery 架构即可显著降低首屏成本。
+- 移除 jQuery 需要重写 `ayeria.js` 的全部 DOM 操作，工程量中等偏高，且没有页面级性能之外的额外收益。建议在 15 的功能重构中逐模块替换，而不是现在专门立项；不作为本轮优先事项。
 
-> **⚑ 顺序约束**：中/长期"移除 jQuery"方向，建议在 §15（`ayeria.js` 模块化重构）完成后再推进。模块化后各功能块相互隔离，可逐模块替换 jQuery 调用，成本显著低于在单体文件中整体替换。短期 `defer` 改造无此约束，可提前独立执行。
+### 5.2 jquery-modal、justifiedGallery、lazyload 无条件加载
 
-### 5.2 jquery-modal 和 justifiedGallery 无条件加载
+**位置**: `themes/ayeria/layout/_partial/after-footer.ejs`  第 2、22-24 行
 
-**位置**: `themes/ayeria/layout/_partial/after-footer.ejs` — 第 22-24 行
+**2026-09-17 复核结论（旧报告的条件判断有误）**:
 
-**问题**: `jquery-modal`（JS + CSS）和 `justifiedGallery` 在每个页面加载，但仅在包含图片画廊的文章页中使用。
+| 资源 | 当前加载 | 实际使用 | 结论 |
+|------|---------|---------|------|
+| `jquery-modal` JS + CSS（staticfile CDN） | 所有页面无条件 | 全仓库检索 `jquery-modal`、`.modal(`、`rel="modal:open"` 只命中加载代码本身，没有任何调用点 | **死依赖，直接删除**（2 个外部请求/页） |
+| `justifiedGallery` JS（staticfile CDN） | 所有页面无条件 | 仅 `post/justifiedGallery.ejs` 在 `post.albums` 非空时渲染 `#gallery`；当前 0 篇文章使用 `albums` | 随 `#gallery` 一起按需加载；建议把 `<script>` 和初始化移入该 partial，而不是在 `after-footer.ejs` 里用 `page.*` 条件判断 |
+| `lazyload` JS（本地 4.2KB）+ `$("img.lazy")` 初始化 | 所有页面无条件 | 仅未被任何模板引用的 `post/albums.ejs` 使用 `class="lazy"`；现有文章 0 处 `lazy`、0 处 `data-original` | 当前为死代码；要么删除 `albums.ejs` 与 lazyload，要么把文章图片改为懒加载（推荐后者，见 §5.4） |
 
-**建议**: 添加条件判断，仅在文章页且文章包含画廊标记时加载：
+旧版建议的条件 `post.photos || post.gallery` 与实际标记不符：`#gallery` 由 `post.albums` 生成，`post.photos` 生成的是 `.article-gallery`，且 `after-footer.ejs` 的上下文是 `page` 而不是文章局部变量 `post`。按旧条件实施会导致需要它的页面不加载、不需要的页面仍加载。正确做法是让资源与使用它的 partial 共址。
 
-```ejs
-<% if (!index && (post.photos || post.gallery)) { %>
-  <script src="...jquery.modal.min.js"></script>
-  <link rel="stylesheet" href="...jquery.modal.min.css" />
-  <script src="...jquery.justifiedGallery.min.js"></script>
-<% } %>
-```
-
-> **⚑ 与 §14.4 重复；覆盖于 §15**：本条目与 §14.4（ISP 违规审查）描述同一问题。§15.2 的 `ayeria.js` 模块化重构方案已统一规划 justifiedGallery 初始化的迁移（移入 `after-footer.ejs` 并添加页面类型条件判断）。建议以 §15 方案为主入口实施，不单独修复本条目。
+> **与 §14.4/§15 的关系**：本节与 §14.4.1 是同一问题；§15 模块化方案不是修复本问题的前提。jquery-modal 删除、justifiedGallery/lazyload 按需化可独立先行，收益明确，成本低于整体拆分。
 
 ### 5.3 Google Fonts 加载策略欠佳
 
@@ -476,16 +479,130 @@
 
 > **⚑ 与 §12.3 合并**：§12.3 是本节的扩展分析，针对中国大陆用户场景提供了更完整的系统字体栈方案及第三方镜像可用性评估。修复时应以 §12.3 的方案为基准实施，而非仅参考本节。
 
-### 5.4 缺少图片优化管线
+> **2026-09-17 复核**：维持移除/缩减字体的结论，并补充两点更正：
+> - `display=swap` 只影响字体文件下载完成前使用回退字体，不能避免 `fonts.font.im` 的 CSS 请求阻塞首次渲染；在中国大陆网络下，该外部样式表仍是关键路径单点。
+> - 当前加载 Noto Serif SC 400/700 + Noto Sans SC 300/400 共 4 个字重；中文 WebFont 的实际下载量取决于页面用字与字符子集，可能达到数百 KB 至 MB 级。
+>
+> **建议优先级上调为高**：优先改用系统中文字体栈（正文衬线可用 `Source Han Serif SC`/`Songti SC`/`SimSun`，界面/代码使用系统 sans/mono），或至少减到 1-2 个字重并自托管子集。移除 WebFont 前必须在 Windows/macOS/iOS/Android 上逐项验证字体栈，不能只依赖当前包含 `Noto Serif SC` 的列表，否则 Windows 可能回退到不理想的默认衬线字体。
 
-**问题**: 项目中没有图片压缩、格式转换或响应式图片的自动化流程。`source/images/` 下同时存在 `.jpg`、`.png`、`.webp` 格式，但无统一规范。
+### 5.4 图片资源未优化（2026-09-17 复核：由低优先级上调为高优先级）
+
+**位置**: `source/images/`、`source/mc-server/img/`、`source/waifu/img/` 及各文章中的 Markdown 图片引用
+
+**实测规模（2026-09-17）**:
+
+- `source/images/` 共 50 个文件、29,737,111 字节（约 29.7MB）。最大文件为 `kuixingmen.jpg` 5,016KB（3840×2160）、`xian.png` 4,236KB（2048×1371）、`栖云堂.png` 3,222KB（2331×1163）、`background.jpg` 2,015KB、`滕王阁.jpeg` 1,572KB。
+- 最重的单篇文章 `source/_posts/2025-10-15-mc-cn-building.md` 引用 25 张标准 Markdown 图片，原始体积合计 21,956,558 字节（约 22.0MB）；这些图片以普通 `<img>` 输出，没有 `loading="lazy"`，浏览器会立即全部下载（其中包含 5MB、4.2MB、3.2MB 三张巨图）。
+- 主题的 `lazyload` 初始化和 `class="lazy"` 模板目前是死代码（见 §5.2），并未给文章图片提供任何懒加载。
+
+**收益实测（本机 ffmpeg/libwebp，仅实验，未改动源文件）**: 对最大的 5 张图按最长边 1920px + WebP quality 78转码：
+
+| 文件 | 原始 | 转码后 | 比例 |
+|------|------|--------|------|
+| kuixingmen.jpg | 5,016KB | 322KB | 6.4% |
+| xian.png | 4,236KB | 272KB | 6.4% |
+| 栖云堂.png | 3,222KB | 38KB | 1.2% |
+| 滕王阁.jpeg | 1,572KB | 221KB | 14.0% |
+| background.jpg | 2,015KB | 112KB | 5.6% |
+
+五张合计 16,447,044 字节 → 约 965KB（约 6%）。据此保守估计，全目录在画质可接受的前提下可减少 80% 以上；重文章页可从约 22MB 降到 1-2MB 量级。对以中国大陆移动网络读者为主的站点，这是当前最大的单页体验瓶颈，优先级高于 jQuery 与字体子集外的多数议题。
 
 **建议**:
 
-- 在 CI 中添加图片压缩步骤（如 `imagemin`）
-- 统一使用 WebP 格式（保留 JPG 作为 fallback）
-- 在文章模板中使用 `<picture>` 元素实现格式回退
-- 为文章图片添加 `loading="lazy"` 和 `decoding="async"` 属性
+1. **立即执行一次存量图片优化**：批处理 `source/images/` 与文章图片，统一限制最长边（正文图约 1600-1920px，封面/背景单独评估），照片转 WebP、需要透明或线条图的 PNG 单独压缩；保持文件名与引用路径不变，把编码优化和内容重命名拆开，避免一次 diff 同时承载两类变更。工具可用 `sharp`/`imagemin`/`cwebp` 或本机 ffmpeg；建议脚本化并记录参数。
+2. **为文章图片添加原生懒加载**：通过 Hexo `after_post_render` 过滤器给 `post.content` 中的 `<img>` 注入 `loading="lazy"` 与 `decoding="async"`（首图可保留 eager，以保护 LCP）。这比恢复旧的 `lazyload` jQuery 插件更轻、更稳。响应式 `srcset`/`sizes` 可作为后续阶段，不必与本次压缩捆绑。
+3. **为持续新增图片设规则**：在 `doc/blog-post-format-standard.md` 中写明尺寸/格式上限，并提供 `scripts/` 下的压缩脚本。当前 29.7MB 存量是一次性问题，是否接入 CI 取决于新增图片频率；CI 图片压缩应是后续增量措施，而不是这次优化的前置条件。
+4. **可选**：若执行 1.5 的批量重命名，与本次图片优化合并为同一次引用更新，避免两次大范围改动。
+
+### 5.5 页面级资源按需化（2026-09-17 复核新增）
+
+**背景**: 旧报告分节审查了 jQuery、字体、modal 等单点，但没有给出每个页面实际加载了什么、是否真的需要的完整清单，因此遗漏了比这些单点更大的问题。下表按当前模板条件逐项核对（默认配置）：
+
+| 资源 | 当前加载条件 | 默认配置下的实际行为 | 每页需求评估 |
+|------|-------------|-------------------|-------------|
+| `dist/main.css` / `dist/main.js` | 无条件 | 站点核心样式与脚本。本机近似构建：`main.js` minified 约 9.2KB；`style.styl` 直接输出约 68.7KB（未 cssnano/autoprefix） | 必需 |
+| `jquery-3.6.0.min.js` | 无条件 | 所有交互的运行时，89,503 字节 | 当前架构必需，见 §5.1 |
+| `fonts.font.im` CSS（4 字重） | 无条件，位于 `<head>` | 阻塞渲染的外部关键路径 | 非必需，建议系统字体栈，见 §5.3/§12.3 |
+| `pace.min.js`（staticfile CDN） | `progressBar: true`（默认） | `<head>` 同步外部脚本 | 功能可选；若保留应自托管 |
+| `search.js` + `search.xml` | 只要页面存在 `.local-search` | 侧边栏在所有页面渲染 `.local-search`，因此**首次进入任意页面即下载全文索引并建立搜索函数** | 改为首次交互时加载，见 §5.5.1 |
+| `jquery-modal` JS+CSS | 无条件 | 全仓库无任何调用点 | 删除，见 §5.2 |
+| `justifiedGallery` JS | 无条件 | 仅 `post.albums` 页面需要；当前 0 篇文章使用 | 随内容按需加载，见 §5.2 |
+| `lazyload.min.js` | 无条件 | 模板中无有效使用点 | 删除或改原生 `loading="lazy"`，见 §5.2/§5.4 |
+| `viewer.ejs` PhotoSwipe JS2 + CSS2 | `image_viewer: true`（默认） | 所有页面加载，并在页尾扫描图片 | 仅在含图片页面加载或首次点击时加载，见 §5.5.4 |
+| `katex` CSS+JS2 | `katex.enable && (allpost \|\| page.math)`；当前 `allpost: true` | **所有页面加载并扫描整个 body 渲染公式** | 改为仅公式文章加载，见 §5.5.3 |
+| `clipboard.min.js` | `copy_btn: true`（默认） | 所有页面加载并执行复制按钮初始化 | 仅含代码块的页面需要，见 §5.5.4 |
+| `/data/random-sentences.txt` | 页脚模块存在（默认所有页面） | 每个页面 `fetch` 97,672 字节（gzip 53,223 字节，2,613 行） | 缓存或裁剪后按需加载，见 §5.5.4 |
+| 51.la SDK | 打包进 `ayeria.js`，无条件 | 所有页面访问 `sdk.51.la`，ID 硬编码 | 配置化并可关闭，见 §5.5.5 |
+
+> 注：本地体积由本机离线文件/近似构建测量；外部 CDN 资源未联网实测，以无条件加载这一可由代码验证的事实为准。完整清单会随配置变化，建议在主题 README 中维护。
+
+#### 5.5.1 全文搜索索引在首屏加载（高优先级）
+
+`source-src/js/ayeria.js` 第 34-39 行：
+
+```js
+// Not recommended in mobile, /search.xml is actually large.
+if ($(".local-search").length) {
+  $.getScript("/js/search.js", function () {
+    searchFunc("/search.xml", "local-search-input", "local-search-result");
+  });
+}
+```
+
+`_partial/sidebar.ejs` 在每个页面都渲染 `.local-search`，所以这个 `if` 永远成立。`_config.yml` 中 `hexo-generator-searchdb` 配置为 `content: true`，`search.xml` 包含全部文章（当前 53 篇、源 Markdown 约 399KB）的渲染后 HTML；代码注释本身已承认它 actually large。结果是：无论用户是否使用搜索，每个页面首屏都会下载完整全文索引，随后 `search.js` 为所有文章建立数组。
+
+**建议**:
+
+- 移除 `ayeria.js` 中的 eager `getScript/searchFunc` 调用；首次点击搜索按钮（或首次聚焦输入框）时再加载 `search.js` 并请求索引。必要时可在 `mouseenter`/`requestIdleCallback` 中做低优先级预取，但不要默认下载。
+- 搜索路径不再硬编码：在 `post/search.ejs` 上输出 `data-xml="<%- url_for(config.search.path || 'search.xml') %>"` 与 `data-script="<%- url_for('/js/search.js') %>"`，搜索模块读取它们。这同时修复 §14.9 的硬编码问题与子路径部署兼容性。
+- 第二阶段可选：在 `after_generate` 过滤器中把 `search.xml` 的 `<content>` 预先剥离 HTML 标签，生成纯文本索引，降低文件体积和客户端解析成本。先做交互时加载即可获得大部分收益。
+
+#### 5.5.2 搜索脚本的算法与正确性问题（高优先级，与 5.5.1 一并修复）
+
+`themes/ayeria/source/js/search.js` 是 2015 年的旧实现，存在三个可复现问题：
+
+1. **用户输入直接进入正则导致搜索崩溃**：高亮时执行 `new RegExp(keyword, "gi")`。搜索词包含正则元字符时会抛异常并中断搜索。Node 实测：`c++`  `Invalid regular expression: /c++/gi: Nothing to repeat`；`(`、`[`、`*` 同样抛错。对一个会写 C/C++ 与数学内容的站点，这是功能性 bug。
+2. **每次按键重复做预处理**：输入事件里对每篇文章执行 `replace(/<[^>]+>/g, "")` 并扫描全文，命中后还再 strip 一次；这些 HTML 剥离与输入无关，完全可以预计算。本站规模下桌面端约 0.5ms/键，移动端会放大数倍，并产生大量临时字符串。
+3. **摘要截取参数误用**：`content.substr(start, end)` 的第二个参数是长度而非结束下标，匹配位置靠后的结果摘要过长。应改为 `substr(start, end - start)`。
+
+**建议**：XML 解析完成后一次性生成 `titleLower` 与 `plainTextLower`；输入处理加 100-150ms 防抖；高亮前用 `keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")` 转义；修正摘要长度。改动集中在单个文件，收益是搜索可靠性和移动端输入流畅度，不改变搜索语义。
+
+#### 5.5.3 KaTeX 每页加载（高优先级）
+
+`_config.ayeria.yml`：
+
+```yaml
+katex:
+  enable: true
+  allpost: true
+  copy_tex: false
+```
+
+`after-footer.ejs` 在 `theme.katex.enable` 为真时引入 `partial('katex')`，而 `katex.ejs` 内部条件是 `allpost || page.math`。因此 `allpost: true` 让每一页都从 staticfile CDN 加载 `katex.min.css`、`katex.min.js`、`auto-render.min.js`，并在 `DOMContentLoaded` 时对 `document.body` 执行公式扫描与渲染。
+
+当前全站仅 3 篇文章含 `$$` 块级公式（`2025-03-20-markdown-latex-guide.md`、`2025-08-26-ahu-mathematical-foundations-of-cyber-security.md`、`2025-10-02-how-to-use-hexo.md`），且这些公式都位于 `<!--more-->` 之后，首页摘要不受影响。
+
+**建议**:
+
+- 将 `allpost` 改为 `false`，给上述 3 篇文章的 front-matter 加 `math: true`。这样约 50 个非公式页面不再请求 KaTeX 资源，也不再执行 body 扫描。
+- **进一步验证**：本站 Markdown 由 `hexo-renderer-markdown-it-katex` 在构建时渲染公式，正文已经输出 KaTeX HTML；客户端 `renderMathInElement` 很可能完全冗余，只有 KaTeX CSS 是显示公式所必需。若用一篇公式文章构建后确认 DOM 已包含 `.katex` 且没有残留 `$...$`，可把 `katex.ejs` 缩减为按需引入 CSS，删除 auto-render JS。该步骤需要构建验证，但收益明确。
+- 这与 `source/_drafts/2026-09-07-pure-latex-post-support-options.md` 的结论一致：该草稿已明确新方案应尽量避免再引入客户端数学运行时。
+
+#### 5.5.4 PhotoSwipe、clipboard、随机句子文本（中优先级）
+
+- **PhotoSwipe 图片查看器**：`viewer.ejs` 在 `image_viewer: true` 时出现在所有页面（`after-footer.ejs` 第 29-31 行），加载 2 个 CSS + 2 个 JS（staticfile CDN），并扫描 `.article-entry img`。建议至少改为当前页面内容含 `<img>` 时才加载；更彻底的做法是把资源和初始化延迟到第一次点击图片时，但这需要把 `viewer_init` 改造成按需加载回调。收益是消除非图片页面的 4 个外部请求。
+- **clipboard.js**：`copy_btn: true` 使 `post/clipboard.ejs` 在所有页面加载 staticfile 的 `clipboard.min.js` 并初始化。建议限定在 `is_post()` 且正文含代码块时；或者改用原生 `navigator.clipboard`，去掉外部依赖。首页、归档页等没有代码复制需求，属于浪费。
+- **随机句子文本**：`use_local_file: true` 时，`random-sentences.js` 在每个含页脚模块的页面 `fetch('/data/random-sentences.txt')`。该文件 97,672 字节（gzip 53,223 字节），共 2,613 行。浏览器缓存可能覆盖同一会话的重复访问，但首次加载和缓存失效后仍会产生可观开销。建议：裁剪到数百行、在 `localStorage` 中缓存文本并在版本键变化时才重新请求、或把精选句子内联进 bundle（需权衡主 JS 体积）。同时把硬编码的 `/data/random-sentences.txt` 改为 `url_for`/配置注入，避免子路径部署失败。
+
+#### 5.5.5 51.la 统计（中优先级，安全/隐私相关）
+
+`ayeria.js` 末尾的 IIFE（第 255-280 行）会在每个页面动态插入 `https://sdk.51.la/js-sdk-pro.min.js`，统计 ID/ck 硬编码为 `JGjrOr2rebvP6q2a`（§14.5.2）。这意味着：
+
+- 即使站点配置中 Google Analytics、百度统计、CNZZ、不蒜子全部关闭，51.la 仍是实际启用且无法通过配置关闭的第三方统计；
+- 每个访客（包括中国大陆以外、不希望被追踪的访客）都会连接第三方域名；
+- 更换统计 ID 必须改源码并重新构建主题。
+
+**建议**：在 `_config.ayeria.yml` 增加 `tracking.la51.enable/id`（或直接删除该统计），参照 `google-analytics.ejs`/`baidu-analytics.ejs` 的条件注入方式。若保留，至少让 ID 来自配置而非源码，并评估隐私说明与加载时机。
 
 ---
 
@@ -515,6 +632,8 @@
 
 > **⚑ 前置影响**：§12.2（核心 CDN 资源自托管）落地后，本条目对已自托管资源的 SRI 要求自动消除。建议在 §12.2 落地范围确定后再处理本条目，可避免为即将自托管的资源做无效 SRI 配置。
 
+> **2026-09-17 复核**：jQuery、lazyload、tocbot、busuanzi、点击特效等已改为主题内自托管，SRI 覆盖范围比旧报告缩小。当前仍需处理的外部资源为 pace、jquery-modal（建议直接删除）、justifiedGallery（按需）、PhotoSwipe、KaTeX、clipboard、fonts.font.im 与 giscus/51.la。先按 5.2/5.5 删除或按需化，再只为剩余外部 CDN 资源补 `integrity`/`crossorigin`。
+
 ### 6.3 网站加密功能安全性不足
 
 **位置**: `_config.ayeria.yml` — `lock` 配置
@@ -522,6 +641,8 @@
 **问题**: 网站加密功能（`lock.enable: false`，当前已关闭）使用前端 JavaScript 实现密码验证。即使启用，密码以明文存储在配置文件中，验证逻辑在客户端执行，任何人查看源码即可绕过。
 
 **建议**: 如果确实需要内容保护，应使用服务端方案。对于 GitHub Pages 静态站点，可考虑使用加密的 HTML 文件（如 `staticrypt` 方案）。当前已关闭此功能，建议从配置和模板中彻底移除相关代码。
+
+> **2026-09-17 复核**：`lock.enable` 仍为 `false`，但 `_config.ayeria.yml` 保留默认密码 `123456`，`_partial/lock.ejs` 也仍在 `layout.ejs` 中无条件 include。前端密码锁本身可被绕过，但保留默认密码会造成改个 enable 就能上线的错觉。建议至少删除默认密码与示例配置，或整段移除模板；若确实需要内容保护，采用构建期加密方案。
 
 ---
 
@@ -565,6 +686,8 @@ Disallow: /resume-en/
 ```
 
 > **⚑ 前置依赖**：§7.1（Sitemap）。robots.txt 中的 `Sitemap: https://kaleidscoper.github.io/sitemap.xml` 字段依赖 §7.1 中已生成并确认的 sitemap.xml 路径，两者应按序完成。
+
+> **2026-09-17 复核**：不建议照抄旧版示例中的 `Disallow: /resume/`。简历页是否需要被搜索引擎收录取决于作者意图（求职场景反而可能希望收录）；应先与 Sitemap 一并明确策略，再决定 disallow 列表。至少应把 `test/` 等演示页排除。
 
 ### 7.3 缺少 Open Graph 和 Twitter Card 元数据
 
@@ -621,26 +744,41 @@ Disallow: /resume-en/
 
 ~~> **⚑ §10.2 同步关闭**：`Build theme` 步骤中的 `npm install` 已安装主题的 `devDependencies`（rollup、autoprefixer 等），§10.2 随之自动修复。~~
 
-### 8.3 缺少部署环境锁定
+### 8.3 依赖安装不可复现（2026-09-17 复核：影响已扩大）
 
-**问题**: `package-lock.json` 虽已提交，但 CI 中使用 `npm install`（而非 `npm ci`），可能产生非确定性构建。
+**位置**: `.github/workflows/pages.yml`、`themes/ayeria/.gitignore`
 
-**建议**: 将 CI 中的 `npm install` 改为 `npm ci`，确保严格按照 `package-lock.json` 安装依赖。
+**原问题**: 根目录使用 `npm install` 而非 `npm ci`，可能产生非确定性构建（旧报告已指出）。
+
+**2026-09-17 复核新增证据**:
+
+1. **主题没有锁文件且被刻意忽略**：`themes/ayeria/.gitignore` 第 7 行忽略 `package-lock.json`。因此 CI 的 `npm install` 每次按 `^` 范围解析最新兼容版本，rollup 及构建插件版本会随发布漂移。
+2. **主题缓存 key 实际上是常量**：缓存 key 为 `${{ runner.OS }}-npm-theme-${{ hashFiles('themes/ayeria/package-lock.json') }}`，但该文件不会出现在 checkout 中；`hashFiles` 返回空字符串，key 恒为 `Linux-npm-theme-`，restore 前缀也相同。依赖变化不会使缓存失效，最早缓存的 `node_modules` 可能被长期复用；一旦缓存被驱逐，重新 `npm install` 又会解析到与缓存中不同的版本，构建结果前后不一致。
+3. **本地 Node 24 构建失败已可复现**：离线安装主题当前依赖后（rollup 2.80、rollup-plugin-styles 3.14.1、其传递依赖 source-map 0.7.6），在 Node 24 下执行 `npm run build` 抛出 `TypeError: Invalid URL`（rollup-plugin-styles → source-map `computeSourceURL`）。CI 使用 Node 20 且缓存了历史依赖，因此目前可能正常，但旧工具链加无锁文件的组合是随时可能爆的构建债。`rollup-plugin-terser@7` 也已在 npm 上标记 deprecated。
+4. **Dependabot 未覆盖主题**：`.github/dependabot.yml` 只有 `directory: "/"`，`themes/ayeria/package.json` 的构建依赖不会收到更新提醒，而主题又通过 CI 参与构建。
+
+**建议**:
+
+1. 从 `themes/ayeria/.gitignore` 移除 `package-lock.json`，在主题目录执行一次 `npm install` 生成锁文件并提交；CI 主题步骤改为 `npm ci`，缓存 key 改为锁文件 hash。
+2. 根目录 `Install Dependencies` 同步改为 `npm ci`（根锁文件已提交）。
+3. 为 `.github/dependabot.yml` 增加 `directory: /themes/ayeria` 的 npm 条目，并按需增加 `github-actions` 生态。
+4. 将主题构建工具链升级到维护中的版本（Rollup 4 + `@rollup/plugin-terser` + 替代 `rollup-plugin-styles` 的方案，或改为 Hexo 自带 Stylus 渲染加独立 JS bundle），并在 Node 20 与 Node 24 上各验证一次。升级前，锁文件加 Node 20 CI 可先止血；升级不是本周必须，但应在计划中明确。
 
 ---
 
 ## 九、可维护性
 
-### 9.1 缺乏代码规范工具
+### 9.1 缺乏代码规范工具（2026-09-17 复核更正）
 
-**问题**: 项目没有配置任何代码规范工具：
+**位置**: 项目根目录、`themes/ayeria/.stylintrc`、`themes/ayeria/package.json`
 
-- 无 `.editorconfig`（统一缩进、换行符等）
-- 无 ESLint（JS 代码检查）
-- 无 Stylelint（CSS/Stylus 代码检查）
-- 无 Prettier（代码格式化）
+**问题（更正）**: 主题目录已有 `.stylintrc` 和 `npm test`（Stylint）脚本，旧报告项目没有配置任何代码规范工具不准确。准确现状是：
 
-**建议**: 至少添加 `.editorconfig` 和 Prettier 配置，确保多人协作时代码风格一致。
+- 根目录没有 `.editorconfig`、ESLint、Prettier；
+- 主题虽有 Stylint 配置，但 CI 从未执行 `npm test`；
+- Stylint 本身已停止维护，主题当前真正有效的语法防线是 Rollup 构建中的 Stylus 编译（能捕获语法错误，但不检查风格/坏味）。
+
+**建议**: 最低成本是添加 `.editorconfig`（统一缩进、换行符、编码）并在 CI 的主题构建步骤后运行一次 `npm run test`。ESLint/Prettier 是否引入，取决于后续 JS/CSS 修改频率与协作人数；不要为了工具齐全同时引入多套职责重叠的格式化工具，以免互相冲突。
 
 ### 9.2 根目录调试脚本积累
 
@@ -676,15 +814,27 @@ Disallow: /resume-en/
 - 监控该包的维护状态
 - 准备备选方案：官方 `hexo-renderer-markdown-it` + 独立 KaTeX 插件
 
+> **2026-09-17 复核**：`package.json` 仍为 `^3.4.4`，`package-lock.json` 锁定 3.4.4；本次离线审查无法核实该包在 npm 上的最新维护状态，因此旧报告仅发布过 3 个版本、已停更应视为待联网复核的外部事实。无论维护状态如何，将范围收紧为精确版本仍是低成本措施；根锁文件已经降低了当前风险，但前提是 CI 改用 `npm ci`（§8.3）。
+
 ### ~~10.2 （已修复，随 §8.2）主题 devDependencies 未在 CI 中安装~~
 
 ~~**位置**: `themes/ayeria/package.json` — `devDependencies`~~
 
 ~~**问题**: 主题的 `devDependencies`（rollup、autoprefixer 等）在 CI 中不会被安装（根目录 `npm install` 不会处理子目录的 `package.json`）。这意味着 CI 无法执行主题构建。~~
 
-~~**建议**: 参见 8.2，在 CI 中显式安装主题依赖并构建。~~
+~~**建议**: 参见 §8.2，在 CI 中显式安装主题依赖并构建。~~
 
 ~~> **已修复（2026-05-25）**：随 §8.2 同步关闭。CI 中 `Build theme` 步骤已包含 `cd themes/ayeria && npm install`，主题 devDependencies 现已在每次 CI 构建中安装。~~
+
+---
+
+### 10.3 主题构建工具链陈旧（2026-09-17 复核新增）
+
+**位置**: `themes/ayeria/package.json`  `rollup@^2.50.2`、`rollup-plugin-styles@^3.14.1`、`rollup-plugin-terser@^7.0.2`、`autoprefixer@^9.8.6`
+
+**问题**: 这些版本均为 2019-2021 年间的工具链，`rollup-plugin-terser` 已被 npm 标记 deprecated；在没有锁文件的情况下，上游传递依赖一旦变化，本地 Node 24 已出现 `TypeError: Invalid URL` 构建失败（§8.3）。这不是代码风格问题，而是构建可复现性与可维护性问题。
+
+**建议**: 与 8.3 一起处理：先提交锁文件并用 `npm ci` 止血，再规划升级到 Rollup 4 + `@rollup/plugin-terser`，或评估改为Hexo 自带 Stylus 渲染 + 独立 JS bundle以减少构建插件数量。升级后必须在 Node 20（CI）和 Node 24（本地）各验证一次。
 
 ---
 
@@ -729,29 +879,31 @@ Disallow: /resume-en/
 
 ### 12.2 第三方 CDN 资源对中国大陆的可用性风险
 
-**现状**: 站点多个功能依赖 `staticfile.org`（360 维护的 CDN）：
+**2026-09-17 复核后的现状**: 旧报告列出 staticfile.org 的 6 项资源；此后的自托管工作完成了一部分，但也新增/遗漏了若干资源。当前第三方 CDN 依赖如下：
 
-| 资源 | 功能 | 当前状态 |
-|------|------|---------|
-| pace.js | 页面顶部进度条 | 已启用 |
-| jquery-modal | 图片画廊弹窗 | 无条件加载 |
-| justifiedGallery | 图片画廊布局 | 无条件加载 |
-| sweetalert2 | 网站加密锁 | 功能已关闭，但代码仍引用 |
-| anime.js | 点击爆炸特效 | 功能已关闭，但代码仍引用 |
-| mermaid | 流程图渲染 | 功能已关闭 |
+| 资源 | 加载位置/条件 | 当前状态 |
+|------|--------------|---------|
+| pace.js | `head.ejs`，`progressBar: true` | **每页同步加载**，建议自托管（体积小） |
+| jquery-modal JS+CSS | `after-footer.ejs`，无条件 | **无任何调用点**，建议直接删除（§5.2） |
+| justifiedGallery | `after-footer.ejs`，无条件 | 仅 `post.albums` 页面需要；当前 0 篇，建议随 partial 按需加载 |
+| PhotoSwipe CSS2 + JS2 | `viewer.ejs`，`image_viewer: true` | 所有页面加载，建议按页/按需（§5.5.4） |
+| KaTeX CSS+JS2 | `katex.ejs`，当前 `allpost: true` | 所有页面加载，建议 `allpost: false` + `math: true`（§5.5.3） |
+| clipboard.js | `post/clipboard.ejs`，`copy_btn: true` | 所有页面加载，建议按页/自托管（§5.5.4） |
+| sweetalert2 | `head.ejs`，`lock.enable` 为真时 | 功能关闭，条件已包裹；建议随 lock 代码一起清理（§6.3） |
+| anime.js | `after-footer.ejs`，`click_effect === 2` 时 | 功能关闭，条件已包裹；非当前风险 |
+| mermaid | `head.ejs`，`mermaid.enable` 为真时 | 功能关闭，条件已包裹 |
+| MathJax | `mathjax` 为真时 | 功能关闭 |
+| Noto WebFont CSS | `head.ejs`，无条件 | 独立的关键路径问题，见 §5.3/§12.3 |
+| giscus client.js | 文章页评论 | 功能固有，可接受 |
+| 51.la SDK | `ayeria.js`，无条件 | 不适合归为CDN 可用性，是默认追踪行为，见 §5.5.5 |
 
-**问题**: `staticfile.org` 历史上经历过服务调整。一旦不可用，进度条、图片画廊等功能将静默失败。此外，部分已关闭功能（lock、click_effect、mermaid）的 CDN 引用仍保留在模板中，虽不会被加载，但增加了代码债务。
+**已完成的自托管（值得肯定）**: jQuery 3.6.0、lazyload、tocbot、busuanzi、clickLove/clickBoom、dz 等已从 CDN 迁至主题 `source/js/`；核心交互库的本地化已显著降低外部依赖。
 
-**建议**:
-- 将核心功能依赖（pace.js、jquery-modal、justifiedGallery）自托管至 `themes/ayeria/source/js/`
-- 为自托管不可行的 CDN 资源添加本地 fallback：
-  ```html
-  <script src="https://cdn.staticfile.org/pace/1.2.4/pace.min.js" defer></script>
-  <script>window.Pace||document.write('<script src="/js/pace.min.js"><\/script>')</script>
-  ```
-- 清理已关闭功能的 CDN 引用（sweetalert2、anime.js、mermaid），或将这些引用也包裹在条件判断中
+**建议（更新）**:
 
-> **⚑ 顺序约束（影响 §6.2）**：核心资源（pace.js、jquery-modal、justifiedGallery）自托管完成后，§6.2（CDN 资源缺少 SRI）对这些资源的 SRI 覆盖需求自动消除。建议先实施本节，再评估 §6.2 剩余 CDN 引用的范围，可避免为即将自托管的资源做无效配置。
+1. 先删除/按需化，再谈自托管：jquery-modal 直接删除；justifiedGallery、PhotoSwipe、KaTeX、clipboard 先按页面能力条件加载。
+2. pace.js 体积很小且位于渲染关键路径，优先自托管到主题 `source/js/`，消除 `head.ejs` 的跨境同步请求。
+3. 处理完 §5.5 后，再评估剩余 CDN 是否值得自托管或补 SRI；不要为即将删除/按需化的资源做 SRI（旧报告的顺序约束仍适用，但覆盖范围要按新清单更新）。
 
 ### 12.3 中文字体加载——对中国大陆用户的成本收益分析
 
@@ -774,18 +926,23 @@ Disallow: /resume-en/
 - 系统字体栈对所有地区用户都零开销，海外用户（macOS 苹方 / Windows 微软雅黑 / Linux 思源）同样获得良好体验
 - 如果认为 Web Font 是品牌体验的必要部分，至少减少至 1 个字重，并评估改用 `fonts.googleapis.com` 官方源（中国大陆部分地区可访问）的可行性
 
-### 12.4 缺少面向中国大陆的访问统计分析
+### 12.4 访问统计现状与决策（2026-09-17 复核更正）
 
-**问题**:
-- `google_analytics` 为空 — Google Analytics 在中国大陆被封锁，即使填写也无法收集数据，反而拖慢页面
-- `baidu_analytics` 为空 — 百度统计是中国大陆最常用的站点分析工具
-- `cnzz.enable: false` — 友盟统计也未启用
-- 当前仅不蒜子（busuanzi）提供 PV/UV 计数，不蒜子是个人维护的免费服务，稳定性时有波动，且不提供用户行为分析
+**旧报告的不准确之处**: 旧版称当前仅不蒜子提供 PV/UV 计数。实际代码状态是：
+
+- `busuanzi.enable: false`（不蒜子已关闭；脚本已自托管但不会加载）；
+- `google_analytics`、`baidu_analytics` 为空；
+- `cnzz.enable: false`；
+- **51.la 仍在工作**：`ayeria.js` 末尾无条件注入 `sdk.51.la`，ID 硬编码。
+
+因此当前站点并非没有可用统计，而是唯一实际启用的 51.la 不在配置体系中（详见 §14.5.2 与 §5.5.5）。
 
 **建议**:
-- 如需了解中国大陆用户访问情况，至少启用百度统计（`baidu_analytics` 填入统计 ID）
-- 不蒜子 JS 建议添加 `defer` + 超时 fallback，避免其服务不稳定时阻塞页面渲染
-- 如果出于隐私考量不使用任何分析工具，可在本报告中明确说明决策理由
+
+1. 明确隐私与数据目标：如果不需要统计，删除 51.la 注入代码；如果需要，把它改为 `_config.ayeria.yml` 中的 `tracking.la51.enable/id`，并在隐私说明中披露。
+2. 不建议同时启用 Google Analytics 与百度统计：中国大陆无法正常使用 Google Analytics，只会增加一次失败请求；百度统计是否启用取决于对百度生态的接受度。
+3. 不蒜子脚本已自托管，这是正确的；若未来启用，其 PV/UV 仍由 busuanzi 服务端计数，脚本本地化并不改变外部请求依赖。
+4. 无论采用哪种统计，都不应阻塞渲染；条件加载加 `defer/async` 是底线。
 
 ### 12.5 giscus 评论系统在中国大陆的可用性
 
@@ -797,81 +954,65 @@ Disallow: /resume-en/
 
 ---
 
-## 十三、问题优先级汇总
+## 十三、问题优先级汇总（2026-09-17 复核重排）
 
-> **注**：部分问题之间存在实施顺序约束，已在各问题详情节中以 **⚑ 顺序约束** / **⚑ 前置依赖** / **⚑ 与 X.X 合并** 等方式标注。汇总表不重复展示，实施前请参阅对应详情节。
+> **排序原则（本次复核）**: 只保留能带来可验证性能收益或显著维护成本降低的事项；把让代码更优雅但不改变行为/成本的重构降级为可选。旧版表格中的部分高优先级项（如 permalink 扁平化）经复核后撤下，见 §16.4。状态以 2026-09-17 工作区为准。
 
-### 🔴 高优先级（影响用户体验或站点可发现性）
+### 🔴 高优先级（影响真实用户体验、正确性或默认行为）
 
+| # | 问题 | 类别 | 复核依据 |
+| --- | --- | --- | --- |
+| §5.4 | 图片未优化：目录 29.7MB，单篇文章 22MB 且无懒加载 | 性能/带宽 | 最大 5 张 16.4MB → 实测约 965KB；重文章页可降一个数量级 |
+| §5.5.1 | `search.xml` 全文索引在每个页面首屏 eager load | 性能/架构 | 侧边栏 `.local-search` 永远存在，53 篇文章全文索引随每次首屏下载 |
+| §5.5.2 | 搜索脚本正则崩溃 + 重复计算 + 摘要截取 bug | 正确性/算法 | `c++`、`(`、`[`、`*` 等搜索词必抛异常 |
+| §5.5.3 | KaTeX `allpost: true` 使所有页面加载公式资源并扫描 body | 性能 | 仅 3 篇公式文，其余约 50 个页面白载 |
+| §5.3 / §12.3 | `fonts.font.im` 4 字重外部字体位于渲染关键路径 | 性能 | 跨境外链阻塞首屏；系统字体栈可零成本替代 |
+| §5.2 | `jquery-modal` 死依赖；`justifiedGallery`/`lazyload` 无条件加载 | 性能/维护 | 全仓库无 modal 调用点；0 篇文章使用 albums/lazy |
+| §5.5.5 / §14.5.2 | 51.la 统计无条件加载且 ID 硬编码 | 隐私/性能/配置 | 无法通过配置关闭；所有访客都会连接第三方 |
+| §8.3 | 主题无锁文件、CI 缓存 key 恒为常量、`npm install` 非确定 | CI/可维护性 | 本地 Node 24 构建已复现失败；缓存可能长期复用旧依赖 |
 
-| #   | 问题                              | 类别    |
-| --- | ------------------------------- | ----- |
-| 7.1 | 缺少 Sitemap                      | SEO   |
-| 7.2 | 缺少 robots.txt                   | SEO   |
-| 5.1 | jQuery 每页无条件加载                  | 性能    |
-| 8.3 | CI 使用 `npm install` 而非 `npm ci` | CI/CD |
-| 12.2 | 第三方 CDN 资源可用性风险（staticfile.org）     | 性能/架构 |
-| 12.1 | GitHub Pages 中国大陆访问性能              | 架构/性能 |
-| 14.1 | `ayeria.js` 单文件承担 13 种职责       | SOLID/SRP |
-| 14.4 | jquery-modal / justifiedGallery 无条件加载 | SOLID/ISP |
-| 14.5 | 51.la 统计 ID 硬编码在 JS 源码中       | SOLID/DIP |
+### 🟡 中优先级（影响可维护性、部分页面性能或站点可发现性）
 
+| # | 问题 | 类别 | 复核说明 |
+| --- | --- | --- | --- |
+| §5.5.4 | PhotoSwipe、clipboard.js、随机句子 97KB 文本按页/按需化 | 性能 | 仅影响非图片/非代码页与首访带宽，收益可观但低于上表 |
+| §3.5.2 | 缺少 `prefers-color-scheme` 系统偏好检测 | 体验/亮暗系统 | 成本极低，仍未实现；当前仅识别 `localStorage === '0'` |
+| §10.3 | 主题构建工具链陈旧（Rollup 2 / plugin-styles 3 / terser 插件已 deprecated） | 构建/可维护性 | 与 §8.3 同源；建议先锁版本止血，再规划升级 |
+| §7.1 / §7.2 / §7.3 | 缺少 Sitemap、robots.txt、Open Graph/Twitter Card | SEO | 仍然缺失；robots 不应照抄旧版的 `Disallow: /resume/`，见 §7.2 更正 |
+| §2.4 | RSS 订阅未配置 | SEO/订阅 | 仍然缺失；安装插件成本低 |
+| §10.1 | `hexo-renderer-markdown-it-katex` 使用 `^3.4.4` 范围版本 | 依赖管理 | 根锁文件已固定 3.4.4，但 CI `npm install` 使范围仍有意义；建议精确版本 |
+|  | 主题默认配置缺失：只有 `_config.yml.old`，README/解耦文档却声称有 `_config.yml` | 主题架构/可维护性 | 当前站点无功能影响（用户配置覆盖全部键），但对主题独立发布与默认值升级有实际影响；修复成本近乎为零 |
+| §11.1 / §11.2 | 缺少跳过导航链接、社交图标缺少 `aria-label` | 可访问性 | 已复核仍存在；修复成本低 |
+| §5.1 | jQuery 无条件加载（89.5KB）且 `ayeria.js` 整体耦合 | 性能/架构 | 移除需中等改造，建议在模块化/逐功能迁移时处理，不单独高优先 |
+| §7.4 | `pretty_urls` 仍保留 `index.html`/`.html` 后缀 | SEO | 可低成本改 false，GitHub Pages 同时兼容两种形式；不需重定向，收益中等 |
+| §14.5.1 / §14.9 | `core.js` 死代码、搜索路径/统计 ID 硬编码 | SOLID/维护 | 应在 §5.5.1/§5.5.5 的伴随修复中一并解决 |
 
-### 🟡 中优先级（影响可维护性或工程规范）
+### 🟢 低优先级（可选清理，不产生显著行为/性能变化）
 
+| # | 问题 | 类别 | 说明 |
+| --- | --- | --- | --- |
+| §1.1 | `source/_drafts/` 混有 42 个非标准文件（`哲学.py` + 16 个无 front-matter Markdown） | 目录结构 | 不影响构建，整理草稿时顺手处理 |
+| §1.4 | `source/test/` 仍未加入 `skip_render` | 目录结构 | 演示页会进入生产输出；建议随 skip_render 审查一起修 |
+| §1.5 | 中文图片文件名 | 目录结构 | 维持可忽略；若做 §5.4 批量优化可顺带改 ASCII 命名 |
+| §2.2 | `post_asset_folder: false` | 配置 | 维持现状；启用对已有全局图片无收益且有迁移风险 |
+| §5.4 后续 | 响应式 `srcset`、CI 增量压缩 | 性能 | 完成第一轮压缩/懒加载后再评估 |
+| §6.3 | `lock` 功能未删除，配置仍留默认密码 `123456` | 安全 | 功能关闭且前端锁不可靠；建议删除默认密码/模板 |
+| §9.1 / §9.2 | `.editorconfig`、根目录 `debug.py`/`debug_wsl.py` | 可维护性 | 低成本整理；ROI 普通 |
+| §14.1 / §15 | `ayeria.js` 模块拆分 | 可维护性 | 只改善维护性，不减少首屏体积；并入伴随修复后再做，非当务之急 |
+| §14.7 / §14.8 | `core.js` 死代码、`meta_generator.js` 对 `default_config.js` 的冗余依赖 | 维护 | 低风险清理 |
+| §12.5 | giscus 中国大陆可用性 | 架构 | 维持可接受，增加失败提示可在后续处理 |
 
-| #    | 问题                                  | 类别    |
-| ---- | ----------------------------------- | ----- |
-| ~~4.1~~  | ~~简历页面与主站脱节~~（已忽略）                           | 自定义页面 |
-| 2.4  | RSS 未配置                             | 配置    |
-| 5.2  | jquery-modal/justifiedGallery 无条件加载 | 性能    |
-| 5.3  | Google Fonts 加载策略（参见 12.3 中国大陆分析）    | 性能    |
-| 6.2  | CDN 资源缺少 SRI                        | 安全    |
-| 7.3  | 缺少 Open Graph / Twitter Card        | SEO   |
-| 9.1  | 缺乏代码规范工具                            | 可维护性  |
-| 10.1 | 渲染器单点依赖                             | 依赖管理  |
-| 14.2 | `click_effect` 魔法数字分支                | SOLID/OCP |
-| 14.3 | 评论系统 partial 参数接口不一致              | SOLID/LSP |
-| 14.6 | 未使用 Hexo `_data/` 目录存储数据           | SOLID/OCP |
-| 3.5.2 | 缺少 `prefers-color-scheme` 系统偏好检测 | 亮暗系统 |
+### ⚫ 不建议实施（本次复核撤下或更正）
 
-
-### 🟢 低优先级（优化建议，不影响功能）
-
-
-| #    | 问题                          | 类别    |
-| ---- | --------------------------- | ----- |
-| 1.1  | `source/_drafts/` 混有非 Markdown 文件 | 目录结构  |
-| ~~1.3~~  | ~~无用的 `.gitkeep`~~（已忽略）              | 目录结构  |
-| 1.4  | 测试文件/页面残留                   | 目录结构  |
-| ~~1.5~~  | ~~图片文件名使用中文~~（已忽略）                   | 目录结构  |
-| ~~1.6~~  | ~~主题目录内遗留 `.old` 备份文件~~（已忽略）         | 目录结构  |
-| ~~2.1~~  | ~~`future: true`~~（已修复）              | 配置    |
-| 2.2  | `post_asset_folder: false`  | 配置    |
-| 2.3  | 日期型永久链接层级过深                 | 配置    |
-| ~~3.2~~  | ~~主题构建产物提交仓库~~（已修复）                  | 主题架构  |
-| ~~3.3~~  | ~~`index.js` 为空壳~~（已修复）              | 主题架构  |
-| ~~3.4~~  | ~~暗色模式实现架构（sessionStorage/FOUC/双层系统）~~（已修复） | 主题架构  |
-| ~~4.2~~  | ~~MC 页面架构独立~~（已忽略）                   | 自定义页面 |
-| ~~4.3~~  | ~~手办柜页面 raw HTML~~（已忽略）              | 自定义页面 |
-| ~~4.4~~  | ~~关于页面混合 Markdown/HTML~~（已忽略）        | 自定义页面 |
-| 5.4  | 缺少图片优化管线                    | 性能    |
-| 6.1  | 简历分析脚本可能过时                  | 安全    |
-| 6.3  | 网站加密功能安全性不足                 | 安全    |
-| 7.4  | URL 保留冗余后缀                  | SEO   |
-| 8.1  | 缺少质量门禁                      | CI/CD |
-| 9.2  | 根目录调试脚本积累（debug.py + debug_wsl.py） | 可维护性  |
-| ~~9.3~~  | ~~Git 提交信息不规范~~（已忽略）                 | 可维护性  |
-| 11.1 | 缺少跳过导航链接                    | 可访问性  |
-| 11.2 | 社交图标缺少可访问文本                 | 可访问性  |
-| 12.4 | 缺少面向中国大陆的访问统计分析             | 可维护性  |
-| 12.5 | giscus 评论系统中国大陆可用性            | 架构    |
-| ~~3.5.1~~ | ~~组件级 `body.darkmode` 块裸 hex 值~~（已修复） | 亮暗系统 |
-| 3.5.3 | 仅支持二态切换，无"跟随系统"选项 | 亮暗系统 |
-| 14.7 | `core.js` 保留死代码 / `head.ejs` 内联样式泄漏 | SOLID/SRP |
-| 14.8 | `meta_generator.js` 对 default_config 不必要依赖 | SOLID/DIP |
-| 14.9 | `ayeria.js` 硬编码 `/search.xml` 路径      | SOLID/DIP |
-
+| 旧条目 | 不实施/降级理由 |
+| --- | --- |
+| §2.3 permalink 改为 `:year/:title/` 或 `:title/` | GitHub Pages 无服务端重定向，需为每篇旧文生成跳转页；日期型 URL 对博客是稳定常态，SEO 收益不足以支撑全站 404 风险 |
+| §14.1.3 将 `category_map`/`tag_map` 抽到 `source/_data/` | 这是 Hexo 核心配置项，移出后分类/标签路径映射会失效；旧建议不可实施 |
+| §3.4 `:root` 语义翻转 | 改动大、收益仅为语义一致性，维持现状 |
+| §3.5.3 暗色模式第三态跟随系统 | 需求未出现前不建设；若只做 §3.5.2 的单向跟随，成本更低 |
+| §5.1 先加 `defer` 再议 | 脚本已在 body 末尾，defer 不减少下载量，收益有限；按需化资源更有效 |
+| §15 六模块大拆分 | 280 行文件拆成 6 个模块只改善可维护性，Rollup 仍输出单 bundle；建议先做伴随修复，需要时再做 3-4 个高内聚模块 |
+| §2.2 立即迁移所有图片到 `post_asset_folder` | 与 §5.4 的图片压缩相比收益低、迁移风险高；维持逐步评估 |
 
 ---
 
@@ -916,13 +1057,14 @@ Disallow: /resume-en/
 #### 14.1.3 项目层面
 
 **遵循良好**：
-- `_config.yml` 负责 Hexo 核心配置，`_config.ayeria.yml` 负责主题配置 — 关注点分离清晰
+- `_config.yml` 负责 Hexo 核心配置，`_config.ayeria.yml` 负责主题配置  关注点分离清晰
 - `.github/workflows/pages.yml` 单一职责：构建部署流水线
 - `.github/dependabot.yml` 单一职责：依赖更新策略
 
-**违规**：
-- `_config.yml` 混合了站点元数据、URL 规则、分类/标签映射（内容分类学）、Markdown 渲染器配置 — 这些是不同变更原因的数据。建议将分类/标签映射抽到 `source/_data/` 下的独立数据文件
-- 根目录 `debug.py`、`debug_wsl.py` 两个调试脚本与项目核心职责无关，属于工具链脚本，应归入 `scripts/`
+**违规（2026-09-17 复核更正）**：
+- `_config.yml` 混合了站点元数据、URL 规则、分类/标签映射、Markdown 渲染器配置  这些确实有不同变更原因。但旧报告将分类/标签映射抽到 `source/_data/`的**建议不可实施**：`category_map`/`tag_map` 是 Hexo 核心配置项，必须由 Hexo 在生成阶段读取；移出后分类/标签路径映射会失效。本条应从改进清单撤下，维持现状。
+- `.github/dependabot.yml` 当前只覆盖根目录 npm，主题目录构建依赖不在提醒范围内（§8.3）；这不是职责问题，而是覆盖缺口。
+- 根目录 `debug.py`、`debug_wsl.py` 属于工具链脚本，可归入 `scripts/` 或 `tools/`（低优先级）。
 
 ---
 
@@ -1007,19 +1149,20 @@ Disallow: /resume-en/
 
 #### 14.4.1 客户端 JS 资源加载
 
-**严重违规**：
+**2026-09-17 复核（旧表有误，已修正）**：
 
-| 资源 | 加载位置 | 实际需求 | 浪费 |
-|------|---------|---------|------|
-| `jquery-3.6.0.min.js` (90KB) | `after-footer.ejs:1` — 无条件加载 | 仅 modal、justifiedGallery、lazyload 等少数功能使用 | 所有页面均加载 |
-| `jquery.modal.min.js` + CSS | `after-footer.ejs:22-23` — 无条件加载 | 仅图片画廊文章页使用 | 首页、归档页、分类页等均加载 |
-| `jquery.justifiedGallery.min.js` | `after-footer.ejs:24` — 无条件加载 | 仅含画廊标记的文章页使用 | 同上 |
-| `pace.min.js` | `head.ejs:43` — 由 progressBar 配置控制 | 有条件判断（`theme.progressBar`） | ✅ 已有条件 |
-| `sweetalert2` JS + CSS | `head.ejs:46-57` — 由 lock.enable 控制 | lock 功能已关闭 | ✅ 已包裹条件 |
+| 资源 | 加载位置 | 实际需求 | 复核结论 |
+|------|---------|---------|---------|
+| `jquery-3.6.0.min.js` (89.5KB) | `after-footer.ejs:1`  无条件加载 | `ayeria.js` 全模块、clipboard 内联代码等均依赖 jQuery | 当前架构的运行时基础，不是少数插件依赖（§5.1） |
+| `jquery-modal` JS + CSS | `after-footer.ejs:22-23`  无条件加载 | 全仓库检索不到任何调用点（无 `.modal(`、无 `rel="modal:open"`） | **死依赖，直接删除**，不是仅图片画廊页需要 |
+| `jquery.justifiedGallery.min.js` | `after-footer.ejs:24`  无条件加载 | 仅 `post.albums` 非空时生成的 `#gallery` 需要；当前 0 篇文章使用 | 随 `post/justifiedGallery.ejs` 共址按需加载 |
+| `lazyload.min.js` (4.2KB) | `after-footer.ejs:2`  无条件加载 | 仅未被引用的 `post/albums.ejs` 使用 `class="lazy"`；现有文章无 lazy/data-original | 死代码，删除或改用原生 `loading="lazy"` |
+| `pace.min.js` | `head.ejs:43`  由 `progressBar` 控制 | 已有条件判断 |  条件正确；建议自托管 |
+| PhotoSwipe CSS2 + JS2 | `viewer.ejs`  由 `image_viewer` 控制 | 仅含图片页面需要 |  当前所有页面加载，应改条件/按需 |
+| KaTeX CSS + JS2 | `katex.ejs`  由 `allpost \|\| page.math` 控制 | 当前 `allpost: true` 导致所有页面加载 |  应改为 `allpost: false` + 文章 `math: true` |
+| `clipboard.min.js` | `post/clipboard.ejs`  由 `copy_btn` 控制 | 仅含代码块的页面需要 |  当前所有页面加载，应改条件/自托管 |
 
-**建议**: 将 jquery-modal 和 justifiedGallery 加载包裹在页面类型条件中（仅文章详情页且有画廊标记时加载）。
-
-> **⚑ 与 §5.2 重复；覆盖于 §15**：本条目与 §5.2 描述同一问题。§15.2 的模块化重构方案已统一规划（justifiedGallery 初始化移入 `after-footer.ejs` 并添加页面条件），应在 §15 实施时一并完成，不单独修复。
+**建议**: 不要再沿用把 jquery-modal 和 justifiedGallery 包进 `post.photos || post.gallery`的旧条件：markup 由 `post.albums` 生成，且 `after-footer.ejs` 上下文是 `page`。正确做法是把资源与使用它的 partial 共址：删除 jquery-modal；把 justifiedGallery 的 `<script>` 与初始化移入 `post/justifiedGallery.ejs`；lazyload 与 `post/albums.ejs` 一并删除或改原生懒加载；PhotoSwipe/clipboard/KaTeX 按页面能力加载。这些修复不依赖 §15 的模块拆分。
 
 #### 14.4.2 客户端 JS 模块
 
@@ -1060,7 +1203,7 @@ Disallow: /resume-en/
 | 违规项 | 详情 |
 |--------|------|
 | `ayeria.js` 全模块依赖 jQuery | 整个模块包裹在 `(function($){...})(jQuery)` 中，与 jQuery 紧耦合。无法在无 jQuery 环境下运行，单元测试需要 jQuery DOM 模拟 |
-| `ayeria.js:245-269` 硬编码 51.la 统计 ID | `{ id: "JGjrOr2rebvP6q2a", ck: "JGjrOr2rebvP6q2a" }` 直接写在源码中，应通过 HTML `data-*` 属性或 `theme` 配置传入 |
+| `ayeria.js:255-280` 硬编码 51.la 统计 ID | `{ id: "JGjrOr2rebvP6q2a", ck: "JGjrOr2rebvP6q2a" }` 直接写在源码中，应通过 HTML `data-*` 属性或 `theme` 配置传入 |
 | `ayeria.js:37` 硬编码搜索文件路径 | `/search.xml`、`/js/search.js` 路径硬编码，若配置修改 `search.path` 则搜索功能静默失败 |
 | `share.js` 依赖全局 DOM | 直接访问 `window.location.href`、`document.querySelector` 等全局对象，无抽象层。这使得模块无法脱离浏览器环境测试 |
 
@@ -1105,37 +1248,24 @@ Disallow: /resume-en/
 
 #### 问题优先级（SOLID 相关）
 
-##### 🔴 高优先级
-
-| # | 问题 | 原则 | 影响 |
-|---|------|------|------|
-| 14.1 | `ayeria.js` 单一文件承担 13 种职责 | SRP | 维护困难、无法按需加载、无法独立测试 |
-| 14.4 | `after-footer.ejs` 无条件加载 jquery-modal + justifiedGallery | ISP | 所有页面浪费带宽 |
-| 14.5 | 51.la 统计 ID 硬编码在 JS 源码中 | DIP | 更换 ID 需修改源码并重新构建 |
-| 14.5 | `share.js` 硬编码 `if/else` 平台链 | OCP | 新增社交平台需修改函数体 |
-
-##### 🟡 中优先级
-
-| # | 问题 | 原则 | 影响 |
-|---|------|------|------|
-| 14.2 | `click_effect` 魔法数字分支 | OCP | 新增效果需改 layout |
-| 14.3 | 评论系统 partial 参数接口不一致 | LSP | 切换评论系统需修改调用侧代码 |
-| 14.3 | `head.ejs` 内联 sweetalert2 样式 | SRP | 样式泄漏到模板 |
-| 14.6 | 未使用 Hexo `_data/` 目录 | OCP/DIP | 数据修改需接触源文件 |
-
-##### 🟢 低优先级
-
-| # | 问题 | 原则 | 影响 |
-|---|------|------|------|
-| 14.7 | `core.js` 保留死代码 | SRP | 增加认知负担 |
-| 14.8 | `meta_generator.js` 对 `default_config.js` 的不必要依赖 | DIP | 轻微耦合 |
-| 14.9 | ayeria.js 硬编码 `/search.xml` 路径 | DIP | 与 `_config.yml` 的解耦缺失 |
+> **2026-09-17 复核**：SOLID 相关问题的优先级已统一并入 §13 与 §16，避免重复表格与过期排序。当前仍然成立的核心问题简述如下：
+> - `ayeria.js` 单文件 13 职责（SRP）仍存在；但 §15 的完整拆分只带来维护性收益，已降级为伴随修复完成后可选。
+> - `after-footer.ejs` 仍承担多类资源加载；真正的问题不是职责数，而是其中 `jquery-modal`/lazyload 是死加载、PhotoSwipe/KaTeX/clipboard 未按需化（§5.2/§5.5）。
+> - 51.la ID 硬编码、`share.js` 平台 if/else、`click_effect` 魔法数字、评论 partial 接口不一致仍然存在，分别见 §5.5.5、§14.2.1、§14.3.1。
+> - 旧报告未使用 Hexo `_data/`应拆分看：`category_map`/`tag_map` 不可迁移（§14.1.3）；MC 成员/手办柜数据是否迁移仍属低优先级自定义页面决策（§4）。
+> - `core.js` 死代码、`meta_generator.js` 冗余依赖、搜索路径硬编码仍待清理，建议随 5.5.1 的伴随修复解决。
 
 ---
 
 ## 十五、`ayeria.js` 模块化重构方案
 
 > **新增于 2026-05-20**：本节为 §14.1 / §14.4 / §14.5 所描述客户端 JS 问题的专项拆分方案，是近期重构的主要方向。
+
+> **实施状态（2026-09-17 复核）**: 截至本次复核，`source-src/js/ayeria.js` 仍为 280 行单体 IIFE，`main.js` 仍导入 `./js/ayeria`；§15 的拆分方案尚未实施。按本次只做有实际收益的优化标准，建议调整实施顺序：
+>
+> 1. 先做与 §5.5 重叠且有直接运行时收益的伴随修复：删除 `isMobile` 死代码；搜索索引改为首次交互加载并把路径配置化；51.la 改为配置驱动/移除；justifiedGallery/lazyload/modal 按需化。
+> 2. 模块拆分本身只带来可维护性收益（Rollup 仍打成单文件，不减少首屏体积），不应作为最高优先级；若执行，建议合并为 3-4 个高内聚模块，而不是为凑数拆成 6 个。
+> 3. 如果未来要移除 jQuery（§5.1），拆分是合理的前置准备，但仍应按功能逐个迁移，避免大爆炸式重写。
 
 ### 15.1 问题归纳
 
@@ -1236,6 +1366,8 @@ import "./js/random-sentences";
 
 重构完成后，按序执行以下文档和配置更新：
 
+> **2026-09-17 说明**: 以下清单是方案实施后的历史规划，目前尚未执行。执行时以 §16 的顺序和 13 的优先级为准；其中 51.la 迁移、搜索路径去硬编码仍然需要，但搜索还应增加首次交互加载；justifiedGallery 不应按原 15.3 第 2 点移入 `after-footer.ejs`，而应移入 `post/justifiedGallery.ejs`（5.2/14.4.1）。
+
 #### A. 更新 `doc/SKILL.md`
 
 将「五、交互行为规范 → JS 文件职责」小节替换为以下内容（反映新模块列表，删除"待后续重构"备注）：
@@ -1298,6 +1430,85 @@ refactor(template): move justifiedGallery init to after-footer.ejs
 feat(tracking): migrate 51.la to EJS template with config-driven ID
 docs: update SKILL.md JS file responsibilities
 ```
+
+---
+
+## 十六、2026-09-17 复核结论与实施顺序
+
+> 本节是 2026-09-17 全面复核的结论汇总，与 §13 的新排序配套。只列值得做的事项，并明确列出不建议做的旧建议及其理由。
+
+### 16.1 旧报告状态修正
+
+| 旧条目 | 2026-09-17 状态 |
+|--------|----------------|
+| §3.1 `custom.styl` 重构 | 已完成：`custom.styl` 17 行、29 个 Stylus partial 通过 Rollup 输出。更正一处事实：`clipboard.styl` 由 `after-footer.ejs` 引用，不是 `head.ejs`。 |
+| §3.2 构建产物提交仓库 | 已完成：`source/dist/` 已被主题 `.gitignore` 忽略且未跟踪；CI 会构建主题。 |
+| §3.3 `index.js` 空壳 | 已完成：已添加详细注释。 |
+| §3.4 暗色系统架构 | 已完成：`localStorage`、亮色 FOUC 防护、`_darkmode.styl` 拆分均已落地；`:root` 语义倒置按原决策保留。 |
+| §2.1 `future: true` | 已修复为 `false`。 |
+| §8.2 / §10.2 CI 主题构建 | 已修复构建步骤，但依赖安装仍不可复现，见 §8.3。 |
+| §1.1 根目录非标准目录 | 部分完成：根目录已清理，但 `source/_drafts/` 仍混有 42 个非标准文件。 |
+| §1.5 中文图片名 | 结论可维持为低优先级，但原判据图片数量有限已过期：现有 50 个文件、29.7MB。 |
+| §12.2 staticfile CDN 清单 | 过期：jQuery、lazyload、tocbot、busuanzi、点击特效等已自托管；modal 是死依赖而非画廊页需要。 |
+| §12.4 仅不蒜子提供统计 | 不实：不蒜子已关闭，实际唯一在线的统计是硬编码的 51.la。 |
+| §13 优先级表 | 已按本次证据重排；permalink 扁平化、`category_map` 数据化等建议撤下。 |
+| 主题默认配置 | 主题内部 `decoupling-report` 与 README 声称存在 `themes/ayeria/_config.yml`，实际只有 `_config.yml.old`。 |
+
+### 16.2 本次新增的高价值优化
+
+| 优先级 | 事项 | 核心依据 | 预期收益 | 成本/风险 |
+|--------|------|---------|---------|----------|
+| P0 | 优化存量图片 + 文章图片原生懒加载 | `source/images` 29.7MB；单篇 22MB；最大 5 张转码实测约 6% | 单页体积下降一个数量级；移动端带宽与 LCP 显著改善；仓库/部署体积同步下降 | 中低；批处理保持引用路径不变，首图保留 eager |
+| P0 | 搜索索引改为首次交互加载；修复 `search.js` 正则/预处理/摘要 | `.local-search` 在所有页面；`search.xml` 含全部 53 篇全文；`c++` 等搜索词必崩 | 移除每次首屏的全文索引下载；搜索可靠性恢复；移动端输入更顺滑 | 低到中；改动集中在 `ayeria.js` 与 `search.js` |
+| P0 | KaTeX 改为仅公式文章加载，并验证客户端 JS 是否冗余 | 当前 `allpost: true` 导致所有页面加载 CSS+2 JS 并扫描 body；实际仅 3 篇含公式 | 约 50 个页面减少外部资源与 CPU 扫描；若验证成立可再删 JS | 低；需要给 3 篇文章加 `math: true` 并构建验证 |
+| P0 | 删除 jquery-modal；justifiedGallery/lazyload/PhotoSwipe/clipboard 按需化 | modal 无调用点；albums/lazy 使用量为 0；PhotoSwipe/clipboard 当前全站加载 | 每页减少多个外部请求；消除死代码 | 低；注意把 justifiedGallery 初始化随 `#gallery` partial 共址 |
+| P1 | 中文字体改系统字体栈或大幅缩减并自托管 | `fonts.font.im` 4 字重位于关键路径；中国大陆可用性不可控 | 消除首屏外部阻塞点，减少字体传输 | 中；需在 Windows/macOS/iOS/Android 验证字体栈观感 |
+| P1 | 主题锁文件 + CI `npm ci` + Dependabot 覆盖主题 | 锁被 `.gitignore` 忽略；缓存 key 是常量；本地 Node 24 构建已复现失败 | 构建可复现，缓存可失效，依赖更新可被提醒 | 低；先生成锁文件止血，工具链升级另行计划 |
+| P1 | 恢复主题 `_config.yml` 默认配置 | README 与主题文档的承诺与实际不符；当前站点靠完整覆盖配置运行 | 主题可独立复用/升级；未配置项有安全默认值 | 低；重命名后需构建验证覆盖优先级 |
+| P1 | 51.la 配置化或删除；随机句子文本缓存/裁剪 | 51.la 无法配置关闭；随机句子每页 fetch 97,672 字节 | 明确隐私边界；减少每页传输 | 低 |
+| P2 | Sitemap/robots/OG、skip link/aria、`prefers-color-scheme` | 仍缺失，成本低 | 站点可发现性与可访问性改善 | 低；robots 策略需先确定 |
+| P2 | 工具链升级、模块拆分、死代码清理、`.editorconfig` | §8.3/§10.3/§14/§15 所列 | 长期维护性 | 中；按需排期 |
+
+### 16.3 复核方法与局限
+
+- 本次复核基于工作区静态代码与文件测量，未联网；外部 CDN 资源的实际体积/可用性未实测。
+- 完整 Hexo 构建因根依赖不在本机离线缓存中而未执行；搜索索引实际体积、构建后页面传输量应在 CI 或完整本地环境中用 `public/search.xml`、浏览器 Network/Lighthouse 复测。
+- 图片转码数据为本机 ffmpeg/libwebp 实验，用于估算量级；实际优化脚本应采用项目选定的工具与质量参数，并在有代表性的图片上目检。
+- 主题构建依赖曾临时安装用于测量，已完成清理；工作区无未跟踪产物。
+
+### 16.4 明确不建议实施的旧建议
+
+| 旧建议 | 理由 |
+|--------|------|
+| §2.3 permalink 改为扁平结构 | 纯静态 GitHub Pages 无服务端重定向，会为全部旧文制造 404 风险；收益缺乏证据 |
+| §14.1.3 将分类/标签映射移出 `_config.yml` | `category_map`/`tag_map` 是 Hexo 核心配置，移出即失效 |
+| §3.4 翻转 `:root`/`body.darkmode` 语义 | 全局重写 selector，收益仅为语义一致性 |
+| §3.5.3 立即实现跟随系统第三态 | 需求未出现；先做 §3.5.2 的低成本系统偏好检测即可 |
+| §5.1 仅为 jQuery 加 `defer` | 脚本已在 body 末尾，收益有限；应先按需化资源 |
+| §15 一次性拆成 6 个模块 | 只改善可维护性；可先做伴随修复，需要时再拆为 3-4 个高内聚模块 |
+
+### 16.5 推荐实施顺序（P0 → P2）
+
+1. **P0-1 图片**：批处理存量图片 → 页面网络测量确认 → 加原生懒加载过滤器 → 记录规范。
+2. **P0-2 搜索**：搜索索引首次交互加载 + 路径配置化 → `search.js` 预计算/防抖/转义/摘要修复 → 构建后测量 `search.xml` 与搜索体验。
+3. **P0-3 KaTeX**：`allpost: false` + 3 篇文章 `math: true` → 构建验证公式显示 → 验证客户端 auto-render 是否可以删除。
+4. **P0-4 死资源与按需资源**：删除 jquery-modal → lazyload 删除或接入原生懒加载 → justifiedGallery 随 partial 共址 → PhotoSwipe/clipboard 条件化。
+5. **P1-1 字体**：选定并验证系统字体栈 → 移除 `fonts.font.im` 链接；或缩减字重后自托管子集。
+6. **P1-2 构建**：提交主题锁文件 → CI 全部 `npm ci` → 修复缓存 key → Dependabot 覆盖主题 → 规划工具链升级。
+7. **P1-3 主题配置与追踪**：恢复主题 `_config.yml` → 51.la 配置化/删除 → 随机句子缓存或裁剪。
+8. **P2**：SEO 基础设施、可访问性、`prefers-color-scheme`、死代码清理、模块拆分、`.editorconfig`、草稿整理。
+
+### 16.6 验收与复测清单
+
+- [ ] `source/images` 体积显著下降（目标：总量下降 80% 以上，重文章页 1-2MB 量级），所有文章图片仍正常显示。
+- [ ] 非首图具备 `loading="lazy"`/`decoding="async"`，首图 LCP 未被懒加载拖慢。
+- [ ] 未打开搜索前，Network 中不出现 `search.xml`；首次点击搜索后功能正常；`c++`、`(`、`[`、`*` 等关键词不再报错。
+- [ ] 非公式文章不再请求 KaTeX；3 篇公式文章显示正常且无重复渲染/闪烁。
+- [ ] 非图片、非代码页面不再请求 PhotoSwipe、clipboard、justifiedGallery、jquery-modal。
+- [ ] CI 使用锁文件安装，缓存 key 随主题锁文件变化；Node 20 构建通过。
+- [ ] 恢复主题默认配置后，`_config.ayeria.yml` 仍能正确覆盖；主题构建与站点生成通过。
+- [ ] 51.la 可由配置关闭；随机句子首次加载后复用缓存或文件已缩小。
+- [ ] Lighthouse/Network 复测：首页与重文章页的传输量、LCP、主线程搜索输入耗时均较基线改善。
 
 ---
 
