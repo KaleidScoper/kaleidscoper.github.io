@@ -8,7 +8,9 @@
  *
  * 字段说明
  * ────────────────────────────────────────────────
- *   id          — (必填) MC 用户名。作为卡片标题显示，同时用于拉取 mc-heads 头像
+ *   id          — (必填) MC 用户名。作为卡片标题显示
+ *   uuid        — (必填) 玩家的 Mojang UUID（无连字符）。用于拉取 mcheads.org 头像，
+ *                 避免运行时用户名解析（minotar/mc-heads 的用户名解析均已失效）
  *   role        — (必填) 服务器管理身份，如"服主""管理员""成员"
  *   tag         — (必填) 游戏内角色头衔，如"出生点建筑师""工业领主"
  *   color       — (必填) 卡片主题色，十六进制色值，如 "#f1c40f"
@@ -20,75 +22,88 @@
  * ────────────────────────────────────────────────
  *   {
  *     id: "Steve",
+ *     uuid: "8667ba71b85a4004af54457a9734eed7",
  *     role: "成员",
  *     tag: "红石工程师",
  *     color: "#80cfff",
  *     description: "第一行描述\n第二行描述",
  *     link: "https://example.com",
- *     fallback: "img/placeholder.png",
+ *     fallback: "img/member_placeholder.webp",
  *   },
  */
 
 const TEAM_MEMBERS = [
   {
     id: "KaleidScoper",
+    uuid: "a86d98df724b4e7a98a67a71345386d6",
     role: "服主",
     tag: "艺术家",
     color: "#f1c40f",
-    description: "服务器的创建者与维护者，负责日常运维和版本更新\n住在出生点奢靡的宅院中",
+    description: "服务器的创建者与维护者，负责日常运维和版本更新",
     link: "https://kaleidscoper.github.io",
     fallback: "img/kale.png",
   },
   {
     id: "b1ack_51av3",
+    uuid: "5aa7b312fcc24bacb9aae3775c1077a2",
     role: "成员",
     tag: "工程师",
     color: "#80cfff",
-    description: "在出生点附近建立了最大的工业体系，是服内最活跃的资源生产者\n有传闻称他住在其中一部机器里",
+    description: "服内最活跃的资源生产者\n生产力不来自逆天 ID",
     fallback: "img/cs.png",
   },
   {
     id: "404tomato",
+    uuid: "904280edf7e54343884fa6e10f59219f",
     role: "成员",
     tag: "农学家",
-    color: "#80cfff",
-    description: "运营着位于出生点的农牧场\n据说她的农场是全服最好看的",
+    color: "#c74005",
+    description: "杨柳依依",
     fallback: "img/tomato.png",
   },
   {
     id: "syr2004",
+    uuid: "29dc4bb35820418a89b3213040d332cc",
     role: "成员",
     tag: "地质学家",
     color: "#80cfff",
-    description: "痴迷于地底探险与矿脉开采，是服务器矿产资源的重要供给者\n据说她从未在地表被目击到过",
+    description: "从未在地表被目击到过",
     fallback: "img/member_placeholder.webp",
   },
   {
     id: "eeee567",
+    uuid: "51cbfe94e0454cd2a5dfc80131ed0a23",
     role: "成员",
     tag: "探险家",
     color: "#80cfff",
-    description: "精通 PVP/VE 战斗，单人率先击败了本服的末影龙\n据说他直接住在试炼要塞中",
+    description: "率先抵达末地",
+    fallback: "img/member_placeholder.webp",
   },
   {
     id: "InRedBaglu",
+    uuid: "da1b3123711540c8b1f3ba17557bdf2b",
     role: "成员",
     tag: "吉祥物",
     color: "#80cfff",
-    description: "非常可爱，除此之外我们对他一无所知",
+    description: "非常可爱\n除此之外我们对他一无所知",
+    fallback: "img/member_placeholder.webp",
   },
   {
     id: "yxjygcty123",
+    uuid: "ff9b0fb67ff24f939512c918b9d13ad6",
     role: "成员",
     tag: "探险家",
     color: "#80cfff",
-    description: "执着于踹开别人的门。祝他早日成功",
+    description: "执着于踹开别人的门",
+    fallback: "img/member_placeholder.webp",
   },
   {
     id: "Zn_0817",
+    uuid: "2dceb3a5f54f4d49a3a02ca80cf9b74b",
     role: "成员",
     tag: "建筑师",
     color: "#80cfff",
-    description: "在出生点附近建造了“令人印象深刻”的“建筑物”。我们宁愿他没建造它们",
+    description: "在出生点附近建造了“令人印象深刻”的“建筑物”",
+    fallback: "img/member_placeholder.webp",
   },
 ];

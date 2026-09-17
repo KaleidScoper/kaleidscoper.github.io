@@ -10,7 +10,7 @@ function mobile_navbar_link_hider() {
 }
 
 function copyText() {
-  navigator.clipboard.writeText("qm.rainplay.cn:38953");
+  navigator.clipboard.writeText("nbd.rainplay.cn:14630");
 }
 
 /* ── Team Members Renderer ── */
@@ -55,7 +55,7 @@ function renderTeamMembers() {
       : '<span class="team-card__name">' + escapeHtml(m.id) + "</span>";
 
     card.innerHTML =
-      '<img src="https://mc-heads.net/body/' + encodeURIComponent(m.id) + '/128"' +
+      '<img src="https://api.mcheads.org/avatar/' + encodeURIComponent(m.uuid) + '/right/128"' +
       fallbackAttr +
       ' alt="' + escapeHtml(m.id) + '"' +
       ' class="team-card__avatar"' +
