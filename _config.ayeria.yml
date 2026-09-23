@@ -103,17 +103,17 @@ reward_wording: "如果这篇文章对你有帮助，可以请我喝杯茶"
 reward:
   button_text: "赏杯茶"       # 按钮文字，留空则回退到语言包默认值
   channels:
-    - name: "支付宝"
-      icon: "ri-alipay-line"
-      color: "#1677FF"
-      qrcode: "/images/reward/alipay.jpg"
-      description: "支付宝扫一扫"
+    # - name: "支付宝"
+    #   icon: "ri-alipay-line"
+    #   color: "#1677FF"
+    #   qrcode: "/images/reward/alipay.jpg"
+    #   description: "支付宝扫一扫"
 
-    - name: "微信支付"
-      icon: "ri-wechat-pay-line"
-      color: "#07C160"
-      qrcode: "/images/reward/wechat.jpg"
-      description: "微信扫一扫"
+    # - name: "微信支付"
+    #   icon: "ri-wechat-pay-line"
+    #   color: "#07C160"
+    #   qrcode: "/images/reward/wechat.jpg"
+    #   description: "微信扫一扫"
 
     - name: "比特币"
       icon: "ri-bitcoin-line"
