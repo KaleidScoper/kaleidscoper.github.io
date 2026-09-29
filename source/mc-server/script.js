@@ -50,9 +50,8 @@ function renderTeamMembers() {
 
     var descHtml = escapeHtml(m.description || "").replace(/\n/g, "<br>");
 
-    var nameHtml = m.link
-      ? '<a href="' + escapeHtml(m.link) + '" class="team-card__name team-card__name--link">' + escapeHtml(m.id) + "</a>"
-      : '<span class="team-card__name">' + escapeHtml(m.id) + "</span>";
+    var nameHtml = '<a href="https://namemc.com/profile/' + encodeURIComponent(m.uuid) +
+      '" class="team-card__name team-card__name--link">' + escapeHtml(m.id) + "</a>";
 
     card.innerHTML =
       '<img src="https://api.mcheads.org/avatar/' + encodeURIComponent(m.uuid) + '/right/128"' +

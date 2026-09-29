@@ -8,14 +8,13 @@
  *
  * 字段说明
  * ────────────────────────────────────────────────
- *   id          — (必填) MC 用户名。作为卡片标题显示
- *   uuid        — (必填) 玩家的 Mojang UUID（无连字符）。用于拉取 mcheads.org 头像，
+ *   id          — (必填) MC 用户名。作为卡片标题显示，点击进入对应玩家的 NameMC 主页
+ *   uuid        — (必填) 玩家的 Mojang UUID（无连字符）。用于生成 NameMC 主页链接和拉取 mcheads.org 头像，
  *                 避免运行时用户名解析（minotar/mc-heads 的用户名解析均已失效）
  *   role        — (必填) 服务器管理身份，如"服主""管理员""成员"
  *   tag         — (必填) 游戏内角色头衔，如"出生点建筑师""工业领主"
  *   color       — (必填) 卡片主题色，十六进制色值，如 "#f1c40f"
  *   description — (必填) 成员描述文本。用 \n 换行
- *   link        — (可选) 个人主页 URL；填写后成员名称变为可点击链接
  *   fallback    — (可选) 头像 API 不可用时的本地回退图片路径
  *
  * 添加新成员示例
@@ -27,7 +26,6 @@
  *     tag: "红石工程师",
  *     color: "#80cfff",
  *     description: "第一行描述\n第二行描述",
- *     link: "https://example.com",
  *     fallback: "img/member_placeholder.webp",
  *   },
  */
@@ -40,7 +38,6 @@ const TEAM_MEMBERS = [
     tag: "艺术家",
     color: "#f1c40f",
     description: "服务器的创建者与维护者，负责日常运维和版本更新",
-    link: "https://kaleidscoper.github.io",
     fallback: "img/kale.png",
   },
   {
