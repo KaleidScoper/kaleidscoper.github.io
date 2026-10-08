@@ -264,6 +264,7 @@ layout: page
     </div>
   </div>
 
+  <!--
   <div class="card" style="--bg:url('img/wulingni.jpg')">
     <div class="card-content">
       <img src="img/wulingni.jpg" loading="lazy" decoding="async" width="100" height="100" alt="吴凌旎">
@@ -273,6 +274,7 @@ layout: page
       <a href="/about/" target="_blank" rel="noopener noreferrer" class="wiki-btn">关于</a>
     </div>
   </div>
+  -->
 
   <div class="card" style="--bg:url('img/wanderer.png')">
     <div class="card-content">
