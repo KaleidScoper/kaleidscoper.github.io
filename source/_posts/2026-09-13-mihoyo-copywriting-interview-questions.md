@@ -117,6 +117,13 @@ $$
   font-weight: 500;
   line-height: 1.5;
   white-space: nowrap;
+  color: white;
+  text-decoration: none;
+}
+.mihoyo-skip-question-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
 }
 .mihoyo-skip-question > i {
   margin-right: 0.45em;
@@ -130,8 +137,13 @@ $$
 }
 </style>
 
-<button type="button" class="float-btn mihoyo-skip-question"><i class="ri-skip-forward-line" aria-hidden="true"></i>跳过此问题</button> 不想看你剧情的人，一边拿手机盲点一边也能干别的，想看你剧情的人，游戏都没下也会去 B 站云过。
+<div class="mihoyo-skip-question-wrap">
+  <a href="#mihoyo-question-29" class="float-btn mihoyo-skip-question"><i class="ri-skip-forward-line" aria-hidden="true"></i>跳过此问题</a>
+</div>
 
+不想看你剧情的人，一边拿手机盲点一边也能干别的，想看你剧情的人，游戏都没下也会去 B 站云过。
+
+<span id="mihoyo-question-29"></span>
 > 29 主机单机游戏的传统叙事结构与长线运营的二次元手游在叙事维度上最大的三个不可调和的区别是什么？
 
 一个开发团队希望无限续写下去的故事是不可能工整的，没有结尾的故事意味着有相当一部分文学技法不可能使用。我很难列出具体区别，因为这因游戏而异。
