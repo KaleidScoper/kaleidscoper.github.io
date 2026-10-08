@@ -105,7 +105,27 @@ $$
 
 > 28 如今短视频时代玩家耐心极度下降，剧情跳过按键成为玩家刚需。在必须保留该按键的前提下，如何通过设计让玩家主动愿意留下来看剧情？
 
-跳过这个问题。
+<style>
+.mihoyo-skip-question {
+  display: inline-flex;
+  width: auto;
+  height: auto;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-family: "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.9em;
+  font-weight: 500;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.mihoyo-skip-question:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 3px;
+  opacity: 1;
+}
+</style>
+
+<button type="button" class="float-btn mihoyo-skip-question">跳过此问题</button>
 
 > 29 主机单机游戏的传统叙事结构与长线运营的二次元手游在叙事维度上最大的三个不可调和的区别是什么？
 
