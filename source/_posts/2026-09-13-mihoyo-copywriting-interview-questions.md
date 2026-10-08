@@ -118,6 +118,11 @@ $$
   line-height: 1.5;
   white-space: nowrap;
 }
+.mihoyo-skip-question > i {
+  margin-right: 0.45em;
+  font-size: 1em;
+  line-height: 1;
+}
 .mihoyo-skip-question:focus-visible {
   outline: 2px solid var(--color-text);
   outline-offset: 3px;
@@ -125,7 +130,9 @@ $$
 }
 </style>
 
-<button type="button" class="float-btn mihoyo-skip-question">跳过此问题</button>
+<button type="button" class="float-btn mihoyo-skip-question"><i class="ri-skip-forward-line" aria-hidden="true"></i>跳过此问题</button>
+
+☝ 这谁能忍住不点
 
 > 29 主机单机游戏的传统叙事结构与长线运营的二次元手游在叙事维度上最大的三个不可调和的区别是什么？
 
