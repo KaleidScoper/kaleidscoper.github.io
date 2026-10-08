@@ -10,6 +10,8 @@ author: KaleidScoper
 
 <!--more-->
 
+---
+
 > **作品全名：** My Fair Lady（窈窕淑女）
 > **国别作者：** 🇬🇧 英国 萧伯纳
 > **原作语种：** 英文

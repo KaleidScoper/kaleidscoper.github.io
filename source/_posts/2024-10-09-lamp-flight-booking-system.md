@@ -13,6 +13,8 @@ reward: true
 
 <!--more-->
 
+---
+
 ```bash
 git clone https://github.com/KaleidScoper/LAMP_Flight_Booking.git
 ```

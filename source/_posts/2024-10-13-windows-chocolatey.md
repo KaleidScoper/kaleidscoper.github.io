@@ -10,6 +10,8 @@ reward: true
 
 <!--more-->
 
+---
+
 包管理器的方便之处就体现在这里了：它可以把配置环境、更新环境等等操作自动化。像自带包管理器的Linux各发行版一样，Windows也有适用于它的包管理器：Chocolatey。
 
 Chocolatey[1](#2862beb1-6032-4e76-a84c-9cc4dd2d8982)，一个专为 Windows 系统设计的包管理器，类似于 Linux 系统中的 APT 或 MacOS 中的 Homebrew。它通过命令行界面提供了一种快速、高效的方式来处理软件包的安装、更新和管理。

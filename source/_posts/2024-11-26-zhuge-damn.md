@@ -10,4 +10,6 @@ author: KaleidScoper
 
 <!--more-->
 
+---
+
 ![蛋神动皮什么时候能开放合成，急急急](/images/zhuge-damn.jpeg)

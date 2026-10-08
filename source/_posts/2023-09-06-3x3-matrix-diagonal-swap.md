@@ -11,6 +11,8 @@ reward: true
 
 <!--more-->
 
+---
+
 ```c
 #include <stdio.h>
 //旋转函数。在此处沿着“\”对角线旋转，所以只遍历

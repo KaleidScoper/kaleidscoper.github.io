@@ -11,6 +11,8 @@ Talk is cheap, show you my code.
 
 <!--more-->
 
+---
+
 ```c
 #include <stdio.h>
 void main(){

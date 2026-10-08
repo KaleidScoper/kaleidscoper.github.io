@@ -12,6 +12,8 @@ author: KaleidScoper
 
 <!--more-->
 
+---
+
 > 此处附上[我的 Steam 评测](https://steamcommunity.com/profiles/76561199070595111/recommended/2593370/)。
 
 ## 一、关于《饿殍》，我们在吵什么？

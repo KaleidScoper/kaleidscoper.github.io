@@ -13,6 +13,8 @@ reward: true
 
 <!--more-->
 
+---
+
 ## 正文
 
 创建randomQuote.js文件如下：

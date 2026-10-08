@@ -11,6 +11,8 @@ tags: [HTML, JavaScript, 转载]
 
 <!--more-->
 
+---
+
 将这个文件加入你网站某个页面的head可以起到类似的效果。
 
 ```html

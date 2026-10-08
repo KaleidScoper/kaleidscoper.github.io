@@ -10,6 +10,8 @@ author: KaleidScoper
 
 <!-- more -->
 
+---
+
 ## 一
 
 万历朝鲜战争中：

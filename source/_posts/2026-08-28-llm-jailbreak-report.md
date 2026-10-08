@@ -11,6 +11,8 @@ reward: true
 
 <!--more-->
 
+---
+
 ## 零、越狱
 
 2025 年 5 月有一篇多语言越狱对照实验报告（[The Tower of Babel Revisited](https://arxiv.org/abs/2505.12287)），在 GPT-4o、Gemini-1.5-Pro、Qwen-Max 和 DeepSeek-R1 上跑了 38400 条应答，分为 6 类受限内容、32 条禁问 × 6 种攻击提示配置（完整攻击 + 5 组消融），每条禁问每种语言重复 25 次，输出由两名双语博士评审按 Success / Fail / Response but Acceptable 三分类人工标注，分歧交第三方资深评审仲裁（论文没有考虑标注者一致性系数）。
