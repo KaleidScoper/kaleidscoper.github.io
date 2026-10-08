@@ -130,9 +130,7 @@ $$
 }
 </style>
 
-<button type="button" class="float-btn mihoyo-skip-question"><i class="ri-skip-forward-line" aria-hidden="true"></i>跳过此问题</button>
-
-☝ 这谁能忍住不点
+<button type="button" class="float-btn mihoyo-skip-question"><i class="ri-skip-forward-line" aria-hidden="true"></i>跳过此问题</button> 不想看你剧情的人，一边拿手机盲点一边也能干别的，想看你剧情的人，游戏都没下也会去 B 站云过。
 
 > 29 主机单机游戏的传统叙事结构与长线运营的二次元手游在叙事维度上最大的三个不可调和的区别是什么？
 
