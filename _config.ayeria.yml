@@ -115,24 +115,19 @@ reward:
     #   qrcode: "/images/reward/wechat.jpg"
     #   description: "微信扫一扫"
 
-    - name: "比特币"
+    - name: "BTC"
       icon: "ri-bitcoin-line"
       color: "#F7931A"
       qrcode: "/images/reward/BTC.webp"
-      description: "扫码转账 BTC"
     
     - name: "USDT"
       icon: "ri-coin-line"
       color: "#50AF95"
-      description: "选择网络后扫码转账"
       children:
-        - name: "TRC-20"
-          badge: "推荐"
-          qrcode: "/images/reward/USDT-TRC20.webp"
-          description: "Tron 链 · 手续费最低"
         - name: "ERC-20"
           qrcode: "/images/reward/USDT-ERC20.webp"
-          description: "以太坊主网"
+        - name: "TRC-20"
+          qrcode: "/images/reward/USDT-TRC20.webp"
 
 # 版权声明
 # 版权声明type设定：0-关闭版权声明； 1-文章对应的md文件里有copyright: true属性，才有版权声明； 2-所有文章均有版权声明
