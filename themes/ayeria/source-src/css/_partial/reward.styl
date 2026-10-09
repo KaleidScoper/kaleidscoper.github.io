@@ -18,7 +18,7 @@
   --reward-tab-active-text  #333333
   --reward-tab-active-shadow 0 1px 4px rgba(0, 0, 0, 0.13)
 
-  --reward-qr-border        rgba(0, 0, 0, 0.09)
+  --reward-badge-bg         rgba(0, 0, 0, 0.08)
 
   --reward-btn-bg           rgba(255, 255, 255, 0.55)
   --reward-btn-border       rgba(0, 0, 0, 0.11)
@@ -43,7 +43,7 @@ body.darkmode
   --reward-tab-active-text  dark-text
   --reward-tab-active-shadow 0 1px 4px rgba(0, 0, 0, 0.45)
 
-  --reward-qr-border        rgba(255, 255, 255, 0.12)
+  --reward-badge-bg         rgba(255, 255, 255, 0.12)
 
   --reward-btn-bg           rgba(255, 255, 255, 0.08)
   --reward-btn-border       rgba(255, 255, 255, 0.13)
@@ -61,7 +61,15 @@ body.darkmode
   bottom 0
   z-index 9998
   background var(--reward-overlay)
-  display none
+  visibility hidden
+  opacity 0
+  pointer-events none
+  transition opacity 0.25s ease, visibility 0.25s ease
+
+  &.active
+    visibility visible
+    opacity 1
+    pointer-events auto
 
 // ─── Modal panel ──────────────────────────────────────────────────────────────
 .reward-modal
@@ -81,12 +89,16 @@ body.darkmode
   border 1px solid var(--reward-border)
   border-radius 12px
   box-shadow var(--reward-shadow)
-  display none
+  font-family font-family-sans
+  text-align center
+  visibility hidden
+  pointer-events none
   opacity 0
-  transition opacity 0.25s ease, transform 0.25s ease
+  transition opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease
 
   &.visible
-    display block
+    visibility visible
+    pointer-events auto
     opacity 1
     transform translate(-50%, -50%) scale(1)
 
@@ -100,6 +112,9 @@ body.darkmode
   display flex
   align-items center
   justify-content center
+  padding 0
+  border 0
+  background transparent
   border-radius 50%
   cursor pointer
   transition background 0.2s ease
@@ -117,7 +132,8 @@ body.darkmode
   text-align center
   font-size 14px
   color var(--reward-subtext)
-  margin 4px 0 20px
+  margin 4px 16px 20px
+  overflow-wrap anywhere
   line-height 1.5
 
   i
@@ -127,18 +143,25 @@ body.darkmode
 // ─── Channel tabs — segmented control ─────────────────────────────────────────
 // The track is a recessed container; the active item floats up with a white
 // background and shadow. No color is used to communicate selection.
-.reward-tabs
+.reward-tabs,
+.reward-sub-tabs
   display flex
+  width max-content
+  max-width 100%
   gap 3px
-  justify-content center
-  margin-bottom 20px
-  flex-wrap wrap
+  margin 0 auto
+  overflow-x auto
   background var(--reward-tabs-track)
   border-radius 8px
   padding 3px
 
-.reward-tab
+.reward-tabs
+  margin-bottom 20px
+
+.reward-tab,
+.reward-sub-tab
   display inline-flex
+  flex-shrink 0
   align-items center
   gap 5px
   padding 6px 14px
@@ -166,45 +189,51 @@ body.darkmode
     font-size 15px
     color inherit
 
-// ─── QR panel ─────────────────────────────────────────────────────────────────
-.reward-panel
-  display none
+// Inactive panels keep their grid area so channel/network switches never resize
+// the modal. Their content remains hidden and inert (see modal.ejs / ayeria.js).
+.reward-panels,
+.reward-method-panels
+  display grid
+  min-width 0
+
+.reward-panel,
+.reward-sub-panel
+  grid-area 1 / 1
+  min-width 0
+  align-self start
+  visibility hidden
+  opacity 0
+  pointer-events none
   text-align center
-  animation rewardFadeIn 0.2s ease
+  transition opacity 0.2s ease
 
   &.active
-    display block
-
-@keyframes rewardFadeIn
-  from
-    opacity 0
-    transform translateY(6px)
-  to
+    visibility inherit
     opacity 1
-    transform translateY(0)
+    pointer-events auto
 
-// Minimal white frame ensures QR codes are scannable in dark mode.
-// Exempted from the global darkmode image brightness dimming.
+// A single-method channel uses the available body space symmetrically instead
+// of leaving all the multi-network controls' reserved space below its QR code.
+.reward-panel
+  align-self center
+
+// Round the image itself; no independent white frame can escape image dimming.
 .reward-qrcode-wrap
   display inline-block
   line-height 0
-  padding 6px
-  border 1px solid var(--reward-qr-border)
-  border-radius 8px
-  background #ffffff
-
-  body.darkmode &
-    filter none
 
 .reward-qrcode
   display block
   width 180px
   height 180px
+  border-radius 8px
+  object-fit contain
 
 .reward-desc
   margin 10px 0 0
   font-size 13px
   color var(--reward-subtext)
+  overflow-wrap anywhere
 
 // Link to payment platform — elevated to match active tab style
 .reward-link
@@ -263,72 +292,42 @@ body.darkmode
     transform translateY(-1px)
     box-shadow 0 4px 16px rgba(0, 0, 0, 0.09)
 
-// ─── Sub-tabs (multi-chain) — same elevation pattern, smaller scale ───────────
+// ─── Networks — same control style, below the common QR / description area ───
+.reward-networks
+  margin-top 16px
+
 .reward-chain-hint
   text-align center
   font-size 13px
   color var(--reward-subtext)
   margin 0 0 10px
-
-.reward-sub-tabs
-  display inline-flex
-  gap 2px
-  justify-content center
-  margin-bottom 14px
-  background var(--reward-tabs-track)
-  border-radius 6px
-  padding 2px
+  overflow-wrap anywhere
 
 .reward-sub-tab
-  display inline-flex
-  align-items center
-  gap 4px
-  padding 4px 12px
-  border none
-  border-radius 4px
-  background transparent
-  color var(--reward-tab-text)
+  padding 6px 12px
   font-size 12px
-  cursor pointer
-  transition background 0.2s ease, color 0.15s ease, box-shadow 0.2s ease
-  font-family inherit
-  line-height 1.4
-
-  &:hover:not(.active)
-    background var(--reward-tab-hover)
-
-  &.active
-    background var(--reward-tab-active-bg)
-    color var(--reward-tab-active-text)
-    font-weight 500
-    box-shadow var(--reward-tab-active-shadow)
 
 .reward-sub-badge
   font-size 10px
   padding 1px 5px
   border-radius 4px
-  background rgba(0, 0, 0, 0.08)
+  background var(--reward-badge-bg)
   color var(--reward-tab-text)
   line-height 1.3
 
-  body.darkmode &
-    background rgba(255, 255, 255, 0.12)
+.reward-trigger:focus-visible,
+#reward-btn:focus-visible,
+.reward-modal :focus-visible
+  outline 2px solid var(--color-link)
+  outline-offset 3px
 
-.reward-sub-tab.active .reward-sub-badge
-  background rgba(0, 0, 0, 0.08)
-
-.reward-sub-panel
-  display none
-  text-align center
-  animation rewardFadeIn 0.2s ease
-
-  &.active
-    display block
+.reward-tab:focus-visible,
+.reward-sub-tab:focus-visible
+  outline-offset 0
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 @media (max-width: 768px)
   .reward-modal
-    width 88vw
     padding 20px 18px 24px
 
   .reward-qrcode
@@ -336,18 +335,16 @@ body.darkmode
     height 160px
 
 @media (max-width: 480px)
-  .reward-tabs,
-  .reward-sub-tabs
-    flex-wrap nowrap
-    overflow-x auto
-    justify-content flex-start
-    padding-bottom 4px
-    -webkit-overflow-scrolling touch
-
   .reward-qrcode
     width 140px
     height 140px
 
   .reward-sub-tab
-    padding 4px 10px
-    font-size 12px
+    padding 6px 10px
+
+@media (prefers-reduced-motion: reduce)
+  #mask,
+  .reward-modal,
+  .reward-panel,
+  .reward-sub-panel
+    transition none

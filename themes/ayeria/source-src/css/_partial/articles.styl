@@ -7,14 +7,24 @@
     margin-top 1rem
     padding 0 2rem 2rem
     border 1px dashed lighten(tag-color,80%)
+    // A reading-context control: match blockquote surfaces without their rule.
     .article-more-link
       display inline-block
       float right
-      background-color body-color 
-      padding .5rem 1rem
-      border-radius 4px
-      color white !important
+      padding .5rem 1.5rem
+      background-color var(--blockquote-bg)
+      border 0
+      border-radius 0
+      color inherit
+      font inherit
       text-decoration none
+      transition color .2s ease
+      &:hover,
+      &:focus-visible
+        color var(--color-link)
+      &:focus-visible
+        outline 2px solid var(--color-link)
+        outline-offset 3px
     .article-gallery
       margin-top 1.5rem
   .article-footer

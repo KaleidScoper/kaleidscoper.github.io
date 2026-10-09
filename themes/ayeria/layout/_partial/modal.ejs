@@ -2,18 +2,18 @@
 
 <% var channels = (theme.reward && theme.reward.channels) ? theme.reward.channels : []; %>
 <% if (channels.length > 0) { %>
-<div id="reward" class="reward-modal">
-  <span class="reward-close"><i class="ri-close-line"></i></span>
+<div id="reward" class="reward-modal" role="dialog" aria-modal="true" aria-labelledby="reward-wording" inert>
+  <button type="button" class="reward-close" aria-label="<%= __('close') %>"><i class="ri-close-line" aria-hidden="true"></i></button>
 
-  <p class="reward-wording">
+  <p id="reward-wording" class="reward-wording">
     <i class="ri-cup-line"></i><%= theme.reward_wording %>
   </p>
 
   <% if (channels.length > 1) { %>
   <div class="reward-tabs">
     <% channels.forEach(function(ch, i) { %>
-    <button class="reward-tab<%= i === 0 ? ' active' : '' %>"
-            data-index="<%= i %>">
+    <button type="button" class="reward-tab<%= i === 0 ? ' active' : '' %>"
+            data-index="<%= i %>" aria-pressed="<%= i === 0 %>" aria-controls="reward-panel-<%= i %>">
       <i class="<%= ch.icon %>"></i>
       <span><%= ch.name %></span>
     </button>
@@ -23,26 +23,16 @@
 
   <div class="reward-panels">
     <% channels.forEach(function(ch, i) { %>
-    <div class="reward-panel<%= i === 0 ? ' active' : '' %>" data-index="<%= i %>">
+    <% var hasChildren = ch.children && ch.children.length; %>
+    <% var methods = hasChildren ? ch.children : [ch]; %>
+    <div id="reward-panel-<%= i %>" class="reward-panel<%= i === 0 ? ' active' : '' %>" data-index="<%= i %>" <%- i === 0 ? '' : 'inert' %>>
 
-      <% if (ch.children && ch.children.length) { %>
-      <% if (ch.description) { %>
-      <p class="reward-chain-hint"><%= ch.description %></p>
-      <% } %>
-      <div class="reward-sub-tabs">
-        <% ch.children.forEach(function(sub, j) { %>
-        <button class="reward-sub-tab<%= j === 0 ? ' active' : '' %>"
-                data-parent="<%= i %>" data-sub="<%= j %>">
-          <%= sub.name %>
-          <% if (sub.badge) { %><span class="reward-sub-badge"><%= sub.badge %></span><% } %>
-        </button>
-        <% }); %>
-      </div>
-      <% ch.children.forEach(function(sub, j) { %>
+      <div class="reward-method-panels">
+      <% methods.forEach(function(sub, j) { %>
       <div class="reward-sub-panel<%= j === 0 ? ' active' : '' %>"
-           data-parent="<%= i %>" data-sub="<%= j %>">
+           id="reward-method-<%= i %>-<%= j %>" data-sub="<%= j %>" <%- j === 0 ? '' : 'inert' %>>
         <div class="reward-qrcode-wrap">
-          <img class="reward-qrcode" src="<%- url_for(sub.qrcode) %>" alt="<%= ch.name %> - <%= sub.name %>">
+          <img class="reward-qrcode" src="<%- url_for(sub.qrcode) %>" alt="<%= hasChildren ? ch.name + ' - ' + sub.name : ch.name %>">
         </div>
         <% if (sub.description) { %>
         <p class="reward-desc"><%= sub.description %></p>
@@ -54,19 +44,23 @@
         <% } %>
       </div>
       <% }); %>
-      <% } else { %>
-
-      <div class="reward-qrcode-wrap">
-        <img class="reward-qrcode" src="<%- url_for(ch.qrcode) %>" alt="<%= ch.name %>">
       </div>
+
+      <% if (hasChildren) { %>
+      <div class="reward-networks">
       <% if (ch.description) { %>
-      <p class="reward-desc"><%= ch.description %></p>
+      <p class="reward-chain-hint"><%= ch.description %></p>
       <% } %>
-      <% if (ch.link) { %>
-      <a class="reward-link" href="<%= ch.link %>" target="_blank" rel="noopener">
-        前往<%= ch.name %> <i class="ri-external-link-line"></i>
-      </a>
-      <% } %>
+      <div class="reward-sub-tabs">
+        <% methods.forEach(function(sub, j) { %>
+        <button type="button" class="reward-sub-tab<%= j === 0 ? ' active' : '' %>"
+                data-parent="<%= i %>" data-sub="<%= j %>" aria-pressed="<%= j === 0 %>" aria-controls="reward-method-<%= i %>-<%= j %>">
+          <%= sub.name %>
+          <% if (sub.badge) { %><span class="reward-sub-badge"><%= sub.badge %></span><% } %>
+        </button>
+        <% }); %>
+      </div>
+      </div>
       <% } %>
 
     </div>
