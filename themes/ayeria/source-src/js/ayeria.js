@@ -150,48 +150,72 @@
   });
 
   // Reward Modal
+  var rewardPreviousFocus = null;
+
+  function closeReward() {
+    var $modal = $("#reward");
+    if (!$modal.hasClass("visible")) return;
+    $("#mask").removeClass("active");
+    $modal.removeClass("visible").attr("inert", "");
+    if (rewardPreviousFocus && rewardPreviousFocus.isConnected) {
+      rewardPreviousFocus.focus();
+    }
+  }
+
   $(document).on("click", ".reward-trigger, #reward-btn", function () {
     var $modal = $("#reward");
-    var $mask = $("#mask");
     if (!$modal.length) return;
 
-    $mask.fadeIn(150);
-    $modal.addClass("visible");
+    rewardPreviousFocus = document.activeElement;
+    $("#mask").addClass("active");
+    $modal.removeAttr("inert").addClass("visible");
+    $modal.find(".reward-close").trigger("focus");
   });
 
-  $(document).on("click", "#reward .reward-close, #mask", function () {
-    $("#mask").fadeOut(100);
-    $("#reward").removeClass("visible");
-  });
+  $(document).on("click", "#reward .reward-close, #mask", closeReward);
 
   $(document).on("click", ".reward-tab", function () {
     var $this = $(this);
     var idx = $this.data("index");
 
-    $(".reward-tab").removeClass("active");
-    $this.addClass("active");
+    $("#reward .reward-tab").removeClass("active").attr("aria-pressed", "false");
+    $this.addClass("active").attr("aria-pressed", "true");
 
-    $(".reward-panel").removeClass("active");
-    $('.reward-panel[data-index="' + idx + '"]').addClass("active");
+    $("#reward .reward-panel").removeClass("active").attr("inert", "");
+    $('#reward .reward-panel[data-index="' + idx + '"]').removeAttr("inert").addClass("active");
   });
 
   $(document).on("click", ".reward-sub-tab", function () {
     var $this = $(this);
     var parent = $this.data("parent");
     var sub = $this.data("sub");
-    var $panel = $('.reward-panel[data-index="' + parent + '"]');
+    var $panel = $('#reward .reward-panel[data-index="' + parent + '"]');
 
-    $panel.find(".reward-sub-tab").removeClass("active");
-    $this.addClass("active");
+    $panel.find(".reward-sub-tab").removeClass("active").attr("aria-pressed", "false");
+    $this.addClass("active").attr("aria-pressed", "true");
 
-    $panel.find(".reward-sub-panel").removeClass("active");
-    $panel.find('.reward-sub-panel[data-sub="' + sub + '"]').addClass("active");
+    $panel.find(".reward-sub-panel").removeClass("active").attr("inert", "");
+    $panel.find('.reward-sub-panel[data-sub="' + sub + '"]').removeAttr("inert").addClass("active");
   });
 
   $(document).on("keydown", function (e) {
+    var $modal = $("#reward");
+    if (!$modal.hasClass("visible")) return;
     if (e.key === "Escape") {
-      $("#mask").fadeOut(100);
-      $("#reward").removeClass("visible");
+      closeReward();
+    } else if (e.key === "Tab") {
+      var controls = $modal.find("button, a[href]").filter(function () {
+        return !this.closest("[inert]") && !this.disabled;
+      }).get();
+      var first = controls[0];
+      var last = controls[controls.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     }
   });
 
