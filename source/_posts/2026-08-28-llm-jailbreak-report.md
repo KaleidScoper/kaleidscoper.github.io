@@ -15,7 +15,9 @@ reward: true
 
 ## 零、越狱
 
-2025 年 5 月有一篇多语言越狱对照实验报告（[The Tower of Babel Revisited](https://arxiv.org/abs/2505.12287)），在 GPT-4o、Gemini-1.5-Pro、Qwen-Max 和 DeepSeek-R1 上跑了 38400 条应答，分为 6 类受限内容、32 条禁问 × 6 种攻击提示配置（完整攻击 + 5 组消融），每条禁问每种语言重复 25 次，输出由两名双语博士评审按 Success / Fail / Response but Acceptable 三分类人工标注，分歧交第三方资深评审仲裁（论文没有考虑标注者一致性系数）。
+2025 年 5 月有一篇多语言越狱对照实验报告（[The Tower of Babel Revisited](https://arxiv.org/abs/2505.12287)）。
+
+实验在 GPT-4o、Gemini-1.5-Pro、Qwen-Max 和 DeepSeek-R1 上跑了 38400 条应答，分为 6 类受限内容、32 条禁问 × 6 种攻击提示配置（完整攻击 + 5 组消融），每条禁问每种语言重复 25 次，输出由人类按 Success / Fail / Response but Acceptable 三个分类标注。
 
 完整攻击（Full-Attack）配置下的 ASR 分数（攻击成功率）：
 
@@ -28,17 +30,23 @@ reward: true
 
 四个模型里，三个都是用中文提示词更容易越狱成功，DeepSeek-R1 差异最大；Gemini-1.5-Pro 是反例（英文略高）。原文引用 Wang et al. (2024) 来解释原因，即模型能拒答英文越狱提示，却在中文下产出不安全内容，是因为 RLHF 的对齐语料以英文为主。
 
-我对这个解释比较怀疑，比较符合人们直觉的一个理论应该是，模型在使用低资源语言（语料更少的小语种）时更脆弱——难道中文对 DeepSeek 来说是小语种吗。考虑到在 LLM 领域里，这算是古人研究古董写的古文了，希望数据还是有点参考价值的。
+我对这个解释比较怀疑，比较符合人们直觉的一个理论应该是，模型在使用低资源语言（语料更少的小语种）时更脆弱——难道中文对 DeepSeek 来说是小语种吗。
+
+考虑到在 LLM 领域里，这算是古人研究古董写的古文了，希望至少数据还是有点参考价值的。
 
 DeepSeek 从 V2/V3 开始用 MoE 稀疏路由：每个 token 只激活 top-k 个专家子网络，而不是激活整张网。直接后果是现在安全对齐不再“均匀”分布。
 
-黑盒（调 API）角度有一些我比较喜欢的解释（[RASA: Routing-Aware Safety Alignment for Mixture-of-Experts Models, arXiv 2602.04448](https://arxiv.org/abs/2602.04448)，收录于 [promptfoo LMVD](https://www.promptfoo.dev/lm-security-db/vuln/moe-routing-safety-bypass-e37619a6/)）：MoE 在全参数安全微调阶段存在一种对齐捷径——模型会通过改路由、绕开“不那么安全”的专家来 reward hacking，而不是去修正那些真正会产出有害内容的专家参数，不安全参数原封不动地留在专家里。
+黑盒（调 API）角度看（[RASA: Routing-Aware Safety Alignment for Mixture-of-Experts Models, arXiv 2602.04448](https://arxiv.org/abs/2602.04448)，收录于 [promptfoo LMVD](https://www.promptfoo.dev/lm-security-db/vuln/moe-routing-safety-bypass-e37619a6/)），MoE 在全参数安全微调阶段存在一种对齐捷径——模型会通过改路由、绕开“不那么安全”的专家来“reward hacking”，而不是去修正那些真正会产出有害内容的专家参数，不安全参数原封不动地留在专家里。
 
-而攻击面就在这里：路由由输入的表层形式决定。同一个有害意图，标准问法被路由到拒答专家、被拒；换成虚构场景、思想实验或 roleplay 把它包一下，路由分布就变了，于是重新激活那批在安全训练里被绕过的法外狂徒，有害内容就出来了。这条路径是纯黑盒的——不要权重、不要梯度，只需要改说法。
+而攻击面就在这里：路由由输入的表层形式决定。同一个有害意图，标准问法被路由到拒答专家然后拒掉，换成虚构场景、思想实验或 roleplay 把它包一下，路由分布就变了，于是重新激活那批在安全训练里被绕过的法外狂徒，有害内容就出来了。
 
-白盒（本地部署）角度会有更好的办法（[Large Language Lobotomy, arXiv 2602.08741](https://arxiv.org/abs/2602.08741)）：MoE 的拒答行为集中在稀疏的一小撮专家里，而不是平摊到全网。攻击者只要设法定位这批“和谐”的专家，在 softmax 之前把它们的路由 logits 置为负无穷，概率质量就被强行分给法外狂徒——不用训练或者改权重，通常让不到 20% 的层级专家闭麦即可，平均 ASR 从 7.3% 拉到 70.4%（个别模型 86.3%），通用能力据说基本不掉。
+白盒（本地部署）角度会有更好的办法（[Large Language Lobotomy, arXiv 2602.08741](https://arxiv.org/abs/2602.08741)）：MoE 的拒答行为集中在稀疏的一小撮专家里，而不是平摊到全网。
 
-当然依旧古人测古董，V3/V4 这些大 MoE 上都没有什么公开验证。V4.* API 甲的实际情况目前没人知道，大概率是以上这种甲加上一个国内政治向的敏感词表。想写今上和特朗普刘备文的要失望了。
+攻击者只要设法定位这批“和谐”的专家，在 softmax 之前把它们的路由 logits 置为负无穷，概率质量就被强行分给法外狂徒。
+
+通常让不到 20% 的层级专家闭麦即可，平均 ASR 从 7.3% 拉到 70.4%（个别模型 86.3%），通用能力基本不变。
+
+当然依旧古人测古董，V3/V4 这些大 MoE 上都没有什么公开验证。V4.* API 甲的实际情况目前没人知道，大概率是以上这种甲加上一个国内政治向的敏感词表。
 
 ## 一、渗透测试
 
