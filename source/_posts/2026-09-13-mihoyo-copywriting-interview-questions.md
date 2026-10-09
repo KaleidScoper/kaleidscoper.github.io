@@ -142,19 +142,18 @@ $$
 > 28 如今短视频时代玩家耐心极度下降，剧情跳过按键成为玩家刚需。在必须保留该按键的前提下，如何通过设计让玩家主动愿意留下来看剧情？
 
 <style>
-.mihoyo-skip-question {
+.article-entry .mihoyo-skip-question {
   display: inline-flex;
-  width: auto;
-  height: auto;
-  padding: 10px 20px;
-  border-radius: 20px;
-  font-family: "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
-  font-size: 0.9em;
-  font-weight: 500;
-  line-height: 1.5;
+  align-items: center;
+  padding: .5rem 1.5rem;
+  background-color: var(--blockquote-bg);
+  border: 0;
+  border-radius: 0;
+  font: inherit;
   white-space: nowrap;
-  color: white;
+  color: inherit;
   text-decoration: none;
+  transition: color .2s ease;
 }
 .mihoyo-skip-question-wrap {
   display: flex;
@@ -166,15 +165,18 @@ $$
   font-size: 1em;
   line-height: 1;
 }
-.mihoyo-skip-question:focus-visible {
-  outline: 2px solid var(--color-text);
+.article-entry .mihoyo-skip-question:hover,
+.article-entry .mihoyo-skip-question:focus-visible {
+  color: var(--color-link);
+}
+.article-entry .mihoyo-skip-question:focus-visible {
+  outline: 2px solid var(--color-link);
   outline-offset: 3px;
-  opacity: 1;
 }
 </style>
 
 <div class="mihoyo-skip-question-wrap">
-  <a href="#mihoyo-question-29" class="float-btn mihoyo-skip-question"><i class="ri-skip-forward-line" aria-hidden="true"></i>跳过此问题</a>
+  <a href="#mihoyo-question-29" class="mihoyo-skip-question"><i class="ri-skip-forward-line" aria-hidden="true"></i>跳过此问题</a>
 </div>
 
 ---
