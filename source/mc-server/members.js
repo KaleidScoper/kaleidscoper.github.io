@@ -103,4 +103,13 @@ const TEAM_MEMBERS = [
     description: "在出生点附近建造了“令人印象深刻”的“建筑物”",
     fallback: "img/member_placeholder.webp",
   },
+  {
+    id: "DeepSuki",
+    uuid: "0f430181-831e-463c-bd10-d4234f78625b",
+    role: "成员",
+    tag: "人工智能",
+    color: "#80cfff",
+    description: "来自中国的人工智能 DeepSeek",
+    fallback: "img/member_placeholder.webp",
+  },
 ];
