@@ -37,6 +37,8 @@ jobs:
             ${{ runner.OS }}-npm-theme-
       - name: Build theme
         run: cd themes/ayeria && npm install && npm run build
+      - name: Check landing font subset
+        run: python3 tools/subset_font.py --check
       - name: Build
         run: npm run build
       - name: Upload Pages artifact

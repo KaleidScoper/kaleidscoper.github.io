@@ -1,0 +1,340 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ayeria · 为中文书写而生的 Hexo 主题</title>
+<meta name="description" content="Ayeria 是一个干净、克制的 Hexo 主题：全屏图像封面、本地全文搜索、明暗双模式与四套评论系统，装好即用。">
+<link rel="canonical" href="https://kaleidscoper.github.io/ayeria/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ayeria · 为中文书写而生的 Hexo 主题">
+<meta property="og:description" content="全屏图像封面、本地全文搜索、明暗双模式与四套评论系统，装好即用。">
+<meta property="og:url" content="https://kaleidscoper.github.io/ayeria/">
+<meta property="og:image" content="https://kaleidscoper.github.io/ayeria/img/shot-home.webp">
+<meta name="theme-color" content="#FBFAF7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1C1F26" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/svg+xml" href="img/ayeria.svg">
+<link rel="apple-touch-icon" href="img/ayeria.svg">
+<link rel="preload" as="image" href="img/hero-1280.webp" imagesrcset="img/hero-1280.webp 1280w, img/hero-1920.webp 1920w" imagesizes="100vw" fetchpriority="high">
+<link rel="stylesheet" href="style.css">
+<script>
+  (function () {
+    var root = document.documentElement;
+    root.classList.add('js');
+    var stored = null;
+    try { stored = sessionStorage.getItem('darkmode'); } catch (e) {}
+    var dark = stored === '1' || (stored === null &&
+      window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    root.setAttribute('data-theme', dark ? 'dark' : 'light');
+  })();
+</script>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a class="brand" href="./" aria-label="Ayeria 首页">
+      <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.4 10.6 6 6 10.6 1.4 6Z" fill="currentColor"/></svg>
+      <span>Ayeria</span>
+    </a>
+    <nav class="nav__links" aria-label="页面导航">
+      <a href="#typography">排版</a>
+      <a href="#search">搜索</a>
+      <a href="#mobile">移动端</a>
+      <a href="#install">安装</a>
+    </nav>
+    <div class="nav__actions">
+      <button class="icon-btn" type="button" id="theme-toggle" aria-label="切换明暗模式" aria-pressed="false">
+        <svg class="i-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+        <svg class="i-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+      <a class="btn btn--ghost btn--sm nav__gh" href="https://github.com/KaleidScoper/hexo-theme-ayeria" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn btn--primary btn--sm" href="https://kaleidscoper.github.io/" target="_blank" rel="noopener">
+        示例站
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <!-- 首屏 -->
+  <section class="hero" id="top">
+    <div class="hero__media" aria-hidden="true">
+      <img class="hero__photo"
+           src="img/hero-1280.webp"
+           srcset="img/hero-1280.webp 1280w, img/hero-1920.webp 1920w"
+           sizes="100vw" width="1920" height="1438" alt="" fetchpriority="high" decoding="sync">
+      <div class="hero__blur" style="background-image:url(img/hero-1280.webp)"></div>
+    </div>
+
+    <div class="hero__inner wrap">
+      <div class="hero__text">
+        <p class="eyebrow"><i aria-hidden="true"></i>Hexo Theme<i aria-hidden="true"></i></p>
+        <h1>Ayeria</h1>
+        <p class="hero__sub">为中文书写而生的 Hexo 主题</p>
+        <p class="hero__lede">全屏图像封面、本地全文搜索、明暗双模式与四套评论系统。<br>装好即用；想改样式，只写一个 <code>custom.styl</code>。</p>
+
+        <div class="install">
+          <span class="install__prompt" aria-hidden="true">$</span>
+          <span class="install__cmd">npm i hexo-theme-ayeria</span>
+          <button type="button" data-copy="npm i hexo-theme-ayeria" aria-label="复制安装命令">
+            <svg class="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <svg class="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+          </button>
+        </div>
+
+        <div class="cta-row">
+          <a class="btn btn--primary" href="https://kaleidscoper.github.io/" target="_blank" rel="noopener">
+            看看示例站
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </a>
+          <a class="btn btn--ghost" href="https://github.com/KaleidScoper/hexo-theme-ayeria" target="_blank" rel="noopener">GitHub</a>
+        </div>
+
+        <p class="hero__meta"><span>v1.9.11</span><span>14 个语言包</span><span>SATA 许可</span></p>
+      </div>
+
+      <div class="hero__visual">
+        <figure class="browser">
+          <div class="browser__chrome" aria-hidden="true">
+            <span class="browser__dot"></span><span class="browser__dot"></span><span class="browser__dot"></span>
+            <span class="browser__url">kaleidscoper.github.io</span>
+          </div>
+          <div class="browser__screen">
+            <img src="img/shot-home.webp" width="1440" height="900" alt="Ayeria 主题首页截图：全屏黄昏插画封面与左侧导航" fetchpriority="high" decoding="sync">
+          </div>
+        </figure>
+        <p class="visual-caption">主题首页 · 全屏封面与侧栏</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 排版 -->
+  <section class="section" id="typography">
+    <div class="wrap feature">
+      <div class="feature__text" data-reveal>
+        <p class="feature__idx">01 / 排版</p>
+        <h2>读到第三段，视线还没有被任何东西打断</h2>
+        <p>正文用思源宋体、1.7 倍行距，除了链接与行内代码，不给任何元素添颜色。目录、字数、版权声明都在，但都退到一边。</p>
+        <p class="feature__meta"><span>思源宋体</span><span>1.7 行距</span><span>无装饰边框</span></p>
+      </div>
+      <figure class="shot" data-reveal>
+        <img src="img/shot-article.webp" width="850" height="780" loading="lazy" decoding="async" alt="Ayeria 文章页截图：宋体标题、段落、引用与目录">
+        <figcaption>文章页 · 标题、正文、引用与目录</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 搜索 -->
+  <section class="section" id="search">
+    <div class="wrap feature feature--flip">
+      <div class="feature__text" data-reveal>
+        <p class="feature__idx">02 / 搜索</p>
+        <h2>三年写下的东西，找一句话就够</h2>
+        <p>构建时把全文写成一份 XML 索引，浏览器里直接检索，不经过任何服务器。敲 ⌘K 打开，结果里高亮关键词。</p>
+        <p class="feature__meta"><span>本地索引</span><span>无需后端</span><span>⌘K</span></p>
+      </div>
+
+      <div class="search-demo" data-reveal aria-hidden="true">
+        <div class="search-demo__ghost">
+          <p>紫禁城的四角各有一座角楼。站在护城河北岸看过去，三层檐口在同一个高度上收住，像一句话说完了，还留了半口气。望柱、栏板、斗拱、瓦当，构件各有各的名字，凑在一起才叫一座楼。</p>
+          <p>写文章也是这样：标题、段落、注脚，单看都不稀奇，摆对了位置才有人读下去。角楼的用处不在住人，而在收束。</p>
+          <p>城墙的尽头要有一个体面的句号。这句话放在建筑上成立，放在排版上也成立。</p>
+        </div>
+        <div class="searchcard">
+          <div class="searchcard__bar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+            <span class="searchcard__q">角楼</span>
+            <kbd>ESC</kbd>
+          </div>
+          <div class="searchcard__list">
+            <div class="res">
+              <p class="res__title">角楼的重檐</p>
+              <p class="res__snippet">紫禁城的四角各有一座<mark>角楼</mark>，九梁十八柱七十二条脊……</p>
+              <p class="res__path">/2026/10/12/jiaolou/</p>
+            </div>
+            <div class="res">
+              <p class="res__title">从护城河看紫禁城</p>
+              <p class="res__snippet">……<mark>角楼</mark>的三层檐口在同一个高度收束，水面把轮廓又描了一遍。</p>
+              <p class="res__path">/2025/03/08/moat/</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 移动端 -->
+  <section class="section" id="mobile">
+    <div class="wrap feature">
+      <div class="feature__text" data-reveal>
+        <p class="feature__idx">03 / 随时</p>
+        <h2>同一篇文章，换一块屏幕也不将就</h2>
+        <p>侧栏在窄屏收起，封面按视口重新裁切，字号与行距跟着读距走。手机、平板、桌面共用一套模板，不需要另做一份。</p>
+        <p class="feature__meta"><span>响应式</span><span>触屏字号</span><span>一套模板</span></p>
+      </div>
+      <figure class="phone" data-reveal>
+        <img src="img/phone-725.webp"
+             srcset="img/phone-725.webp 725w, img/phone-1450.webp 1450w"
+             sizes="(max-width: 860px) 60vw, 300px"
+             width="725" height="1468" loading="lazy" decoding="async"
+             alt="Ayeria 主题在 iPhone 上的移动端首页截图">
+        <figcaption>移动端首页 · 封面与菜单收起</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 安装 -->
+  <section class="section" id="install">
+    <div class="wrap">
+      <div class="sec-head" data-reveal><i aria-hidden="true"></i><span>Install</span></div>
+      <h2 class="sec-title" data-reveal>三步，装完就能写</h2>
+      <p class="sec-lede" data-reveal>不需要改主题目录里的任何文件。站点根目录的 <code>_config.ayeria.yml</code> 只写要覆盖的几项。</p>
+
+      <div class="steps">
+        <div class="step" data-reveal>
+          <span class="step__no">01</span>
+          <div class="step__body">
+            <h3>安装</h3>
+            <p>在站点根目录执行，Hexo 5 及以上版本均可。</p>
+            <div class="code">
+              <button class="code__copy" type="button" data-copy="npm i hexo-theme-ayeria -S" aria-label="复制命令">
+                <svg class="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <svg class="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              </button>
+              <pre><code>npm i hexo-theme-ayeria -S</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="step" data-reveal>
+          <span class="step__no">02</span>
+          <div class="step__body">
+            <h3>写配置</h3>
+            <p>新建 <code>_config.ayeria.yml</code>，只填想改的项；主题升级不会覆盖它。</p>
+            <div class="code">
+              <button class="code__copy" type="button" data-copy="# _config.ayeria.yml&#10;menu:&#10;  首页: /&#10;  归档: /archives&#10;search: true&#10;darkmode: true" aria-label="复制配置">
+                <svg class="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <svg class="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              </button>
+              <pre><code><span class="cm"># _config.ayeria.yml</span>
+menu:
+  首页: /
+  归档: /archives
+search: true
+darkmode: true</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="step" data-reveal>
+          <span class="step__no">03</span>
+          <div class="step__body">
+            <h3>构建</h3>
+            <p>本地预览用 <code>hexo server</code>；确认无误再交给 GitHub Actions。</p>
+            <div class="code">
+              <button class="code__copy" type="button" data-copy="hexo clean &amp;&amp; hexo generate" aria-label="复制命令">
+                <svg class="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <svg class="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              </button>
+              <pre><code>hexo clean &amp;&amp; hexo generate</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 疑问 -->
+  <section class="section" id="faq">
+    <div class="wrap">
+      <div class="sec-head" data-reveal><i aria-hidden="true"></i><span>Questions</span></div>
+      <h2 class="sec-title" data-reveal>几个常被问到的</h2>
+
+      <div class="faq" data-reveal>
+        <details>
+          <summary>需要修改主题文件吗？</summary>
+          <p>不需要。站点根目录的 <code>_config.ayeria.yml</code> 只写要覆盖的项，主题升级不会动它。真要加样式，改站点里的 <code>source/css/custom.styl</code>，它加载在主题样式之后。</p>
+        </details>
+        <details>
+          <summary>和原来的 Ayer 是什么关系？</summary>
+          <p>Ayeria 基于 Ayer 深度定制并独立维护，沿用 SATA 许可，保留原作者 Eric-Shen 的署名。</p>
+        </details>
+        <details>
+          <summary>还要装哪些插件？</summary>
+          <p>搜索需要 <code>hexo-generator-searchdb</code>，字数统计需要 <code>hexo-wordcount</code>。评论、公式、流程图按需开启，其余都可以不装。</p>
+        </details>
+        <details>
+          <summary>深色模式会记住吗？</summary>
+          <p>会。切换时写入 <code>sessionStorage</code>，同一标签页内刷新与跳转都保持；关闭标签页后回到系统偏好。</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- 封底 -->
+  <div class="backmatter">
+    <section class="finale">
+      <div class="wrap">
+        <h2>从一条命令开始</h2>
+        <p>五分钟装好，剩下的时间用来写字。</p>
+        <div class="install">
+          <span class="install__prompt" aria-hidden="true">$</span>
+          <span class="install__cmd">npm i hexo-theme-ayeria</span>
+          <button type="button" data-copy="npm i hexo-theme-ayeria" aria-label="复制安装命令">
+            <svg class="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <svg class="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+          </button>
+        </div>
+        <div class="cta-row">
+          <a class="btn btn--primary" href="https://github.com/KaleidScoper/hexo-theme-ayeria" target="_blank" rel="noopener">
+            去 GitHub 看看
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </a>
+          <a class="btn btn--ghost" href="https://www.npmjs.com/package/hexo-theme-ayeria" target="_blank" rel="noopener">npm 页面</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="wrap">
+        <div class="footer__grid">
+          <div class="footer__col">
+            <span class="footer__brand">
+              <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.4 10.6 6 6 10.6 1.4 6Z" fill="currentColor"/></svg>
+              Ayeria
+            </span>
+            <p class="footer__tagline">一个干净、克制的 Hexo 主题，<br>2022 年起持续维护。</p>
+          </div>
+          <div class="footer__col">
+            <h2 class="footer__title">Links</h2>
+            <div class="footer__links">
+              <a href="https://github.com/KaleidScoper/hexo-theme-ayeria" target="_blank" rel="noopener">GitHub</a>
+              <a href="https://www.npmjs.com/package/hexo-theme-ayeria" target="_blank" rel="noopener">npm</a>
+              <a href="https://kaleidscoper.github.io/" target="_blank" rel="noopener">示例站</a>
+              <a href="https://github.com/KaleidScoper/hexo-theme-ayeria/blob/main/CHANGELOG.md" target="_blank" rel="noopener">更新日志</a>
+            </div>
+          </div>
+          <div class="footer__col">
+            <h2 class="footer__title">Colophon</h2>
+            <p>© 2022–2026 Kaleid Scoper</p>
+            <p>SATA 许可 · 基于 Ayer 定制，原作者 Eric-Shen</p>
+            <p>本页为纯静态页面，无外部请求。</p>
+          </div>
+        </div>
+        <div class="footer__bottom">
+          <span>封面图：Ayer 默认主题封面</span>
+          <span>字体：思源宋体（本站子集）</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+</main>
+
+<div id="live" role="status" aria-live="polite" class="sr-only"></div>
+
+<script src="landing.js"></script>
+</body>
+</html>
