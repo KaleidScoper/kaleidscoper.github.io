@@ -38,6 +38,7 @@ skip_render:
   - cctv/**
   - DDoS-Test-Lab/**
   - poetry-stats/**
+  - ayeria/**
 
 
 # Writing

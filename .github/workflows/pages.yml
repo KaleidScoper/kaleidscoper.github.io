@@ -37,6 +37,17 @@ jobs:
             ${{ runner.OS }}-npm-theme-
       - name: Build theme
         run: cd themes/ayeria && npm install && npm run build
+      - name: Ensure landing font subset
+        run: |
+          if ! python3 tools/subset_font.py --check; then
+            python3 -m pip install fonttools brotli
+            # 固定源字体版本，避免构建结果随第三方字体更新而变化。
+            python3 -c 'import sys, urllib.request; urllib.request.urlretrieve(sys.argv[1], sys.argv[2])' \
+              'https://raw.githubusercontent.com/google/fonts/8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5/ofl/notoserifsc/NotoSerifSC%5Bwght%5D.ttf' \
+              "$RUNNER_TEMP/NotoSerifSC-VF.ttf"
+            python3 tools/subset_font.py --src "$RUNNER_TEMP/NotoSerifSC-VF.ttf"
+            python3 tools/subset_font.py --check
+          fi
       - name: Build
         run: npm run build
       - name: Upload Pages artifact
