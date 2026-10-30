@@ -14,7 +14,7 @@ layout: page
     <h2 class="profile-name">Kaleid Scoper</h2>
     <p class="profile-title">漢人 | 安徽大学 | INTP</p>
     <p class="profile-desc">
-      欢迎来到我的博客！我是 Kale，毕业于信息安全专业。此网站作为我的电子日记本，主要用于堆放我本人写的一些没用的内容。祝你度过美好的一天。
+      欢迎来到我的博客！我是 Kale，毕业于信息安全专业。此网站主要用于堆放我写的一些没用的东西，祝你度过美好的一天~
     </p>
   </div>
 </div>
@@ -37,7 +37,7 @@ layout: page
   </a>
 </div>
 
-本站曾经采用 WordPress + VPS 搭建，现换用 Hexo + GitHub Page 搭建，详情请前往[本站 GitHub 仓库页面](https://github.com/KaleidScoper/kaleidscoper.github.io)查看。本站使用的主题为 **自研主题 [Ayeria](https://github.com/KaleidScoper/hexo-theme-ayeria)**，喜欢的话欢迎大家使用、修改、提建议。
+本站曾经采用 WordPress + VPS 搭建，现换用 Hexo + GitHub Page 搭建，使用的主题为 **自研主题 [Ayeria](https://kaleidscoper.github.io/ayeria)**，喜欢的话欢迎大家使用、修改、提建议。
 
 我保证本站无任何评论审核、封禁、禁言、敏感词条等规则，这也意味着网站内可能出现非预期的恶意内容。<strong>您在此处发布的内容最好遵守您居住地的相关法律法规。</strong>
 
