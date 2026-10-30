@@ -331,24 +331,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
   mask-image: linear-gradient(to bottom, transparent 46%, #000 82%, #000 100%);
 }
 
-.hero__media::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  background: radial-gradient(56% 64% at 24% 52%,
-    var(--scrim-solid) 0%,
-    var(--scrim-solid) 42%,
-    var(--scrim-soft) 68%,
-    var(--scrim-none) 100%);
-}
-
 .hero__media::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 3;
   background:
+    linear-gradient(90deg, var(--scrim-solid) 0%, var(--scrim-soft) 35%, var(--scrim-none) 80%),
     linear-gradient(180deg, var(--scrim-strong) 0%, var(--scrim-strong) 4%, var(--scrim-none) 20%),
     linear-gradient(0deg, var(--scrim-solid) 0%, var(--scrim-none) 24%);
 }
@@ -957,13 +946,6 @@ mark { background: var(--hl); color: inherit; padding: 0 .15em; border-radius: 2
   .nav__links { display: none; }
   .hero { padding: 10rem 0 7rem; align-items: start; }
   .hero__inner { grid-template-columns: minmax(0, 1fr); gap: 4.4rem; }
-  .hero__media::before {
-    background: radial-gradient(130% 78% at 50% 32%,
-      var(--scrim-solid) 0%,
-      var(--scrim-solid) 58%,
-      var(--scrim-soft) 82%,
-      var(--scrim-none) 100%);
-  }
   .hero__text { max-width: none; }
   .hero__visual { margin-top: .6rem; }
   .visual-caption { text-align: left; }
