@@ -59,7 +59,7 @@
 
   --radius:     12px;
   --radius-sm:  8px;
-  --pill:       19px;
+  --pill:       999px;
 
   --serif: "Ayeria Serif", "Noto Serif SC", "Source Han Serif SC", "STSong", Georgia, "Times New Roman", serif;
   --sans:  "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
@@ -206,8 +206,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .nav.is-scrolled .nav__inner {
   max-width: 98rem;
   height: 5.2rem;
-  padding-inline: 1.6rem .6rem;
-  border-radius: var(--pill);
+  padding-inline: 1.6rem calc(.8rem - 1px);
+  border-radius: 2.6rem;
   border-color: var(--hairline);
   background: var(--nav-bg);
   -webkit-backdrop-filter: blur(16px) saturate(150%);
@@ -598,14 +598,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
   overflow: hidden;
 }
 .shot img { width: 100%; height: auto; }
-.shot figcaption {
-  padding: 1.3rem 1.8rem 1.4rem;
-  border-top: 1px solid var(--hairline);
-  font-family: var(--sans);
-  font-size: 1.15rem;
-  letter-spacing: .03em;
-  color: var(--muted);
-}
 
 /* 手机 */
 .phone {
@@ -620,14 +612,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
   filter: drop-shadow(0 40px 60px rgba(0, 0, 0, .28));
 }
 [data-theme="dark"] .phone img { filter: drop-shadow(0 40px 60px rgba(0, 0, 0, .55)); }
-.phone figcaption {
-  margin-top: 2.4rem;
-  font-family: var(--sans);
-  font-size: 1.15rem;
-  letter-spacing: .03em;
-  color: var(--muted);
-  text-align: center;
-}
 
 /* 搜索活样本 */
 .search-demo {
@@ -901,15 +885,6 @@ mark { background: var(--hl); color: inherit; padding: 0 .15em; border-radius: 2
 .footer__links a:hover { color: var(--back-ink); }
 .footer__col p { line-height: 1.9; }
 .footer__col p + p { margin-top: .6rem; }
-.footer__bottom {
-  display: flex;
-  justify-content: space-between;
-  gap: 2rem;
-  margin-top: 4.4rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--back-line);
-  font-size: 1.15rem;
-}
 
 /* ---------------------------------------------------------------- 动效 */
 .js [data-reveal] {
@@ -960,7 +935,6 @@ mark { background: var(--hl); color: inherit; padding: 0 .15em; border-radius: 2
   .steps { gap: 4rem; }
   .finale { padding: 8rem 0; }
   .footer__grid { grid-template-columns: 1fr 1fr; gap: 3.2rem; }
-  .footer__bottom { flex-direction: column; gap: .8rem; }
   .search-demo { min-height: 36rem; padding: 3rem 2rem; }
 }
 
