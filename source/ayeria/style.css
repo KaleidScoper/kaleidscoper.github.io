@@ -576,20 +576,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
   color: var(--ink-2);
   text-wrap: pretty;
 }
-.feature__meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .8rem;
-}
-.feature__meta span {
-  padding: .35rem 1rem;
-  border: 1px solid var(--hairline);
-  border-radius: var(--pill);
-  font-family: var(--sans);
-  font-size: 1.15rem;
-  letter-spacing: .04em;
-  color: var(--muted);
-}
 
 /* 截图框 */
 .shot {
