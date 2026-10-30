@@ -600,13 +600,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
   position: relative;
   display: grid;
   place-items: center;
-  min-height: 42rem;
-  padding: 4rem 3rem;
+  min-height: 44rem;
+  padding: 5rem 3rem;
 }
 
 .search-demo__ghost {
   position: absolute;
-  inset: 0;
+  inset: 0 -3rem;
   padding: 1.6rem 1rem;
   font-size: 1.45rem;
   line-height: 2.1;
@@ -907,7 +907,8 @@ mark { background: var(--hl); color: inherit; padding: 0 .15em; border-radius: 2
   .steps { gap: 4rem; }
   .finale { padding: 8rem 0; }
   .footer__grid { grid-template-columns: 1fr 1fr; gap: 3.2rem; }
-  .search-demo { min-height: 36rem; padding: 3rem 2rem; }
+  .search-demo { min-height: 42rem; padding: 4rem 2rem; }
+  .search-demo__ghost { inset: 0; }
 }
 
 @media (max-width: 560px) {
@@ -923,6 +924,6 @@ mark { background: var(--hl); color: inherit; padding: 0 .15em; border-radius: 2
   .phone img { width: min(26rem, 78%); }
   .finale h2 { font-size: 2.8rem; }
   .footer__grid { grid-template-columns: 1fr; }
-  .search-demo { min-height: 34rem; padding: 2.4rem 1.6rem; }
+  .search-demo { min-height: 42rem; padding: 4rem 1.6rem; }
   .searchcard__bar { padding: 1.2rem 1.4rem; }
 }
