@@ -1,7 +1,7 @@
 ﻿/* ------------------------------------------------------------------
    Ayeria landing page
    字体：Ayeria Serif（Noto Serif SC 子集，SIL OFL 1.1）
-   令牌来源：主题 --reward-* / _darkmode.styl
+   配色来源：主题 _variables.styl / _tokens.styl、搜索与代码块样式
    ------------------------------------------------------------------ */
 @font-face {
   font-family: "Ayeria Serif";
@@ -24,32 +24,34 @@
 :root {
   color-scheme: light;
 
-  --paper:      #FBFAF7;
-  --paper-2:    #F3EFE7;
-  --panel:      #FFFDFA;
-  --code-bg:    #F1EDE4;
-  --ink:        #333333;
-  --ink-2:      #5C5650;
-  --muted:      #7A736B;
+  --paper:      #FFFFFF;
+  --paper-2:    #F4F4F4;
+  --panel:      #FFFFFF;
+  --code-bg:    #F8F8F8;
+  --ink:        #403E3E;
+  --button-bg:  var(--ink);
+  --ink-2:      #555555;
+  --muted:      #999999;
   --hairline:   rgba(0, 0, 0, .075);
   --hairline-2: rgba(0, 0, 0, .16);
-  --surface:    rgba(252, 250, 247, .97);
-  --nav-bg:     rgba(251, 250, 247, .78);
+  --surface:    rgba(255, 255, 255, .97);
+  --nav-bg:     rgba(255, 255, 255, .78);
   --accent:     #5AA8D8;
-  --link:       #0A6E96;
+  --link:       #0681D0;
   --hl:         rgba(90, 168, 216, .22);
   --shadow:     0 6px 24px rgba(0, 0, 0, .09);
+  --install-shadow: 0 4px 16px rgba(0, 0, 0, .16);
   --shadow-lift:0 12px 34px rgba(0, 0, 0, .13);
   --shadow-shot:0 30px 70px rgba(0, 0, 0, .22);
 
-  --scrim-strong:rgba(251, 250, 247, .93);
-  --scrim-solid: rgba(251, 250, 247, .97);
-  --scrim-soft:  rgba(251, 250, 247, .72);
-  --scrim-none:  rgba(251, 250, 247, 0);
+  --scrim-strong:rgba(255, 255, 255, .93);
+  --scrim-solid: rgba(255, 255, 255, .97);
+  --scrim-soft:  rgba(255, 255, 255, .72);
+  --scrim-none:  rgba(255, 255, 255, 0);
   --hero-dim:    1;
 
   --back-bg:    #1C1F26;
-  --back-ink:   #F1EEE8;
+  --back-ink:   #FFFFFF;
   --back-muted: rgba(255, 255, 255, .58);
   --back-line:  rgba(255, 255, 255, .14);
   --back-fill:  rgba(255, 255, 255, .06);
@@ -76,7 +78,8 @@
   --panel:      #232833;
   --code-bg:    #242935;
   --ink:        #D0D0D0;
-  --ink-2:      #B4B0AA;
+  --button-bg:  #FFFFFF;
+  --ink-2:      #AAAAAA;
   --muted:      #AAAAAA;
   --hairline:   rgba(255, 255, 255, .09);
   --hairline-2: rgba(255, 255, 255, .2);
@@ -95,14 +98,14 @@
   --scrim-none:  rgba(28, 31, 38, 0);
   --hero-dim:    .95;
 
-  --back-bg:    #EFEAE2;
-  --back-ink:   #2A2724;
-  --back-muted: rgba(42, 39, 36, .6);
-  --back-line:  rgba(42, 39, 36, .14);
-  --back-fill:  rgba(42, 39, 36, .05);
-  --back-fill-h:rgba(42, 39, 36, .09);
-  --back-ghost: rgba(42, 39, 36, .22);
-  --back-accent:#2A7C9F;
+  --back-bg:    #FFFFFF;
+  --back-ink:   #403E3E;
+  --back-muted: rgba(0, 0, 0, .6);
+  --back-line:  rgba(0, 0, 0, .14);
+  --back-fill:  rgba(0, 0, 0, .05);
+  --back-fill-h:rgba(0, 0, 0, .09);
+  --back-ghost: rgba(0, 0, 0, .22);
+  --back-accent:#0681D0;
 }
 
 /* ---------------------------------------------------------------- 基础 */
@@ -278,7 +281,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .btn svg { width: 1.4rem; height: 1.4rem; }
 
-.btn--primary { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.btn--primary { background: var(--button-bg); border-color: var(--button-bg); color: var(--paper); }
 .btn--primary:hover { transform: translateY(-1px); box-shadow: var(--shadow-lift); }
 
 .btn--ghost { background: transparent; border-color: var(--hairline-2); color: var(--ink); }
@@ -402,12 +405,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
   gap: 1rem;
   margin-top: 3.4rem;
   padding: .7rem .8rem .7rem 1.8rem;
-  border: 1px solid var(--hairline);
+  border: 0;
   border-radius: var(--pill);
   background: var(--surface);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
-  box-shadow: var(--shadow);
+  box-shadow: var(--install-shadow);
   font-family: var(--mono);
   font-size: 1.32rem;
   letter-spacing: .01em;
@@ -598,6 +601,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   overflow: hidden;
 }
 .shot img { width: 100%; height: auto; }
+[data-theme="dark"] .shot img { filter: brightness(.8); }
 
 /* 手机 */
 .phone {
@@ -826,8 +830,6 @@ mark { background: var(--hl); color: inherit; padding: 0 .15em; border-radius: 2
 .finale .install {
   margin-top: 3.4rem;
   background: var(--back-fill);
-  border-color: var(--back-line);
-  box-shadow: none;
   color: var(--back-ink);
 }
 .finale .install__cmd { color: var(--back-ink); }
