@@ -296,8 +296,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
   display: grid;
   align-items: center;
   padding: 12rem 0 8rem;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
 }
 
 .hero__media {
@@ -513,7 +511,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
 /* ---------------------------------------------------------------- 通用区块 */
 .section {
   padding: 13rem 0 0;
-  scroll-snap-align: start;
   scroll-margin-top: 8rem;
 }
 
@@ -554,14 +551,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .feature--flip .feature__text { order: 2; }
 
-.feature__idx {
-  font-family: var(--mono);
-  font-size: 1.1rem;
-  letter-spacing: .24em;
-  color: var(--muted);
-}
 .feature h2 {
-  margin-top: 1.4rem;
   font-size: clamp(2.4rem, 2.6vw, 3rem);
   font-weight: 700;
   line-height: 1.5;
@@ -883,17 +873,12 @@ mark { background: var(--hl); color: inherit; padding: 0 .15em; border-radius: 2
 .js [data-reveal].is-in { opacity: 1; transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; scroll-snap-type: none; }
+  html { scroll-behavior: auto; }
   *, *::before, *::after {
     animation-duration: .001ms !important;
     transition-duration: .001ms !important;
   }
   .js [data-reveal] { opacity: 1; transform: none; }
-}
-
-/* 只有桌面高视口才吸附 */
-@media (min-height: 900px) and (hover: hover) and (pointer: fine) {
-  html { scroll-snap-type: y proximity; }
 }
 
 /* ---------------------------------------------------------------- 响应 */
