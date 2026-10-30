@@ -181,7 +181,7 @@
   <!-- 安装 -->
   <section class="section" id="install">
     <div class="wrap">
-      <div class="sec-head" data-reveal><i aria-hidden="true"></i><span>Install</span></div>
+      <!--div class="sec-head" data-reveal><i aria-hidden="true"></i><span>Install</span></div-->
       <h2 class="sec-title" data-reveal>三步，装完就能写</h2>
       <p class="sec-lede" data-reveal>不需要改主题目录里的任何文件。站点根目录的 <code>_config.ayeria.yml</code> 只写要覆盖的几项。</p>
 
@@ -205,7 +205,7 @@
           <span class="step__no">02</span>
           <div class="step__body">
             <h3>写配置</h3>
-            <p>新建 <code>_config.ayeria.yml</code>，只填想改的项；主题升级不会覆盖它。</p>
+            <p>新建 <code>_config.ayeria.yml</code>，只填想改的项，不会被主题升级覆盖。</p>
             <div class="code">
               <button class="code__copy" type="button" data-copy="# _config.ayeria.yml&#10;menu:&#10;  首页: /&#10;  归档: /archives&#10;search: true&#10;darkmode: true" aria-label="复制配置">
                 <svg class="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
@@ -225,7 +225,7 @@ darkmode: true</code></pre>
           <span class="step__no">03</span>
           <div class="step__body">
             <h3>构建</h3>
-            <p>本地预览用 <code>hexo server</code>；确认无误再交给 GitHub Actions。</p>
+            <p>马上就可以在任何你想用的平台上享受主题了！</p>
             <div class="code">
               <button class="code__copy" type="button" data-copy="hexo clean &amp;&amp; hexo generate" aria-label="复制命令">
                 <svg class="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
@@ -243,12 +243,12 @@ darkmode: true</code></pre>
   <section class="section" id="faq">
     <div class="wrap">
       <div class="sec-head" data-reveal><i aria-hidden="true"></i><span>Questions</span></div>
-      <h2 class="sec-title" data-reveal>几个常被问到的</h2>
+      <h2 class="sec-title" data-reveal>FAQs</h2>
 
       <div class="faq" data-reveal>
         <details>
           <summary>需要修改主题文件吗？</summary>
-          <p>不需要。站点根目录的 <code>_config.ayeria.yml</code> 只写要覆盖的项，主题升级不会动它。真要加样式，改站点里的 <code>source/css/custom.styl</code>，它加载在主题样式之后。</p>
+          <p>除非你要改样式，否则不需要~ 站点根目录的 <code>_config.ayeria.yml</code> 只写要覆盖的项，不受主题升级影响。加样式可以放在站点里的 <code>source/css/custom.styl</code>，它会在主题样式之后加载，也可以直接改主题来维护属于你的 Ayer 分支！</p>
         </details>
         <details>
           <summary>和原来的 Ayer 主题是什么关系？</summary>
@@ -270,8 +270,7 @@ darkmode: true</code></pre>
   <div class="backmatter">
     <section class="finale">
       <div class="wrap">
-        <h2>从一条命令开始</h2>
-        <p>五分钟装好，剩下的时间用来写字。</p>
+        <h2>开始使用 Ayeria</h2>
         <div class="install">
           <span class="install__prompt" aria-hidden="true">$</span>
           <span class="install__cmd">npm i hexo-theme-ayeria</span>
@@ -280,6 +279,7 @@ darkmode: true</code></pre>
             <svg class="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
           </button>
         </div>
+        <p>也支持使用 Git 安装</p>
         <div class="cta-row">
           <a class="btn btn--primary" href="https://github.com/KaleidScoper/hexo-theme-ayeria" target="_blank" rel="noopener">
             去 GitHub 看看
@@ -298,7 +298,7 @@ darkmode: true</code></pre>
               <img src="img/ayeria.svg" width="22" height="22" alt="">
               Ayeria
             </span>
-            <p class="footer__tagline">一个干净、克制的 Hexo 主题，<br>2026 年起持续维护至今。</p>
+            <p class="footer__tagline">干净、克制的 Hexo 主题<br>自 2026 年起活跃维护中</p>
           </div>
           <div class="footer__col">
             <h2 class="footer__title">Links</h2>
