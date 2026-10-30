@@ -224,7 +224,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   letter-spacing: .02em;
   white-space: nowrap;
 }
-.brand svg { width: 1.1rem; height: 1.1rem; color: var(--accent); }
+.brand img { width: 2.4rem; height: 2.4rem; }
 
 .nav__links {
   display: flex;
@@ -896,7 +896,7 @@ mark { background: var(--hl); color: inherit; padding: 0 .15em; border-radius: 2
   font-size: 1.7rem;
   color: var(--back-ink);
 }
-.footer__brand svg { width: 1rem; height: 1rem; color: var(--back-accent); }
+.footer__brand img { width: 2.2rem; height: 2.2rem; }
 .footer__tagline { margin-top: 1.2rem; line-height: 1.9; }
 .footer__title {
   margin: 0 0 1.2rem;
