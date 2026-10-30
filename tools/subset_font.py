@@ -4,8 +4,8 @@
   python tools/subset_font.py            # 生成子集（需要 fonttools + brotli）
   python tools/subset_font.py --check    # 校验子集是否与当前文案一致（只用标准库）
 
-设计：子集随文案变化，构建期不生成，只在文案定稿后手动跑一次并提交产物；
-CI 只跑 --check，校验 manifest 里的字符集哈希，防止“改了文案忘了重跑”。
+CI 先运行 --check；字体缺失或字符集变化时，下载固定版本的源字体并重新生成，
+生成结果随本站部署，无需开发者手动更新或由 CI 回写仓库。
 """
 
 from __future__ import annotations
@@ -112,7 +112,7 @@ def build(src: Path) -> None:
 
 def check() -> int:
     if not MANIFEST.exists():
-        print("✗ 缺少 fonts/manifest.json，请先运行 npm run subset", file=sys.stderr)
+        print("✗ 缺少 fonts/manifest.json，需要生成字体子集。", file=sys.stderr)
         return 1
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     chars = char_set()
@@ -125,7 +125,7 @@ def check() -> int:
         print("✗ 落地页文案已变更，字体子集过期。", file=sys.stderr)
         print(f"  manifest: {manifest.get('chars')} 字符 / {manifest.get('hash')[:12]}", file=sys.stderr)
         print(f"  当前页面: {len(chars)} 字符 / {current[:12]}", file=sys.stderr)
-        print("  运行 npm run subset 重新生成并提交。", file=sys.stderr)
+        print("  CI 会自动重建；本地可运行 npm run subset。", file=sys.stderr)
         return 1
     print(f"✓ 字体子集与文案一致（{len(chars)} 字符，{manifest.get('cjk')} 汉字）")
     return 0
