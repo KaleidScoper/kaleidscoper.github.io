@@ -39,10 +39,11 @@
   --accent:     #5AA8D8;
   --link:       #0681D0;
   --hl:         rgba(90, 168, 216, .22);
-  --shadow:     0 6px 24px rgba(0, 0, 0, .09);
-  --install-shadow: 0 4px 16px rgba(0, 0, 0, .16);
-  --shadow-lift:0 12px 34px rgba(0, 0, 0, .13);
-  --shadow-shot:0 30px 70px rgba(0, 0, 0, .22);
+  --shadow:     0 3px 12px rgba(0, 0, 0, .06);
+  --install-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+  --shadow-lift:0 4px 14px rgba(0, 0, 0, .08);
+  --shadow-shot:0 8px 24px rgba(0, 0, 0, .10);
+  --shadow-phone:0 10px 18px rgba(0, 0, 0, .12);
 
   --scrim-strong:rgba(255, 255, 255, .93);
   --scrim-solid: rgba(255, 255, 255, .97);
@@ -89,8 +90,10 @@
   --link:       #80CFFF;
   --hl:         rgba(128, 207, 255, .2);
   --shadow:     0 6px 24px rgba(0, 0, 0, .45);
+  --install-shadow: 0 4px 16px rgba(0, 0, 0, .16);
   --shadow-lift:0 12px 34px rgba(0, 0, 0, .55);
   --shadow-shot:0 30px 70px rgba(0, 0, 0, .6);
+  --shadow-phone:0 40px 60px rgba(0, 0, 0, .55);
 
   --scrim-strong:rgba(28, 31, 38, .88);
   --scrim-solid: rgba(28, 31, 38, .92);
@@ -589,9 +592,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .phone img {
   width: min(30rem, 72%);
   height: auto;
-  filter: drop-shadow(0 40px 60px rgba(0, 0, 0, .28));
+  filter: drop-shadow(var(--shadow-phone));
 }
-[data-theme="dark"] .phone img { filter: drop-shadow(0 40px 60px rgba(0, 0, 0, .55)); }
 
 /* 搜索活样本 */
 .search-demo {
