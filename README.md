@@ -21,7 +21,7 @@ KaleidScoper testing his Hexo blog.
 
 ## 部署
 
-本网站为单仓库，工程文件与站点不分离，push不提交本地生成的静态网站`public`
+本网站为单仓库，工程文件与站点不分离，push不提交本地生成的静态网站`public`，以期能在任何设备上更新网站。
 
 构建方法：GitHub Page -> Action，具体代码位于`\.github\workflows\pages.yml`
 
