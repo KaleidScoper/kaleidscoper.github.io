@@ -37,9 +37,13 @@ layout: page
   </a>
 </div>
 
-本站曾经采用 WordPress + VPS 搭建，现换用 Hexo + GitHub Page 搭建，使用的主题为 **自研主题 [Ayeria](https://kaleidscoper.github.io/ayeria)**，喜欢的话欢迎大家使用、修改、提建议。
+网站源码中接近 50% 的自定义代码由 Claude Code 辅助生成，非自定义代码 100% 来自 Hexo 等开源项目；100% 的文章/页面内容由我手工编写，不含有 AI 生成内容。
 
-我保证本站无任何评论审核、封禁、禁言、敏感词条等规则，这也意味着网站内可能出现非预期的恶意内容。<strong>您在此处发布的内容最好遵守您居住地的相关法律法规。</strong>
+网站使用的主题为 **自研主题 [Ayeria](https://kaleidscoper.github.io/ayeria)**，其 UI/UX 设计、配色方案等均为人工完成。
+
+本站所有的由我原创的信息，包括源代码、文章、交互设计等，均不带限制地**允许**用于 AI 训练。
+
+网站无任何评论审核、封禁、禁言、敏感词条等规则，这也意味着您可能看见始料未及的恶意内容。<strong>您在此处发布的内容最好遵守您居住地的相关法律法规。</strong>
 
 <strong>*When you share, everyone wins.*</strong>
 
@@ -55,7 +59,7 @@ layout: page
   - 欧陆风云
   - 设定控
   - 电锯人
-  - 波兰球
+  - 波兰球（考虑在关于页卡片顶部吸附半个露出头的中国球）
   - 冷媒 Airsoft
   - 乐高
   - 倭刀
