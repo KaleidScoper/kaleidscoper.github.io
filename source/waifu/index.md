@@ -286,6 +286,17 @@ layout: page
     </div>
   </div>
 
+  <!-- Z -->
+  <div class="card" style="--bg:url('img/zhongli.webp')">
+    <div class="card-content">
+      <img src="img/zhongli.webp" loading="lazy" decoding="async" width="100" height="100" alt="钟离">
+      <h2>钟离</h2>
+      <p class="subname">Zhongli</p>
+      <p class="intro">《原神》</p>
+      <a href="https://zh.wikipedia.org/wiki/钟离_(原神)" target="_blank" rel="noopener noreferrer" class="wiki-btn">维基百科</a>
+    </div>
+  </div>
+
 </div>
 
 {% endraw %}
