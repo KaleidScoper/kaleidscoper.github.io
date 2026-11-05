@@ -2,9 +2,6 @@
 title: 关于
 date: 2025-03-19 12:00:00
 layout: page
-# 从上至下排列；每增减一行文字，就增减一顶帽子。
-profile_hats:
-  - 
 ---
 
 <link rel="stylesheet" href="/about/glass-card.css">
@@ -69,7 +66,6 @@ profile_hats:
   - 欧陆风云
   - 设定控
   - 电锯人
-  - 波兰球（考虑在关于页卡片顶部吸附半个露出头的中国球）
   - 冷媒 Airsoft
   - 乐高
   - 倭刀
