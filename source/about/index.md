@@ -17,7 +17,7 @@ profile_hats:
     <ul class="profile-hats" aria-label="帽子上的自我标签" data-hats="{{ profile_hats | dump | escape }}" style="--hat-count:{{ profile_hats | length }}"></ul>
     {% endif %}
     <a href="/" class="avatar-link">
-      <img src="/images/kaleidscoper.jpg" alt="Kaleid Scoper 的头像" class="profile-avatar">
+      <img src="/images/kaleid-new.jpg" alt="Kaleid Scoper 的头像" class="profile-avatar">
     </a>
   </div>
   <div class="profile-info">
