@@ -1,5 +1,10 @@
 /* Glass Card */
 
+.glass-card,
+.about-footer-art {
+  --countryball-size: 160px;
+}
+
 .glass-card {
   --glass-bg: rgba(255, 255, 255, 0.1);
   --glass-border: rgba(255, 255, 255, 0.2);
@@ -74,13 +79,12 @@ body.darkmode .glass-card {
 }
 
 .glass-card .profile-peek {
-  --peek-size: 160px;
   position: absolute;
   z-index: -1;
-  top: calc(var(--peek-size) * -0.72);
+  top: calc(var(--countryball-size) * -0.72);
   right: 24px;
-  width: var(--peek-size);
-  height: var(--peek-size);
+  width: var(--countryball-size);
+  height: var(--countryball-size);
   background: url('/images/china.png') center / contain no-repeat;
   filter: var(--image-brightness);
   pointer-events: none;
@@ -191,6 +195,11 @@ body.darkmode .glass-card {
 
 /* Responsive */
 @media (max-width: 768px) {
+  .glass-card,
+  .about-footer-art {
+    --countryball-size: clamp(96px, 30vw, 120px);
+  }
+
   .glass-card {
     flex-direction: column;
     text-align: center;
@@ -202,7 +211,6 @@ body.darkmode .glass-card {
   }
 
   .glass-card .profile-peek {
-    --peek-size: clamp(96px, 30vw, 120px);
     right: 12px;
   }
 
@@ -254,6 +262,15 @@ body.darkmode .glass-card {
   border-color: color-mix(in srgb, var(--brand-color, #555) 40%, rgba(255, 255, 255, 0.2));
   box-shadow: 0 6px 20px color-mix(in srgb, var(--brand-color, #555) 25%, transparent);
   text-decoration: none;
+}
+
+.about-footer-art img {
+  display: block;
+  /* 球体在素材中的宽度分别为 342px（中国）和 302px（美国）。 */
+  width: calc(var(--countryball-size) * 1.13);
+  max-width: 100%;
+  height: auto;
+  margin: 32px 0 0;
 }
 
 body.darkmode .social-icon {

@@ -80,3 +80,7 @@ profile_hats:
   - 海盗党
   - 左翼民粹主义
 -->
+
+<div class="about-footer-art" role="img" aria-label="美国球">
+  <img src="/images/usa.png" alt="" width="500" height="500" loading="lazy" decoding="async">
+</div>
