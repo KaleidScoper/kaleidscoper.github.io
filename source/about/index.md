@@ -2,6 +2,13 @@
 title: 关于
 date: 2025-03-19 12:00:00
 layout: page
+profile_hats:
+  - 小粉红
+  - 基本盘
+  - 海盗党
+  - 原批
+  - 左翼民粹份子
+  - 皇汉
 ---
 
 <link rel="stylesheet" href="/about/glass-card.css">
@@ -65,7 +72,6 @@ layout: page
 **查成分：**
   - 欧陆风云
   - 设定控
-  - 电锯人
   - 冷媒 Airsoft
   - 乐高
   - 倭刀
