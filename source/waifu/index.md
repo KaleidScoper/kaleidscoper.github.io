@@ -135,6 +135,17 @@ layout: page
     </div>
   </div>
 
+  <!-- J -->
+  <div class="card" style="--bg:url('img/jill.png')">
+    <div class="card-content">
+      <img src="img/jill.png" srcset="img/thumbs/jill-94.webp 1x, img/thumbs/jill-188.webp 2x, img/thumbs/jill-282.webp 3x" loading="lazy" decoding="async" width="100" height="100" alt="朱丽安 娜塔莉 斯汀雷">
+      <h2>朱丽安 娜塔莉 斯汀雷</h2>
+      <p class="subname">Julianne Natalie Stingray</p>
+      <p class="intro">《VA-11 HALL-A》</p>
+      <a href="https://zh.moegirl.org.cn/朱丽安·斯汀雷" target="_blank" rel="noopener noreferrer" class="wiki-btn">萌娘百科</a>
+    </div>
+  </div>
+
   <!-- K -->
   <div class="card" style="--bg:url('img/kurusu-makina.png')">
     <div class="card-content">
