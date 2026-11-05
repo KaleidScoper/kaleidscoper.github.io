@@ -11,6 +11,7 @@ profile_hats:
 <script src="/about/hats.js" defer></script>
 
 <div class="glass-card" style="--bg-image: url('/images/about-background.jpg')">
+  <div class="profile-peek" role="img" aria-label="中国球探头说 Ni hao."></div>
   <div class="profile-portrait">
     {% if profile_hats | length %}
     <ul class="profile-hats" aria-label="帽子上的自我标签" data-hats="{{ profile_hats | dump | escape }}" style="--hat-count:{{ profile_hats | length }}"></ul>

@@ -73,6 +73,19 @@ body.darkmode .glass-card {
   z-index: 2;
 }
 
+.glass-card .profile-peek {
+  --peek-size: 160px;
+  position: absolute;
+  z-index: -1;
+  top: calc(var(--peek-size) * -0.72);
+  right: 24px;
+  width: var(--peek-size);
+  height: var(--peek-size);
+  background: url('/images/china.png') center / contain no-repeat;
+  filter: var(--image-brightness);
+  pointer-events: none;
+}
+
 .profile-portrait {
   --avatar-size: 120px;
   display: flex;
@@ -186,6 +199,11 @@ body.darkmode .glass-card {
 
   .profile-portrait {
     --avatar-size: 100px;
+  }
+
+  .glass-card .profile-peek {
+    --peek-size: clamp(96px, 30vw, 120px);
+    right: 12px;
   }
 
   .profile-name {
