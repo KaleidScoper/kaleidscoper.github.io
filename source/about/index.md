@@ -4,8 +4,7 @@ date: 2025-03-19 12:00:00
 layout: page
 # 从上至下排列；每增减一行文字，就增减一顶帽子。
 profile_hats:
-  - 海盗党
-  - 左翼民粹主义
+  - 
 ---
 
 <link rel="stylesheet" href="/about/glass-card.css">
@@ -75,4 +74,6 @@ profile_hats:
   - 倭刀
   - 汝瓷
   - 汉服
+  - 海盗党
+  - 左翼民粹主义
 -->
