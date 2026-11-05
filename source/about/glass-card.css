@@ -10,19 +10,20 @@
   --profile-title-color: #e9ecef;
   --profile-desc-color: #f1f3f4;
   --profile-info-color: #f8f9fa;
+  --hat-label-color: #fff;
+  --hat-label-shadow: rgba(0, 0, 0, 0.7);
 
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: 20px;
   padding: 30px;
-  margin: 20px 0;
+  margin: 64px 0 20px;
   box-shadow: 0 8px 32px 0 var(--glass-shadow);
   display: flex;
   align-items: center;
   gap: 30px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
-  overflow: hidden;
+  isolation: isolate;
 }
 
 body.darkmode .glass-card {
@@ -48,6 +49,7 @@ body.darkmode .glass-card {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  border-radius: inherit;
   z-index: 0;
 }
 
@@ -61,6 +63,7 @@ body.darkmode .glass-card {
   background: var(--glass-overlay);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  border-radius: inherit;
   z-index: 1;
   pointer-events: none;
 }
@@ -70,68 +73,71 @@ body.darkmode .glass-card {
   z-index: 2;
 }
 
-.glass-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 40px 0 var(--glass-shadow);
+.profile-portrait {
+  --avatar-size: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: var(--avatar-size);
 }
 
-body.darkmode .glass-card:hover {
-  --glass-bg: rgba(50, 55, 66, 0.7);
-  --glass-shadow: rgba(0, 0, 0, 0.8);
+.glass-card .profile-hats {
+  --hat-height: calc(var(--avatar-size) * 0.653333);
+  --hat-step: calc(var(--avatar-size) * 0.2);
+  position: relative;
+  z-index: 1;
+  width: calc(var(--avatar-size) * 0.875);
+  height: calc(var(--hat-height) + (var(--hat-count) - 1) * var(--hat-step));
+  /* Account for the PNG's transparent padding: its brim center is at y=849/1024.
+     The supplied mockup places it about 16% of a diameter below the circle's top. */
+  margin: calc(var(--avatar-size) * -0.45) 0 calc(var(--avatar-size) * -0.225);
+  padding: 0;
+  list-style: none;
 }
 
-/* Avatar — container styles on <a> so ::before pseudo-element works */
+.glass-card .profile-hat {
+  position: absolute;
+  top: calc(var(--hat-index) * var(--hat-step));
+  left: 0;
+  width: 100%;
+  height: var(--hat-height);
+  margin: 0;
+  padding: 0;
+  background: url('/about/hat.png') center / 135% auto no-repeat;
+  transform: translateX(calc(var(--avatar-size) * var(--hat-offset, 0))) rotate(var(--hat-rotation, 0deg));
+  transform-origin: 50% 90%;
+}
+
+.profile-hat-label {
+  position: absolute;
+  right: 0;
+  bottom: calc(var(--avatar-size) * 0.105);
+  left: 0;
+  color: var(--hat-label-color);
+  font-family: "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+  font-size: clamp(12px, calc(var(--avatar-size) * 0.108333), 13px);
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  white-space: nowrap;
+  text-shadow: 0 1px 3px var(--hat-label-shadow);
+}
+
 .avatar-link {
   display: block;
-  flex-shrink: 0;
-  width: 120px;
-  height: 120px;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
   border-radius: 50%;
   overflow: hidden;
   border: 3px solid var(--avatar-border);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   position: relative;
   text-decoration: none;
-  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.avatar-link::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent 0%,
-    transparent 40%,
-    rgba(255, 255, 255, 0.9) 50%,
-    transparent 60%,
-    transparent 100%
-  );
-  transform: translateX(-100%) translateY(-100%) rotate(45deg);
-  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  z-index: 2;
-  pointer-events: none;
 }
 
 .avatar-link:hover {
-  transform: scale(1.05) rotate(2deg);
   text-decoration: none;
-  box-shadow:
-    0 8px 32px 0 rgba(31, 38, 135, 0.37),
-    0 4px 16px 0 rgba(31, 38, 135, 0.2),
-    0 0 0 1px rgba(255, 255, 255, 0.2);
-}
-
-.avatar-link:hover::before {
-  transform: translateX(100%) translateY(100%) rotate(45deg);
-}
-
-body.darkmode .avatar-link:hover {
-  --avatar-border: rgba(255, 255, 255, 0.4);
 }
 
 .profile-avatar {
@@ -178,13 +184,8 @@ body.darkmode .avatar-link:hover {
     gap: 20px;
   }
 
-  .avatar-link {
-    width: 100px;
-    height: 100px;
-  }
-
-  .avatar-link:hover {
-    transform: scale(1.08) rotate(1deg);
+  .profile-portrait {
+    --avatar-size: 100px;
   }
 
   .profile-name {

@@ -2,14 +2,24 @@
 title: 关于
 date: 2025-03-19 12:00:00
 layout: page
+# 从上至下排列；每增减一行文字，就增减一顶帽子。
+profile_hats:
+  - 海盗党
+  - 左翼民粹主义
 ---
 
 <link rel="stylesheet" href="/about/glass-card.css">
+<script src="/about/hats.js" defer></script>
 
 <div class="glass-card" style="--bg-image: url('/images/about-background.jpg')">
-  <a href="/" class="avatar-link">
-    <img src="/images/kaleidscoper.jpg" alt="Kaleid Scoper 的头像" class="profile-avatar">
-  </a>
+  <div class="profile-portrait">
+    {% if profile_hats | length %}
+    <ul class="profile-hats" aria-label="帽子上的自我标签" data-hats="{{ profile_hats | dump | escape }}" style="--hat-count:{{ profile_hats | length }}"></ul>
+    {% endif %}
+    <a href="/" class="avatar-link">
+      <img src="/images/kaleidscoper.jpg" alt="Kaleid Scoper 的头像" class="profile-avatar">
+    </a>
+  </div>
   <div class="profile-info">
     <h2 class="profile-name">Kaleid Scoper</h2>
     <p class="profile-title">漢人 | 安徽大学 | INTP</p>
@@ -65,6 +75,4 @@ layout: page
   - 倭刀
   - 汝瓷
   - 汉服
-  - 左翼民粹主义
-  - 海盗党
 -->
