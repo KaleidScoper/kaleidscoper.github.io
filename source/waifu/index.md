@@ -125,6 +125,16 @@ layout: page
     </div>
   </div>
 
+  <div class="card" style="--bg:url('img/kobeni.jpg')">
+    <div class="card-content">
+      <img src="img/kobeni.jpg" srcset="img/thumbs/kobeni-94.webp 1x, img/thumbs/kobeni-188.webp 2x, img/thumbs/kobeni-282.webp 3x" loading="lazy" decoding="async" width="100" height="100" alt="东山 小红">
+      <h2>东山 小红</h2>
+      <p class="subname">Higashiyama Kobeni</p>
+      <p class="intro">《电锯人》</p>
+      <a href="https://zh.moegirl.org.cn/东山小红" target="_blank" rel="noopener noreferrer" class="wiki-btn">萌娘百科</a>
+    </div>
+  </div>
+
   <!-- K -->
   <div class="card" style="--bg:url('img/kurusu-makina.png')">
     <div class="card-content">
