@@ -1,4 +1,0 @@
-interface:
-  display_name: "SPTestLink 冒烟测试执行与订正"
-  short_description: "逐项执行或订正测试计划，保存并核验中文结果与截图证据"
-  default_prompt: "使用 $sptestlink-smoke-test 执行或订正指定的 SPTestLink 冒烟测试计划，并核验结果与截图证据。"

@@ -141,13 +141,23 @@ layout: page
   </div>
 
   <!-- 《咒术回战》 -->
-  <div class="card" style="--bg:url('img/gojo.jpg'); --img-border-color: #57d1ee;">
+  <div class="card" style="--bg:url('img/thumbs/gojo-new-bg.webp'); --img-border-color: #57d1ee;">
     <div class="card-content">
-      <img src="img/gojo.jpg" srcset="img/thumbs/gojo-94.webp 1x, img/thumbs/gojo-188.webp 2x, img/thumbs/gojo-282.webp 3x" loading="lazy" decoding="async" width="100" height="100" alt="五条 悟">
+      <img src="img/gojo.webp" srcset="img/thumbs/gojo-94.webp 1x, img/thumbs/gojo-188.webp 2x, img/thumbs/gojo-282.webp 3x" loading="lazy" decoding="async" width="100" height="100" alt="五条 悟">
       <h2>五条 悟</h2>
       <p class="subname">Gojo Satoru</p>
       <p class="intro">《咒术回战》</p>
       <a href="https://zh.moegirl.org.cn/五条悟" target="_blank" rel="noopener noreferrer" class="wiki-btn">萌娘百科</a>
+    </div>
+  </div>
+
+  <div class="card" style="--bg:url('img/thumbs/gojo-new-bg.webp'); --img-border-color: #342B40;">
+    <div class="card-content">
+      <img src="img/geto.webp" srcset="img/thumbs/geto-94.webp 1x, img/thumbs/geto-188.webp 2x, img/thumbs/geto-282.webp 3x" loading="lazy" decoding="async" width="100" height="100" alt="夏油 杰">
+      <h2>夏油 杰</h2>
+      <p class="subname">Geto Suguru</p>
+      <p class="intro">《咒术回战》</p>
+      <a href="https://zh.moegirl.org.cn/夏油杰" target="_blank" rel="noopener noreferrer" class="wiki-btn">萌娘百科</a>
     </div>
   </div>
 
