@@ -1,0 +1,63 @@
+@import "_variables"
+
+// ─── 暗色模式色值 ────────────────────────────────────────────────────────────────
+dark-bg               = #1c1f26
+dark-text             = #d0d0d0
+dark-text-secondary   = #aaaaaa
+dark-link             = #5aa8d8
+dark-link-hover       = #8bc7e8
+dark-border           = #3b414c
+dark-surface          = #2a2f3a
+dark-code-bg          = #2e3440
+dark-code-text        = #ffcc99
+dark-warning          = #ffb347
+dark-tag-bg           = #3a3f4a
+dark-tag-text         = #cccccc
+dark-blockquote-bg    = #252932
+dark-input-placeholder = #888
+dark-fn-text          = #aab2bf
+dark-fn-marker        = #8d95a3
+
+// ─── CSS 自定义属性（亮/暗主题切换） ─────────────────────────────────────────────
+// 改配色只需修改此文件
+
+:root
+  --color-bg               body-background
+  // 正文墨色：比 body-color(#403e3e) 再深一档，弥补亮色下宋体 400 的笔画损失（doc §3 方案 A）
+  --color-text             #24211f  // 16.00:1
+  // 次级文字：原 #999 仅 2.85:1（不达 AA），且日期还套了 300 字重
+  --color-text-secondary   #6b6560  // 5.74:1
+  --color-link             #1b6f9e  // 5.51:1，品牌蓝同色相压暗
+  --color-link-hover       #145a82
+  --color-link-subtle      #d8ebf5  // 蓝色强调的浅色底
+  --color-border           border-color
+  --color-warning          #cc3638  // 白字压底 5.06:1、红字压纸底 4.78:1（原 #ea434a 分别只有 3.89 / 3.68）
+  --color-tag-bg           tag-color
+  --color-tag-text         white
+  --image-brightness       brightness(1)
+  --blockquote-bg          paper-quote
+  --input-placeholder      var(--color-text-secondary)  // 5.43:1，与次级文字同源（原 #ccc 仅 1.61:1）
+  // 脚注引用与正文链接共用同一个蓝色强调（小字号也满足 AA）
+  --fn-ref                 var(--color-link)
+  --fn-text                #5b6270  // 6.13:1
+  --fn-marker              #68707c  // 4.73:1 @纸底（原 #6f7783 在纸底上只有 4.28）
+  --fn-sep                 #e3e6eb
+
+body.darkmode
+  --color-bg               dark-bg
+  --color-text             dark-text
+  --color-text-secondary   dark-text-secondary
+  --color-link             #5aa8d8  // 品牌蓝，6.30:1
+  --color-link-hover       #8bc7e8
+  --color-link-subtle      rgba(90, 168, 216, .22)
+  --color-border           dark-border
+  --color-warning          dark-warning
+  --color-tag-bg           dark-tag-bg
+  --color-tag-text         dark-tag-text
+  --image-brightness       brightness(.8)
+  --blockquote-bg          dark-blockquote-bg
+  --input-placeholder      dark-input-placeholder
+  --fn-ref                 var(--color-link)
+  --fn-text                dark-fn-text
+  --fn-marker              dark-fn-marker
+  --fn-sep                 var(--color-border)  // 暗色发丝线与边框同值同角色，直接引用

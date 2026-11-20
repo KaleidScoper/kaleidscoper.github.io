@@ -1,0 +1,316 @@
+作者：赵泠
+链接：https://zhuanlan.zhihu.com/p/2054618167868122154
+来源：知乎
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>孤车弈</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #1e1e2f; font-family: 'Segoe UI', 'Noto Sans SC', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+    .game-container { display: flex; gap: 24px; background: #2a2a3c; padding: 20px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); align-items: flex-start; position: relative; }
+    .board-section { flex-shrink: 0; position: relative; }
+    .board-canvas { display: block; border: 2px solid #5a3e2b; border-radius: 4px; box-shadow: inset 0 0 10px rgba(0,0,0,0.2), 0 8px 20px rgba(0,0,0,0.5); background: #d4a574; cursor: pointer; }
+    .pieces-layer { position: absolute; top: 2px; left: 2px; width: calc(100% - 4px); height: calc(100% - 4px); pointer-events: none; }
+    .piece { width: 46px; height: 46px; border-radius: 50%; position: absolute; transform: translate(-50%, -50%); z-index: 5; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 22px; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); pointer-events: none; user-select: none; line-height: 1; }
+    .piece.red { background: radial-gradient(circle at 35% 30%, #e05a4f, #9e2a23); border: 3px solid #6b1d18; box-shadow: 0 4px 10px rgba(180,30,20,0.6); }
+    .piece.red.protected { animation: protectGlow 0.6s infinite alternate; border-color: #f0c040; }
+    @keyframes protectGlow { 0% { box-shadow: 0 0 8px rgba(240,192,64,0.6), 0 4px 10px rgba(180,30,20,0.6); } 100% { box-shadow: 0 0 25px rgba(240,192,64,1), 0 0 40px rgba(240,192,64,0.7), 0 4px 10px rgba(180,30,20,0.6); } }
+    .piece.black { background: radial-gradient(circle at 35% 30%, #4a4a5a, #1f1f2b); border: 3px solid #0a0a12; box-shadow: 0 4px 10px rgba(0,0,0,0.6); }
+    .piece.stone { background: radial-gradient(circle at 35% 30%, #6b5e4e, #3e3629); border: 3px solid #2a241c; color: #d4c5b2; box-shadow: 0 3px 8px rgba(0,0,0,0.5); font-size: 18px; }
+    .order-badge { position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; border-radius: 50%; background: #1a1a1a; border: 2px solid #f0c040; color: #f0c040; font-size: 13px; font-weight: bold; display: flex; align-items: center; justify-content: center; z-index: 10; pointer-events: none; box-shadow: 0 0 12px rgba(240,192,64,0.6); text-shadow: 0 0 6px black; transform: translate(50%, -50%); }
+    .highlight-dot { position: absolute; width: 36px; height: 36px; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 2; }
+    .highlight-dot.move { background: rgba(0, 150, 255, 0.45); box-shadow: 0 0 16px rgba(0,150,255,0.6); }
+    .highlight-dot.ability { background: rgba(255, 180, 0, 0.5); box-shadow: 0 0 18px rgba(255,180,0,0.7); }
+    .highlight-dot.capture { background: rgba(255, 60, 40, 0.55); box-shadow: 0 0 20px rgba(255,60,40,0.8); }
+    .rook-targeted { position: absolute; width: 54px; height: 54px; border-radius: 50%; transform: translate(-50%, -50%); z-index: 4; pointer-events: none; border: 3px solid rgba(255, 60, 30, 0.9); box-shadow: 0 0 20px rgba(255, 40, 20, 0.8), 0 0 40px rgba(255, 80, 40, 0.5), inset 0 0 15px rgba(255, 50, 30, 0.4); animation: targetPulse 0.8s infinite alternate; }
+    @keyframes targetPulse { 0% { box-shadow: 0 0 15px rgba(255, 40, 20, 0.7), 0 0 30px rgba(255, 80, 40, 0.4), inset 0 0 10px rgba(255, 50, 30, 0.3); } 100% { box-shadow: 0 0 25px rgba(255, 30, 15, 1), 0 0 50px rgba(255, 60, 30, 0.7), inset 0 0 20px rgba(255, 40, 20, 0.6); } }
+    .danger-cross { position: absolute; width: 30px; height: 30px; transform: translate(-50%, -50%); pointer-events: none; z-index: 1; }
+    .danger-cross::before, .danger-cross::after { content: ''; position: absolute; background: rgba(0,0,0,0.55); border-radius: 2px; }
+    .danger-cross::before { width: 100%; height: 4px; top: 50%; left: 0; transform: translateY(-50%); }
+    .danger-cross::after { width: 4px; height: 100%; left: 50%; top: 0; transform: translateX(-50%); }
+    .danger-cross .red-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    .danger-cross .red-overlay::before, .danger-cross .red-overlay::after { content: ''; position: absolute; background: rgba(200, 30, 20, 0.7); border-radius: 1px; }
+    .danger-cross .red-overlay::before { width: 60%; height: 2px; top: 50%; left: 20%; transform: translateY(-50%); }
+    .danger-cross .red-overlay::after { width: 2px; height: 60%; left: 50%; top: 20%; transform: translateX(-50%); }
+    .cannon-laser { position: absolute; z-index: 3; pointer-events: none; background: rgba(255,40,40,0.7); box-shadow: 0 0 6px rgba(255,40,40,0.8); }
+    .cannon-laser.horizontal { height: 2px; }
+    .cannon-laser.vertical { width: 2px; }
+
+    .victory-overlay, .defeat-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; pointer-events: none; gap: 8px; }
+    .victory-text { font-size: 42px; font-weight: bold; color: #f0c040; text-shadow: 0 0 20px rgba(240,192,64,0.8), 0 0 40px rgba(240,192,64,0.5); }
+    .victory-sub { font-size: 18px; color: #f0c040; text-shadow: 0 0 10px rgba(240,192,64,0.5); }
+    .defeat-text { font-size: 42px; font-weight: bold; color: #e04040; text-shadow: 0 0 20px rgba(224,64,64,0.8), 0 0 40px rgba(224,64,64,0.5); }
+    .side-panel { background: #2f2f44; border-radius: 16px; padding: 18px 16px; display: flex; flex-direction: column; gap: 12px; min-width: 220px; color: #e8e0d0; box-shadow: 0 8px 20px rgba(0,0,0,0.5); }
+    .panel-title { font-size: 22px; font-weight: bold; color: #f0c040; text-align: center; }
+    .level-box { background: #1a1a2e; border-radius: 12px; padding: 8px 12px; text-align: center; font-size: 18px; color: #f0c040; }
+    .score-box { background: #1a1a2e; border-radius: 12px; padding: 8px 14px; text-align: center; font-size: 15px; color: #aaa; }
+    .score-box span { color: #f0c040; font-weight: bold; font-size: 20px; }
+    .ability-btn { padding: 10px 8px; font-size: 15px; font-weight: bold; border-radius: 12px; border: 2px solid #5a5a7a; background: #3a3a52; color: #d0d0e0; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .ability-btn.active { border-color: #f0c040; background: #4a4020; color: #f0c040; box-shadow: 0 0 18px #f0c04080; }
+    .ability-btn .badge { background: #f0c040; color: #1a1a1a; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; }
+    .recall-btn { padding: 10px 8px; font-size: 15px; font-weight: bold; border-radius: 12px; border: 2px solid #4a90d9; background: #1e3050; color: #80c0ff; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .recall-btn:hover { background: #2a4070; color: #a0d0ff; }
+    .recall-btn.recalling { border-color: #f0c040; background: #4a4020; color: #f0c040; box-shadow: 0 0 18px #f0c04080; animation: btnGlow 0.8s infinite alternate; }
+    @keyframes btnGlow { 0% { box-shadow: 0 0 15px rgba(240,192,64,0.5), 0 0 30px rgba(240,192,64,0.2); } 100% { box-shadow: 0 0 30px rgba(240,192,64,0.9), 0 0 60px rgba(240,192,64,0.5); } }
+    .restart-btn { padding: 10px; font-weight: bold; font-size: 15px; border-radius: 12px; border: 2px solid #c0392b; background: #4a2020; color: #e0a0a0; cursor: pointer; margin-top: auto; transition: all 0.3s; }
+    .restart-btn:hover { background: #622a2a; color: #ffcccc; }
+    .restart-btn.glowing { border-color: #f0c040; background: #5a3020; color: #f0c040; box-shadow: 0 0 20px rgba(240,192,64,0.6), 0 0 40px rgba(240,192,64,0.3); animation: btnGlow 0.8s infinite alternate; }
+    .info-text { font-size: 12px; color: #999; text-align: center; }
+    .danger-warning { color: #e08070; font-size: 12px; text-align: center; margin-top: 4px; animation: pulse 1.5s infinite; }
+    .protection-info { color: #c0a060; font-size: 12px; text-align: center; margin-top: 4px; line-height: 1.4; }
+    @keyframes pulse { 0%,100% { opacity: 0.7; } 50% { opacity: 1; } }
+    .board-footer-text { margin-top: 6px; font-size: 11px; color: #b0a080; text-align: center; line-height: 1.5; white-space: nowrap; }
+  </style>
+</head>
+<body>
+<div class="game-container">
+  <div class="board-section">
+    <canvas id="boardCanvas" class="board-canvas" width="540" height="600"></canvas>
+    <div class="pieces-layer" id="piecesLayer"></div>
+    <div id="victoryOverlay" class="victory-overlay" style="display:none;"><div class="victory-text">胜利！</div><div class="victory-sub">点击棋盘继续下一关</div></div>
+    <div id="defeatOverlay" class="defeat-overlay" style="display:none;"><div class="defeat-text">红车阵亡！</div></div>
+    <div class="board-footer-text">
+      <div>山: <span id="stoneCountDisplay">?</span>个 | 能力：A马 S炮 D象 F士 | 敌增援:每回合开始(被吃子则2个，否则1个)</div>
+      <div>击杀黑将过关 | 黑子上限<span id="maxBlackDisplay">16</span> | 山可蹩马脚、塞象眼、作炮架</div>
+      <div>敌子能走时必走 | 敌炮的威胁范围请自行判断</div>
+    </div>
+  </div>
+  <div class="side-panel">
+    <div class="panel-title">孤车弈</div>
+    <div class="level-box" id="levelDisplay">第 1 关</div>
+    <div class="score-box">🏆 最高关: <span id="highScoreDisplay">0</span></div>
+    <button class="ability-btn" id="btnHorse">🐴 马 <span class="badge" id="badgeHorse">1</span></button>
+    <button class="ability-btn" id="btnCannon">💣 炮 <span class="badge" id="badgeCannon">1</span></button>
+    <button class="ability-btn" id="btnElephant">🐘 象 <span class="badge" id="badgeElephant">1</span></button>
+    <button class="ability-btn" id="btnAdvisor">👤 士 <span class="badge" id="badgeAdvisor">1</span></button>
+    <button class="recall-btn" id="btnRecall">🏰 回城</button>
+    <div class="info-text"><strong>A/S/D/F</strong> 激活 · <strong>Z</strong> 取消能力 · <strong>R</strong> 回城（不可取消）</div>
+    <div class="protection-info" id="protectionInfo">🛡盾击:能力总和≥5时被吃反杀</div>
+    <div class="danger-warning">⚠敌人的威胁范围可能随行棋而改变</div>
+    <button class="restart-btn" id="btnRestart">🔄 重新开始</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  const ROWS = 10, COLS = 9, CELL = 60;
+  const T = { R:'red_rook',BR:'black_rook',BN:'black_knight',BC:'black_cannon',BE:'black_elephant',BA:'black_advisor',BG:'black_general',S:'stone' };
+  const AB = [T.BR,T.BN,T.BC,T.BE,T.BA,T.BG];
+  const LIMITS = { [T.BG]:1,[T.BA]:2,[T.BE]:2 };
+  const BLACK_SIDE = 5;
+  const SPAWN_POINT = {row:9, col:4};
+
+  function getMaxBlack(){return Math.min(16+LV-1,45)}
+  function getInitialBlack(){return Math.min(5+LV-1,16)}
+
+  const cv=document.getElementById('boardCanvas'),ctx=cv.getContext('2d');
+  const pl=document.getElementById('piecesLayer'),vo=document.getElementById('victoryOverlay');
+  const df=document.getElementById('defeatOverlay'),br=document.getElementById('btnRestart');
+  const btnRecall=document.getElementById('btnRecall');
+
+  let B,PD,RP,BP,RS,AA=null,HC=[],GO=false,PT=true,BO=[],CID=0,LV=1,HS=0;
+  let ATE=false,SC=6,DC=[],RT=false,cRM=null,cAM={},cAS=new Set(),cDL=new Set();
+  let dTO=null,SWC=0,VA=false,RECALLING=false;
+
+  function lh(){try{HS=parseInt(localStorage.getItem('cr_hs'))||0}catch(e){HS=0};document.getElementById('highScoreDisplay').textContent=HS}
+  function sh(){if(LV>HS){HS=LV;localStorage.setItem('cr_hs',HS)};document.getElementById('highScoreDisplay').textContent=HS}
+  function cd(sl){B=Array.from({length:ROWS},()=>Array(COLS).fill(null));PD={};BP=[];RP={row:9,col:4};RS={horse:1,cannon:1,elephant:1,advisor:1};AA=null;HC=[];GO=false;PT=true;BO=[];CID=0;ATE=false;DC=[];RT=false;cRM=null;cAM={};cAS=new Set();cDL=new Set();LV=sl||1;SWC=0;VA=false;RECALLING=false;btnRecall.classList.remove('recalling')}
+  function ta(){return RS.horse+RS.cannon+RS.elephant+RS.advisor}
+  function ip(){return ta()>=5}
+  function rar(n){const k=['horse','cannon','elephant','advisor'];let r=n;while(r>0&&ta()>0){const x=k[Math.floor(Math.random()*4)];if(RS[x]>0){const d=Math.min(RS[x],r);RS[x]-=d;r-=d}}}
+  function pp(r,c,t){B[r][c]=t;const id=CID++;PD[`${r},${c}`]={type:t,id,row:r,col:c};if(t===T.R)RP={row:r,col:c};else if(AB.includes(t))BP.push({row:r,col:c,type:t,id,order:-1,hasMoved:false})}
+  function rp2(r,c){const k=`${r},${c}`,info=PD[k];if(!info)return;B[r][c]=null;delete PD[k];if(info.type===T.R)RP=null;else if(AB.includes(info.type))BP=BP.filter(b=>b.id!==info.id)}
+  function mp(fr,fc,tr,tc){const info=PD[`${fr},${fc}`];if(!info)return null;const ct=B[tr][tc];if(ct)rp2(tr,tc);B[fr][fc]=null;delete PD[`${fr},${fc}`];B[tr][tc]=info.type;PD[`${tr},${tc}`]={type:info.type,id:info.id,row:tr,col:tc};if(info.type===T.R)RP={row:tr,col:tc};else if(AB.includes(info.type)){const bp=BP.find(b=>b.id===info.id);if(bp){bp.row=tr;bp.col=tc}}cRM=null;cAM={};uac();return{movedType:info.type,capturedType:ct}}
+  function ge(){const e=[];for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)if(!B[r][c])e.push({row:r,col:c});return e}
+  function bc(){return BP.length}
+  function shf(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}
+  function rdl(rr,rc){const l=new Set();for(const[dr,dc]of[[-1,0],[1,0],[0,-1],[0,1]]){let nr=rr+dr,nc=rc+dc;while(nr>=0&&nr<ROWS&&nc>=0&&nc<COLS){l.add(`${nr},${nc}`);if(B[nr][nc]!==null)break;nr+=dr;nc+=dc}}return l}
+  function aac(rr,rc,res){if(rr==null)return new Set();const atk=new Set();for(const m of rm(rr,rc,true))atk.add(`${m.row},${m.col}`);if(res.horse>0)for(const m of knm(rr,rc,true))atk.add(`${m.row},${m.col}`);if(res.cannon>0)for(const m of cnm(rr,rc,true))atk.add(`${m.row},${m.col}`);if(res.elephant>0)for(const m of elm(rr,rc,true))atk.add(`${m.row},${m.col}`);if(res.advisor>0)for(const m of adm(rr,rc,true))atk.add(`${m.row},${m.col}`);return atk}
+  function uac(){if(RP){cAS=aac(RP.row,RP.col,RS);cDL=rdl(RP.row,RP.col)}else{cAS=new Set();cDL=new Set()}}
+  function dtr(r,c){return RP?Math.max(Math.abs(r-RP.row),Math.abs(c-RP.col)):0}
+  function bse(){const e=[];for(let r=BLACK_SIDE;r<ROWS;r++)for(let c=0;c<COLS;c++)if(!B[r][c])e.push({row:r,col:c});return e}
+  function csg(){return SWC>=LV}
+  function rbt(eg){const cnt={};for(const b of BP)cnt[b.type]=(cnt[b.type]||0)+1;const av=AB.filter(t=>{if(eg&&t===T.BG)return false;if(LIMITS[t]!==undefined)return(cnt[t]||0)<LIMITS[t];return true});return av.length?av[Math.floor(Math.random()*av.length)]:null}
+  function psc(fg){const bs=bse(),ae=ge();const ffr=(cells)=>cells.filter(c=>!RP||(dtr(c.row,c.col)>3&&!cDL.has(`${c.row},${c.col}`)));if(fg){let cand=bs.length>0?bs:ae;cand=ffr(cand);if(cand.length===0)cand=bs.length>0?bs:ae;const sf=cand.filter(c=>!cDL.has(`${c.row},${c.col}`)&&!cAS.has(`${c.row},${c.col}`));if(sf.length>0){sf.sort((a,b)=>dtr(b.row,b.col)-dtr(a.row,a.col));return sf[0]}const sf2=cand.filter(c=>!cDL.has(`${c.row},${c.col}`));if(sf2.length>0)return sf2[Math.floor(Math.random()*sf2.length)];return cand[Math.floor(Math.random()*cand.length)]}let pool=ae;const fp=ffr(ae);if(fp.length>0)pool=fp;else{const nd=ae.filter(c=>!cDL.has(`${c.row},${c.col}`));if(nd.length>0)pool=nd}const ubs=Math.random()<0.667;const bsp=pool.filter(c=>c.row>=BLACK_SIDE);const rsp=pool.filter(c=>c.row<BLACK_SIDE);if(ubs&&bsp.length>0)return bsp[Math.floor(Math.random()*bsp.length)];if(rsp.length>0)return rsp[Math.floor(Math.random()*rsp.length)];if(bsp.length>0)return bsp[Math.floor(Math.random()*bsp.length)];return pool[Math.floor(Math.random()*pool.length)]}
+  function sb(pr){const sr=pr?{...RS}:null;const nl=pr?LV:1;cd(nl);if(sr)RS=sr;pp(9,4,T.R);SC=6+Math.floor(Math.random()*7);const all=[];for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)if(!(r===9&&c===4))all.push({row:r,col:c});let att=0;while(att<100){B=Array.from({length:ROWS},()=>Array(COLS).fill(null));B[9][4]=T.R;RP={row:9,col:4};PD={};PD['9,4']={type:T.R,id:0,row:9,col:4};BP=[];CID=1;const sa=[...all];shf(sa);for(let i=0;i<SC&&i<sa.length;i++)pp(sa[i].row,sa[i].col,T.S);if(rm(9,4,true).length>0)break;att++}uac();const ibc=getInitialBlack();for(let i=0;i<Math.min(ibc,getMaxBlack());i++){const cell=psc(false);if(!cell)break;const t=rbt(true);if(!t)break;pp(cell.row,cell.col,t)}uac();udc()}
+  function cp(r,c){return{x:c*CELL+CELL/2,y:r*CELL+CELL/2}}
+  function db(){ctx.clearRect(0,0,540,600);ctx.fillStyle='#d4a574';ctx.fillRect(0,0,540,600);ctx.strokeStyle='#5a3e2b';ctx.lineWidth=1;for(let r=0;r<ROWS;r++){const y=r*CELL+CELL/2;ctx.beginPath();ctx.moveTo(CELL/2,y);ctx.lineTo(540-CELL/2,y);ctx.stroke()}for(let c=0;c<COLS;c++){const x=c*CELL+CELL/2;ctx.beginPath();ctx.moveTo(x,CELL/2);ctx.lineTo(x,4*CELL+CELL/2);ctx.stroke();ctx.beginPath();ctx.moveTo(x,5*CELL+CELL/2);ctx.lineTo(x,600-CELL/2);ctx.stroke()}}
+  function cpl(){while(pl.firstChild)pl.removeChild(pl.firstChild)}
+  function renderCannonLasers(frag){const cannons=BP.filter(b=>b.type===T.BC);for(const cn of cannons){const cx=cn.col*CELL+CELL/2;const cy=cn.row*CELL+CELL/2;const radius=23;const dirs=[{dr:0,dc:-1,cls:'horizontal',left:0,top:cy,width:cx-radius,height:2},{dr:0,dc:1,cls:'horizontal',left:cx+radius,top:cy,width:540-cx-radius,height:2},{dr:-1,dc:0,cls:'vertical',left:cx,top:0,width:2,height:cy-radius},{dr:1,dc:0,cls:'vertical',left:cx,top:cy+radius,width:2,height:600-cy-radius}];for(const d of dirs){if(d.width<=0||d.height<=0)continue;const laser=document.createElement('div');laser.className='cannon-laser '+d.cls;laser.style.left=d.left+'px';laser.style.top=d.top+'px';laser.style.width=d.width+'px';laser.style.height=d.height+'px';frag.appendChild(laser)}}}
+  function ra(){cpl();const frag=document.createDocumentFragment();renderCannonLasers(frag);const fdc=DC.filter(c=>!RP||!(c.row===RP.row&&c.col===RP.col));for(const c of fdc){const{x,y}=cp(c.row,c.col);const cr=document.createElement('div');cr.className='danger-cross';cr.style.left=x+'px';cr.style.top=y+'px';const ov=document.createElement('div');ov.className='red-overlay';cr.appendChild(ov);frag.appendChild(cr)}const map={[T.BR]:'車',[T.BN]:'馬',[T.BC]:'炮',[T.BE]:'象',[T.BA]:'士',[T.BG]:'将'};const pa=ip()&&!GO;for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const t=B[r][c];if(!t)continue;const{x,y}=cp(r,c);const p=document.createElement('div');p.className='piece';p.dataset.row=r;p.dataset.col=c;if(t===T.R){p.classList.add('red');if(pa)p.classList.add('protected');p.textContent='車'}else if(t===T.S){p.classList.add('stone');p.textContent='山'}else{p.classList.add('black');p.textContent=map[t]}p.style.left=x+'px';p.style.top=y+'px';if(AB.includes(t)&&!GO){const bp=BP.find(b=>b.row===r&&b.col===c);if(bp&&bp.order>0){const bd=document.createElement('div');bd.className='order-badge';bd.textContent=bp.order;p.appendChild(bd)}}frag.appendChild(p)}for(const h of HC){const{x,y}=cp(h.row,h.col);const d=document.createElement('div');d.className='highlight-dot '+(h.isCapture?'capture':(AA?'ability':'move'));d.style.left=x+'px';d.style.top=y+'px';frag.appendChild(d)}if(RT&&RP&&!GO){const{x,y}=cp(RP.row,RP.col);const e=document.createElement('div');e.className='rook-targeted';e.style.left=x+'px';e.style.top=y+'px';frag.appendChild(e)}pl.appendChild(frag)}
+  function udc(){const ds=new Set();for(const bp of BP){if(bp.type===T.BC)continue;for(const m of gm(bp.row,bp.col,bp.type,false))ds.add(`${m.row},${m.col}`)}DC=Array.from(ds).map(s=>{const[r,c]=s.split(',').map(Number);return{row:r,col:c}});RT=false;if(RP){for(const bp of BP){for(const m of gm(bp.row,bp.col,bp.type,false)){if(m.row===RP.row&&m.col===RP.col&&m.cap){RT=true;break}}if(RT)break}}}
+  function ui(){document.getElementById('levelDisplay').textContent=`第 ${LV} 关`;document.getElementById('highScoreDisplay').textContent=HS;document.getElementById('maxBlackDisplay').textContent=getMaxBlack();document.getElementById('badgeHorse').textContent=RS.horse;document.getElementById('badgeCannon').textContent=RS.cannon;document.getElementById('badgeElephant').textContent=RS.elephant;document.getElementById('badgeAdvisor').textContent=RS.advisor;document.getElementById('btnHorse').classList.toggle('active',AA==='horse');document.getElementById('btnCannon').classList.toggle('active',AA==='cannon');document.getElementById('btnElephant').classList.toggle('active',AA==='elephant');document.getElementById('btnAdvisor').classList.toggle('active',AA==='advisor');btnRecall.classList.toggle('recalling',RECALLING);document.getElementById('stoneCountDisplay').textContent=SC;const t=ta();document.getElementById('protectionInfo').textContent=`🛡 护主: 能力总和${t}，${t>=5?'被吃时反杀并减5能力':'不足5，被吃即败'}`;db();ra()}
+  function cdto(){if(dTO){clearTimeout(dTO);dTO=null}}
+  function sv2(){cdto();GO=true;PT=false;AA=null;HC=[];VA=true;RECALLING=false;btnRecall.classList.remove('recalling');sh();vo.style.display='flex';ui()}
+  function gnl(){vo.style.display='none';VA=false;LV++;SWC=0;RECALLING=false;btnRecall.classList.remove('recalling');const sr={...RS};sb(true);GO=false;PT=true;sh();ui();st()}
+  function eg(){if(GO)return;cdto();GO=true;PT=false;AA=null;HC=[];RT=false;VA=false;RECALLING=false;btnRecall.classList.remove('recalling');sh();df.style.display='flex';br.classList.add('glowing');ui();dTO=setTimeout(()=>{df.style.display='none'},2500)}
+  cv.addEventListener('click',(e)=>{if(VA){gnl();return}if(GO||!PT)return;const rect=cv.getBoundingClientRect();const col=Math.floor((e.clientX-rect.left)/CELL),row=Math.floor((e.clientY-rect.top)/CELL);if(row<0||row>=ROWS||col<0||col>=COLS)return;hc2(row,col)});
+  function hc2(row,col){if(HC.some(h=>h.row===row&&h.col===col)){ex(row,col);return}if(B[row][col]===T.R&&!AA){HC=rm(row,col,true).map(m=>({row:m.row,col:m.col,isCapture:m.cap}));ui()}else if(B[row][col]===T.R&&AA){if(RS[AA]<=0){AA=null;HC=[];ui();return}HC=am(row,col,AA).map(m=>({row:m.row,col:m.col,isCapture:m.cap}));ui()}else{HC=[];AA=null;ui()}}
+  function ib(r,c){return r>=0&&r<ROWS&&c>=0&&c<COLS}
+  function bl(r,c){return B[r][c]===T.S}
+  function rm(r,c,ir){if(ir&&r===RP?.row&&c===RP?.col&&cRM)return cRM;const m=[],dirs=[[-1,0],[1,0],[0,-1],[0,1]];for(const[dr,dc]of dirs){let nr=r+dr,nc=c+dc;while(ib(nr,nc)){const t=B[nr][nc];if(t===T.S)break;if(t===null)m.push({row:nr,col:nc,cap:false});else{if(ir?AB.includes(t):t===T.R)m.push({row:nr,col:nc,cap:true});break}nr+=dr;nc+=dc}}if(ir&&r===RP?.row&&c===RP?.col)cRM=m;return m}
+  function adm(r,c,ir){const m=[],dirs=[[-1,-1],[-1,1],[1,-1],[1,1]];for(const[dr,dc]of dirs){const tr=r+dr,tc=c+dc;if(!ib(tr,tc)||bl(tr,tc))continue;const t=B[tr][tc];if(t===null||(ir?AB.includes(t):t===T.R))m.push({row:tr,col:tc,cap:!!t})}return m}
+  function gnm(r,c,ir){const m=[],dirs=[[-1,0],[1,0],[0,-1],[0,1]];for(const[dr,dc]of dirs){const tr=r+dr,tc=c+dc;if(!ib(tr,tc)||bl(tr,tc))continue;const t=B[tr][tc];if(t===null||(ir?AB.includes(t):t===T.R))m.push({row:tr,col:tc,cap:!!t})}return m}
+  function knm(r,c,ir){const m=[],steps=[[-2,-1,-1,0],[-2,1,-1,0],[2,-1,1,0],[2,1,1,0],[-1,-2,0,-1],[-1,2,0,1],[1,-2,0,-1],[1,2,0,1]];for(const[dr,dc,lr,lc]of steps){const tr=r+dr,tc=c+dc;if(!ib(tr,tc)||B[r+lr]?.[c+lc]||bl(tr,tc))continue;const t=B[tr][tc];if(t===null||(ir?AB.includes(t):t===T.R))m.push({row:tr,col:tc,cap:!!t})}return m}
+  function elm(r,c,ir){const m=[],steps=[[-2,-2,-1,-1],[-2,2,-1,1],[2,-2,1,-1],[2,2,1,1]];for(const[dr,dc,er,ec]of steps){const tr=r+dr,tc=c+dc;if(!ib(tr,tc)||B[r+er]?.[c+ec]||bl(tr,tc))continue;const t=B[tr][tc];if(t===null||(ir?AB.includes(t):t===T.R))m.push({row:tr,col:tc,cap:!!t})}return m}
+  function cnm(r,c,ir){const m=[],dirs=[[-1,0],[1,0],[0,-1],[0,1]];for(const[dr,dc]of dirs){let nr=r+dr,nc=c+dc;while(ib(nr,nc)){if(B[nr][nc]===null)m.push({row:nr,col:nc,cap:false});else break;nr+=dr;nc+=dc}if(ib(nr,nc)&&B[nr][nc]!==null){nr+=dr;nc+=dc;while(ib(nr,nc)){const t=B[nr][nc];if(t===T.S)break;if(t!==null){if(ir?AB.includes(t):t===T.R)m.push({row:nr,col:nc,cap:true});break}nr+=dr;nc+=dc}}}return m}
+  function gm(r,c,t,ir){switch(t){case T.R:case T.BR:return rm(r,c,ir);case T.BN:return knm(r,c,ir);case T.BC:return cnm(r,c,ir);case T.BE:return elm(r,c,ir);case T.BA:return adm(r,c,ir);case T.BG:return gnm(r,c,ir);default:return[]}}
+  function am(r,c,a){const ck=`${r},${c},${a}`;if(cAM[ck])return cAM[ck];let res;if(a==='horse')res=knm(r,c,true);else if(a==='cannon')res=cnm(r,c,true);else if(a==='elephant')res=elm(r,c,true);else if(a==='advisor')res=adm(r,c,true);else res=[];cAM[ck]=res;return res}
+  function sr2(){const mxb=getMaxBlack();if(bc()>=mxb)return;const ms=mxb-bc();const cnt=Math.min(ATE?2:1,ms);if(cnt<=0)return;SWC++;for(let i=0;i<cnt;i++){const cell=psc(false);if(!cell)break;const t=csg()?rbt(false):rbt(true);if(!t)break;pp(cell.row,cell.col,t)}cRM=null;cAM={};uac();udc()}
+  function st(){if(GO)return;if(RECALLING&&RP){executeRecall();return}sr2();PT=true;BO=BP.map(b=>b.id);shf(BO);BP.forEach(b=>{b.order=BO.indexOf(b.id)+1;b.hasMoved=false});if(RP){HC=AA?am(RP.row,RP.col,AA).map(m=>({row:m.row,col:m.col,isCapture:m.cap})):rm(RP.row,RP.col,true).map(m=>({row:m.row,col:m.col,isCapture:m.cap}))}ui()}
+  function executeRecall(){const sp=SPAWN_POINT;const fr=RP.row,fc=RP.col;const cap=B[sp.row][sp.col];const rookId=PD[`${fr},${fc}`].id;if(cap){rp2(sp.row,sp.col)}B[fr][fc]=null;delete PD[`${fr},${fc}`];B[sp.row][sp.col]=T.R;PD[`${sp.row},${sp.col}`]={type:T.R,id:rookId,row:sp.row,col:sp.col};RP={row:sp.row,col:sp.col};RECALLING=false;btnRecall.classList.remove('recalling');cRM=null;cAM={};uac();udc();if(cap===T.BG){sh();sv2();return}sr2();PT=true;BO=BP.map(b=>b.id);shf(BO);BP.forEach(b=>{b.order=BO.indexOf(b.id)+1;b.hasMoved=false});if(RP){HC=AA?am(RP.row,RP.col,AA).map(m=>({row:m.row,col:m.col,isCapture:m.cap})):rm(RP.row,RP.col,true).map(m=>({row:m.row,col:m.col,isCapture:m.cap}))}ui()}
+  async function ex(tr,tc){if(!PT||GO||!RP)return;const mv=HC.find(h=>h.row===tr&&h.col===tc);if(!mv){HC=[];AA=null;ui();return}const fr=RP.row,fc=RP.col,cap=B[tr][tc],used=AA;if(used){RS[used]--;AA=null;cAM={};uac()}await anim(fr,fc,tr,tc);mp(fr,fc,tr,tc);HC=[];if(cap){ATE=true;hcp(cap);if(cap===T.BG){udc();ui();sv2();return}}else{ATE=false}if(!RP){eg();ui();return}PT=false;udc();ui();await pb2();if(!GO){udc();st()}}
+  function hcp(t){if(t===T.BR){const p=['horse','cannon','elephant'];RS[p[Math.floor(Math.random()*3)]]++}else if(t===T.BN)RS.horse++;else if(t===T.BC)RS.cannon++;else if(t===T.BE)RS.elephant++;else if(t===T.BA)RS.advisor++;else if(t===T.BG){RS.horse++;RS.cannon++;RS.elephant++;RS.advisor++}uac()}
+  function protectedKillReward(t){hcp(t)}
+  async function pb2(){if(GO)return;const ua=BP.filter(b=>!b.hasMoved);if(!ua.length)return;const od=[...BO.filter(id=>ua.some(b=>b.id===id))];for(const id of ua.map(b=>b.id))if(!od.includes(id))od.push(id);for(const id of od){if(GO)return;const bp=BP.find(b=>b.id===id);if(!bp||bp.hasMoved)continue;BP.forEach(b=>{if(!b.hasMoved)b.order=od.indexOf(b.id)+1});ui();await slp(200);if(GO)return;const move=aim(bp);if(move){const tt=B[move.row][move.col];if(tt===T.R){if(ip()){await anim(bp.row,bp.col,RP.row,RP.col);const rr=RP.row,rc=RP.col;B[bp.row][bp.col]=null;delete PD[`${bp.row},${bp.col}`];B[rr][rc]=bp.type;PD[`${rr},${rc}`]={type:bp.type,id:bp.id,row:rr,col:rc};bp.row=rr;bp.col=rc;await slp(300);rar(5);protectedKillReward(bp.type);rp2(rr,rc);pp(rr,rc,T.R);bp.hasMoved=true;bp.order=-1;cRM=null;cAM={};uac();udc();ui();if(bp.type===T.BG){sv2();return}}else{await anim(bp.row,bp.col,RP.row,RP.col);mp(bp.row,bp.col,RP.row,RP.col);bp.hasMoved=true;bp.order=-1;udc();ui();eg();return}}else{await anim(bp.row,bp.col,move.row,move.col);mp(bp.row,bp.col,move.row,move.col);bp.hasMoved=true;bp.order=-1}}else{bp.hasMoved=true;bp.order=-1}udc();ui()}}
+  function ral(r1,c1,r2,c2){if(r1===r2){for(let i=Math.min(c1,c2)+1;i<Math.max(c1,c2);i++)if(B[r1][i]!==null)return false;return true}if(c1===c2){for(let i=Math.min(r1,r2)+1;i<Math.max(r1,r2);i++)if(B[i][c1]!==null)return false;return true}return false}
+  function getAllyMoves(piece){return gm(piece.row,piece.col,piece.type,false)}
+  function countDefendersAt(row,col,excludeId){
+    let count=0;
+    for(const o of BP){
+      if(o.id===excludeId)continue;
+      if(o.type===T.BC)continue;
+      let moves;
+      if(o.hasMoved){moves=getAllyMoves(o)}
+      else{const allMoves=gm(o.row,o.col,o.type,false);const safeMoves=allMoves.filter(m=>!cAS.has(`${m.row},${m.col}`)&&!cDL.has(`${m.row},${m.col}`));moves=safeMoves.length>0?safeMoves:allMoves}
+      if(moves.some(m=>m.row===row&&m.col===col&&m.cap))count++;
+    }
+    return count;
+  }
+  function isUnderRedThreat(row,col){return cAS.has(`${row},${col}`)||cDL.has(`${row},${col}`)}
+  function cca2(r,c,tr,tc){if(r===tr){const mn=Math.min(c,tc),mx=Math.max(c,tc);let mt=false;for(let i=mn+1;i<mx;i++){const cl=B[r][i];if(cl===T.S){if(!mt)mt=true;else return false}else if(cl!==null){if(!mt)mt=true;else return false}}return mt}else if(c===tc){const mn=Math.min(r,tr),mx=Math.max(r,tr);let mt=false;for(let i=mn+1;i<mx;i++){const cl=B[i][c];if(cl===T.S){if(!mt)mt=true;else return false}else if(cl!==null){if(!mt)mt=true;else return false}}return mt}return false}
+
+  function isOnLineBetween(r1,c1,r2,c2,r,c){
+    if(r1===r2&&r===r1){
+      const mnc=Math.min(c1,c2),mxc=Math.max(c1,c2);
+      return c>mnc&&c<mxc;
+    }
+    if(c1===c2&&c===c1){
+      const mnr=Math.min(r1,r2),mxr=Math.max(r1,r2);
+      return r>mnr&&r<mxr;
+    }
+    return false;
+  }
+
+  function getThreatLineToGeneral(){
+    if(!RP)return null;
+    const general=BP.find(b=>b.type===T.BG);
+    if(!general)return null;
+    const gr=general.row,gc=general.col;
+    const rr=RP.row,rc=RP.col;
+    if(gr===rr||gc===rc){
+      if(isOnLineBetween(rr,rc,gr,gc,rr,rc)||Math.abs(gr-rr)+Math.abs(gc-rc)===0)return null;
+      let blocked=false;
+      if(gr===rr){const mnc=Math.min(gc,rc),mxc=Math.max(gc,rc);for(let i=mnc+1;i<mxc;i++){if(B[gr][i]!==null){blocked=true;break}}}
+      else{const mnr=Math.min(gr,rr),mxr=Math.max(gr,rr);for(let i=mnr+1;i<mxr;i++){if(B[i][gc]!==null){blocked=true;break}}}
+      if(!blocked)return{genR:gr,genC:gc,rookR:rr,rookC:rc};
+    }
+    return null;
+  }
+
+  function isBlockingThreatLine(moveRow,moveCol,threatLine){
+    if(!threatLine)return false;
+    const {genR,genC,rookR,rookC}=threatLine;
+    return isOnLineBetween(rookR,rookC,genR,genC,moveRow,moveCol);
+  }
+
+  function aim(bpP){
+    const pi=bpP.id,or2=bpP.row,oc=bpP.col,pt2=bpP.type,tab=ta();
+    const moves=gm(or2,oc,pt2,false);
+    if(moves.length===0)return null;
+    let cMoves=moves;
+
+    const threatLine=getThreatLineToGeneral();
+
+    if(pt2===T.BG){
+      const adjacentToRook=RP&&Math.max(Math.abs(or2-RP.row),Math.abs(oc-RP.col))<=1;
+      if(adjacentToRook){
+        const atkMoves=moves.filter(m=>B[m.row][m.col]===T.R);
+        if(atkMoves.length>0){const scored=atkMoves.map(m=>({move:m,score:10000}));scored.sort((a,b)=>b.score-a.score);return scored[0].move}
+      }
+      const sf=moves.filter(m=>{
+        if(cAS.has(`${m.row},${m.col}`))return false;
+        if(cDL.has(`${m.row},${m.col}`))return false;
+        if(B[m.row][m.col]===T.R&&tab>=5)return false;
+        return true;
+      });
+      if(sf.length>0)cMoves=sf;
+      else{const ss=moves.filter(m=>!cDL.has(`${m.row},${m.col}`));if(ss.length>0)cMoves=ss}
+    }
+    const bRks=BP.filter(b=>b.type===T.BR);
+    let hasRookLink=false;
+    const linkedRookIds=new Set();
+    for(let i=0;i<bRks.length;i++)for(let j=i+1;j<bRks.length;j++)if(ral(bRks[i].row,bRks[i].col,bRks[j].row,bRks[j].col)){hasRookLink=true;linkedRookIds.add(bRks[i].id);linkedRookIds.add(bRks[j].id)}
+    const curDefenders=countDefendersAt(or2,oc,pi);
+    const curUnderThreat=isUnderRedThreat(or2,oc);
+    const scored=cMoves.map(m=>{
+      let sc=0;
+      const tt=B[m.row][m.col];
+      const newDefenders=countDefendersAt(m.row,m.col,pi);
+      const newUnderThreat=isUnderRedThreat(m.row,m.col);
+      if(pt2===T.BG){
+        if(tt===T.R&&tab>=5)sc+=500;else if(tt===T.R)sc+=200;
+        const nd=dtr(m.row,m.col),od=dtr(or2,oc);
+        if(nd>od)sc+=200;else if(nd<od)sc-=350;
+        if(!cDL.has(`${m.row},${m.col}`))sc+=120;
+        if(!cAS.has(`${m.row},${m.col}`))sc+=180;
+        const nb=BP.filter(b=>b.id!==pi&&Math.max(Math.abs(b.row-m.row),Math.abs(b.col-m.col))<=2);
+        sc+=nb.length*25;
+      }else{
+        if(threatLine&&pt2!==T.BG&&isBlockingThreatLine(m.row,m.col,threatLine)){
+          sc+=500;
+        }
+        if(pt2===T.BR){
+          if(tt===T.R)sc+=400;
+          const isLinked=hasRookLink&&linkedRookIds.has(pi);
+          if(isLinked){
+            const stillLinked=bRks.filter(b=>b.id!==pi).some(ork=>ral(m.row,m.col,ork.row,ork.col));
+            if(!stillLinked){if(newUnderThreat)sc-=300;if(newDefenders===0)sc-=250;const nd=dtr(m.row,m.col),od=dtr(or2,oc);if(nd<od)sc+=50}
+            else{const nd=dtr(m.row,m.col),od=dtr(or2,oc);if(nd<od)sc+=120;if(tt!==T.R){const atks=gm(m.row,m.col,pt2,false).filter(a=>a.cap);if(atks.some(a=>a.row===RP?.row&&a.col===RP?.col))sc+=60}}
+          }else{
+            if(newUnderThreat&&newDefenders===0)sc-=350;
+            if(!newUnderThreat)sc+=100;
+            if(newDefenders>0)sc+=80;
+            const nd=dtr(m.row,m.col),od=dtr(or2,oc);if(nd<od&&tt!==T.R)sc+=40;
+            const atks=gm(m.row,m.col,pt2,false).filter(a=>a.cap);if(atks.some(a=>a.row===RP?.row&&a.col===RP?.col))sc+=60;
+          }
+          if(!newUnderThreat&&newDefenders>0)sc+=120;
+          if(newDefenders>curDefenders)sc+=100;
+          if(newUnderThreat&&!curUnderThreat)sc-=200;
+        }else if(pt2===T.BC){
+          if(tt===T.R)sc+=500;
+          const car=RP&&(m.row===RP.row||m.col===RP.col)&&cca2(m.row,m.col,RP.row,RP.col);
+          if(car){const ilta=BP.filter(b=>!b.hasMoved&&b.id!==pi).length===0;if(ilta)sc+=350;else if(newUnderThreat)sc-=180}
+          if(!newUnderThreat)sc+=90;
+          if(newDefenders>0)sc+=50;
+        }else{
+          if(tt===T.R)sc+=(tab>=5?120:450);
+          if(!newUnderThreat)sc+=70;
+          if(newDefenders>0)sc+=60;
+          if(newUnderThreat&&!curUnderThreat)sc-=150;
+          const atks=gm(m.row,m.col,pt2,false).filter(a=>a.cap);if(atks.some(a=>a.row===RP?.row&&a.col===RP?.col))sc+=50;
+        }
+      }
+      return{move:m,score:sc};
+    });
+    scored.sort((a,b)=>b.score-a.score);
+    return scored[0].move;
+  }
+  function slp(ms){return new Promise(r=>setTimeout(r,ms))}
+  function anim(fr,fc,tr,tc){return new Promise(resolve=>{const piece=pl.querySelector(`.piece[data-row="${fr}"][data-col="${fc}"]`);if(!piece){resolve();return}const to=cp(tr,tc);piece.style.transition='left 0.12s ease-in-out, top 0.12s ease-in-out';piece.style.left=to.x+'px';piece.style.top=to.y+'px';piece.dataset.row=tr;piece.dataset.col=tc;const oe=()=>{piece.style.transition='';resolve()};piece.addEventListener('transitionend',oe,{once:true});setTimeout(()=>{if(piece.parentNode)oe()},150)})}
+  function restart(){cdto();vo.style.display='none';df.style.display='none';VA=false;RECALLING=false;btnRecall.classList.remove('recalling');br.classList.remove('glowing');cpl();ctx.clearRect(0,0,540,600);LV=1;SWC=0;sb(false);GO=false;PT=true;sh();ui();st()}
+  function activateRecall(){if(GO||!PT||!RP||RECALLING)return;RECALLING=true;AA=null;HC=[];PT=false;udc();ui();processBlackAfterRecall()}
+  async function processBlackAfterRecall(){await pb2();if(!GO){udc();st()}}
+  btnRecall.onclick=activateRecall;
+  document.getElementById('btnHorse').onclick=()=>act('horse');document.getElementById('btnCannon').onclick=()=>act('cannon');document.getElementById('btnElephant').onclick=()=>act('elephant');document.getElementById('btnAdvisor').onclick=()=>act('advisor');br.onclick=restart;
+  function act(t){if(GO||!PT||!RP||RS[t]<=0)return;if(RECALLING)return;if(AA===t){AA=null;HC=[];ui();return}AA=t;HC=am(RP.row,RP.col,t).map(m=>({row:m.row,col:m.col,isCapture:m.cap}));ui()}
+  document.addEventListener('keydown',e=>{if(GO)return;const k=e.key.toLowerCase();if(k==='a'){e.preventDefault();act('horse')}if(k==='s'){e.preventDefault();act('cannon')}if(k==='d'){e.preventDefault();act('elephant')}if(k==='f'){e.preventDefault();act('advisor')}if(k==='r'){e.preventDefault();activateRecall()}if(k==='z'){e.preventDefault();if(RECALLING) return;AA=null;HC=[];ui()}});
+  lh();sb(false);st();
+})();
+</script>
+</body>
+</html>

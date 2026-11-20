@@ -1,0 +1,246 @@
+// Share widget — CSS custom properties for light/dark mode.
+// Icons use a unified muted ink tone by default; brand colours surface only on hover.
+
+// ─── Light mode ───────────────────────────────────────────────────────────────
+\:root
+  --share-wrap-bg         rgba(250, 248, 245, 0.97)
+  --share-wrap-border     rgba(0, 0, 0, 0.07)
+  --share-wrap-shadow     0 6px 20px rgba(0, 0, 0, 0.07)
+  --share-icon-color      #7a7060
+  --share-icon-bg-hover   rgba(0, 0, 0, 0.04)
+  --share-trigger-color   var(--color-link)
+  --share-trigger-icon    rgba(27, 111, 158, 0.55)
+  --share-modal-bg        rgba(252, 250, 247, 0.97)
+  --share-modal-border    rgba(0, 0, 0, 0.07)
+  --share-modal-shadow    0 8px 32px rgba(0, 0, 0, 0.1)
+  --share-modal-text      #555555
+  --share-modal-close     rgba(0, 0, 0, 0.2)
+  --share-modal-close-hover rgba(0, 0, 0, 0.45)
+  --share-mask-bg         rgba(0, 0, 0, 0.4)
+
+// ─── Dark mode ────────────────────────────────────────────────────────────────
+body.darkmode
+  --share-wrap-bg         rgba(dark-surface, .97)
+  --share-wrap-border     rgba(255, 255, 255, 0.09)
+  --share-wrap-shadow     0 6px 20px rgba(0, 0, 0, 0.45)
+  --share-icon-color      #999999
+  --share-icon-bg-hover   rgba(255, 255, 255, 0.06)
+  --share-trigger-color   var(--color-link)
+  --share-trigger-icon    rgba(90, 168, 216, 0.55)
+  --share-modal-bg        rgba(dark-surface, .99)
+  --share-modal-border    rgba(255, 255, 255, 0.09)
+  --share-modal-shadow    0 8px 32px rgba(0, 0, 0, 0.5)
+  --share-modal-text      dark-text
+  --share-modal-close     rgba(255, 255, 255, 0.2)
+  --share-modal-close-hover rgba(255, 255, 255, 0.45)
+  --share-mask-bg         rgba(0, 0, 0, 0.65)
+
+// ─── Trigger button ───────────────────────────────────────────────────────────
+.share-btn
+  float right
+  position relative
+
+.share-outer
+  display flex
+  justify-content flex-end
+  border none
+  text-shadow none
+  text-decoration none
+  width auto
+  color var(--share-trigger-color)
+  height 28px
+  line-height 26px
+
+  i
+    font-size 18px
+    margin-right 5px
+    color var(--share-trigger-icon)
+
+  &:hover
+    transform none
+    cursor pointer
+
+// ─── Dropdown panel ───────────────────────────────────────────────────────────
+// Visibility controlled by .open class — opacity+pointer-events instead of
+// display:none, enabling CSS transition without jQuery fadeToggle.
+.share-wrap
+  min-height 20px
+  display block
+  position absolute
+  top 100%
+  right 0
+  z-index 10
+  width 220px
+  background var(--share-wrap-bg)
+  border 1px solid var(--share-wrap-border)
+  border-radius 8px
+  box-shadow var(--share-wrap-shadow)
+  -webkit-backdrop-filter blur(8px)
+  backdrop-filter blur(8px)
+  opacity 0
+  pointer-events none
+  transform translateY(-4px)
+  transition opacity 0.2s ease, transform 0.2s ease
+
+  &.open
+    opacity 1
+    pointer-events auto
+    transform translateY(0)
+
+  // Pseudo-element arrow replaces the inline .arrow element,
+  // allowing correct border rendering on the exposed sides.
+  &::before
+    content ''
+    position absolute
+    top -5px
+    right 18px
+    width 10px
+    height 10px
+    transform rotate(45deg)
+    background var(--share-wrap-bg)
+    border-top 1px solid var(--share-wrap-border)
+    border-left 1px solid var(--share-wrap-border)
+    z-index 2
+
+  .arrow
+    display none
+
+// ─── Icon grid ────────────────────────────────────────────────────────────────
+.share-icons
+  display flex
+  justify-content center
+  align-items center
+  flex-wrap wrap
+  padding 10px 8px
+
+  a
+    border-radius 6px
+    display inline-flex
+    align-items center
+    justify-content center
+    margin 4px
+    transition all 0.25s ease
+    color var(--share-icon-color)
+    width 34px
+    height 34px
+    background transparent
+    text-decoration none
+
+    i
+      font-size 20px
+      color inherit
+
+    &:hover
+      background var(--share-icon-bg-hover)
+      transform scale(1.1)
+      text-decoration none
+
+    &.weibo:hover
+      color weibo-color
+    &.weixin:hover
+      color wechat-color
+    &.qq:hover
+      color qq-color
+    &.douban:hover
+      color douban-color
+    &.twitter:hover
+      color twitter-color
+    &.facebook:hover
+      color facebook-color
+    &.google:hover
+      color google-color
+
+    &:active
+      transform scale(0.95)
+
+// ─── WeChat QR modal ──────────────────────────────────────────────────────────
+// Default state: pointer-events:none prevents the fixed-position element from
+// intercepting clicks on underlying content (e.g. about page social links).
+.wx-share-modal
+  position fixed
+  top 50%
+  left 50%
+  z-index 9999
+  width 220px
+  max-width 92vw
+  padding 28px 24px 24px
+  text-align center
+  color var(--share-modal-text)
+  background var(--share-modal-bg)
+  -webkit-backdrop-filter blur(16px)
+  backdrop-filter blur(16px)
+  border 1px solid var(--share-modal-border)
+  border-radius 12px
+  box-shadow var(--share-modal-shadow)
+  opacity 0
+  pointer-events none
+  transform translate(-50%, -50%) scale(0.96)
+  transition opacity 0.3s ease, transform 0.3s ease
+
+  &.visible
+    opacity 1
+    pointer-events auto
+    transform translate(-50%, -50%) scale(1)
+
+// ─── Modal close button (aligned with .reward-close) ─────────────────────────
+.wx-modal-close
+  position absolute
+  right 10px
+  top 10px
+  width 30px
+  height 30px
+  display flex
+  align-items center
+  justify-content center
+  border-radius 50%
+  cursor pointer
+  transition background 0.2s ease
+  color var(--share-modal-close)
+
+  &:hover
+    background var(--share-icon-bg-hover)
+    color var(--share-modal-close-hover)
+
+  i
+    font-size 18px
+    color inherit
+
+// ─── Modal caption (aligned with .reward-wording) ────────────────────────────
+.wx-modal-caption
+  margin 4px 0 16px
+  font-size 14px
+  color var(--share-modal-text)
+  line-height 1.5
+
+// ─── QR code frame (aligned with .reward-qrcode-wrap) ────────────────────────
+.wx-qrcode-frame
+  display inline-block
+  line-height 0
+  padding 8px
+  border 1px solid var(--share-modal-border)
+  border-radius 8px
+
+.wx-qrcode-img
+  display block
+  width 150px
+  height 150px
+
+// ─── Overlay ──────────────────────────────────────────────────────────────────
+// Uses visibility+opacity transition instead of display:none for smooth fade.
+#share-mask
+  position fixed
+  width 100%
+  height 100%
+  left 0
+  top 0
+  background var(--share-mask-bg)
+  z-index 999
+  visibility hidden
+  opacity 0
+  pointer-events none
+  transition opacity 0.25s ease, visibility 0.25s ease
+
+  &.active
+    visibility visible
+    opacity 1
+    pointer-events auto

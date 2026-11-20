@@ -1,0 +1,12 @@
+{
+  "family": "Ayeria Serif",
+  "source": "ayeria-preview-NotoSerifSC-VF.ttf",
+  "weights": [
+    400,
+    700
+  ],
+  "chars": 585,
+  "cjk": 462,
+  "hash": "799c09e472d76c4535995bdbd570698c08be1733691b2f397736e3b9df4fdb61",
+  "generated": "2026-10-30"
+}

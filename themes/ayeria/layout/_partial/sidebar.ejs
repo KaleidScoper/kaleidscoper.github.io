@@ -1,0 +1,49 @@
+<button class="float-btn navbar-toggle"></button>
+<nav class="navbar">
+  <% if (theme.logo){ %>
+  <div class="logo">
+    <a href="<%- url_for() %>"><img src="<%- theme.logo %>" alt="<%= config.title %>"></a>
+  </div>
+  <% } %>
+  <ul class="nav nav-main">
+    <% for (var key in theme.menu) {
+       var item = theme.menu[key];
+       var isObj = typeof item === 'object';
+       var url = isObj ? item.url : item;
+       var target = isObj ? (item.target || 'current') : 'current';
+    %>
+    <li class="nav-item">
+      <a class="nav-item-link"
+         href="<%- url_for(url) %>"
+         <% if (target === 'blank') { %>
+         target="_blank" rel="noopener noreferrer"
+         <% } else if (target === 'popup') { %>
+         data-target="popup"
+         data-popup-name="popup-<%= key %>"
+         data-popup-width="<%= item.popup_width || 380 %>"
+         data-popup-height="<%= item.popup_height || 620 %>"
+         <% } %>
+      ><%= key %></a>
+    </li>
+    <% } %>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <% if (theme.search){ %>
+      <a class="nav-item-link nav-item-search"  title="<%= __('search') %>">
+        <i class="ri-search-line"></i>
+      </a>
+      <% } %>
+      <% if (theme.rss){ %>
+      <a class="nav-item-link" target="_blank" href="<%- url_for(theme.rss) %>" title="<%= __('rss_feed') %>">
+        <i class="ri-rss-line"></i>
+      </a>
+      <% } %>
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <%- partial('post/search') %>
+</div>

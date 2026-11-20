@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>脚注渲染方案原型 · 栖云散录</title>
+<link rel="preconnect" href="https://fonts.font.im" crossorigin>
+<link rel="stylesheet" href="https://fonts.font.im/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@300;400;500&display=swap">
+<!-- 使用站内真实样式表，保证字号/行高/颜色/字体与线上一致 -->
+<link rel="stylesheet" href="../../../source/dist/main.css">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   原型说明：本文件只用于方案评审，不进入站点构建。
+   「现状」面板完全不加自定义样式，即线上真实效果。
+   其余面板叠加候选样式，视觉参数均按 ayeria-aesthetic 规范取值。
+   ───────────────────────────────────────────────────────────── */
+
+/* 新增语义变量（正式实现时应下沉到 _tokens.styl） */
+:root {
+  --fn-text:        #5b6270;
+  --fn-sep:         #e3e6eb;
+  --fn-marker:      #6f7783;
+  --fn-accent:      #0568a3;
+  --fn-hl:          rgba(5, 104, 163, .06);
+  --fn-pop-bg:      rgba(255, 255, 255, .78);
+  --fn-pop-border:  rgba(28, 31, 38, .10);
+  --fn-pop-shadow:  0 6px 24px rgba(0, 0, 0, .09);
+  --fn-font-serif:  "Noto Serif SC", "Source Han Serif SC", "STSong", Georgia, serif;
+  --fn-font-sans:   "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+}
+body.darkmode {
+  --fn-text:        #aab2bf;
+  --fn-sep:         #3b414c;
+  --fn-marker:      #8d95a3;
+  --fn-accent:      #80cfff;
+  --fn-hl:          rgba(128, 207, 255, .10);
+  --fn-pop-bg:      rgba(42, 47, 58, .74);
+  --fn-pop-border:  rgba(255, 255, 255, .12);
+  --fn-pop-shadow:  0 6px 24px rgba(0, 0, 0, .45);
+}
+
+/* ── 评审页外壳（非方案内容） ── */
+html, body { height: auto; }
+body.pv { background: var(--color-bg); }
+.pv-bar {
+  position: fixed; top: 1.6rem; right: 1.6rem; z-index: 900;
+  display: flex; gap: .6rem;
+  font-family: var(--fn-font-sans);
+}
+.pv-bar button {
+  font: inherit; font-size: 1.2rem; font-weight: 300;
+  padding: .7rem 1.4rem; border-radius: 19px;
+  border: 1px solid var(--fn-pop-border);
+  background: var(--fn-pop-bg);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  color: var(--color-text); cursor: pointer;
+  transition: opacity .2s ease, border-color .2s ease;
+}
+.pv-bar button:hover { border-color: var(--color-text-secondary); }
+.pv-lead {
+  max-width: 70rem; margin: 6rem auto 0; padding: 0 1.5rem;
+  font-family: var(--fn-font-sans); font-weight: 300;
+  font-size: 1.3rem; line-height: 1.9; color: var(--color-text-secondary);
+}
+.pv-lead h1 {
+  font-family: var(--fn-font-serif); font-size: 2rem; font-weight: 700;
+  color: var(--color-text); margin: 0 0 1rem;
+}
+.pv-lead code { font-family: Consolas, Monaco, monospace; font-size: .92em; }
+.pv-panel { border-top: 1px solid var(--fn-sep); margin-top: 4rem; }
+.pv-panel-label {
+  max-width: 70rem; margin: 0 auto; padding: 4rem 1.5rem 0;
+  font-family: var(--fn-font-sans);
+}
+.pv-panel-label h2 {
+  font-family: var(--fn-font-serif); font-size: 1.7rem; font-weight: 700;
+  color: var(--color-text); margin: 0 0 .8rem; letter-spacing: .01em;
+}
+.pv-panel-label .pv-tag {
+  display: inline-block; font-size: 1.1rem; font-weight: 400;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--fn-sep); border-radius: 19px;
+  padding: .2rem 1rem; margin-bottom: 1.2rem; letter-spacing: .04em;
+}
+.pv-panel-label p {
+  font-size: 1.3rem; line-height: 1.9; font-weight: 300;
+  color: var(--color-text-secondary); margin: 0 0 .6rem;
+}
+.pv-panel .outer { min-height: 0; }
+.pv-panel .article { padding: 2rem 0 5rem; }
+
+/* ─────────────────────────────────────────────────────────────
+   方案 1 · 精修注释区（纯 CSS）
+   ───────────────────────────────────────────────────────────── */
+[data-variant="a"] .article-entry sup.footnote-ref,
+[data-variant="aplus"] .article-entry sup.footnote-ref {
+  font-size: .72em; top: -.44em; margin-left: .1em; line-height: 0;
+}
+[data-variant="a"] .article-entry sup.footnote-ref a,
+[data-variant="aplus"] .article-entry sup.footnote-ref a {
+  color: var(--fn-accent); text-decoration: none;
+  font-variant-numeric: tabular-nums;
+  border-bottom: 1px solid transparent;
+  transition: border-color .18s ease;
+}
+[data-variant="a"] .article-entry sup.footnote-ref a:hover,
+[data-variant="aplus"] .article-entry sup.footnote-ref a:hover { border-bottom-color: currentColor; }
+
+[data-variant="a"] hr.footnotes-sep,
+[data-variant="aplus"] hr.footnotes-sep {
+  width: 6rem; height: 1px; margin: 3.2rem 0 1.5rem;
+  background-color: var(--fn-sep); border: none;
+}
+[data-variant="a"] section.footnotes,
+[data-variant="aplus"] section.footnotes {
+  font-size: .9em; line-height: 1.8; color: var(--fn-text);
+}
+[data-variant="a"] ol.footnotes-list,
+[data-variant="aplus"] ol.footnotes-list {
+  margin: 0 0 0 1.8rem; padding: 0;
+}
+[data-variant="a"] li.footnote-item,
+[data-variant="aplus"] li.footnote-item {
+  margin: 0; padding: .3rem 0 .3rem .4rem;
+  border-left: 2px solid transparent;   /* 预留，避免 :target 时位移 */
+  transition: border-color .25s ease;
+}
+[data-variant="a"] li.footnote-item:target,
+[data-variant="aplus"] li.footnote-item:target {
+  border-left-color: var(--fn-accent);
+  background: var(--fn-hl);
+}
+[data-variant="a"] li.footnote-item::marker,
+[data-variant="aplus"] li.footnote-item::marker {
+  color: var(--fn-marker); font-variant-numeric: tabular-nums;
+}
+[data-variant="a"] section.footnotes p,
+[data-variant="aplus"] section.footnotes p { margin: 0; }
+[data-variant="a"] a.footnote-backref,
+[data-variant="aplus"] a.footnote-backref {
+  margin-left: .3em; padding: 0 .15em;
+  color: var(--fn-marker); text-decoration: none;
+  opacity: .75; transition: opacity .18s ease, color .18s ease;
+}
+[data-variant="a"] a.footnote-backref:hover,
+[data-variant="aplus"] a.footnote-backref:hover {
+  opacity: 1; color: var(--fn-accent);
+}
+/* 从注释回跳时，正文中的引用号给出落点提示 */
+[data-variant="a"] sup.footnote-ref a:target,
+[data-variant="aplus"] sup.footnote-ref a:target {
+  color: var(--fn-accent); border-bottom-color: var(--fn-accent);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   方案 2 · 悬浮注释（功能层）
+   ───────────────────────────────────────────────────────────── */
+[data-variant="b"] .article-entry sup.footnote-ref { font-size: .72em; top: -.44em; margin-left: .1em; }
+[data-variant="b"] .article-entry sup.footnote-ref a {
+  position: relative; display: inline-block;
+  padding: 0 .12em; border-radius: 3px;
+  color: var(--fn-accent); text-decoration: none;
+  font-variant-numeric: tabular-nums;
+  transition: background-color .18s ease, color .18s ease;
+}
+[data-variant="b"] .article-entry sup.footnote-ref a::after {
+  content: ""; position: absolute; inset: -.75em -.45em;   /* 扩大热区 */
+}
+[data-variant="b"] .article-entry sup.footnote-ref a[aria-expanded="true"] {
+  background: var(--fn-hl); color: var(--fn-accent);
+}
+/* 底部注释区：保留可读列表，但更紧凑（与方案 1 同款排法） */
+[data-variant="b"] hr.footnotes-sep {
+  width: 6rem; height: 1px; margin: 3.2rem 0 1.5rem;
+  background-color: var(--fn-sep); border: none;
+}
+[data-variant="b"] section.footnotes { font-size: .9em; line-height: 1.8; color: var(--fn-text); }
+[data-variant="b"] ol.footnotes-list { margin: 0 0 0 1.8rem; padding: 0; }
+[data-variant="b"] li.footnote-item { margin: 0; padding: .3rem 0; }
+[data-variant="b"] li.footnote-item::marker { color: var(--fn-marker); font-variant-numeric: tabular-nums; }
+[data-variant="b"] section.footnotes p { margin: 0; }
+[data-variant="b"] a.footnote-backref { margin-left: .3em; color: var(--fn-marker); text-decoration: none; opacity: .75; }
+[data-variant="b"] a.footnote-backref:hover { opacity: 1; color: var(--fn-accent); }
+
+.fn-popover {
+  position: fixed; z-index: 800;
+  width: min(28rem, calc(100vw - 3rem));
+  padding: 1.2rem 1.4rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--fn-pop-border);
+  background: var(--fn-pop-bg);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  box-shadow: var(--fn-pop-shadow);
+  color: var(--color-text);
+  font-family: var(--fn-font-sans);
+  font-size: 1.3rem; line-height: 1.75; font-weight: 300;
+  opacity: 0; visibility: hidden;
+  transform: scale(.96); transform-origin: 50% 0;
+  transition: opacity .22s ease, transform .22s ease, visibility .22s;
+  pointer-events: none;
+}
+.fn-popover.visible {
+  opacity: 1; visibility: visible;
+  transform: scale(1); pointer-events: auto;
+}
+.fn-popover .fn-pop-body { margin: 0; }
+.fn-popover .fn-pop-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: .8rem; padding-top: .6rem;
+  border-top: 1px solid var(--fn-pop-border);
+  font-size: 1.1rem; color: var(--color-text-secondary);
+  letter-spacing: .04em;
+}
+.fn-popover .fn-pop-foot a {
+  color: var(--color-text-secondary); text-decoration: none;
+  transition: color .18s ease;
+}
+.fn-popover .fn-pop-foot a:hover { color: var(--fn-accent); }
+.fn-popover::before {
+  content: ""; position: absolute; left: var(--fn-arrow-x, 50%);
+  width: 8px; height: 8px; margin-left: -4px;
+  background: var(--fn-pop-bg); border: 1px solid var(--fn-pop-border);
+}
+.fn-popover[data-side="bottom"]::before { top: -5px; border-right: 0; border-bottom: 0; transform: rotate(45deg); }
+.fn-popover[data-side="top"]::before { bottom: -5px; border-left: 0; border-top: 0; transform: rotate(45deg); }
+
+/* ─────────────────────────────────────────────────────────────
+   方案 3 · 页边侧注
+   右侧边距已被 .tocbot（right:-28rem, max-width 255px）占用，
+   因此侧注落在左栏。
+   ───────────────────────────────────────────────────────────── */
+[data-variant="c"] .article { position: relative; }
+[data-variant="c"] .article-entry sup.footnote-ref { font-size: .72em; top: -.44em; margin-left: .1em; }
+[data-variant="c"] .article-entry sup.footnote-ref a {
+  color: var(--fn-accent); text-decoration: none;
+  font-variant-numeric: tabular-nums;
+  border-bottom: 1px solid transparent;
+  transition: border-color .18s ease;
+}
+[data-variant="c"] .article-entry sup.footnote-ref a:hover,
+[data-variant="c"] .article-entry sup.footnote-ref a.is-active { border-bottom-color: currentColor; }
+
+[data-variant="c"] hr.footnotes-sep {
+  width: 6rem; height: 1px; margin: 3.2rem 0 1.5rem;
+  background-color: var(--fn-sep); border: none;
+}
+[data-variant="c"] section.footnotes { font-size: .9em; line-height: 1.8; color: var(--fn-text); }
+[data-variant="c"] ol.footnotes-list { margin: 0 0 0 1.8rem; padding: 0; }
+[data-variant="c"] li.footnote-item { margin: 0; padding: .3rem 0; }
+[data-variant="c"] li.footnote-item::marker { color: var(--fn-marker); }
+[data-variant="c"] section.footnotes p { margin: 0; }
+[data-variant="c"] a.footnote-backref { margin-left: .3em; color: var(--fn-marker); text-decoration: none; }
+
+.pn-margin {
+  position: absolute; top: 0; right: calc(100% + 3.5rem);
+  width: clamp(17rem, 15vw, 21rem);
+  font-family: var(--fn-font-serif);
+}
+.pn-note {
+  position: absolute; left: 0; width: 100%;
+  font-size: 1.2rem; line-height: 1.75; color: var(--fn-text);
+  padding: .35rem .2rem .35rem .6rem;
+  border-left: 1px solid transparent;
+  transition: border-color .2s ease, color .2s ease;
+}
+.pn-note .pn-num {
+  display: inline-block; min-width: 1.6rem;
+  color: var(--fn-marker); font-variant-numeric: tabular-nums;
+}
+.pn-note.is-active { border-left-color: var(--fn-accent); color: var(--color-text); }
+.pn-note a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--fn-sep); }
+
+/* 窄屏：方案 3 回落到方案 1 的列表形态 */
+@media (max-width: 1319px) {
+  .pn-margin { display: none; }
+  [data-variant="c"] section.footnotes,
+  [data-variant="c"] hr.footnotes-sep { display: revert; }
+}
+@media (min-width: 1320px) {
+  [data-variant="c"] section.footnotes,
+  [data-variant="c"] hr.footnotes-sep { display: none; }
+}
+</style>
+</head>
+<body class="pv">
+<div class="pv-bar">
+  <button type="button" id="pv-theme">切换到深色</button>
+</div>
+
+<div class="pv-lead">
+  <h1>脚注渲染：现状与四个方案</h1>
+  <p>本页直接加载站内真实的 <code>dist/main.css</code> 与相同字体栈，因此字号、行高、颜色、字体与线上一致。<b>「现状」面板未加任何自定义样式</b>，即当前线上效果；其余面板只叠加候选样式。深色模式由页面右上角按钮切换。</p>
+  <p>示例文字中的引用号来自 <code>markdown-it-footnote</code> 的真实输出（含重复引用 <code>[1:1]</code> 与两条回链），并非手写。</p>
+</div>
+
+<main id="panels"></main>
+
+<template id="tpl-entry">
+  <div class="article-entry">
+    <p>汉字排版里，行长和字号总要互相让步：中文一行的舒适区大约在三十到四十五字之间，再宽眼睛就跟不上换行了<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>。西文页面之所以读起来顺，一半功劳在脚注——它默认退到次级字号，只在必要处出现，而不是把正文再抄一遍<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>。</p>
+    <p>反过来看，很多中文博客并没有这层约定：注释与正文同号同色，段间距甚至更松，读者滚到文末时已经分不清哪一段是补充说明、哪一段是正论<sup class="footnote-ref"><a href="#fn1" id="fnref1:1">[1:1]</a></sup>。</p>
+    <hr class="footnotes-sep">
+    <section class="footnotes">
+    <ol class="footnotes-list">
+    <li id="fn1" class="footnote-item"><p>舒适行长与字号的关系，Tufte CSS 与 Butternick 的中文排版笔记都给出过实测区间；这里取的是常见的 30–45 字说法。 <a href="#fnref1" class="footnote-backref">↩︎</a> <a href="#fnref1:1" class="footnote-backref">↩︎</a></p>
+    </li>
+    <li id="fn2" class="footnote-item"><p>行内脚注由 <code>markdown-it-footnote</code> 处理，无需在文末重复定义。 <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+    </li>
+    </ol>
+    </section>
+  </div>
+</template>
+
+<script>
+(function () {
+  'use strict';
+
+  var VARIANTS = [
+    {
+      id: 'now',
+      title: '现状',
+      tag: '未定制',
+      desc: 'markdown-it-footnote 默认输出 + 主题通用规则（&lt;sup&gt; 75% 字号、&lt;hr&gt; 整行发丝线、&lt;ol&gt; 缩进、每条注释 1.5rem 段间距）。方括号、链接色、过大间距都是继承来的副作用。'
+    },
+    {
+      id: 'a',
+      title: '方案 1 · 精修注释区',
+      tag: '纯 CSS · 内容层',
+      desc: '保留方括号；引用号压到 0.72em、去掉下划线；分隔线缩为 6rem 发丝线；注释区降半级字号、收紧行距与缩进、回链半隐；:target 时注释条左侧亮出强调色细线，正文引用号同步高亮。'
+    },
+    {
+      id: 'aplus',
+      title: '方案 1+ · 精修 + 去括号',
+      tag: 'CSS + 约 10 行过滤器',
+      desc: '在方案 1 上加 after_post_render 过滤器：去掉方括号，并把重复引用的 1:1 折叠回 1 —— 这是 HTML 层唯一能做、CSS 做不到的两件事。本面板下标即过滤器目标输出（原型里由脚本模拟）。'
+    },
+    {
+      id: 'b',
+      title: '方案 2 · 悬浮注释',
+      tag: 'CSS + JS · 功能层',
+      desc: '点击引用号在行内弹注，不再跳页。弹层按功能层规范取值，文末列表保留（无 JS、打印、SEO 仍需要它）。试试点击正文里的引用号。'
+    },
+    {
+      id: 'c',
+      title: '方案 3 · 页边侧注',
+      tag: 'CSS + JS · 内容层',
+      desc: '≥1320px 时注释移入左栏并与引用行对齐（右侧边距已归目录树，只能放左边）；窄屏回落为方案 1 的列表。悬停引用号会点亮对应侧注。Tufte 式阅读体验，成本最高。'
+    }
+  ];
+
+  var panelsEl = document.getElementById('panels');
+  var tpl = document.getElementById('tpl-entry');
+
+  function cloneEntry(prefix) {
+    var node = tpl.content.cloneNode(true);
+    var wrap = document.createElement('div');
+    wrap.appendChild(node);
+    // 面板内 id 加前缀，避免五个面板互相抢锚点
+    wrap.querySelectorAll('[id]').forEach(function (el) {
+      var old = el.id;
+      el.id = prefix + '-' + old;
+    });
+    wrap.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      a.setAttribute('href', '#' + prefix + '-' + a.getAttribute('href').slice(1));
+    });
+    return wrap;
+  }
+
+  function stripBrackets(root) {
+    // 模拟 after_post_render 过滤器：去掉方括号，并把 "1:1" 折叠回 "1"
+    root.querySelectorAll('sup.footnote-ref > a').forEach(function (a) {
+      var m = a.textContent.match(/^\[(.+)\]$/);
+      if (m) a.textContent = m[1].replace(/:\d+$/, '');
+    });
+  }
+
+  /* ── 方案 2：悬浮注释 ── */
+  function initPopovers(panel, prefix) {
+    var pop = document.createElement('div');
+    pop.className = 'fn-popover';
+    pop.setAttribute('role', 'dialog');
+    pop.setAttribute('aria-label', '脚注内容');
+    document.body.appendChild(pop);
+
+    var activeRef = null;
+    var activeBtn = null;
+
+    function close() {
+      if (!activeRef) return;
+      pop.classList.remove('visible');
+      if (activeBtn) activeBtn.setAttribute('aria-expanded', 'false');
+      activeRef = null;
+      activeBtn = null;
+    }
+
+    function open(btn) {
+      var target = document.getElementById(btn.getAttribute('href').slice(1));
+      if (!target) return;
+      var node = target.cloneNode(true);
+      node.querySelectorAll('.footnote-backref').forEach(function (b) { b.remove(); });
+      var num = target.id.replace(prefix + '-fn', '');
+
+      pop.innerHTML = '<p class="fn-pop-body">' + node.innerHTML.trim() + '</p>' +
+        '<div class="fn-pop-foot"><span>注 ' + num + '</span>' +
+        '<a href="' + btn.getAttribute('href') + '" class="fn-pop-return">回到正文 ↩</a></div>';
+      pop.classList.add('visible');
+
+      if (activeBtn) activeBtn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-expanded', 'true');
+      activeRef = btn;
+      activeBtn = btn;
+      position(btn);
+    }
+
+    function position(btn) {
+      var r = btn.getBoundingClientRect();
+      var pw = pop.offsetWidth, ph = pop.offsetHeight;
+      var gap = 10, edge = 12;
+      var left = Math.min(Math.max(edge, r.left + r.width / 2 - pw / 2), window.innerWidth - pw - edge);
+      var side = 'bottom';
+      var top = r.bottom + gap;
+      if (top + ph > window.innerHeight - edge) {
+        if (r.top - gap - ph >= edge) { side = 'top'; top = r.top - gap - ph; }
+        else { top = Math.max(edge, window.innerHeight - ph - edge); }
+      }
+      pop.style.left = left + 'px';
+      pop.style.top = top + 'px';
+      pop.dataset.side = side;
+      var arrowX = Math.min(Math.max(14, r.left + r.width / 2 - left), pw - 14);
+      pop.style.setProperty('--fn-arrow-x', arrowX + 'px');
+    }
+
+    panel.querySelectorAll('sup.footnote-ref > a').forEach(function (btn) {
+      btn.setAttribute('role', 'button');
+      btn.setAttribute('tabindex', '0');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (btn === activeRef) { close(); return; }
+        open(btn);
+      });
+      btn.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); }
+        if (e.key === 'Escape') { close(); btn.focus(); }
+      });
+    });
+
+    pop.addEventListener('click', function (e) {
+      var back = e.target.closest('.fn-pop-return');
+      if (back) { close(); }
+    });
+    document.addEventListener('click', function (e) {
+      if (!activeRef) return;
+      if (e.target.closest('.fn-popover')) return;
+      if (e.target === activeRef) return;
+      close();
+    });
+    window.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    window.addEventListener('resize', function () { if (activeRef) position(activeRef); });
+
+    panel.__fnOpen = open;
+    panel.__fnPop = pop;
+  }
+
+  /* ── 方案 3：页边侧注 ── */
+  function initSidenotes(panel, prefix) {
+    var article = panel.querySelector('.article');
+    var entry = panel.querySelector('.article-entry');
+    if (!article || !entry) return;
+
+    var margin = document.createElement('div');
+    margin.className = 'pn-margin';
+    article.appendChild(margin);
+
+    var notes = [];
+    entry.querySelectorAll('li.footnote-item').forEach(function (li) {
+      var ref = entry.querySelector('sup.footnote-ref > a[href="#' + li.id + '"]');
+      if (!ref) return;
+      var clone = li.cloneNode(true);
+      clone.querySelectorAll('.footnote-backref').forEach(function (b) { b.remove(); });
+      var num = li.id.replace(prefix + '-fn', '');
+      var body = clone.querySelector('p');
+      var el = document.createElement('div');
+      el.className = 'pn-note';
+      el.innerHTML = '<span class="pn-num">' + num + '</span>' +
+        (body ? body.innerHTML.trim() : clone.innerHTML.trim());
+      margin.appendChild(el);
+      notes.push({ el: el, ref: ref });
+    });
+
+    function layout() {
+      if (!window.matchMedia('(min-width: 1320px)').matches) return;
+      var base = article.getBoundingClientRect().top + window.scrollY;
+      var cursor = 0;
+      notes.forEach(function (n) {
+        var r = n.ref.getBoundingClientRect();
+        var top = r.top + window.scrollY - base - 4;
+        top = Math.max(top, cursor);
+        n.el.style.top = top + 'px';
+        cursor = top + n.el.offsetHeight + 8;
+      });
+    }
+
+    notes.forEach(function (n) {
+      n.ref.addEventListener('mouseenter', function () { n.el.classList.add('is-active'); });
+      n.ref.addEventListener('mouseleave', function () { n.el.classList.remove('is-active'); });
+      n.ref.addEventListener('focus', function () { n.el.classList.add('is-active'); });
+      n.ref.addEventListener('blur', function () { n.el.classList.remove('is-active'); });
+    });
+
+    layout();
+    window.addEventListener('resize', layout);
+    window.addEventListener('load', layout);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+    setTimeout(layout, 400);
+  }
+
+  /* ── 渲染面板 ── */
+  var onlyIds = new URLSearchParams(location.search).get('only');
+  var shown = onlyIds ? VARIANTS.filter(function (v) { return onlyIds.split(',').indexOf(v.id) !== -1; }) : VARIANTS;
+
+  shown.forEach(function (v) {
+    var section = document.createElement('section');
+    section.className = 'pv-panel';
+    section.dataset.variant = v.id;
+
+    var label = document.createElement('div');
+    label.className = 'pv-panel-label';
+    label.innerHTML =
+      '<span class="pv-tag">' + v.tag + '</span>' +
+      '<h2>' + v.title + '</h2>' +
+      '<p>' + v.desc + '</p>';
+    section.appendChild(label);
+
+    var outer = document.createElement('section');
+    outer.className = 'outer';
+    var article = document.createElement('article');
+    article.className = 'article article-type-post';
+    var inner = document.createElement('div');
+    inner.className = 'article-inner';
+
+    var built = cloneEntry(v.id);
+    var entry = built.querySelector('.article-entry');
+    if (v.id !== 'a' && v.id !== 'now') stripBrackets(entry);
+
+    inner.appendChild(entry);
+    article.appendChild(inner);
+    outer.appendChild(article);
+    section.appendChild(outer);
+    panelsEl.appendChild(section);
+
+    if (v.id === 'b') initPopovers(section, v.id);
+    if (v.id === 'c') initSidenotes(section, v.id);
+  });
+
+  /* ── 截图辅助：?q=dark-b 之类的一次性参数（避免 URL 里出现 &） ── */
+  var qParam = (new URLSearchParams(location.search).get('q') || '').split('-');
+  var qDark = qParam.indexOf('dark') !== -1;
+  var qOpenB = qParam.indexOf('b') !== -1;
+
+  if (qOpenB) {
+    setTimeout(function () {
+      try {
+        var panelB = document.querySelector('[data-variant="b"]');
+        var firstRef = panelB && panelB.querySelector('sup.footnote-ref > a');
+        if (!firstRef) { document.title = 'NO_REF'; return; }
+        if (panelB.__fnOpen) { panelB.__fnOpen(firstRef); }
+        else { firstRef.click(); }
+      } catch (err) {
+        document.title = 'OPEN_ERR ' + err.message;
+      }
+    }, 400);
+  }
+
+  /* ── 调试：?debug=1 把关键几何写入 title，便于 --dump-dom 读取 ── */
+  if (new URLSearchParams(location.search).get('debug') === '1') {
+    setTimeout(function () {
+      function box(sel) {
+        var el = document.querySelector(sel);
+        if (!el) return null;
+        var r = el.getBoundingClientRect();
+        return [Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)];
+      }
+      document.title = 'DBG ' + JSON.stringify({
+        vw: window.innerWidth,
+        vh: window.innerHeight,
+        root: getComputedStyle(document.documentElement).fontSize,
+        panels: Array.prototype.map.call(document.querySelectorAll('.pv-panel'), function (p) {
+          var r = p.getBoundingClientRect();
+          return p.dataset.variant + ':' + Math.round(r.top) + '-' + Math.round(r.bottom);
+        }),
+        outer: box('[data-variant="a"] .outer'),
+        entry: box('[data-variant="a"] .article-entry'),
+        entryFont: getComputedStyle(document.querySelector('[data-variant="a"] .article-entry')).fontSize,
+        margin: box('[data-variant="c"] .pn-margin'),
+        note: box('[data-variant="c"] .pn-note'),
+        popover: box('.fn-popover'),
+        popoverVisible: !!document.querySelector('.fn-popover.visible')
+      });
+    }, 600);
+  }
+
+  /* ── 深浅色切换 ── */
+  var themeBtn = document.getElementById('pv-theme');
+  function applyTheme(dark) {
+    document.body.classList.toggle('darkmode', dark);
+    themeBtn.textContent = dark ? '切换到浅色' : '切换到深色';
+    try { sessionStorage.setItem('pv-dark', dark ? '1' : '0'); } catch (e) {}
+  }
+  var params = new URLSearchParams(location.search);
+  var initialDark = params.get('theme') === 'dark' || qDark;
+  if (!params.get('theme') && !qDark) {
+    try { initialDark = sessionStorage.getItem('pv-dark') === '1'; } catch (e) {}
+  }
+  applyTheme(initialDark);
+  themeBtn.addEventListener('click', function () {
+    applyTheme(!document.body.classList.contains('darkmode'));
+  });
+})();
+</script>
+</body>
+</html>

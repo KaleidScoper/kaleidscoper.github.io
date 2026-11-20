@@ -1,0 +1,103 @@
+$block-caption
+  text-decoration none
+  color var(--color-text-secondary)
+  &:hover
+    color var(--color-text)
+
+$block
+  border-radius 4px
+
+$base-style
+  h1, h2, h3, h4, h5, h6
+    margin 2.5rem 0 1rem
+  h3
+    margin-top 2rem
+    margin-bottom .75rem
+  h4
+    margin-top 1.5rem
+    margin-bottom .5rem
+  h5, h6
+    margin-top 1.25rem
+    margin-bottom .5rem
+  hr
+    height border-width
+    background-color var(--color-border)
+    border none
+    padding 0
+    margin 1.5rem 0
+  strong
+    font-weight bold
+  em, cite
+    font-style italic
+  sup, sub
+    font-size 75%
+    line-height 0
+    position relative
+    vertical-align baseline
+  sup
+    top -.5rem
+  sub
+    bottom -.25rem
+  small
+    font-size 85%
+  acronym, abbr
+    border-bottom border-width var(--color-border) dotted
+  ul, ol, dl
+    margin 1.5rem 0 1.5rem 2rem
+
+  p, table, blockquote
+    margin 1.5rem 0
+
+  img, video
+    max-width 100%
+    height auto
+    display block
+    margin auto
+  iframe
+    border none
+  table
+    width 100%
+    max-width 70rem
+    border 1px solid #dedede
+    margin 15px auto
+    border-collapse collapse
+    empty-cells show
+    th,td
+        border 1px solid #dedede
+        padding 5px 10px
+    th
+        font-weight bold
+        text-align center !important
+        background rgba(158, 188, 226, .2)
+        white-space nowrap
+    td:nth-child(1)
+        white-space nowrap
+
+  blockquote
+    display block
+    // 有底色的引用块，内边距必须大于块内段距，否则边缘会读作裁切。
+    // 外侧 2.25rem > 内边距 2rem > 段间 .75rem，形成三级留白。
+    padding 2rem
+    margin 2.25rem 0
+    width 100%
+    overflow auto
+    border-left 2px solid currentColor
+    color inherit
+    background-color var(--blockquote-bg)
+    border-radius 0
+    > :first-child
+      margin-top 0;
+    > :last-child
+      margin-bottom 0;
+    > p
+      margin 0
+    > p + p
+      margin-top .75rem
+    footer
+      cite
+        &:before
+          content "—"
+          padding 0 .5rem
+
+
+

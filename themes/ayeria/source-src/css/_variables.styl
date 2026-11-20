@@ -1,0 +1,96 @@
+// Config
+support-for-ie = false
+vendor-prefixes = webkit moz ms official
+
+// Fonts
+font-size-browser = 62.5%
+font-size-base    = 1.4rem
+font-family-serif = "Noto Serif SC", "Source Han Serif SC", "STSong", Georgia, "Times New Roman", serif
+font-family-sans  = "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif
+font-family-mono  = "Consolas", "Monaco", "Courier New", monospace
+font-family-base  = font-family-serif
+font-line-height  = 1.7
+
+// Colors
+black         = #000000
+water         = #d8ebf5
+water-green   = #9c9
+sea-blue      = #1b6f9e
+sea-dark      = #172d3e
+sea           = #1e3e3f
+sea-light     = #253145
+sea-lighter   = #5c6b72
+gray          = #adb5bd
+froth-light   = #f4f4f4
+froth         = #999
+white         = #ffffff
+sand-light    = #9c8079
+sand          = #9e6a4d
+sand-dark     = #5c5858
+sand-gray     = #bbb
+red           = #ea434a
+
+// Share Colors
+weibo-color      = #d81e06
+wechat-color     = #51c332
+qq-color         = #4cafe9
+douban-color     = #05b711
+twitter-color    = #00aced
+facebook-color   = #3b5998
+pinterest-color  = #cb2027
+google-color     = #dd4b39
+
+// Link Colors
+// 品牌蓝 #5aa8d8 在深色底可读（6.30:1），白底仅 2.62:1；
+// 浅色改用同色相压暗的 #1b6f9e（5.51:1），深色保留品牌蓝。
+link-color         = #1b6f9e
+link-hover-color   = #145a82
+link-active-color  = #124d70
+disabled-color     = gray
+
+// Paper（仅亮色模式使用；推导过程见 doc/archive/text-readability-proposal/README.md §3）
+// 纸面明度取 L*97.75 —— sRGB 白是 L*100，印刷正文纸落在 L*94 附近，取"看得出是纸、但不构成主题色"的一档。
+// 色相与饱和度不另起一套，直接取既有 sand（HSL 21°/35%）的色相与饱和度，只换明度 → HSL(21.5°, 34%, 97.5%)。
+// 三个填充面同步下沉同一 ΔL*（=2.25），保持"纸 < 引用块 < 代码块"的原有层级差。
+paper            = #fbf8f6  // 纸面       L*97.75
+paper-quote      = #f1eeec  // 引用块     L*94.29（原 #f5f5f5 下沉 2.25）
+paper-code       = #f4f1ef  // 代码块     L*95.33（原 #f8f8f8 下沉 2.25）
+paper-inline     = #eeebe9  // 行内代码   L*93.17（原 #f0f2f5 下沉 2.25）
+
+// Body Colors
+body-background = paper
+body-color      = darken(sand-dark,30%)
+main-color      = darken(water,20%)
+tag-color       = lighten(body-color,15%)
+
+// Border
+border-radius   = 0.4rem
+border-width    = 0.1rem
+border-color    = froth
+
+// Layout
+aside-width      = 8rem
+wrap-width       = 70rem
+years-width      = 6rem
+logo-size        = 4.2rem
+cover-logo-size  = 6rem
+
+gutter-width     = 1.5rem
+
+// Breakpoints
+breakpoints = (
+  xs = 0,
+  sm = 576px,
+  md = 768px,
+  lg = 992px,
+  xl = 1200px
+)
+
+// Transition
+transition-slow          = all .7s ease-in-out 0s
+transition-fast          = all .1s ease-in-out 0s
+transition-base          = all .3s ease-in-out
+transition-fade          = opacity .15s linear
+transition-collapse      = height .35s ease
+
+

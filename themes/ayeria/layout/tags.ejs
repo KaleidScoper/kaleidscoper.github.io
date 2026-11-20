@@ -1,0 +1,88 @@
+<section class="outer">
+  <% if (site.tags.length) { %>
+    <h1 class="page-type-title"><%= __('tags') %></h1>
+
+    <% var tagList = site.tags.sort('name'); %>
+
+    <div class="tag-cloud">
+      <div class="tag-cloud-header">
+        <span class="tag-cloud-stats">
+          共 <strong><%= site.tags.length %></strong> 个标签，<strong><%= site.posts.length %></strong> 篇文章
+        </span>
+        <div class="tag-cloud-controls">
+          <div class="tag-cloud-search">
+            <input type="text"
+                   class="tag-cloud-input"
+                   placeholder="搜索标签…"
+                   aria-label="搜索标签" />
+          </div>
+          <div class="tag-cloud-sort">
+            <button type="button" class="tag-sort-btn is-active" data-sort="name">名称</button>
+            <button type="button" class="tag-sort-btn" data-sort="count">热度</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tag-cloud-wrap">
+        <% tagList.each(function(tag) { %>
+        <a class="tag-cloud-item"
+           href="<%- url_for(tag.path) %>"
+           data-count="<%= tag.posts.length %>"
+           data-name="<%= tag.name.toLowerCase() %>">
+          <span class="tag-cloud-name"><%= tag.name %></span>
+          <span class="tag-cloud-count"><%= tag.posts.length %> 篇文章</span>
+        </a>
+        <% }); %>
+      </div>
+
+      <p class="tag-cloud-empty">没有匹配的标签</p>
+    </div>
+  <% } %>
+</section>
+
+<script>
+(function () {
+  var wrap = document.querySelector('.tag-cloud-wrap');
+  if (!wrap) return;
+
+  var allItems = Array.prototype.slice.call(wrap.querySelectorAll('.tag-cloud-item'));
+  var input = document.querySelector('.tag-cloud-input');
+  var sortBtns = document.querySelectorAll('.tag-sort-btn');
+  var empty = document.querySelector('.tag-cloud-empty');
+
+  if (input) {
+    var timer;
+    input.addEventListener('input', function () {
+      clearTimeout(timer);
+      var self = this;
+      timer = setTimeout(function () {
+        var q = self.value.trim().toLowerCase();
+        var visible = 0;
+        allItems.forEach(function (el) {
+          var match = !q || el.getAttribute('data-name').indexOf(q) !== -1;
+          el.style.display = match ? '' : 'none';
+          if (match) visible++;
+        });
+        if (empty) empty.style.display = visible ? 'none' : '';
+      }, 120);
+    });
+  }
+
+  sortBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      sortBtns.forEach(function (b) { b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+
+      var mode = btn.getAttribute('data-sort');
+      allItems.sort(function (a, b) {
+        if (mode === 'count') {
+          var diff = (+b.getAttribute('data-count')) - (+a.getAttribute('data-count'));
+          if (diff !== 0) return diff;
+        }
+        return a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'), 'zh-CN');
+      });
+      allItems.forEach(function (el) { wrap.appendChild(el); });
+    });
+  });
+})();
+</script>

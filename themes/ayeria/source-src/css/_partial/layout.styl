@@ -1,0 +1,118 @@
+// Layout
+#app
+  height 100%
+  width 100%
+  position relative
+  overflow hidden
+
+.cover
+  position relative
+  padding 0
+  margin-bottom 3rem
+  text-align center
+  .forkMe
+    position absolute
+    z-index 999
+    top 0
+    right 0
+
+.content, .sidebar
+  &.anim
+    transition transition-base
+
+.content
+  position relative
+  z-index 1
+  margin-left 0
+  height 100%
+  width 100%
+  overflow-y scroll
+  overflow-x: hidden
+  -webkit-overflow-scrolling touch
+  &.on
+    margin-left 0 !important
+
+.sidebar
+  position fixed
+  z-index 9
+  left - aside-width
+  bottom 0
+  width aside-width
+  height 100%
+  background-color rgba(0,0,0,.8)
+  &.on
+    left 0
+
+.float-btn
+  border none
+  height 4rem
+  width 4rem
+  border-radius 50%
+  background-color rgba(black, .5)
+  color white
+  display flex
+  align-items center
+  justify-content center
+  transition transition-base
+  opacity .5
+  cursor pointer
+  & > i
+    font-size 1.7rem
+  &:hover
+    opacity 1
+
+.navbar-toggle
+  position absolute
+  top gutter-width
+  left: gutter-width + aside-width
+  &::before
+    content '\ee09'
+    font-family remixicon
+    font-size larger
+
+.wrap, .outer
+  position relative
+  width 100%
+  padding-right gutter-width
+  padding-left gutter-width
+  margin auto
+  min-height calc( 100% - 157px )
+  clearfix()
+
+.local-search
+  width 100%
+
+#main
+  position relative
+
+
+// Media Query
+@media (min-width: 768px)
+  .cover
+    margin-bottom 0
+    height 100%
+
+  .wrap, .outer
+    width wrap-width
+    padding-right 0
+    padding-left 0
+  .local-search
+    width wrap-width
+  
+  .content
+    &.on
+      transform: none
+
+@media (max-width: 768px)
+  .cover
+    .forkMe
+      display none
+  .content
+    &.on
+      margin-left -1px !important
+  // 旧实现中此处将 .sidebar 背景覆写为 body-color（不透明 #403e3e），意图是移动端全屏侧边栏
+  // 使用不透明底色遮挡下层内容，营造原生 App 抽屉面板体验。但该行为与桌面端半透明遮罩
+  // rgba(0,0,0,.8) 不一致，且不可配置。现已移除覆写，移动端与桌面端统一由基类规则
+  // .sidebar { background-color: rgba(0,0,0,.8) } 控制。
+  .navbar-toggle
+    transform: scale(1.1)

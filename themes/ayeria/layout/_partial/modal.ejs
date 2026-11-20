@@ -1,0 +1,70 @@
+<div id="mask"></div>
+
+<% var channels = (theme.reward && theme.reward.channels) ? theme.reward.channels : []; %>
+<% if (channels.length > 0) { %>
+<div id="reward" class="reward-modal" role="dialog" aria-modal="true" aria-labelledby="reward-wording" inert>
+  <button type="button" class="reward-close" aria-label="<%= __('close') %>"><i class="ri-close-line" aria-hidden="true"></i></button>
+
+  <p id="reward-wording" class="reward-wording">
+    <i class="ri-cup-line"></i><%= theme.reward_wording %>
+  </p>
+
+  <% if (channels.length > 1) { %>
+  <div class="reward-tabs">
+    <% channels.forEach(function(ch, i) { %>
+    <button type="button" class="reward-tab<%= i === 0 ? ' active' : '' %>"
+            data-index="<%= i %>" aria-pressed="<%= i === 0 %>" aria-controls="reward-panel-<%= i %>">
+      <i class="<%= ch.icon %>"></i>
+      <span><%= ch.name %></span>
+    </button>
+    <% }); %>
+  </div>
+  <% } %>
+
+  <div class="reward-panels">
+    <% channels.forEach(function(ch, i) { %>
+    <% var hasChildren = ch.children && ch.children.length; %>
+    <% var methods = hasChildren ? ch.children : [ch]; %>
+    <div id="reward-panel-<%= i %>" class="reward-panel<%= i === 0 ? ' active' : '' %>" data-index="<%= i %>" <%- i === 0 ? '' : 'inert' %>>
+
+      <div class="reward-method-panels">
+      <% methods.forEach(function(sub, j) { %>
+      <div class="reward-sub-panel<%= j === 0 ? ' active' : '' %>"
+           id="reward-method-<%= i %>-<%= j %>" data-sub="<%= j %>" <%- j === 0 ? '' : 'inert' %>>
+        <div class="reward-qrcode-wrap">
+          <img class="reward-qrcode" src="<%- url_for(sub.qrcode) %>" alt="<%= hasChildren ? ch.name + ' - ' + sub.name : ch.name %>">
+        </div>
+        <% if (sub.description) { %>
+        <p class="reward-desc"><%= sub.description %></p>
+        <% } %>
+        <% if (sub.link) { %>
+        <a class="reward-link" href="<%= sub.link %>" target="_blank" rel="noopener">
+          前往<%= sub.name %> <i class="ri-external-link-line"></i>
+        </a>
+        <% } %>
+      </div>
+      <% }); %>
+      </div>
+
+      <% if (hasChildren) { %>
+      <div class="reward-networks">
+      <% if (ch.description) { %>
+      <p class="reward-chain-hint"><%= ch.description %></p>
+      <% } %>
+      <div class="reward-sub-tabs">
+        <% methods.forEach(function(sub, j) { %>
+        <button type="button" class="reward-sub-tab<%= j === 0 ? ' active' : '' %>"
+                data-parent="<%= i %>" data-sub="<%= j %>" aria-pressed="<%= j === 0 %>" aria-controls="reward-method-<%= i %>-<%= j %>">
+          <%= sub.name %>
+          <% if (sub.badge) { %><span class="reward-sub-badge"><%= sub.badge %></span><% } %>
+        </button>
+        <% }); %>
+      </div>
+      </div>
+      <% } %>
+
+    </div>
+    <% }); %>
+  </div>
+</div>
+<% } %>

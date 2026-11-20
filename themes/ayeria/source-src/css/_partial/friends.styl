@@ -1,0 +1,39 @@
+// friends
+\:root
+  --friend-link-bg: var(--color-link-subtle)
+  --friend-link-hover-bg: rgba(27, 111, 158, .14)
+  --friend-link-text: var(--color-text)
+
+body.darkmode
+  --friend-link-bg: var(--color-link-subtle)
+  --friend-link-hover-bg: rgba(90, 168, 216, .28)
+  --friend-link-text: var(--color-text)
+
+#friends_link
+    .friends_li
+        list-style none
+        float left
+        a
+            padding 15px 25px
+            display flex
+            align-items center
+            justify-content space-between
+            font-size 17px
+            text-decoration none
+            background-color var(--friend-link-bg)
+            color var(--friend-link-text)
+            border-radius 6px
+            margin-right 20px
+            margin-bottom 20px
+            img
+                display inline-block
+                width 40px
+                height 40px
+                border-radius 50%
+                margin-right 10px
+            i
+                font-size 25px
+                width 40px
+                height 40px
+            &:hover
+                background-color var(--friend-link-hover-bg)

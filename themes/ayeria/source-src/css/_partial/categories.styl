@@ -1,0 +1,128 @@
+// ==========================================================================
+// Categories — Dual-Column Block Layout
+//
+// Each root category renders as a two-column block:
+//   Left  : name (large, bold) + "xx 篇文章"
+//   Center: vertical separator line
+//   Right : subcategory tree with indent guide lines
+//
+// All decorative lines use `currentColor` so they follow the body text
+// color in both light and dark modes automatically.
+// ==========================================================================
+
+.categories-box
+  max-width: 100%
+  margin: 1rem 0
+  padding: 0
+
+// ---------------------------------------------------------------------------
+// Dual-Column Block
+// ---------------------------------------------------------------------------
+
+.cat-block
+  display: flex
+  align-items: flex-start
+  margin-bottom: 3.5rem
+
+// Left column — category name + total count
+.cat-block-left
+  flex-shrink: 0
+  padding-right: 2.5rem
+  padding-top: 0.1em
+
+.cat-block-name
+  display: block
+  font-size: 2.4rem
+  font-weight: 600
+  line-height: 1.3
+  text-decoration: none
+  color: inherit
+  &:hover
+    text-decoration: underline
+
+.cat-block-total
+  display: block
+  margin-top: 0.35em
+  font-size: 1.5rem
+  color: var(--color-text-secondary)
+
+// Right column — subcategory tree, with vertical separator on its left edge
+.cat-block-right
+  position: relative
+  flex: 1
+  min-width: 0
+  padding-left: 2.5rem
+
+  &::before
+    content: ''
+    position: absolute
+    left: 0
+    top: 0
+    bottom: 0
+    width: 1px
+    background: currentColor
+    opacity: 0.18
+
+// ---------------------------------------------------------------------------
+// Subcategory Tree
+// ---------------------------------------------------------------------------
+
+.cat-subtree
+  list-style: none
+  margin: 0
+  padding: 0
+
+// Nested subtrees — IDE / tree-command style indent guide lines
+.cat-subtree .cat-subtree
+  position: relative
+  margin-left: 0.4em
+  padding-left: 1.3em
+
+  &::before
+    content: ''
+    position: absolute
+    left: 0
+    top: 0.3em
+    bottom: 0.3em
+    width: 1px
+    background: currentColor
+    opacity: 0.12
+
+.cat-subitem
+  font-size: 1.8rem
+  line-height: 2.2
+
+.cat-sublink
+  text-decoration: none
+  color: inherit
+  &:hover
+    text-decoration: underline
+
+.cat-subcount
+  font-size: 0.85em
+  color: var(--color-text-secondary)
+
+// ---------------------------------------------------------------------------
+// Responsive — stack columns on narrow screens
+// ---------------------------------------------------------------------------
+
+@media (max-width: 768px)
+  .cat-block
+    flex-direction: column
+    margin-bottom: 2.5rem
+
+  .cat-block-left
+    padding-right: 0
+    margin-bottom: 1rem
+
+  .cat-block-right
+    padding-left: 1.5rem
+
+// ---------------------------------------------------------------------------
+// Legacy selectors kept for other pages that may reference them
+// ---------------------------------------------------------------------------
+
+.tag-list-count:before, .archive-list-count:before
+  content: "("
+.tag-list-count:after, .archive-list-count:after
+  content: ")"

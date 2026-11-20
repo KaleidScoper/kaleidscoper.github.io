@@ -1,0 +1,151 @@
+// ==========================================================================
+// Tags — Minimal Blockquote-Style Grid
+//
+// Each tag is a block with a short left border (like a blockquote accent),
+// tag name above, post count below. Laid out in an equal-width CSS Grid.
+//
+// All decorative elements use `currentColor` so they follow body text
+// color in both light and dark modes automatically.
+// ==========================================================================
+
+.tag-cloud
+  max-width: 100%
+  margin: 2rem 0
+  padding: 0
+
+// ---------------------------------------------------------------------------
+// Header — Stats + Controls
+// ---------------------------------------------------------------------------
+
+.tag-cloud-header
+  display: flex
+  flex-wrap: wrap
+  align-items: center
+  justify-content: space-between
+  gap: 1rem
+  margin-bottom: 2.5rem
+
+.tag-cloud-stats
+  font-size: 1.3rem
+  color: var(--color-text-secondary)
+  strong
+    color: var(--color-text)
+
+.tag-cloud-controls
+  display: flex
+  align-items: center
+  gap: 0.75rem
+  flex-wrap: wrap
+
+// ---------------------------------------------------------------------------
+// Search Input — underline style, no box
+// ---------------------------------------------------------------------------
+
+.tag-cloud-search
+  display: flex
+  align-items: center
+
+.tag-cloud-input
+  width: 160px
+  height: 36px
+  padding: 0 0.2rem
+  border: none
+  border-bottom: 1px solid var(--color-border)
+  border-radius: 0
+  background: transparent
+  color: var(--color-text)
+  font-size: 1.2rem
+  outline: none
+  transition: border-color 0.2s
+  &:focus
+    border-bottom-color: var(--color-text)
+  &::placeholder
+    color: var(--color-text-secondary)
+    opacity: 1
+
+// ---------------------------------------------------------------------------
+// Sort Buttons — text-only, underline active state
+// ---------------------------------------------------------------------------
+
+.tag-cloud-sort
+  display: flex
+  gap: 0.3rem
+
+.tag-sort-btn
+  display: inline-flex
+  align-items: center
+  height: 36px
+  padding: 0 0.7rem
+  border: none
+  border-bottom: 1px solid transparent
+  background: none
+  color: var(--color-text-secondary)
+  font-size: 1.2rem
+  cursor: pointer
+  transition: color 0.2s
+  &:hover
+    color: var(--color-text)
+  &.is-active
+    color: var(--color-text)
+    font-weight: 600
+    border-bottom-color: currentColor
+
+// ---------------------------------------------------------------------------
+// Tag Grid
+// ---------------------------------------------------------------------------
+
+.tag-cloud-wrap
+  display: grid
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))
+  gap: 2rem
+
+// ---------------------------------------------------------------------------
+// Tag Item — left border accent
+// ---------------------------------------------------------------------------
+
+.tag-cloud-item
+  display: block
+  padding: 0.5em 0 0.5em 1em
+  // 装饰性竖线：跟着次级文字色走，不要跟标签名一样重
+  border-left: 2px solid var(--color-text-secondary)
+  text-decoration: none
+  color: var(--color-text)
+  transition: border-color 0.2s
+  &:hover
+    border-left-color: var(--color-link)
+
+.tag-cloud-name
+  display: block
+  font-size: 1.8rem
+  line-height: 1.5
+
+.tag-cloud-count
+  display: block
+  font-size: 1.2rem
+  color: var(--color-text-secondary)
+  line-height: 1.5
+
+// ---------------------------------------------------------------------------
+// Empty State
+// ---------------------------------------------------------------------------
+
+.tag-cloud-empty
+  display: none
+  text-align: center
+  padding: 3rem 1rem
+  margin: 0
+  color: var(--color-text-secondary)
+  font-size: 1rem
+
+// ---------------------------------------------------------------------------
+// Responsive
+// ---------------------------------------------------------------------------
+
+@media (max-width: 768px)
+  .tag-cloud-header
+    flex-direction: column
+    align-items: flex-start
+
+  .tag-cloud-wrap
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr))
+    gap: 1.2rem

@@ -1,0 +1,162 @@
+// 脚注（内容层 · 书斋式克制）
+//
+// markdown-it-footnote 的输出结构（方括号已由 scripts/filters/footnote.js 剥离）：
+//   <sup class="footnote-ref"><a href="#fn1" id="fnref1">1</a></sup>
+//   <hr class="footnotes-sep">
+//   <section class="footnotes" role="doc-endnotes" aria-label="注释">
+//     <ol class="footnotes-list">
+//       <li id="fn1" class="footnote-item"><p>…… <a href="#fnref1" class="footnote-backref">↩︎</a></p></li>
+//     </ol>
+//   </section>
+//
+// 排版原则：注释整体退一级（字号、颜色、间距），引用号与注文靠颜色而非装饰建立联系；
+// 唯一允许出现的线是分隔用的短发丝线，以及 :target 落点提示。
+// 色值一律走 _tokens.styl 的 --fn-* 变量。
+
+.article-entry
+  // 正文引用号
+  sup.footnote-ref
+    font-size .72em
+    top -.44em
+    margin-left .1em
+
+    a
+      color var(--fn-ref)
+      text-decoration none
+      font-variant-numeric tabular-nums
+      border-bottom 1px solid transparent
+      transition border-bottom-color .18s ease
+
+      // hover / 键盘聚焦 / 从注释回跳落点，三者共用同一条下划线
+      &:hover,
+      &:focus-visible,
+      &:target
+        border-bottom-color currentColor
+
+  // 分隔线：默认继承的 hr 是整行发丝线，与正文分节线同款，这里收成一条短线
+  hr.footnotes-sep
+    width 6rem
+    height 1px
+    margin 3.2rem 0 1.5rem
+    background-color var(--fn-sep)
+    border none
+
+  section.footnotes
+    font-size .9em
+    line-height 1.8
+    color var(--fn-text)
+
+    ol.footnotes-list
+      margin 0 0 0 1.8rem
+      padding 0
+
+    li.footnote-item
+      position relative
+      margin 0
+      padding .3rem 0 .3rem .4rem
+
+      // 落点提示：只在左缘画一条竖线，不加底色。
+      // 竖线落在版心外侧（-3rem 相对 li 盒，约等于版心左缘再往左 1.2rem），
+      // 与编号之间留出一段空白，读作"在页边补的一笔"，而不是把编号圈起来；
+      // 编号本身仍与正文、分隔线左对齐。
+      &:target::before
+        content ''
+        position absolute
+        left -3rem
+        top .3rem
+        bottom .3rem
+        width 2px
+        background-color var(--fn-ref)
+        border-radius 1px
+
+      // 编号与回链同步提色：颜色只作语义提示，不承担装饰
+      &:target::marker
+        color var(--fn-ref)
+
+      &:target a.footnote-backref
+        opacity 1
+        color var(--fn-ref)
+
+      &::marker
+        color var(--fn-marker)
+        font-variant-numeric tabular-nums
+
+    // 继承来的 p 上下各 1.5rem，会让两条注释之间出现 3rem 空隙
+    p
+      margin 0
+
+    a.footnote-backref
+      margin-left .3em
+      padding 0 .15em
+      color var(--fn-marker)
+      // 原为 .75：与 fn-marker 叠加后纸底上只剩 ~3.3:1，回链等于看不见
+      opacity 1
+      text-decoration none
+      transition opacity .18s ease, color .18s ease
+
+      &:hover,
+      &:focus-visible
+        opacity 1
+        color var(--fn-ref)
+
+  // 窄屏没有版心外的余量，竖线收回到缩进里，避免被视口裁掉
+  @media (max-width: 768px)
+    section.footnotes li.footnote-item:target::before
+      left -1.6rem
+
+// ── 悬浮预览（借用内容层引用块的语汇） ──────────────────────────────────
+//
+// 悬停引用号时由 js/footnote-popover.js 动态创建，挂在 body 上、以光标为锚点。
+// 视觉上不按功能层浮层处理，而是直接借用正文 blockquote 的形态：
+// 直角、无圆角、无阴影、左缘 2px 竖线 + 块级底色；竖线用落点强调色
+// （--fn-ref），与文末被选中条目的 :target 提示线同源，读者一眼能认出
+// "这是从正文里拎出来的一段注释"。
+// 背景不透明，也就顺带解决了毛玻璃版本"背后文字透上来"的问题。
+
+.footnote-popover
+  position fixed
+  z-index 997          // 高于正文与目录（996），低于各类弹窗（9998+）
+  // min() 与 Stylus 内置函数同名，裸写会被求值并报 CoercionError，必须 unquote
+  max-width unquote("min(32rem, calc(100vw - 3rem))")
+  padding .9rem 1.4rem
+  border-radius 0
+  // 竖线是要强调的主体（2px 强调色），其余三边只留 1px 发丝线定形：
+  // 没有这圈线时，纯底色在深色模式下几乎与页面同色，卡片会消失。
+  border 1px solid var(--fn-sep)
+  border-left 2px solid var(--fn-ref)
+  background-color var(--blockquote-bg)
+  color var(--color-text)
+  font-family font-family-serif
+  font-size 1.35rem
+  line-height 1.75
+  opacity 0
+  visibility hidden
+  transform translateY(-3px)
+  transition-property opacity, transform, visibility
+  transition-duration .18s
+  transition-timing-function ease
+  pointer-events none  // 跟随光标，永远不接收指针事件
+
+  &.visible
+    opacity 1
+    visibility visible
+    transform translateY(0)
+
+  // 不画指向光标的尖角：浮层就生成在光标正下方，尖角只有 5px 高，既读不出
+  // 指向关系，又会和描边错开一像素，看着像渲染瑕疵。留白本身就是指向。
+
+  .footnote-popover-body
+    margin 0
+
+    p
+      margin 0
+
+    // 注释里若有链接，浮层里也点不了，别让读者误以为可以点
+    a
+      color inherit
+      text-decoration none
+      border-bottom 1px solid var(--fn-sep)
+
+@media (prefers-reduced-motion: reduce)
+  .footnote-popover
+    transition none

@@ -1,0 +1,36 @@
+<%- partial('_partial/head') %>
+
+<body class="darkmode">
+  <script>
+    if (localStorage.getItem('darkmode') === '0') {
+      document.body.classList.remove('darkmode');
+    }
+  </script>
+  <div id="app">
+    <% if (theme.click_effect === 2) { %>
+      <canvas class="click-effect-canvas"></canvas>
+    <% } %>
+    <% if (theme.click_effect === 3) { %>
+      <canvas class="click-effect-canvas" width="1777" height="841"></canvas>
+    <% } %>
+    <main class="content on">
+      <%- body %>
+      <%- partial('_partial/footer', null, {cache: !config.relative_link}) %>    
+    </main>
+    <div class="float_btns">
+      <%- partial('_partial/float-btns') %>
+    </div>
+    <aside class="sidebar on">
+      <%- partial('_partial/sidebar') %>
+    </aside>
+    <%- partial('_partial/modal') %>
+    <%- partial('_partial/after-footer') %>
+
+    <% if (theme.music&&theme.music.enable){ %>
+    <%- partial('_partial/music') %>
+    <% } %>
+    <%- partial('_partial/lock') %>
+  </div>
+</body>
+
+</html>

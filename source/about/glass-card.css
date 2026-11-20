@@ -1,0 +1,284 @@
+/* Glass Card */
+
+.glass-card,
+.about-footer-art {
+  --countryball-size: 160px;
+}
+
+.glass-card {
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: rgba(31, 38, 135, 0.37);
+  --glass-overlay: rgba(255, 255, 255, 0.1);
+  --avatar-border: rgba(255, 255, 255, 0.3);
+  --profile-name-color: #ffffff;
+  --profile-title-color: #e9ecef;
+  --profile-desc-color: #f1f3f4;
+  --profile-info-color: #f8f9fa;
+  --hat-label-color: #fff;
+  --hat-label-shadow: rgba(0, 0, 0, 0.7);
+
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 30px;
+  margin: 64px 0 20px;
+  box-shadow: 0 8px 32px 0 var(--glass-shadow);
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  position: relative;
+  isolation: isolate;
+}
+
+body.darkmode .glass-card {
+  --glass-bg: rgba(42, 47, 58, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-shadow: rgba(0, 0, 0, 0.6);
+  --glass-overlay: rgba(42, 47, 58, 0.4);
+  --avatar-border: rgba(255, 255, 255, 0.2);
+  --profile-name-color: #f0f0f0;
+  --profile-title-color: #c0c0c0;
+  --profile-desc-color: #b0b0b0;
+  --profile-info-color: #d0d0d0;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: inherit;
+  z-index: 0;
+}
+
+.glass-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--glass-overlay);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: inherit;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.glass-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+.glass-card .profile-peek {
+  position: absolute;
+  z-index: -1;
+  top: calc(var(--countryball-size) * -0.72);
+  right: 24px;
+  width: var(--countryball-size);
+  height: var(--countryball-size);
+  background: url('/images/china.png') center / contain no-repeat;
+  filter: var(--image-brightness);
+  pointer-events: none;
+}
+
+.profile-portrait {
+  --avatar-size: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: var(--avatar-size);
+}
+
+.glass-card .profile-hats {
+  --hat-height: calc(var(--avatar-size) * 0.653333);
+  --hat-step: calc(var(--avatar-size) * 0.2);
+  position: relative;
+  z-index: 1;
+  width: calc(var(--avatar-size) * 0.875);
+  height: calc(var(--hat-height) + (var(--hat-count) - 1) * var(--hat-step));
+  /* Account for the PNG's transparent padding: its brim center is at y=849/1024.
+     The supplied mockup places it about 16% of a diameter below the circle's top. */
+  margin: calc(var(--avatar-size) * -0.45) 0 calc(var(--avatar-size) * -0.225);
+  padding: 0;
+  list-style: none;
+}
+
+.glass-card .profile-hat {
+  position: absolute;
+  top: calc(var(--hat-index) * var(--hat-step));
+  left: 0;
+  width: 100%;
+  height: var(--hat-height);
+  margin: 0;
+  padding: 0;
+  background: url('/about/hat.png') center / 135% auto no-repeat;
+  transform: translateX(calc(var(--avatar-size) * var(--hat-offset, 0))) rotate(var(--hat-rotation, 0deg));
+  transform-origin: 50% 90%;
+}
+
+.profile-hat-label {
+  position: absolute;
+  right: 0;
+  bottom: calc(var(--avatar-size) * 0.105);
+  left: 0;
+  color: var(--hat-label-color);
+  font-family: "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+  font-size: clamp(12px, calc(var(--avatar-size) * 0.108333), 13px);
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  white-space: nowrap;
+  text-shadow: 0 1px 3px var(--hat-label-shadow);
+}
+
+.avatar-link {
+  display: block;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--avatar-border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  text-decoration: none;
+}
+
+.avatar-link:hover {
+  text-decoration: none;
+}
+
+.avatar-link .profile-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Profile info */
+.profile-info {
+  flex: 1;
+  color: var(--profile-info-color);
+}
+
+.profile-name {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0 0 10px 0;
+  color: var(--profile-name-color);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.profile-title {
+  font-size: 18px;
+  color: var(--profile-title-color);
+  margin: 0 0 15px 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.profile-desc {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--profile-desc-color);
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .glass-card,
+  .about-footer-art {
+    --countryball-size: clamp(96px, 30vw, 120px);
+  }
+
+  .glass-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .profile-portrait {
+    --avatar-size: 100px;
+  }
+
+  .glass-card .profile-peek {
+    right: 12px;
+  }
+
+  .profile-name {
+    font-size: 24px;
+  }
+
+  .profile-title {
+    font-size: 16px;
+  }
+}
+
+/* ── Social Links ── */
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin: 30px 0;
+}
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--brand-color, #ccc);
+  font-size: 24px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.social-icon svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+.social-icon:hover {
+  transform: translateY(-3px);
+  background: color-mix(in srgb, var(--brand-color, #555) 20%, rgba(255, 255, 255, 0.1));
+  color: var(--brand-color, #fff);
+  border-color: color-mix(in srgb, var(--brand-color, #555) 40%, rgba(255, 255, 255, 0.2));
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--brand-color, #555) 25%, transparent);
+  text-decoration: none;
+}
+
+.about-footer-art img {
+  display: block;
+  /* 球体在素材中的宽度分别为 342px（中国）和 302px（美国）。 */
+  width: calc(var(--countryball-size) * 1.13);
+  max-width: 100%;
+  height: auto;
+  margin: 32px 0 0;
+}
+
+body.darkmode .social-icon {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+body.darkmode .social-icon:hover {
+  background: color-mix(in srgb, var(--brand-color, #555) 18%, rgba(255, 255, 255, 0.06));
+  border-color: color-mix(in srgb, var(--brand-color, #555) 35%, rgba(255, 255, 255, 0.12));
+}
