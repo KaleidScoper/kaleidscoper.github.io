@@ -206,26 +206,20 @@ ignore:
 theme: ayeria
 
 # Markdown-it configuration
-# 配置键由渲染器定义：hexo-renderer-markdown-it-katex 读取 hexo.config.markdown
+# hexo-renderer-markdown-it 在构建时渲染正文和公式
 markdown:
   render:
     html: true
     xhtmlOut: false
     breaks: true
-    linkify: true
+    linkify: false # 只链接显式 Markdown 链接和 <网址>
     typographer: true
     quotes: '“”‘’'
   plugins:
-    - markdown-it-abbr
-    # markdown-it-cjk-breaks 已移除：会合并中文单换行，影响既有文章排版
-    - markdown-it-container
-    - markdown-it-deflist
-    - markdown-it-emoji
+    - name: '@renbaoshuo/markdown-it-katex'
+      options:
+        throwOnError: false
     - markdown-it-footnote
-    - markdown-it-ins
-    - markdown-it-mark
-    - markdown-it-sub
-    - markdown-it-sup
 
 # Local Search (hexo-generator-searchdb)
 search:

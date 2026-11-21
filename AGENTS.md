@@ -15,7 +15,7 @@
 
 - **框架**：Hexo 8.1.1
 - **主题**：hexo-theme-ayeria（自研主题，源码在 `themes/ayeria/`，同步维护于 `../hexo-theme-ayeria`）
-- **渲染器**：markdown-it-katex（数学公式）、EJS、Stylus
+- **渲染器**：hexo-renderer-markdown-it（数学公式由 KaTeX 在构建时排版）、EJS、Stylus
 - **搜索**：hexo-generator-searchdb
 - **CI/CD**：GitHub Actions（`.github/workflows/pages.yml`）
 

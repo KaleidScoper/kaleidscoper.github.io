@@ -220,7 +220,7 @@
 
 ### 7.5 数学公式
 
-- 使用 KaTeX（本站已配置 `hexo-renderer-markdown-it-katex`）
+- 使用 KaTeX（本站通过 `hexo-renderer-markdown-it` 和 `@renbaoshuo/markdown-it-katex` 在构建时渲染公式）
 - 行内公式：`$...$`
 - 块级公式：`$$...$$`
 

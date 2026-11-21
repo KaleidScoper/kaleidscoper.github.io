@@ -3,10 +3,7 @@
 /**
  * 脚注 HTML 层修复
  *
- * markdown-it-footnote 3.0.3 的渲染结果是固定的，插件本身不接受任何 option
- * （源码中 function footnote_plugin(md) 只取第一个参数），而 hexo-renderer-markdown-it-katex
- * 的 plugins 配置只能在 use() 时传参，无法在之后覆写 renderer.rules。
- * 因此凡 CSS 做不到的事，都在这里做：
+ * 在 markdown-it-footnote 输出 HTML 后统一处理主题排版和无障碍标记：
  *
  *   1. 去掉引用号外层的方括号（编号是排版记号，方括号是实现细节）
  *   2. 重复引用的 [1:1] 折叠回 [1]（读者眼里仍是同一条注释）

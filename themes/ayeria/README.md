@@ -305,20 +305,26 @@ baidu_analytics: ""           # 百度统计追踪 ID
 
 ### 数学公式
 
-MathJax 和 KaTeX 二选一。使用 KaTeX 需要更换渲染器：
+主题从 jsDelivr 加载 KaTeX 0.19.1 的样式、字体和所需脚本。若用官方 Markdown-it 渲染器在构建时生成公式 HTML，请先卸载站点现用的 Markdown 渲染器，再在站点根目录安装这些依赖。
 
 ```bash
-npm un hexo-renderer-marked -S && npm i hexo-renderer-markdown-it-katex -S
+npm install hexo-renderer-markdown-it @renbaoshuo/markdown-it-katex
+npm install --save-exact katex@0.19.1
 ```
+
+在站点 `_config.yml` 的 `markdown.plugins` 中追加 `'@renbaoshuo/markdown-it-katex'`，并在主题配置中启用 KaTeX。以后升级 KaTeX 时，同时更新站点依赖和 `layout/_partial/katex.ejs` 中的 CDN 版本。
 
 ```yml
 mathjax: false
 
 katex:
-  enable: false
+  enable: true
   allpost: true               # false: 仅 front-matter 中 math:true 的文章开启
+  auto_render: false          # 已在构建时生成公式 HTML
   copy_tex: false
 ```
+
+省略 `auto_render` 或设为 `true` 时，浏览器会渲染页面中剩余的 `$…$` 和 `$$…$$` 公式。开启 `copy_tex` 后，复制公式会得到对应的 TeX 源码。
 
 ### Mermaid 流程图
 

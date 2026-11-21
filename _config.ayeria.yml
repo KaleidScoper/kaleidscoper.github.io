@@ -188,10 +188,11 @@ baidu_analytics: ""
 mathjax: false
 
 # Katex数学公式(allpost设置为false时只有头部设置math:true的文章才开启)
-# 需要更换hexo渲染器，npm un hexo-renderer-marked -S && npm i hexo-renderer-markdown-it-katex -S
+# 正文中的公式由 markdown-it 在构建时排版
 katex:
   enable: true # true
   allpost: true
+  auto_render: false
   copy_tex: false
 
 # mermaid流程图 三个选项缺一不可(https://mermaid-js.github.io/mermaid/)

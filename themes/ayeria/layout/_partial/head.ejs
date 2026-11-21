@@ -39,6 +39,9 @@
       <%- css('css/fonts/remixicon') %>
       <%- css('css/ayeria-layout') %>
       <%- css('css/custom') %>
+      <% if (theme.katex && theme.katex.enable && (theme.katex.allpost || page.math)) { %>
+        <%- partial('katex') %>
+      <% } %>
       <% if (theme.progressBar){ %>
       <script src="https://cdn.staticfile.org/pace/1.2.4/pace.min.js"></script>
       <% } %> <%- partial('google-analytics') %> <%- partial('baidu-analytics')
